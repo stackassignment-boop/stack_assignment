@@ -141,6 +141,17 @@ export default function AdminPanel() {
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showInquiryDialog, setShowInquiryDialog] = useState(false);
+  const [showBlogDialog, setShowBlogDialog] = useState(false);
+  const [blogForm, setBlogForm] = useState({
+    title: '',
+    excerpt: '',
+    content: '',
+    featuredImage: '',
+    category: '',
+    tags: '',
+    isPublished: false,
+  });
+  const [creatingBlog, setCreatingBlog] = useState(false);
 
   // Check auth status
   useEffect(() => {
@@ -275,6 +286,50 @@ export default function AdminPanel() {
       }
     } catch (error) {
       toast.error('An error occurred');
+    }
+  };
+
+  const createBlog = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreatingBlog(true);
+
+    try {
+      const res = await fetch('/api/blogs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: blogForm.title,
+          excerpt: blogForm.excerpt,
+          content: blogForm.content,
+          featuredImage: blogForm.featuredImage || undefined,
+          category: blogForm.category || undefined,
+          tags: blogForm.tags ? blogForm.tags.split(',').map(t => t.trim()) : undefined,
+          isPublished: blogForm.isPublished,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success('Blog post created successfully!');
+        setBlogForm({
+          title: '',
+          excerpt: '',
+          content: '',
+          featuredImage: '',
+          category: '',
+          tags: '',
+          isPublished: false,
+        });
+        setShowBlogDialog(false);
+        loadDashboardData();
+      } else {
+        toast.error(data.error || 'Failed to create blog');
+      }
+    } catch (error) {
+      toast.error('An error occurred');
+    } finally {
+      setCreatingBlog(false);
     }
   };
 
@@ -682,9 +737,15 @@ export default function AdminPanel() {
           {/* Blogs Tab */}
           <TabsContent value="blogs" className="space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>All Blogs</CardTitle>
-                <CardDescription>Manage blog posts</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>All Blogs</CardTitle>
+                  <CardDescription>Manage blog posts</CardDescription>
+                </div>
+                <Button onClick={() => setShowBlogDialog(true)}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Add Blog
+                </Button>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -859,6 +920,111 @@ export default function AdminPanel() {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Blog Dialog */}
+      <Dialog open={showBlogDialog} onOpenChange={setShowBlogDialog}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create New Blog Post</DialogTitle>
+            <DialogDescription>
+              Fill in the details to create a new blog post
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={createBlog} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="blog-title">Title *</Label>
+              <Input
+                id="blog-title"
+                value={blogForm.title}
+                onChange={(e) => setBlogForm({ ...blogForm, title: e.target.value })}
+                placeholder="How to paraphrase effectively without Plagiarism"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="blog-excerpt">Excerpt (short description)</Label>
+              <Input
+                id="blog-excerpt"
+                value={blogForm.excerpt}
+                onChange={(e) => setBlogForm({ ...blogForm, excerpt: e.target.value })}
+                placeholder="Brief summary of the blog post..."
+                maxLength={300}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="blog-content">Content (HTML supported) *</Label>
+              <textarea
+                id="blog-content"
+                className="w-full min-h-[300px] p-3 rounded-md border border-input bg-background text-sm"
+                value={blogForm.content}
+                onChange={(e) => setBlogForm({ ...blogForm, content: e.target.value })}
+                placeholder="<p>Your blog content here...</p>"
+                required
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="blog-image">Featured Image URL</Label>
+                <Input
+                  id="blog-image"
+                  value={blogForm.featuredImage}
+                  onChange={(e) => setBlogForm({ ...blogForm, featuredImage: e.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="blog-category">Category</Label>
+                <Input
+                  id="blog-category"
+                  value={blogForm.category}
+                  onChange={(e) => setBlogForm({ ...blogForm, category: e.target.value })}
+                  placeholder="AI Ethics, Writing Tips, etc."
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="blog-tags">Tags (comma-separated)</Label>
+              <Input
+                id="blog-tags"
+                value={blogForm.tags}
+                onChange={(e) => setBlogForm({ ...blogForm, tags: e.target.value })}
+                placeholder="AI, writing, academic, plagiarism"
+              />
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="blog-published"
+                checked={blogForm.isPublished}
+                onChange={(e) => setBlogForm({ ...blogForm, isPublished: e.target.checked })}
+                className="w-4 h-4 rounded border-gray-300"
+              />
+              <Label htmlFor="blog-published" className="cursor-pointer">
+                Publish immediately
+              </Label>
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowBlogDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={creatingBlog}>
+                {creatingBlog ? 'Creating...' : 'Create Blog'}
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
