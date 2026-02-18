@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/home/HeroSection';
 import StatsSection from '@/components/home/StatsSection';
+import TestimonialsSection from '@/components/home/TestimonialsSection';
 import PortfolioSection from '@/components/home/PortfolioSection';
 import FAQSection from '@/components/home/FAQSection';
 import UniversitiesSection from '@/components/home/UniversitiesSection';
@@ -75,6 +76,7 @@ export default function HomePage() {
             <HeroSection onNavigate={handleNavigate} />
             <StatsSection />
             <PricingPage />
+            <TestimonialsSection onNavigate={handleNavigate} />
             <PortfolioSection onNavigate={handleNavigate} />
             <FAQSection />
             <UniversitiesSection />
