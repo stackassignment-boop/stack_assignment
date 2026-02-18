@@ -163,8 +163,8 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
           </p>
         )}
 
-        {/* Author */}
-        {blog.author.name && (
+        {/* Author - Hidden for admin-created blogs */}
+        {/* {blog.author.name && (
           <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-200 dark:border-slate-700">
             <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
               <span className="text-indigo-600 dark:text-indigo-400 font-bold">
@@ -176,7 +176,7 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
               <p className="text-sm text-gray-500 dark:text-gray-400">Author</p>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Content */}
         <article
