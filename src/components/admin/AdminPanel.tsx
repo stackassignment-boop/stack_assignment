@@ -111,6 +111,7 @@ interface Blog {
   title: string;
   slug: string;
   excerpt: string;
+  content?: string;
   isPublished: boolean;
   createdAt: string;
 }
@@ -330,6 +331,28 @@ export default function AdminPanel() {
       toast.error('An error occurred');
     } finally {
       setCreatingBlog(false);
+    }
+  };
+
+  const deleteBlog = async (slug: string) => {
+    if (!confirm('Are you sure you want to delete this blog post? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/blogs/${slug}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        toast.success('Blog post deleted successfully');
+        loadDashboardData();
+      } else {
+        const data = await res.json();
+        toast.error(data.error || 'Failed to delete blog');
+      }
+    } catch (error) {
+      toast.error('An error occurred');
     }
   };
 
@@ -757,6 +780,7 @@ export default function AdminPanel() {
                         <TableHead>Excerpt</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Date</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -771,6 +795,18 @@ export default function AdminPanel() {
                             </Badge>
                           </TableCell>
                           <TableCell>{formatDate(blog.createdAt)}</TableCell>
+                          <TableCell>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                              onClick={() => deleteBlog(blog.slug)}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </Button>
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
