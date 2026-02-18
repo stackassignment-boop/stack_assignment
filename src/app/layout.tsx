@@ -14,24 +14,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Z.ai Code Scaffold - AI-Powered Development",
-  description: "Modern Next.js scaffold optimized for AI-powered development with Z.ai. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
-  keywords: ["Z.ai", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
-  authors: [{ name: "Z.ai Team" }],
+  title: "Stack Assignment - Expert Academic Writing Help",
+  description: "Professional academic writing & assignment assistance since 2010. PhD-qualified writers, 100% original content, on-time delivery. Expert help for essays, dissertations, research papers, and more.",
+  keywords: ["academic writing", "assignment help", "essay writing", "dissertation help", "research paper", "thesis writing", "homework help", "university assignment", "Stack Assignment"],
+  authors: [{ name: "Stack Assignment" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/favicon.png",
   },
   openGraph: {
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
-    url: "https://chat.z.ai",
-    siteName: "Z.ai",
+    title: "Stack Assignment - Expert Academic Writing Help",
+    description: "Professional academic writing & assignment assistance since 2010. PhD-qualified writers, 100% original content.",
+    url: "https://stackassignment.com",
+    siteName: "Stack Assignment",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
+    title: "Stack Assignment - Expert Academic Writing Help",
+    description: "Professional academic writing & assignment assistance since 2010.",
   },
 };
 
