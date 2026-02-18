@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 
 interface Blog {
   id: string;
@@ -17,7 +18,7 @@ interface Blog {
 }
 
 interface BlogPageProps {
-  onNavigate?: (page: string) => void;
+  onNavigate?: (page: string, params?: Record<string, string>) => void;
 }
 
 export default function BlogPage({ onNavigate }: BlogPageProps) {
@@ -60,6 +61,12 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
       'from-violet-500 to-purple-600',
     ];
     return gradients[index % gradients.length];
+  };
+
+  const handleBlogClick = (slug: string) => {
+    if (onNavigate) {
+      onNavigate('blog-detail', { slug });
+    }
   };
 
   if (loading) {
@@ -111,7 +118,8 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
               {blogs.map((blog, index) => (
                 <article
                   key={blog.id}
-                  className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1"
+                  className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                  onClick={() => handleBlogClick(blog.slug)}
                 >
                   {/* Header image */}
                   {blog.featuredImage ? (
@@ -132,9 +140,9 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
                     <p className="text-gray-600 dark:text-gray-300 mb-5 line-clamp-3">
                       {blog.excerpt || 'Click to read more...'}
                     </p>
-                    <button className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
                       Read full article →
-                    </button>
+                    </span>
                   </div>
                 </article>
               ))}

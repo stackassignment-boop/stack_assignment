@@ -12,6 +12,7 @@ import UniversitiesSection from '@/components/home/UniversitiesSection';
 import PricingPage from '@/components/pricing/PricingPage';
 import SamplesPage from '@/components/samples/SamplesPage';
 import BlogPage from '@/components/blog/BlogPage';
+import BlogDetailPage from '@/components/blog/BlogDetailPage';
 import PrivacyPage from '@/components/legal/PrivacyPage';
 import TermsPage from '@/components/legal/TermsPage';
 import IntegrityPage from '@/components/legal/IntegrityPage';
@@ -21,19 +22,38 @@ import OrderPage from '@/components/order/OrderPage';
 // Get initial page from URL
 function getInitialPage(): string {
   if (typeof window !== 'undefined') {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('view') || 'home';
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('view') || 'home';
   }
   return 'home';
 }
 
+// Get slug from URL
+function getInitialSlug(): string {
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('slug') || '';
+  }
+  return '';
+}
+
 export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(getInitialPage);
+  const [blogSlug, setBlogSlug] = useState(getInitialSlug);
 
   // Update URL when page changes
-  const handleNavigate = (page: string) => {
+  const handleNavigate = (page: string, params?: Record<string, string>) => {
     setCurrentPage(page);
-    window.history.pushState({}, '', `/?view=${page}`);
+    setBlogSlug(params?.slug || '');
+    
+    // Build URL with params
+    const urlParams = new URLSearchParams();
+    urlParams.set('view', page);
+    if (params?.slug) {
+      urlParams.set('slug', params.slug);
+    }
+    
+    window.history.pushState({}, '', `/?${urlParams.toString()}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -56,11 +76,13 @@ export default function HomePage() {
           </>
         );
       case 'pricing':
-        return <PricingPage />;
+        return <PricingPage onNavigate={handleNavigate} />;
       case 'samples':
         return <SamplesPage />;
       case 'blog':
-        return <BlogPage />;
+        return <BlogPage onNavigate={handleNavigate} />;
+      case 'blog-detail':
+        return <BlogDetailPage slug={blogSlug} onNavigate={handleNavigate} />;
       case 'privacy':
         return <PrivacyPage />;
       case 'terms':
@@ -75,7 +97,7 @@ export default function HomePage() {
           <>
             <HeroSection onNavigate={handleNavigate} />
             <StatsSection />
-            <PricingPage />
+            <PricingPage onNavigate={handleNavigate} />
             <TestimonialsSection onNavigate={handleNavigate} />
             <PortfolioSection onNavigate={handleNavigate} />
             <FAQSection />
