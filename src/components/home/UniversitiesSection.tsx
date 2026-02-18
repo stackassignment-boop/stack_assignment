@@ -1,26 +1,33 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-
-// University logos (using placeholder text logos)
-const universityLogos = [
-  'MIT', 'Stanford', 'Harvard', 'Oxford', 'Cambridge', 
-  'Yale', 'Princeton', 'Columbia', 'Berkeley', 'UCLA',
-  'Toronto', 'Melbourne', 'Sydney', 'UNSW', 'Monash',
-  'Imperial', 'UCL', 'LSE', 'Edinburgh', 'Manchester',
-  'NUS', 'HKU', 'Tokyo', 'Peking', 'Tsinghua'
+// University logos with local images
+const universities = [
+  { name: 'De Montfort University', image: '/universities/001.jpg' },
+  { name: 'Federation University', image: '/universities/002.jpg' },
+  { name: 'University of Newcastle', image: '/universities/003.jpg' },
+  { name: 'University of New England', image: '/universities/004.jpg' },
+  { name: 'UNSW Sydney', image: '/universities/005.jpg' },
+  { name: 'University of Canberra', image: '/universities/006.jpg' },
+  { name: 'University of Sunshine Coast', image: '/universities/007.jpg' },
+  { name: 'University of Western Australia', image: '/universities/008.jpg' },
+  { name: 'Kaplan University', image: '/universities/009.jpg' },
+  { name: 'Victoria University', image: '/universities/0010.jpg' },
+  { name: 'Torrens University', image: '/universities/0011.jpg' },
+  { name: 'Holmes Institute', image: '/universities/0012.jpg' },
+  { name: 'Melbourne Institute of Technology', image: '/universities/0013.jpg' },
+  { name: 'Southampton Solent University', image: '/universities/0014.jpg' },
 ];
 
 export default function UniversitiesSection() {
   return (
-    <section 
+    <section
       className="py-24 relative overflow-hidden"
       style={{
         background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 45%, #3b82f6 100%)'
       }}
     >
       {/* Background effect */}
-      <div 
+      <div
         className="absolute inset-0"
         style={{
           background: 'radial-gradient(ellipse 90% 60% at 50% 100%, rgba(255,255,255,0.07) 0%, transparent 70%)'
@@ -53,12 +60,15 @@ export default function UniversitiesSection() {
         </div>
 
         {/* Title */}
-        <p className="text-center text-white font-semibold text-lg mb-6">
+        <p className="text-center text-white font-semibold text-lg mb-2">
           Trusted by Students From
+        </p>
+        <p className="text-center text-white/50 text-sm mb-8">
+          Hover to pause • Scroll automatically
         </p>
 
         {/* Marquee */}
-        <Marquee logos={universityLogos} />
+        <Marquee universities={universities} />
       </div>
     </section>
   );
@@ -101,14 +111,14 @@ function StatPill({ icon, value, label }: { icon: string; value: string; label: 
   );
 }
 
-function Marquee({ logos }: { logos: string[] }) {
+function Marquee({ universities }: { universities: { name: string; image: string }[] }) {
   return (
     <div className="relative overflow-hidden">
       {/* Gradient overlays */}
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-blue-700 to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-blue-500 to-transparent z-10 pointer-events-none" />
-      
-      <div 
+
+      <div
         className="flex gap-6"
         style={{
           animation: 'marquee 40s linear infinite',
@@ -116,12 +126,16 @@ function Marquee({ logos }: { logos: string[] }) {
         }}
       >
         {/* Double the logos for seamless loop */}
-        {[...logos, ...logos].map((logo, index) => (
-          <div 
+        {[...universities, ...universities].map((uni, index) => (
+          <div
             key={index}
-            className="bg-white/95 border border-white/40 rounded-2xl px-6 py-4 flex items-center justify-center min-w-[160px] h-[80px] flex-shrink-0 transition-transform hover:scale-105 shadow-lg"
+            className="bg-white/95 border border-white/40 rounded-2xl px-5 py-3 flex items-center justify-center min-w-[200px] h-[65px] flex-shrink-0 transition-all hover:bg-white hover:scale-105 shadow-lg"
           >
-            <span className="text-lg font-bold text-gray-700">{logo}</span>
+            <img
+              src={uni.image}
+              alt={uni.name}
+              className="max-h-[45px] max-w-[180px] object-contain"
+            />
           </div>
         ))}
       </div>
