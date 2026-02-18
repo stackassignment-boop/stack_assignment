@@ -47,5 +47,15 @@ test
 prompt
 
 server.log
+
 # Skills directory
 /skills/
+
+# Database files (local SQLite)
+*.db
+*.db-journal
+prisma/dev.db
+prisma/*.db
+
+# Uploaded files (if any)
+/uploads/
