@@ -993,6 +993,9 @@ export default function AdminPanel() {
             
             <div className="space-y-2">
               <Label htmlFor="blog-content">Content (HTML supported) *</Label>
+              <p className="text-xs text-muted-foreground mb-1">
+                Paste only the article content (inside &lt;article&gt; tag). Navigation, header, and footer will be removed automatically.
+              </p>
               <textarea
                 id="blog-content"
                 className="w-full min-h-[300px] p-3 rounded-md border border-input bg-background text-sm"

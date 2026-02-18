@@ -64,6 +64,19 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
     }
   };
 
+  // Clean blog content - remove navigation and extra headers
+  const cleanContent = (content: string): string => {
+    // Remove nav elements
+    let cleaned = content.replace(/<nav[\s\S]*?<\/nav>/gi, '');
+    // Remove header elements (but not h1-h6)
+    cleaned = cleaned.replace(/<header[\s\S]*?<\/header>/gi, '');
+    // Remove footer elements
+    cleaned = cleaned.replace(/<footer[\s\S]*?<\/footer>/gi, '');
+    // Remove any duplicate h1 that might be in the content
+    // Keep only the first h1 if it matches the title
+    return cleaned;
+  };
+
   if (loading) {
     return (
       <main className="flex-grow py-12">
@@ -183,7 +196,7 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
             prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:px-4 prose-th:py-2 prose-th:bg-gray-100
             prose-td:border prose-td:border-gray-300 prose-td:px-4 prose-td:py-2
           "
-          dangerouslySetInnerHTML={{ __html: blog.content }}
+          dangerouslySetInnerHTML={{ __html: cleanContent(blog.content) }}
         />
 
         {/* Tags */}
