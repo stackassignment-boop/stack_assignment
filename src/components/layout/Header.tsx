@@ -99,7 +99,7 @@ export default function Header({ currentPage = 'home', onNavigate }: HeaderProps
             </a>
 
             <Button
-              onClick={() => handleNav('home')}
+              onClick={() => handleNav('order')}
               className="bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               Order Now

@@ -4,7 +4,10 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/home/HeroSection';
-import ServicesPage from '@/components/services/ServicesPage';
+import StatsSection from '@/components/home/StatsSection';
+import PortfolioSection from '@/components/home/PortfolioSection';
+import FAQSection from '@/components/home/FAQSection';
+import UniversitiesSection from '@/components/home/UniversitiesSection';
 import PricingPage from '@/components/pricing/PricingPage';
 import SamplesPage from '@/components/samples/SamplesPage';
 import BlogPage from '@/components/blog/BlogPage';
@@ -12,6 +15,7 @@ import PrivacyPage from '@/components/legal/PrivacyPage';
 import TermsPage from '@/components/legal/TermsPage';
 import IntegrityPage from '@/components/legal/IntegrityPage';
 import AdminPanel from '@/components/admin/AdminPanel';
+import OrderPage from '@/components/order/OrderPage';
 
 // Get initial page from URL
 function getInitialPage(): string {
@@ -41,7 +45,15 @@ export default function HomePage() {
   const renderPage = () => {
     switch (currentPage) {
       case 'services':
-        return <ServicesPage />;
+        return (
+          <>
+            <HeroSection onNavigate={handleNavigate} />
+            <StatsSection />
+            <PortfolioSection onNavigate={handleNavigate} />
+            <FAQSection />
+            <UniversitiesSection />
+          </>
+        );
       case 'pricing':
         return <PricingPage />;
       case 'samples':
@@ -54,16 +66,29 @@ export default function HomePage() {
         return <TermsPage />;
       case 'integrity':
         return <IntegrityPage />;
+      case 'order':
+        return <OrderPage onNavigate={handleNavigate} />;
       case 'home':
       default:
-        return <HeroSection />;
+        return (
+          <>
+            <HeroSection onNavigate={handleNavigate} />
+            <StatsSection />
+            <PricingPage />
+            <PortfolioSection onNavigate={handleNavigate} />
+            <FAQSection />
+            <UniversitiesSection />
+          </>
+        );
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100">
       <Header currentPage={currentPage} onNavigate={handleNavigate} />
-      {renderPage()}
+      <main className="flex-grow">
+        {renderPage()}
+      </main>
       <Footer onNavigate={handleNavigate} />
     </div>
   );
