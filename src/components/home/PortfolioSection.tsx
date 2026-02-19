@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { BookOpen, ArrowRight, Eye } from 'lucide-react';
+import { BookOpen, ArrowRight, Eye, X } from 'lucide-react';
 
 interface Sample {
   id: string;
@@ -58,6 +58,7 @@ interface PortfolioSectionProps {
 export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) {
   const [samples, setSamples] = useState<Sample[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadSamples() {
@@ -79,12 +80,37 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
     onNavigate?.('samples', { preview: slug });
   };
 
+  // Handle subject filter click
+  const handleSubjectClick = (subject: string) => {
+    if (selectedSubject === subject) {
+      setSelectedSubject(null); // Toggle off if clicking same subject
+    } else {
+      setSelectedSubject(subject);
+    }
+  };
+
+  // Clear filter
+  const clearFilter = () => {
+    setSelectedSubject(null);
+  };
+
+  // Filter samples by selected subject
+  const filteredSamples = selectedSubject 
+    ? samples.filter(s => s.subject === selectedSubject)
+    : samples;
+
   // Get 6 samples, one from each category if possible
   const displaySamples = (() => {
-    if (samples.length === 0) return [];
+    if (filteredSamples.length === 0) return [];
     
+    // If a subject is selected, show all samples from that subject (max 6)
+    if (selectedSubject) {
+      return filteredSamples.slice(0, 6);
+    }
+    
+    // Otherwise, show one from each category
     const bySubject: Record<string, Sample[]> = {};
-    samples.forEach(s => {
+    filteredSamples.forEach(s => {
       const sub = s.subject || 'General';
       if (!bySubject[sub]) bySubject[sub] = [];
       bySubject[sub].push(s);
@@ -102,7 +128,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
     });
     
     // Fill remaining
-    samples.forEach(s => {
+    filteredSamples.forEach(s => {
       if (result.length < 6 && !used.has(s.id)) {
         result.push(s);
       }
@@ -144,22 +170,50 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
 
         {/* Subject Tags */}
         {subjects.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-2 mb-10">
+          <div className="flex flex-wrap justify-center items-center gap-2 mb-10">
             {subjects.map(sub => (
-              <span key={sub} className={`text-white text-sm font-medium px-4 py-1.5 rounded-full ${getColor(sub)}`}>
+              <button 
+                key={sub} 
+                onClick={() => handleSubjectClick(sub)}
+                className={`text-sm font-medium px-4 py-1.5 rounded-full transition-all ${
+                  selectedSubject === sub 
+                    ? `${getColor(sub)} text-white ring-2 ring-offset-2 ring-indigo-300` 
+                    : `${getColor(sub)} text-white opacity-70 hover:opacity-100`
+                }`}
+              >
                 {sub}
-              </span>
+              </button>
             ))}
+            {selectedSubject && (
+              <button 
+                onClick={clearFilter}
+                className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 px-3 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all"
+              >
+                <X className="w-3 h-3" />
+                Clear
+              </button>
+            )}
           </div>
         )}
 
         {/* No Samples */}
-        {samples.length === 0 && (
+        {samples.length === 0 ? (
           <div className="text-center py-12">
             <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-3" />
             <p className="text-gray-500">No samples available yet.</p>
           </div>
-        )}
+        ) : displaySamples.length === 0 && selectedSubject ? (
+          <div className="text-center py-12">
+            <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+            <p className="text-gray-500">No samples found in <span className="font-semibold text-indigo-600">{selectedSubject}</span> category.</p>
+            <button 
+              onClick={clearFilter}
+              className="mt-3 text-indigo-600 hover:text-indigo-700 font-medium"
+            >
+              Clear filter to see all samples
+            </button>
+          </div>
+        ) : null}
 
         {/* Samples Grid */}
         {displaySamples.length > 0 && (
@@ -227,7 +281,13 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
         {samples.length > 0 && (
           <div className="text-center">
             <p className="text-gray-500 mb-4">
-              Showing {Math.min(6, samples.length)} of {samples.length} samples
+              {selectedSubject ? (
+                <>
+                  Showing {Math.min(6, filteredSamples.length)} of {filteredSamples.length} samples in <span className="font-semibold text-indigo-600">{selectedSubject}</span>
+                </>
+              ) : (
+                <>Showing {Math.min(6, samples.length)} of {samples.length} samples across {subjects.length} subjects</>
+              )}
             </p>
             <Button 
               onClick={() => onNavigate?.('samples')}
