@@ -42,8 +42,7 @@ import {
   Clock,
   AlertCircle,
   Eye,
-  Trash2,
-  Upload
+  Trash2
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -128,6 +127,8 @@ interface Sample {
   paperType?: string;
   pages?: number;
   fileUrl?: string;
+  fileName?: string;
+  fileSize?: number;
   isPublished: boolean;
   createdAt: string;
 }
@@ -170,9 +171,9 @@ export default function AdminPanel() {
     academicLevel: '',
     paperType: '',
     pages: 1,
-    fileUrl: '',
     isPublished: true,
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [creatingSample, setCreatingSample] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
 
@@ -378,62 +379,51 @@ export default function AdminPanel() {
     }
   };
 
-  const uploadFile = async (file: File): Promise<string | null> => {
-    setUploadingFile(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        return data.file.url;
-      } else {
-        toast.error(data.error || 'Failed to upload file');
-        return null;
-      }
-    } catch (error) {
-      toast.error('Failed to upload file');
-      return null;
-    } finally {
-      setUploadingFile(false);
-    }
-  };
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const url = await uploadFile(file);
-    if (url) {
-      setSampleForm({ ...sampleForm, fileUrl: url });
-      toast.success('File uploaded successfully');
+    // Validate file type
+    if (file.type !== 'application/pdf') {
+      toast.error('Only PDF files are allowed');
+      return;
     }
+
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File size exceeds 10MB limit');
+      return;
+    }
+
+    setSelectedFile(file);
+    toast.success('File selected: ' + file.name);
   };
 
   const createSample = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!selectedFile) {
+      toast.error('Please select a PDF file');
+      return;
+    }
+
     setCreatingSample(true);
+    setUploadingFile(true);
 
     try {
+      const formData = new FormData();
+      formData.append('title', sampleForm.title);
+      formData.append('description', sampleForm.description || '');
+      formData.append('subject', sampleForm.subject || '');
+      formData.append('academicLevel', sampleForm.academicLevel || '');
+      formData.append('paperType', sampleForm.paperType || '');
+      formData.append('pages', sampleForm.pages.toString());
+      formData.append('isPublished', sampleForm.isPublished.toString());
+      formData.append('file', selectedFile);
+
       const res = await fetch('/api/samples', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: sampleForm.title,
-          description: sampleForm.description || undefined,
-          subject: sampleForm.subject || undefined,
-          academicLevel: sampleForm.academicLevel || undefined,
-          paperType: sampleForm.paperType || undefined,
-          pages: sampleForm.pages || undefined,
-          fileUrl: sampleForm.fileUrl || undefined,
-          isPublished: sampleForm.isPublished,
-        }),
+        body: formData,
       });
 
       const data = await res.json();
@@ -447,9 +437,9 @@ export default function AdminPanel() {
           academicLevel: '',
           paperType: '',
           pages: 1,
-          fileUrl: '',
           isPublished: true,
         });
+        setSelectedFile(null);
         setShowSampleDialog(false);
         loadDashboardData();
       } else {
@@ -459,6 +449,7 @@ export default function AdminPanel() {
       toast.error('An error occurred');
     } finally {
       setCreatingSample(false);
+      setUploadingFile(false);
     }
   };
 
@@ -987,7 +978,15 @@ export default function AdminPanel() {
                             <TableCell>{sample.academicLevel?.replace('_', ' ') || '-'}</TableCell>
                             <TableCell>{sample.pages || '-'}</TableCell>
                             <TableCell>
-                              {sample.fileUrl ? (
+                              {sample.fileName ? (
+                                <a 
+                                  href={`/api/samples/${sample.slug}/download`}
+                                  className="text-primary hover:underline flex items-center gap-1"
+                                >
+                                  <FileText className="h-4 w-4" />
+                                  {sample.fileName}
+                                </a>
+                              ) : sample.fileUrl ? (
                                 <a 
                                   href={sample.fileUrl} 
                                   target="_blank" 
@@ -1334,28 +1333,23 @@ export default function AdminPanel() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="sample-file">Upload PDF File</Label>
-              <div className="flex items-center gap-3">
-                <Input
-                  id="sample-file"
-                  type="file"
-                  accept=".pdf"
-                  onChange={handleFileUpload}
-                  disabled={uploadingFile}
-                  className="flex-1"
-                />
-                {uploadingFile && (
-                  <span className="text-sm text-muted-foreground">Uploading...</span>
-                )}
-              </div>
-              {sampleForm.fileUrl && (
+              <Label htmlFor="sample-file">Upload PDF File *</Label>
+              <Input
+                id="sample-file"
+                type="file"
+                accept=".pdf"
+                onChange={handleFileSelect}
+                disabled={uploadingFile}
+                className="flex-1"
+              />
+              {selectedFile && (
                 <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
                   <FileText className="h-4 w-4" />
-                  File uploaded successfully
+                  Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
                 </div>
               )}
               <p className="text-xs text-muted-foreground">
-                Max file size: 10MB. Only PDF files are accepted.
+                Max file size: 10MB. Only PDF files are accepted. File will be stored in the database.
               </p>
             </div>
             

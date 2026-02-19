@@ -147,7 +147,11 @@ model Sample {
   paperType       String?
   pages           Int?
   content         String?   // Could be markdown or HTML content
-  fileUrl         String?
+  fileUrl         String?   // Legacy field for external URLs
+  fileData        Bytes?    // Binary data for PDF stored in database
+  fileName        String?   // Original file name
+  fileType        String?   // MIME type (e.g., application/pdf)
+  fileSize        Int?      // File size in bytes
   isPublished     Boolean   @default(true)
   viewCount       Int       @default(0)
   downloadCount   Int       @default(0)
