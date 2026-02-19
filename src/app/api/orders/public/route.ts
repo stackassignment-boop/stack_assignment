@@ -1,126 +1,176 @@
-import { NextRequest } from 'next/server';
-import { db } from '@/lib/db';
-import { generateOrderNumber, calculatePrice, apiResponse, apiError } from '@/lib/auth';
-import { getToken } from 'next-auth/jwt';
-import { z } from 'zod';
+import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 
-// Schema for public order creation (guest orders)
-const publicOrderSchema = z.object({
-  email: z.string().email('Valid email is required'),
-  phone: z.string().min(5, 'Phone number is required'),
-  subject: z.string().min(2, 'Subject is required'),
-  description: z.string().min(10, 'Description must be at least 10 characters'),
-  deadline: z.string().min(1, 'Deadline is required'),
-  deadlineTime: z.string().optional(),
-  pages: z.number().int().min(1, 'At least 1 page is required'),
-  service: z.enum(['writing', 'rewriting', 'editing']).default('writing'),
-  coupon: z.string().optional(),
-  academicLevel: z.enum(['high_school', 'bachelor', 'master', 'phd']).default('bachelor'),
-  paperType: z.string().default('essay'),
-});
+// Create a fresh Prisma client for this request
+const getPrismaClient = () => {
+  // Ensure we use the Neon database URL
+  const NEON_DATABASE_URL = "postgresql://neondb_owner:npg_A8kgUBsheXJ3@ep-floral-sun-aikg04vz-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+  
+  return new PrismaClient({
+    datasources: {
+      db: {
+        url: NEON_DATABASE_URL,
+      },
+    },
+  });
+};
+
+// Generate unique order number
+function generateOrderNumber(): string {
+  const timestamp = Date.now().toString(36).toUpperCase();
+  const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return `SA-${timestamp}-${random}`;
+}
+
+// Price per page based on academic level (in INR)
+const PRICE_PER_PAGE: Record<string, number> = {
+  high_school: 250,
+  bachelor: 350,
+  master: 450,
+  phd: 750,
+};
+
+// Urgency multiplier based on deadline
+function getUrgencyMultiplier(days: number): number {
+  if (days >= 14) return 1.0;
+  if (days >= 7) return 1.3;
+  if (days >= 3) return 1.6;
+  if (days >= 2) return 2.2;
+  return 3.0; // under 24 hours
+}
+
+// Calculate price
+function calculatePrice(academicLevel: string, days: number, pages: number) {
+  const pricePerPage = PRICE_PER_PAGE[academicLevel] || 350;
+  const urgencyMultiplier = getUrgencyMultiplier(days);
+  const totalPrice = Math.round(pricePerPage * urgencyMultiplier * pages);
+  
+  return {
+    pricePerPage,
+    urgencyMultiplier,
+    totalPrice,
+  };
+}
 
 // POST /api/orders/public - Create order (guest or logged-in user)
 export async function POST(request: NextRequest) {
+  const prisma = getPrismaClient();
+  
   try {
     const body = await request.json();
-    const result = publicOrderSchema.safeParse(body);
+    console.log('Received order request:', { ...body, description: body.description?.substring(0, 50) + '...' });
 
-    if (!result.success) {
-      return apiError(result.error.errors[0].message, 400);
+    // Validate required fields
+    const { email, phone, subject, description, deadline, deadlineTime, pages, service, coupon } = body;
+
+    if (!email || !phone || !subject || !description || !deadline || !pages) {
+      return NextResponse.json(
+        { error: 'Please fill all required fields' },
+        { status: 400 }
+      );
     }
 
-    const data = result.data;
-
     // Parse deadline
-    const deadlineDate = new Date(`${data.deadline}T${data.deadlineTime || '12:00'}`);
+    const deadlineDate = new Date(`${deadline}T${deadlineTime || '12:00'}:00`);
+    console.log('Parsed deadline:', deadlineDate.toISOString());
 
     // Calculate days until deadline
     const now = new Date();
-    const daysUntilDeadline = Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-
-    if (daysUntilDeadline < 0) {
-      return apiError('Deadline cannot be in the past', 400);
-    }
+    const daysUntilDeadline = Math.max(1, Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
 
     // Check for existing user or create one
-    let user = await db.user.findUnique({
-      where: { email: data.email },
-    });
+    let user;
+    try {
+      user = await prisma.user.findUnique({
+        where: { email: email },
+      });
+    } catch (e) {
+      console.error('Error finding user:', e);
+    }
 
     if (!user) {
       // Create a new customer account
-      user = await db.user.create({
-        data: {
-          email: data.email,
-          phone: data.phone,
-          name: data.email.split('@')[0], // Use email prefix as name
-          role: 'customer',
-          password: '', // No password for guest orders
-        },
-      });
+      try {
+        user = await prisma.user.create({
+          data: {
+            email: email,
+            phone: phone,
+            name: email.split('@')[0] || 'Customer',
+            role: 'customer',
+            password: '',
+          },
+        });
+        console.log('Created new user:', user.id);
+      } catch (createError: unknown) {
+        console.error('Error creating user:', createError);
+        // User might have been created by another request, try to find again
+        user = await prisma.user.findUnique({
+          where: { email: email },
+        });
+        if (!user) {
+          throw new Error('Failed to create or find user');
+        }
+      }
     } else {
       // Update phone if provided and different
-      if (data.phone && user.phone !== data.phone) {
-        await db.user.update({
-          where: { id: user.id },
-          data: { phone: data.phone },
-        });
+      if (phone && user.phone !== phone) {
+        try {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { phone: phone },
+          });
+        } catch (e) {
+          console.error('Error updating user phone:', e);
+        }
       }
+      console.log('Found existing user:', user.id);
     }
 
     // Calculate price
-    const pricing = calculatePrice({
-      academicLevel: data.academicLevel,
-      deadline: daysUntilDeadline,
-      pages: data.pages,
-    });
+    const academicLevel = body.academicLevel || 'bachelor';
+    const pricing = calculatePrice(academicLevel, daysUntilDeadline, parseInt(String(pages)));
 
     // Apply coupon discount if valid
     let discount = 0;
-    if (data.coupon?.toLowerCase() === 'newtostack33') {
+    if (coupon?.toLowerCase() === 'newtostack33') {
       discount = pricing.totalPrice * 0.33;
     }
 
-    const finalPrice = pricing.totalPrice - discount;
+    const finalPrice = Math.round(pricing.totalPrice - discount);
 
     // Create order
-    const order = await db.order.create({
+    const order = await prisma.order.create({
       data: {
         orderNumber: generateOrderNumber(),
         customerId: user.id,
-        title: `${data.subject} - ${data.pages} pages`,
-        description: data.description,
-        subject: data.subject,
-        academicLevel: data.academicLevel,
-        paperType: data.paperType,
-        pages: data.pages,
-        words: data.pages * 250,
+        title: `${subject} - ${pages} pages`,
+        description: description,
+        subject: subject,
+        academicLevel: academicLevel,
+        paperType: body.paperType || 'essay',
+        pages: parseInt(String(pages)),
+        words: parseInt(String(pages)) * 250,
         pricePerPage: pricing.pricePerPage,
         urgencyMultiplier: pricing.urgencyMultiplier,
         totalPrice: finalPrice,
         deadline: deadlineDate,
         requirements: JSON.stringify({
-          service: data.service,
-          coupon: data.coupon,
+          service: service || 'writing',
+          coupon: coupon || null,
           discount: discount,
           originalPrice: pricing.totalPrice,
         }),
         status: 'pending',
         paymentStatus: 'pending',
       },
-      include: {
-        customer: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            phone: true,
-          },
-        },
-      },
     });
 
-    return apiResponse({
+    console.log('Order created successfully:', order.orderNumber);
+
+    // Disconnect prisma
+    await prisma.$disconnect();
+
+    return NextResponse.json({
       success: true,
       message: 'Order submitted successfully',
       order: {
@@ -130,9 +180,22 @@ export async function POST(request: NextRequest) {
         deadline: order.deadline,
         status: order.status,
       },
-    }, 201);
-  } catch (error) {
+    }, { status: 201 });
+
+  } catch (error: unknown) {
     console.error('Create public order error:', error);
-    return apiError('Failed to submit order. Please try again.', 500);
+    await prisma.$disconnect();
+    
+    // More detailed error message
+    let errorMessage = 'Failed to submit order. Please try again.';
+    if (error instanceof Error) {
+      console.error('Error details:', error.message);
+      errorMessage = error.message;
+    }
+    
+    return NextResponse.json(
+      { error: errorMessage },
+      { status: 500 }
+    );
   }
 }

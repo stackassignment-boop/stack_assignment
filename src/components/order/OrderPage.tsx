@@ -50,7 +50,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: formData.email,
-          phone: formData.phone,
+          phone: `${formData.timezone}${formData.phone}`,
           subject: formData.subject,
           description: formData.description,
           deadline: formData.deadlineDate,
