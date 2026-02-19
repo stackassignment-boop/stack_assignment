@@ -89,11 +89,20 @@ interface Order {
   id: string;
   orderNumber: string;
   title: string;
+  description: string;
+  subject: string;
   academicLevel: string;
+  paperType: string;
+  pages: number;
+  words?: number;
   pageCount: number;
   totalPrice: number;
   status: string;
   paymentStatus: string;
+  deadline: string;
+  requirements?: string;
+  attachments?: string;
+  notes?: string;
   createdAt: string;
   customer: { name: string; email: string };
 }
@@ -1221,7 +1230,7 @@ export default function AdminPanel() {
 
       {/* Order Detail Dialog */}
       <Dialog open={showOrderDialog} onOpenChange={setShowOrderDialog}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Order Details</DialogTitle>
             <DialogDescription>
@@ -1230,35 +1239,116 @@ export default function AdminPanel() {
           </DialogHeader>
           {selectedOrder && (
             <div className="space-y-4">
+              {/* Status Cards */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                  <Label className="text-muted-foreground">Order Status</Label>
+                  <div className="mt-1">{getStatusBadge(selectedOrder.status)}</div>
+                </div>
+                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                  <Label className="text-muted-foreground">Payment Status</Label>
+                  <p className="font-medium mt-1">{getStatusBadge(selectedOrder.paymentStatus)}</p>
+                </div>
+              </div>
+
+              {/* Customer Info */}
+              <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                <Label className="text-muted-foreground">Customer</Label>
+                <p className="font-medium">{selectedOrder.customer.name}</p>
+                <p className="text-sm text-muted-foreground">{selectedOrder.customer.email}</p>
+              </div>
+
+              {/* Order Details Grid */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-muted-foreground">Customer</Label>
-                  <p className="font-medium">{selectedOrder.customer.name}</p>
-                  <p className="text-sm text-muted-foreground">{selectedOrder.customer.email}</p>
+                  <Label className="text-muted-foreground">Title</Label>
+                  <p className="font-medium">{selectedOrder.title}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Payment Status</Label>
-                  <p className="font-medium">{selectedOrder.paymentStatus.replace('_', ' ')}</p>
+                  <Label className="text-muted-foreground">Subject</Label>
+                  <p className="font-medium">{selectedOrder.subject || '-'}</p>
                 </div>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">Title</Label>
-                <p className="font-medium">{selectedOrder.title}</p>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <Label className="text-muted-foreground">Academic Level</Label>
                   <p className="font-medium capitalize">{selectedOrder.academicLevel.replace('_', ' ')}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Pages</Label>
-                  <p className="font-medium">{selectedOrder.pageCount}</p>
+                  <Label className="text-muted-foreground">Paper Type</Label>
+                  <p className="font-medium capitalize">{selectedOrder.paperType?.replace('_', ' ') || '-'}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Date</Label>
+                  <Label className="text-muted-foreground">Pages</Label>
+                  <p className="font-medium">{selectedOrder.pages || selectedOrder.pageCount}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Words</Label>
+                  <p className="font-medium">{selectedOrder.words || 'Not specified'}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Deadline</Label>
+                  <p className="font-medium">{selectedOrder.deadline ? formatDate(selectedOrder.deadline) : '-'}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Order Date</Label>
                   <p className="font-medium">{formatDate(selectedOrder.createdAt)}</p>
                 </div>
               </div>
+
+              {/* Description */}
+              {selectedOrder.description && (
+                <div>
+                  <Label className="text-muted-foreground">Description</Label>
+                  <p className="text-sm bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mt-1">{selectedOrder.description}</p>
+                </div>
+              )}
+
+              {/* Requirements */}
+              {selectedOrder.requirements && (
+                <div>
+                  <Label className="text-muted-foreground">Requirements</Label>
+                  <p className="text-sm bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mt-1 whitespace-pre-wrap">{selectedOrder.requirements}</p>
+                </div>
+              )}
+
+              {/* Attachments */}
+              {selectedOrder.attachments && (
+                <div>
+                  <Label className="text-muted-foreground">Attachments</Label>
+                  <div className="mt-2 space-y-2">
+                    {(() => {
+                      try {
+                        const files = JSON.parse(selectedOrder.attachments);
+                        return files.map((file: string, index: number) => (
+                          <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                            <div className="flex items-center gap-2">
+                              <FileText className="w-4 h-4 text-gray-500" />
+                              <span className="text-sm">{file}</span>
+                            </div>
+                            <a
+                              href={file}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline text-sm"
+                            >
+                              Download
+                            </a>
+                          </div>
+                        ));
+                      } catch {
+                        return <span className="text-sm text-muted-foreground">{selectedOrder.attachments}</span>;
+                      }
+                    })()}
+                  </div>
+                </div>
+              )}
+
+              {/* Notes */}
+              {selectedOrder.notes && (
+                <div>
+                  <Label className="text-muted-foreground">Notes</Label>
+                  <p className="text-sm bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mt-1 whitespace-pre-wrap">{selectedOrder.notes}</p>
+                </div>
+              )}
               
               {/* Price Setting Section */}
               <div className="space-y-2 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">

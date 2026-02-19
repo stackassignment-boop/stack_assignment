@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { User, FileText, Package, LogOut, Clock, CheckCircle, AlertCircle, Eye, Download, Plus, ChevronRight, Mail, Phone, Calendar, Settings, Edit2, Save, X, CreditCard, Wallet } from 'lucide-react';
+import { User, FileText, Package, LogOut, Clock, CheckCircle, AlertCircle, Eye, Download, Plus, ChevronRight, Mail, Phone, Calendar, Settings, Edit2, Save, X, CreditCard, Wallet, XCircle, Paperclip, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PaymentPage from './PaymentPage';
 
@@ -24,12 +24,19 @@ interface Order {
   id: string;
   orderNumber: string;
   title: string;
+  description: string;
   subject: string;
+  academicLevel: string;
+  paperType: string;
+  pages: number;
+  words?: number;
   status: string;
   paymentStatus: string;
   totalPrice: number;
   deadline: string;
-  pages: number;
+  requirements?: string;
+  attachments?: string;
+  notes?: string;
   createdAt: string;
 }
 
@@ -60,6 +67,8 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   const [editedName, setEditedName] = useState(user.name);
   const [editedPhone, setEditedPhone] = useState('');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [showOrderModal, setShowOrderModal] = useState(false);
   const [currencySettings, setCurrencySettings] = useState<CurrencySettings>({
     code: 'USD',
     symbol: '$',
@@ -224,6 +233,20 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
 
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
+  const viewOrderDetails = (order: Order) => {
+    setSelectedOrder(order);
+    setShowOrderModal(true);
+  };
+
+  const parseAttachments = (attachments: string | undefined): string[] => {
+    if (!attachments) return [];
+    try {
+      return JSON.parse(attachments);
+    } catch {
+      return [];
+    }
   };
 
   return (
@@ -473,7 +496,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                   </div>
                   <div className="divide-y divide-gray-200 dark:divide-slate-800">
                     {orders.slice(0, 3).map((order) => (
-                      <div key={order.id} className="p-4 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition">
+                      <div key={order.id} className="p-4 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition cursor-pointer" onClick={() => viewOrderDetails(order)}>
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium text-gray-900 dark:text-white">{order.title}</p>
@@ -607,22 +630,27 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                               </span>
                             </td>
                             <td className="px-4 py-4">
-                              {order.totalPrice > 0 && (order.paymentStatus === 'pending' || order.paymentStatus === 'pending_payment') ? (
+                              <div className="flex gap-2">
                                 <Button
-                                  onClick={() => setSelectedOrderId(order.id)}
+                                  onClick={() => viewOrderDetails(order)}
                                   size="sm"
-                                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                                  variant="outline"
+                                  className="border-gray-300 dark:border-slate-700"
                                 >
-                                  <CreditCard className="w-4 h-4 mr-1" />
-                                  Pay Now
+                                  <Eye className="w-4 h-4 mr-1" />
+                                  Details
                                 </Button>
-                              ) : order.totalPrice === 0 ? (
-                                <span className="text-xs text-gray-500 dark:text-gray-400">Awaiting quote</span>
-                              ) : order.paymentStatus === 'paid' ? (
-                                <span className="text-xs text-green-600 dark:text-green-400">Paid ✓</span>
-                              ) : (
-                                <span className="text-xs text-gray-500 dark:text-gray-400">-</span>
-                              )}
+                                {order.totalPrice > 0 && (order.paymentStatus === 'pending' || order.paymentStatus === 'pending_payment') && (
+                                  <Button
+                                    onClick={() => setSelectedOrderId(order.id)}
+                                    size="sm"
+                                    className="bg-orange-500 hover:bg-orange-600 text-white"
+                                  >
+                                    <CreditCard className="w-4 h-4 mr-1" />
+                                    Pay
+                                  </Button>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -754,6 +782,177 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
           </>
         )}
       </div>
+
+      {/* Order Details Modal */}
+      {showOrderModal && selectedOrder && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 p-4 flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Order Details</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedOrder.orderNumber}</p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowOrderModal(false);
+                  setSelectedOrder(null);
+                }}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
+              >
+                <XCircle className="w-6 h-6 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-6">
+              {/* Status Cards */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Order Status</p>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 w-fit ${getStatusColor(selectedOrder.status)}`}>
+                    {getStatusIcon(selectedOrder.status)}
+                    {selectedOrder.status.replace('_', ' ').toUpperCase()}
+                  </span>
+                </div>
+                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Payment Status</p>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 w-fit ${getStatusColor(selectedOrder.paymentStatus)}`}>
+                    {getPaymentStatusLabel(selectedOrder.paymentStatus, selectedOrder.totalPrice)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Order Info */}
+              <div className="space-y-4">
+                <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-teal-600" />
+                  Order Information
+                </h3>
+                
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Title</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{selectedOrder.title}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Subject</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{selectedOrder.subject}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Academic Level</p>
+                    <p className="font-medium text-gray-900 dark:text-white capitalize">{selectedOrder.academicLevel.replace('_', ' ')}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Paper Type</p>
+                    <p className="font-medium text-gray-900 dark:text-white capitalize">{selectedOrder.paperType.replace('_', ' ')}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Pages</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{selectedOrder.pages} pages</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Words</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{selectedOrder.words || 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Deadline</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{formatDateTime(selectedOrder.deadline)}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400">Order Date</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{formatDateTime(selectedOrder.createdAt)}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white">Description</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                  {selectedOrder.description}
+                </p>
+              </div>
+
+              {/* Requirements */}
+              {selectedOrder.requirements && (
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                    <Package className="w-5 h-5 text-indigo-600" />
+                    Requirements
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-slate-800 rounded-lg p-4 whitespace-pre-wrap">
+                    {selectedOrder.requirements}
+                  </p>
+                </div>
+              )}
+
+              {/* Attachments */}
+              {selectedOrder.attachments && parseAttachments(selectedOrder.attachments).length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                    <Paperclip className="w-5 h-5 text-orange-600" />
+                    Attached Files
+                  </h3>
+                  <div className="space-y-2">
+                    {parseAttachments(selectedOrder.attachments).map((file, index) => (
+                      <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                        <div className="flex items-center gap-3">
+                          <FileDown className="w-5 h-5 text-gray-500" />
+                          <span className="text-sm text-gray-700 dark:text-gray-300">{file}</span>
+                        </div>
+                        <a
+                          href={file}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-teal-600 hover:text-teal-700 text-sm font-medium flex items-center gap-1"
+                        >
+                          <Download className="w-4 h-4" />
+                          Download
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Notes */}
+              {selectedOrder.notes && (
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Additional Notes</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-slate-800 rounded-lg p-4 whitespace-pre-wrap">
+                    {selectedOrder.notes}
+                  </p>
+                </div>
+              )}
+
+              {/* Price */}
+              <div className="bg-gradient-to-r from-teal-50 to-indigo-50 dark:from-teal-900/20 dark:to-indigo-900/20 rounded-lg p-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Amount</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {selectedOrder.totalPrice > 0 ? formatPrice(selectedOrder.totalPrice) : 'Pending Quote'}
+                    </p>
+                  </div>
+                  {selectedOrder.totalPrice > 0 && (selectedOrder.paymentStatus === 'pending' || selectedOrder.paymentStatus === 'pending_payment') && (
+                    <Button
+                      onClick={() => {
+                        setShowOrderModal(false);
+                        setSelectedOrderId(selectedOrder.id);
+                      }}
+                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                    >
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Pay Now
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
