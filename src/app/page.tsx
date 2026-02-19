@@ -22,6 +22,9 @@ import AdminPanel from '@/components/admin/AdminPanel';
 import OrderPage from '@/components/order/OrderPage';
 import StudentLoginPage from '@/components/student/StudentLoginPage';
 import StudentDashboard from '@/components/student/StudentDashboard';
+import LiveActivityFeed from '@/components/fomo/LiveActivityFeed';
+import UrgencyBanner from '@/components/fomo/UrgencyBanner';
+import SocialProofWidget from '@/components/fomo/SocialProofWidget';
 
 // Get page from URL
 function getPageFromURL(): string {
@@ -145,6 +148,7 @@ function HomeContent() {
       default:
         return (
           <>
+            <UrgencyBanner onNavigate={handleNavigate} />
             <HeroSection onNavigate={handleNavigate} />
             <StatsSection />
             <PricingPage onNavigate={handleNavigate} />
@@ -152,6 +156,8 @@ function HomeContent() {
             <PortfolioSection onNavigate={handleNavigate} />
             <FAQSection />
             <UniversitiesSection />
+            <LiveActivityFeed />
+            <SocialProofWidget />
           </>
         );
     }
