@@ -6,9 +6,13 @@ import path from 'path';
 
 // POST /api/upload - Upload files (public for order attachments, admin for other types)
 export async function POST(request: NextRequest) {
+  console.log('Upload API called');
+  
   try {
     const formData = await request.formData();
     const files = formData.getAll('files') as File[];
+    
+    console.log('Files received:', files.length, files.map(f => ({ name: f.name, type: f.type, size: f.size })));
     
     if (!files || files.length === 0) {
       return apiError('No files provided', 400);
@@ -34,6 +38,7 @@ export async function POST(request: NextRequest) {
     let totalSize = 0;
     for (const file of files) {
       if (!allowedTypes.includes(file.type)) {
+        console.log('Invalid file type:', file.type, 'for file:', file.name);
         return apiError(`Invalid file type: ${file.name}. Allowed: PDF, DOC, DOCX, Images, TXT, ZIP`, 400);
       }
       if (file.size > maxSize) {
@@ -51,7 +56,10 @@ export async function POST(request: NextRequest) {
     
     // Create upload directory if it doesn't exist
     const uploadPath = path.join(process.cwd(), 'public', uploadDir);
+    console.log('Upload path:', uploadPath);
+    
     if (!existsSync(uploadPath)) {
+      console.log('Creating upload directory...');
       await mkdir(uploadPath, { recursive: true });
     }
 
@@ -67,10 +75,14 @@ export async function POST(request: NextRequest) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       await writeFile(filePath, buffer);
+      
+      console.log('File written:', filePath);
 
       // Add public URL
       uploadedUrls.push(`/${uploadDir}/${fileName}`);
     }
+
+    console.log('Upload complete. URLs:', uploadedUrls);
 
     return apiResponse({
       success: true,

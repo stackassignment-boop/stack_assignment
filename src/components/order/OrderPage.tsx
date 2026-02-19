@@ -85,22 +85,39 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
       // Upload files first if any
       let uploadedFiles: string[] = [];
       if (files.length > 0) {
+        console.log('Uploading files:', files.map(f => f.name));
         const formDataFiles = new FormData();
         files.forEach((file) => {
           formDataFiles.append('files', file);
         });
         
-        const uploadRes = await fetch('/api/upload', {
-          method: 'POST',
-          body: formDataFiles,
-        });
-        
-        if (uploadRes.ok) {
-          const uploadData = await uploadRes.json();
-          uploadedFiles = uploadData.urls || [];
+        try {
+          const uploadRes = await fetch('/api/upload', {
+            method: 'POST',
+            body: formDataFiles,
+          });
+          
+          if (uploadRes.ok) {
+            const uploadData = await uploadRes.json();
+            uploadedFiles = uploadData.urls || [];
+            console.log('Files uploaded successfully:', uploadedFiles);
+          } else {
+            const uploadError = await uploadRes.json();
+            console.error('Upload failed:', uploadError);
+            setError(uploadError.error || 'Failed to upload files. Please try again.');
+            setSubmitting(false);
+            return;
+          }
+        } catch (uploadErr) {
+          console.error('Upload error:', uploadErr);
+          setError('Failed to upload files. Please try again.');
+          setSubmitting(false);
+          return;
         }
       }
 
+      console.log('Submitting order with attachments:', uploadedFiles);
+      
       const response = await fetch('/api/orders/public', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -384,10 +401,29 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                 <div className="mt-4">
                   <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold text-sm cursor-pointer transition">
                     📎 Add Files
-                    <input type="file" multiple className="hidden" onChange={handleFileChange} />
+                    <input type="file" multiple className="hidden" onChange={handleFileChange} accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt,.zip" />
                   </label>
                   {files.length > 0 && (
-                    <div className="mt-3 text-sm text-green-600">✓ {files.length} file(s) selected</div>
+                    <div className="mt-3 space-y-2">
+                      <p className="text-sm text-green-600 font-medium">✓ {files.length} file(s) selected:</p>
+                      <div className="space-y-1">
+                        {files.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-700 rounded-lg px-3 py-2">
+                            <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[200px]">{file.name}</span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-gray-500">{(file.size / 1024).toFixed(1)} KB</span>
+                              <button
+                                type="button"
+                                onClick={() => setFiles(files.filter((_, i) => i !== index))}
+                                className="text-red-500 hover:text-red-700 text-sm"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
 

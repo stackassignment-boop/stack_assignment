@@ -39,6 +39,26 @@ export async function GET(request: NextRequest) {
     const orders = await prisma.order.findMany({
       where: { customerId: user.id },
       orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        orderNumber: true,
+        title: true,
+        description: true,
+        subject: true,
+        academicLevel: true,
+        paperType: true,
+        pages: true,
+        words: true,
+        status: true,
+        paymentStatus: true,
+        totalPrice: true,
+        deadline: true,
+        requirements: true,
+        attachments: true,
+        notes: true,
+        createdAt: true,
+        updatedAt: true,
+      }
     });
 
     await prisma.$disconnect();

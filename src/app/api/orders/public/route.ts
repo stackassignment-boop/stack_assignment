@@ -32,6 +32,17 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     const { email, phone, subject, description, deadline, deadlineTime, pages, service, coupon, attachments } = body;
 
+    console.log('Order data received:', { 
+      email, 
+      phone, 
+      subject, 
+      deadline, 
+      pages,
+      hasAttachments: !!attachments,
+      attachmentsCount: attachments?.length || 0,
+      attachments: attachments
+    });
+
     if (!email || !phone || !subject || !description || !deadline || !pages) {
       return NextResponse.json(
         { error: 'Please fill all required fields' },
@@ -118,6 +129,7 @@ export async function POST(request: NextRequest) {
     });
 
     console.log('Order created successfully:', order.orderNumber);
+    console.log('Order attachments saved:', order.attachments);
 
     // Disconnect prisma
     await prisma.$disconnect();
