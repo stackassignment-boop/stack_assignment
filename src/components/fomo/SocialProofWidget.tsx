@@ -28,7 +28,7 @@ export default function SocialProofWidget() {
   }, []);
 
   return (
-    <div className="fixed bottom-20 md:bottom-24 left-4 right-4 md:left-auto md:right-4 md:w-80 z-30 pointer-events-none">
+    <div className="fixed bottom-40 md:bottom-44 left-4 right-4 md:left-auto md:right-4 md:w-80 z-30 pointer-events-none">
       {/* Testimonial Card */}
       <div 
         className={`bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 p-4 transition-all duration-300 pointer-events-auto ${
