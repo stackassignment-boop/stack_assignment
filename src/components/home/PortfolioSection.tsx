@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { FileText, BookOpen, ArrowRight } from 'lucide-react';
+import { BookOpen, ArrowRight } from 'lucide-react';
 
 interface Sample {
   id: string;
@@ -94,6 +94,7 @@ interface PortfolioSectionProps {
 export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) {
   const [samples, setSamples] = useState<Sample[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSamples();
@@ -101,43 +102,58 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
 
   const fetchSamples = async () => {
     try {
-      const res = await fetch('/api/samples');
+      setLoading(true);
+      setError(null);
+      const res = await fetch('/api/samples?limit=100');
+      if (!res.ok) {
+        throw new Error('Failed to fetch samples');
+      }
       const data = await res.json();
+      console.log('Fetched samples:', data.samples?.length, data.samples);
       setSamples(data.samples || []);
-    } catch (error) {
-      console.error('Failed to fetch samples:', error);
+    } catch (err) {
+      console.error('Failed to fetch samples:', err);
+      setError('Failed to load samples');
     } finally {
       setLoading(false);
     }
   };
 
-  // Group samples by subject and limit to 6 total
-  const groupedSamples = samples.reduce((acc, sample) => {
-    const subject = sample.subject || 'General';
-    if (!acc[subject]) {
-      acc[subject] = [];
-    }
-    acc[subject].push(sample);
-    return acc;
-  }, {} as Record<string, Sample[]>);
-
-  // Get up to 6 samples, prioritizing variety across subjects
-  const getDisplaySamples = () => {
-    const result: Sample[] = [];
-    const subjects = Object.keys(groupedSamples);
+  // Get up to 6 samples, ensuring at least one from each category if possible
+  const getDisplaySamples = (): Sample[] => {
+    if (samples.length === 0) return [];
     
-    // Take one from each subject first, then fill remaining
-    let index = 0;
-    while (result.length < 6 && subjects.length > 0) {
-      for (const subject of subjects) {
-        if (result.length >= 6) break;
-        if (groupedSamples[subject][index]) {
-          result.push(groupedSamples[subject][index]);
-        }
+    // Group samples by subject
+    const groupedSamples = samples.reduce((acc, sample) => {
+      const subject = sample.subject || 'General';
+      if (!acc[subject]) {
+        acc[subject] = [];
       }
-      index++;
-      // If we've gone through all samples and still have room, break
-      if (index > 10) break;
+      acc[subject].push(sample);
+      return acc;
+    }, {} as Record<string, Sample[]>);
+    
+    const subjects = Object.keys(groupedSamples);
+    const result: Sample[] = [];
+    const usedIds = new Set<string>();
+    
+    // First pass: take one sample from each subject (ensures variety)
+    for (const subject of subjects) {
+      if (result.length >= 6) break;
+      const sample = groupedSamples[subject][0];
+      if (sample && !usedIds.has(sample.id)) {
+        result.push(sample);
+        usedIds.add(sample.id);
+      }
+    }
+    
+    // Second pass: fill remaining slots with more samples from any category
+    for (const sample of samples) {
+      if (result.length >= 6) break;
+      if (!usedIds.has(sample.id)) {
+        result.push(sample);
+        usedIds.add(sample.id);
+      }
     }
     
     return result.slice(0, 6);
@@ -195,8 +211,18 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
           </div>
         )}
 
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-16">
+            <p className="text-red-500">{error}</p>
+            <Button onClick={fetchSamples} variant="outline" className="mt-4">
+              Try Again
+            </Button>
+          </div>
+        )}
+
         {/* Empty State */}
-        {!loading && samples.length === 0 && (
+        {!loading && !error && samples.length === 0 && (
           <div className="text-center py-16">
             <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-gray-600 dark:text-gray-400">
@@ -209,7 +235,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
         )}
 
         {/* Cards Grid - Limited to 6 */}
-        {!loading && displaySamples.length > 0 && (
+        {!loading && !error && displaySamples.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displaySamples.map(sample => (
               <PortfolioCard key={sample.id} sample={sample} getSubjectStyle={getSubjectStyle} />
@@ -218,7 +244,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
         )}
 
         {/* CTA */}
-        {samples.length > 0 && (
+        {!loading && !error && samples.length > 0 && (
           <div className="text-center mt-12">
             <p className="text-gray-500 dark:text-gray-400 mb-6">
               Showing {Math.min(6, samples.length)} of {samples.length} samples across {uniqueSubjects.length} subjects
