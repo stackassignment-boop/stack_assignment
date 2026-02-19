@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,6 +20,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
   const [submitted, setSubmitted] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
   const [error, setError] = useState('');
+  const [loadingUser, setLoadingUser] = useState(true);
   
   const [formData, setFormData] = useState({
     email: '',
@@ -32,6 +33,40 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     coupon: '',
     terms: false
   });
+
+  // Fetch user session on mount to autofill email
+  useEffect(() => {
+    const fetchUserSession = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.user?.email) {
+            setFormData(prev => ({
+              ...prev,
+              email: data.user.email
+            }));
+            // Also try to fetch profile for phone
+            const profileRes = await fetch('/api/student/profile');
+            if (profileRes.ok) {
+              const profileData = await profileRes.json();
+              if (profileData.profile?.phone) {
+                setFormData(prev => ({
+                  ...prev,
+                  phone: profileData.profile.phone.replace(/^\+91/, '')
+                }));
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching session:', err);
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+    fetchUserSession();
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -192,8 +227,13 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="Enter email for communication"
+                  placeholder={loadingUser ? "Loading..." : "Enter email for communication"}
+                  disabled={loadingUser}
+                  className={formData.email && !loadingUser ? "border-green-400 dark:border-green-600" : ""}
                 />
+                {formData.email && !loadingUser && (
+                  <p className="text-xs text-green-600 mt-1.5">✓ Signed in as {formData.email}</p>
+                )}
               </CardContent>
             </Card>
 
