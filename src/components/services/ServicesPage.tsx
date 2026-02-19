@@ -238,12 +238,12 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
               Get Started Now
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
-            <button
+            <Button
               onClick={() => onNavigate?.('pricing')}
-              className="bg-white text-indigo-600 hover:bg-gray-100 px-10 py-6 text-xl font-bold rounded-xl shadow-lg transition min-w-[280px]"
+              className="bg-white text-indigo-600 hover:bg-gray-100 px-10 py-6 text-xl font-bold rounded-xl shadow-lg min-w-[280px]"
             >
               View Pricing
-            </button>
+            </Button>
           </div>
         </div>
       </section>
