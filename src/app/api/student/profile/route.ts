@@ -1,8 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { db } from '@/lib/db';
+import { PrismaClient } from '@prisma/client';
+
+// Create a fresh Prisma client for this request
+const getPrismaClient = () => {
+  const NEON_DATABASE_URL = "postgresql://neondb_owner:npg_A8kgUBsheXJ3@ep-floral-sun-aikg04vz-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+  
+  return new PrismaClient({
+    datasources: {
+      db: {
+        url: NEON_DATABASE_URL,
+      },
+    },
+  });
+};
 
 export async function GET(request: NextRequest) {
+  const prisma = getPrismaClient();
+  
   try {
     const token = await getToken({ req: request });
     
@@ -10,7 +25,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ profile: null }, { status: 401 });
     }
 
-    const user = await db.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email: token.email },
       select: {
         id: true,
@@ -24,6 +39,8 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    await prisma.$disconnect();
+
     if (!user) {
       return NextResponse.json({ profile: null }, { status: 404 });
     }
@@ -31,11 +48,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ profile: user });
   } catch (error) {
     console.error('Error fetching profile:', error);
+    await prisma.$disconnect();
     return NextResponse.json({ profile: null }, { status: 500 });
   }
 }
 
 export async function PUT(request: NextRequest) {
+  const prisma = getPrismaClient();
+  
   try {
     const token = await getToken({ req: request });
     
@@ -46,7 +66,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { name, phone } = body;
 
-    const user = await db.user.update({
+    const user = await prisma.user.update({
       where: { email: token.email },
       data: {
         name: name || undefined,
@@ -64,9 +84,12 @@ export async function PUT(request: NextRequest) {
       },
     });
 
+    await prisma.$disconnect();
+
     return NextResponse.json({ profile: user });
   } catch (error) {
     console.error('Error updating profile:', error);
+    await prisma.$disconnect();
     return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
   }
 }

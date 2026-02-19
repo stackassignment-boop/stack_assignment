@@ -1,81 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { getToken } from 'next-auth/jwt';
+import { PrismaClient } from '@prisma/client';
 
-// Simple session storage reference (shared with auth)
-const sessions = new Map<string, { userId: string; email: string; name: string }>();
+// Create a fresh Prisma client for this request
+const getPrismaClient = () => {
+  const NEON_DATABASE_URL = "postgresql://neondb_owner:npg_A8kgUBsheXJ3@ep-floral-sun-aikg04vz-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+  
+  return new PrismaClient({
+    datasources: {
+      db: {
+        url: NEON_DATABASE_URL,
+      },
+    },
+  });
+};
 
 export async function GET(request: NextRequest) {
+  const prisma = getPrismaClient();
+  
   try {
-    const sessionToken = request.cookies.get('student_session')?.value;
-
-    if (!sessionToken) {
+    // Get user from NextAuth session
+    const token = await getToken({ req: request });
+    
+    if (!token || !token.email) {
       return NextResponse.json({ orders: [] });
     }
 
-    // For now, return empty orders since we need to link orders to students
-    // In a real app, you would fetch orders associated with the logged-in student
-    
-    // Get user from session
-    // const session = sessions.get(sessionToken);
-    
-    // For demo purposes, return sample orders structure
-    return NextResponse.json({ 
-      orders: [],
-      message: 'Orders will appear here once you place them'
+    // Find the user
+    const user = await prisma.user.findUnique({
+      where: { email: token.email },
     });
-  } catch (error) {
-    console.error('Error fetching orders:', error);
-    return NextResponse.json({ orders: [] });
-  }
-}
 
-export async function POST(request: NextRequest) {
-  try {
-    const sessionToken = request.cookies.get('student_session')?.value;
-
-    if (!sessionToken) {
-      return NextResponse.json(
-        { error: 'Please login to place an order' },
-        { status: 401 }
-      );
+    if (!user) {
+      return NextResponse.json({ orders: [] });
     }
 
-    const body = await request.json();
-    const {
-      title,
-      description,
-      subject,
-      academicLevel,
-      paperType,
-      pages,
-      deadline,
-      requirements,
-    } = body;
-
-    // Calculate price (basic calculation)
-    const pricePerPage = 150; // Base price per page in INR
-    const totalPrice = pages * pricePerPage;
-
-    // Generate order number
-    const orderNumber = `ORD-${Date.now().toString(36).toUpperCase()}`;
-
-    // For now, we'll create a placeholder response
-    // In production, you would save this to the database linked to the student
-
-    return NextResponse.json({
-      message: 'Order placed successfully',
-      order: {
-        orderNumber,
-        title,
-        totalPrice,
-        status: 'pending',
-      },
+    // Fetch orders for this user
+    const orders = await prisma.order.findMany({
+      where: { customerId: user.id },
+      orderBy: { createdAt: 'desc' },
     });
+
+    await prisma.$disconnect();
+
+    return NextResponse.json({ orders });
   } catch (error) {
-    console.error('Error creating order:', error);
-    return NextResponse.json(
-      { error: 'Failed to place order' },
-      { status: 500 }
-    );
+    console.error('Error fetching orders:', error);
+    await prisma.$disconnect();
+    return NextResponse.json({ orders: [] });
   }
 }
