@@ -1,14 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
 import { X, ChevronLeft, ChevronRight, Lock, MessageCircle, LogIn } from 'lucide-react';
-
-// Set up PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
 
 interface SamplePreviewModalProps {
   sample: {
@@ -23,25 +16,89 @@ interface SamplePreviewModalProps {
 }
 
 export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePreviewModalProps) {
-  // Reset state when sample changes
-  const resetKey = sample.id;
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(sample.pages || 0);
   const [loading, setLoading] = useState(true);
-  const [numPages, setNumPages] = useState<number>(0);
+  const [pdfDoc, setPdfDoc] = useState<any>(null);
+  const [pageImageUrl, setPageImageUrl] = useState<string>('');
   const [containerWidth, setContainerWidth] = useState(600);
 
   // Calculate preview pages (1/3 of total, rounded up, minimum 1)
   const previewPages = useMemo(() => 
-    Math.max(1, Math.ceil((sample.pages || numPages || 3) / 3)),
-    [sample.pages, numPages]
+    Math.max(1, Math.ceil((sample.pages || totalPages || 3) / 3)),
+    [sample.pages, totalPages]
   );
-  
-  const totalPages = sample.pages || numPages;
 
-  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
-    setLoading(false);
-  };
+  // Load PDF document
+  useEffect(() => {
+    if (!isOpen || typeof window === 'undefined') return;
+
+    const loadPdf = async () => {
+      try {
+        setLoading(true);
+        const pdfjsLib = await import('pdfjs-dist');
+        
+        // Set worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
+        
+        const loadingTask = pdfjsLib.getDocument(`/api/samples/${sample.slug}/download`);
+        const pdf = await loadingTask.promise;
+        setPdfDoc(pdf);
+        setTotalPages(pdf.numPages);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading PDF:', error);
+        setLoading(false);
+      }
+    };
+
+    loadPdf();
+    setCurrentPage(1);
+  }, [isOpen, sample.slug]);
+
+  // Render current page
+  useEffect(() => {
+    if (!pdfDoc || typeof window === 'undefined') return;
+
+    const renderPage = async (pageNum: number) => {
+      try {
+        const page = await pdfDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale: 1 });
+        
+        // Calculate scale to fit container
+        const scale = containerWidth / viewport.width;
+        const scaledViewport = page.getViewport({ scale });
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = scaledViewport.height;
+        canvas.width = scaledViewport.width;
+
+        await page.render({
+          canvasContext: context,
+          viewport: scaledViewport,
+        }).promise;
+
+        setPageImageUrl(canvas.toDataURL());
+      } catch (error) {
+        console.error('Error rendering page:', error);
+      }
+    };
+
+    renderPage(currentPage);
+  }, [pdfDoc, currentPage, containerWidth]);
+
+  // Handle container resize
+  useEffect(() => {
+    const handleResize = () => {
+      const width = Math.min(window.innerWidth - 64, 700);
+      setContainerWidth(width);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const goToPrevPage = useCallback(() => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -68,22 +125,10 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
     };
   }, [isOpen, handleKeyDown]);
 
-  // Handle container resize
-  useEffect(() => {
-    const handleResize = () => {
-      const width = Math.min(window.innerWidth - 64, 700);
-      setContainerWidth(width);
-    };
-    
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   // Check if current page is blurred (beyond preview limit)
   const isBlurredPage = currentPage > previewPages;
 
-  if (!isOpen) return null;
+  if (!isOpen || typeof window === 'undefined') return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -119,32 +164,22 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
         </div>
 
         {/* PDF Viewer */}
-        <div className="flex-1 overflow-auto p-4 bg-gray-100 dark:bg-slate-800 flex flex-col items-center">
+        <div className="flex-1 overflow-auto p-4 bg-gray-100 dark:bg-slate-800 flex flex-col items-center justify-center min-h-[400px]">
           {loading && (
             <div className="flex items-center justify-center h-64">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
             </div>
           )}
-
-          <Document
-            file={`/api/samples/${sample.slug}/download`}
-            onLoadSuccess={onDocumentLoadSuccess}
-            loading=""
-            error={
-              <div className="text-center py-8 text-red-500">
-                Failed to load PDF. Please try again.
-              </div>
-            }
-          >
+          
+          {!loading && pageImageUrl && (
             <div className="relative">
-              <Page
-                pageNumber={currentPage}
-                width={containerWidth}
-                className={`shadow-lg transition-all duration-300 ${
+              <img
+                src={pageImageUrl}
+                alt={`Page ${currentPage}`}
+                className={`shadow-lg transition-all duration-300 max-w-full ${
                   isBlurredPage ? 'blur-lg' : ''
                 }`}
-                renderTextLayer={!isBlurredPage}
-                renderAnnotationLayer={!isBlurredPage}
+                style={{ width: containerWidth }}
               />
 
               {/* Watermark overlay for preview pages */}
@@ -191,7 +226,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                 </div>
               )}
             </div>
-          </Document>
+          )}
         </div>
 
         {/* Navigation */}
