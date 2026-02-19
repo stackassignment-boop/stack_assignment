@@ -17,15 +17,49 @@ interface Sample {
   fileSize?: number;
 }
 
-// Gradient colors for cards
-const gradients = [
-  'from-teal-500 to-emerald-600',
-  'from-blue-500 to-cyan-600',
-  'from-purple-500 to-pink-600',
-  'from-orange-500 to-red-600',
-  'from-green-500 to-teal-600',
-  'from-indigo-500 to-purple-600',
-];
+// Subject-based styles and images
+const subjectStyles: Record<string, { gradient: string; image: string }> = {
+  'Business': { 
+    gradient: 'from-blue-500 to-cyan-600',
+    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop'
+  },
+  'Nursing': { 
+    gradient: 'from-teal-500 to-emerald-600',
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop'
+  },
+  'Literature': { 
+    gradient: 'from-purple-500 to-violet-600',
+    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop'
+  },
+  'Law': { 
+    gradient: 'from-amber-500 to-orange-600',
+    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&h=400&fit=crop'
+  },
+  'STEM': { 
+    gradient: 'from-indigo-500 to-blue-600',
+    image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop'
+  },
+  'Computer Science': { 
+    gradient: 'from-green-500 to-lime-600',
+    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=400&fit=crop'
+  },
+  'Psychology': { 
+    gradient: 'from-pink-500 to-rose-600',
+    image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&h=400&fit=crop'
+  },
+  'Economics': { 
+    gradient: 'from-yellow-500 to-amber-600',
+    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop'
+  },
+  'Education': { 
+    gradient: 'from-cyan-500 to-teal-600',
+    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop'
+  },
+  'default': { 
+    gradient: 'from-gray-500 to-slate-600',
+    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&h=400&fit=crop'
+  },
+};
 
 // Academic level labels
 const academicLevels: Record<string, string> = {
@@ -43,6 +77,12 @@ const paperTypes: Record<string, string> = {
   thesis: 'Thesis',
   coursework: 'Coursework',
   case_study: 'Case Study',
+};
+
+// Get style for subject
+const getSubjectStyle = (subject?: string) => {
+  if (!subject) return subjectStyles.default;
+  return subjectStyles[subject] || subjectStyles.default;
 };
 
 export default function SamplesPage() {
@@ -129,25 +169,32 @@ export default function SamplesPage() {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-              {samples.map((sample, index) => (
-                <div
-                  key={sample.id}
-                  className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1"
-                >
-                  {/* Header with gradient */}
+              {samples.map((sample) => {
+                const style = getSubjectStyle(sample.subject);
+                return (
                   <div
-                    className={`h-44 bg-gradient-to-br ${gradients[index % gradients.length]} flex flex-col items-center justify-center text-white p-6 text-center relative`}
+                    key={sample.id}
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 group"
                   >
-                    <FileText className="h-10 w-10 mb-3 opacity-90" />
-                    <h3 className="text-xl font-bold leading-tight">{sample.title}</h3>
-                    {sample.subject && (
-                      <p className="text-white/80 mt-2 text-sm">{sample.subject}</p>
-                    )}
-                    {/* Preview badge */}
-                    <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">
-                      Preview: {getPreviewPages(sample.pages)}/{sample.pages || '?'} pages free
+                    {/* Header with image */}
+                    <div className="relative h-44 overflow-hidden">
+                      <img 
+                        src={style.image}
+                        alt={sample.subject || 'Sample'}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} opacity-60`}></div>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
+                        <h3 className="text-xl font-bold leading-tight drop-shadow-lg">{sample.title}</h3>
+                        {sample.subject && (
+                          <p className="text-white/90 mt-2 text-sm font-medium">{sample.subject}</p>
+                        )}
+                      </div>
+                      {/* Preview badge */}
+                      <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
+                        Preview: {getPreviewPages(sample.pages)}/{sample.pages || '?'} pages free
+                      </div>
                     </div>
-                  </div>
 
                   {/* Content */}
                   <div className="p-6">
@@ -200,7 +247,8 @@ export default function SamplesPage() {
                     </button>
                   </div>
                 </div>
-              ))}
+              );
+              })}
             </div>
           )}
 

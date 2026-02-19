@@ -71,7 +71,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
           </Button>
           <button
             onClick={() => handleNav('samples')}
-            className="border-2 border-white/70 text-white hover:bg-white/15 px-10 py-6 rounded-xl text-xl font-semibold transition bg-transparent"
+            className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-6 rounded-xl text-xl font-bold transition shadow-lg"
           >
             View Samples
           </button>

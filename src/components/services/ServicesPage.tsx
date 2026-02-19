@@ -240,7 +240,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
             </Button>
             <button
               onClick={() => onNavigate?.('pricing')}
-              className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-lg font-semibold rounded-xl bg-transparent transition"
+              className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-xl transition"
             >
               View Pricing
             </button>

@@ -15,18 +15,68 @@ interface Sample {
   pages?: number;
 }
 
-// Gradient colors for different subjects
-const subjectStyles: Record<string, { banner: string; badge: string; icon: typeof FileText }> = {
-  'Business': { banner: 'from-blue-500 to-cyan-500', badge: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', icon: FileText },
-  'Nursing': { banner: 'from-teal-500 to-emerald-500', badge: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400', icon: BookOpen },
-  'Literature': { banner: 'from-purple-500 to-violet-600', badge: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400', icon: FileText },
-  'Law': { banner: 'from-amber-500 to-orange-500', badge: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400', icon: FileText },
-  'STEM': { banner: 'from-indigo-500 to-blue-600', badge: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', icon: FileText },
-  'Computer Science': { banner: 'from-green-500 to-lime-500', badge: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', icon: FileText },
-  'Psychology': { banner: 'from-pink-500 to-rose-500', badge: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400', icon: BookOpen },
-  'Economics': { banner: 'from-yellow-500 to-amber-500', badge: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', icon: FileText },
-  'Education': { banner: 'from-cyan-500 to-teal-500', badge: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400', icon: BookOpen },
-  'default': { banner: 'from-gray-500 to-slate-600', badge: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400', icon: FileText },
+// Gradient colors and images for different subjects
+const subjectStyles: Record<string, { banner: string; badge: string; icon: typeof FileText; image: string }> = {
+  'Business': { 
+    banner: 'from-blue-500 to-cyan-500', 
+    badge: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', 
+    icon: FileText,
+    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop'
+  },
+  'Nursing': { 
+    banner: 'from-teal-500 to-emerald-500', 
+    badge: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400', 
+    icon: BookOpen,
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop'
+  },
+  'Literature': { 
+    banner: 'from-purple-500 to-violet-600', 
+    badge: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400', 
+    icon: FileText,
+    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop'
+  },
+  'Law': { 
+    banner: 'from-amber-500 to-orange-500', 
+    badge: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400', 
+    icon: FileText,
+    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&h=400&fit=crop'
+  },
+  'STEM': { 
+    banner: 'from-indigo-500 to-blue-600', 
+    badge: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', 
+    icon: FileText,
+    image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop'
+  },
+  'Computer Science': { 
+    banner: 'from-green-500 to-lime-500', 
+    badge: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', 
+    icon: FileText,
+    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=400&fit=crop'
+  },
+  'Psychology': { 
+    banner: 'from-pink-500 to-rose-500', 
+    badge: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400', 
+    icon: BookOpen,
+    image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&h=400&fit=crop'
+  },
+  'Economics': { 
+    banner: 'from-yellow-500 to-amber-500', 
+    badge: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', 
+    icon: FileText,
+    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop'
+  },
+  'Education': { 
+    banner: 'from-cyan-500 to-teal-500', 
+    badge: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400', 
+    icon: BookOpen,
+    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop'
+  },
+  'default': { 
+    banner: 'from-gray-500 to-slate-600', 
+    badge: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400', 
+    icon: FileText,
+    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&h=400&fit=crop'
+  },
 };
 
 // Academic level labels
@@ -169,17 +219,18 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
   );
 }
 
-function PortfolioCard({ sample, getSubjectStyle }: { sample: Sample; getSubjectStyle: (subject?: string) => { banner: string; badge: string; icon: typeof FileText } }) {
+function PortfolioCard({ sample, getSubjectStyle }: { sample: Sample; getSubjectStyle: (subject?: string) => { banner: string; badge: string; icon: typeof FileText; image: string } }) {
   const style = getSubjectStyle(sample.subject);
-  const IconComponent = style.icon;
   
   return (
     <article className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-      {/* Image Placeholder */}
-      <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${style.banner}`}>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <IconComponent className="w-16 h-16 text-white/30" />
-        </div>
+      {/* Image */}
+      <div className="relative h-48 overflow-hidden">
+        <img 
+          src={style.image} 
+          alt={sample.subject || 'Sample'}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         
         {/* Preview badge */}
