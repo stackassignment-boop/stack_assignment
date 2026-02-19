@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
+import { CheckCircle, Loader2 } from 'lucide-react';
 
 interface OrderPageProps {
   onNavigate?: (page: string) => void;
@@ -15,6 +16,11 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
   const [pages, setPages] = useState(1);
   const [files, setFiles] = useState<File[]>([]);
   const [expertCount, setExpertCount] = useState(178);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
+  const [error, setError] = useState('');
+  
   const [formData, setFormData] = useState({
     email: '',
     phone: '',
@@ -35,10 +41,97 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Thank you! Your order has been submitted. We will contact you shortly via email and phone.');
+    setError('');
+    setSubmitting(true);
+
+    try {
+      const response = await fetch('/api/orders/public', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          description: formData.description,
+          deadline: formData.deadlineDate,
+          deadlineTime: formData.deadlineTime,
+          pages: pages,
+          service: service,
+          coupon: formData.coupon,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setOrderNumber(data.order.orderNumber);
+        setSubmitted(true);
+      } else {
+        setError(data.error || 'Failed to submit order. Please try again.');
+      }
+    } catch (err) {
+      console.error('Order submission error:', err);
+      setError('An error occurred. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const wordCount = pages * 250;
+
+  // Success state
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 dark:from-slate-950 dark:to-slate-900 py-10 md:py-14">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 md:p-12">
+            <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Order Submitted Successfully!
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Thank you for your order. We will contact you shortly via email and phone.
+            </p>
+            <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-4 mb-6">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Your Order Number</p>
+              <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{orderNumber}</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                onClick={() => onNavigate?.('home')}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-8"
+              >
+                Back to Home
+              </Button>
+              <Button
+                onClick={() => {
+                  setSubmitted(false);
+                  setFormData({
+                    email: '',
+                    phone: '',
+                    subject: '',
+                    deadlineDate: '',
+                    deadlineTime: '12:00',
+                    timezone: '+91',
+                    description: '',
+                    coupon: '',
+                    terms: false
+                  });
+                  setPages(1);
+                }}
+                variant="outline"
+                className="px-8"
+              >
+                Place Another Order
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 dark:from-slate-950 dark:to-slate-900 py-10 md:py-14">
@@ -76,6 +169,15 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
             ))}
           </div>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="max-w-6xl mx-auto mb-6">
+            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-xl text-center">
+              {error}
+            </div>
+          </div>
+        )}
 
         {/* Order Form */}
         <form onSubmit={handleSubmit} className="grid lg:grid-cols-2 gap-8 lg:gap-10">
@@ -264,9 +366,17 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                 {/* Submit Button */}
                 <Button
                   type="submit"
-                  className="mt-6 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-extrabold py-6 rounded-xl text-lg shadow-lg"
+                  disabled={submitting}
+                  className="mt-6 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-extrabold py-6 rounded-xl text-lg shadow-lg disabled:opacity-50"
                 >
-                  Submit Order
+                  {submitting ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Submitting...
+                    </span>
+                  ) : (
+                    'Submit Order'
+                  )}
                 </Button>
               </CardContent>
             </Card>
