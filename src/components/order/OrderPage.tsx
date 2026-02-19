@@ -21,6 +21,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
   const [orderNumber, setOrderNumber] = useState('');
   const [error, setError] = useState('');
   const [loadingUser, setLoadingUser] = useState(true);
+  const [isSignedIn, setIsSignedIn] = useState(false);
   
   const [formData, setFormData] = useState({
     email: '',
@@ -46,6 +47,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
               ...prev,
               email: data.user.email
             }));
+            setIsSignedIn(true);
             // Also try to fetch profile for phone
             const profileRes = await fetch('/api/student/profile');
             if (profileRes.ok) {
@@ -80,6 +82,25 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     setSubmitting(true);
 
     try {
+      // Upload files first if any
+      let uploadedFiles: string[] = [];
+      if (files.length > 0) {
+        const formDataFiles = new FormData();
+        files.forEach((file) => {
+          formDataFiles.append('files', file);
+        });
+        
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: formDataFiles,
+        });
+        
+        if (uploadRes.ok) {
+          const uploadData = await uploadRes.json();
+          uploadedFiles = uploadData.urls || [];
+        }
+      }
+
       const response = await fetch('/api/orders/public', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -93,6 +114,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
           pages: pages,
           service: service,
           coupon: formData.coupon,
+          attachments: uploadedFiles,
         }),
       });
 
@@ -229,9 +251,10 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder={loadingUser ? "Loading..." : "Enter email for communication"}
                   disabled={loadingUser}
-                  className={formData.email && !loadingUser ? "border-green-400 dark:border-green-600" : ""}
+                  readOnly={isSignedIn}
+                  className={isSignedIn ? "bg-gray-100 dark:bg-slate-700 cursor-not-allowed" : ""}
                 />
-                {formData.email && !loadingUser && (
+                {isSignedIn && !loadingUser && (
                   <p className="text-xs text-green-600 mt-1.5">✓ Signed in as {formData.email}</p>
                 )}
               </CardContent>

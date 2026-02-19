@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     console.log('Received order request:', { ...body, description: body.description?.substring(0, 50) + '...' });
 
     // Validate required fields
-    const { email, phone, subject, description, deadline, deadlineTime, pages, service, coupon } = body;
+    const { email, phone, subject, description, deadline, deadlineTime, pages, service, coupon, attachments } = body;
 
     if (!email || !phone || !subject || !description || !deadline || !pages) {
       return NextResponse.json(
@@ -111,6 +111,7 @@ export async function POST(request: NextRequest) {
           service: service || 'writing',
           coupon: coupon || null,
         }),
+        attachments: attachments && attachments.length > 0 ? JSON.stringify(attachments) : null,
         status: 'pending',
         paymentStatus: 'pending_quote', // Special status - waiting for admin to set price
       },
