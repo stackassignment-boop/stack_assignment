@@ -130,7 +130,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                   <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
                     <User className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                   </div>
-                  <span className="hidden lg:block text-sm font-medium">{studentUser.name}</span>
+                  <span className="hidden lg:block text-sm font-medium">{studentUser.name.split(' ')[0]}</span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${loginDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
