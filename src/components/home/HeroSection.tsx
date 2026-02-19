@@ -69,13 +69,12 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
           >
             Get Quote in 60 Seconds →
           </Button>
-          <Button
+          <button
             onClick={() => handleNav('samples')}
-            variant="outline"
-            className="border-2 border-white/70 text-white hover:bg-white/15 hover:text-white px-10 py-6 rounded-xl text-xl font-semibold transition"
+            className="border-2 border-white/70 text-white hover:bg-white/15 px-10 py-6 rounded-xl text-xl font-semibold transition bg-transparent"
           >
             View Samples
-          </Button>
+          </button>
         </div>
       </div>
     </section>
