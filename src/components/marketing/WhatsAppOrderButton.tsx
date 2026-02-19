@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, ArrowRight } from 'lucide-react';
 
 interface WhatsAppOrderButtonProps {
   variant?: 'large' | 'medium' | 'small';
@@ -15,8 +15,7 @@ export default function WhatsAppOrderButton({ variant = 'medium', subject, acade
 Subject: ${subject || '_____'}
 Word Count: _____
 Deadline: _____
-Academic Level: ${academicLevel || '_____'}
-Please provide a quote.`;
+Academic Level: ${academicLevel || '_____'}`;
 
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
@@ -31,8 +30,10 @@ Please provide a quote.`;
       >
         <MessageCircle className="w-6 h-6" />
         <div className="text-left">
-          <div className="text-sm opacity-90">Order via WhatsApp</div>
-          <div className="font-bold">in 30 Seconds 📱</div>
+          <div className="text-sm opacity-90">📱 Order via WhatsApp in 30 Seconds</div>
+          <div className="font-bold flex items-center gap-2">
+            One-Tap Order <ArrowRight className="w-4 h-4" />
+          </div>
         </div>
       </a>
     );

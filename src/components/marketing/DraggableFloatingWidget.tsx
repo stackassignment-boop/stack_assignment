@@ -182,7 +182,7 @@ export default function DraggableFloatingWidget() {
           
           {/* WhatsApp Button */}
           <a
-            href="https://wa.me/919907300710?text=Hi%2C%20I%20need%20help%20with%20my%20assignment%20%E2%80%93%20can%20you%20help%3F%20Please%20tell%20me%20the%20subject%2C%20deadline%20and%20word%20count."
+            href="https://wa.me/919907300710?text=Hi%20Stack%20Assignment%21%20I%20need%20help%20with%3A%0ASubject%3A%20_____ %0AWord%20Count%3A%20_____%0ADeadline%3A%20_____%0AAcademic%20Level%3A%20_____"
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => {
