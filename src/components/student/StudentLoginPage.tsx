@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, User, UserPlus, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { signIn } from 'next-auth/react';
@@ -38,20 +38,12 @@ export default function StudentLoginPage({ onNavigate, onLogin }: StudentLoginPa
     setError('');
     
     try {
-      const result = await signIn('google', {
+      // Redirect to student dashboard after Google login
+      await signIn('google', {
         callbackUrl: '/?view=student-dashboard',
-        redirect: false,
       });
-
-      if (result?.error) {
-        setError('Google login failed. Please try again.');
-      } else if (result?.ok) {
-        // Refresh to get session
-        window.location.href = '/?view=student-dashboard';
-      }
     } catch (err) {
       setError('An error occurred with Google login.');
-    } finally {
       setGoogleLoading(false);
     }
   };
@@ -77,9 +69,8 @@ export default function StudentLoginPage({ onNavigate, onLogin }: StudentLoginPa
           if (onLogin) {
             onLogin({ name: formData.email, email: formData.email });
           }
-          if (onNavigate) {
-            onNavigate('student-dashboard');
-          }
+          // Redirect to dashboard
+          window.location.href = '/?view=student-dashboard';
         }
       } else {
         // Register

@@ -40,6 +40,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           email: user.email,
           role: user.role,
+          image: user.avatar,
         };
       },
     }),
@@ -63,6 +64,14 @@ export const authOptions: NextAuthOptions = {
               avatar: user.image,
             },
           });
+        } else {
+          // Update avatar if user exists but no avatar
+          if (!existingUser.avatar && user.image) {
+            await db.user.update({
+              where: { id: existingUser.id },
+              data: { avatar: user.image },
+            });
+          }
         }
       }
       return true;
@@ -71,19 +80,41 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.image = token.picture as string;
       }
       return session;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
+      // Initial sign in
       if (user) {
-        // Get user from database to get role
+        // Get user from database to get role and other info
         const dbUser = await db.user.findUnique({
           where: { email: user.email! },
         });
         token.id = dbUser?.id || user.id;
         token.role = dbUser?.role || 'student';
+        token.name = dbUser?.name || user.name;
+        token.email = dbUser?.email || user.email;
+        token.picture = dbUser?.avatar || user.image;
       }
+      
+      // Update session
+      if (trigger === 'update' && session) {
+        token.name = session.name;
+        token.email = session.email;
+      }
+      
       return token;
+    },
+    async redirect({ url, baseUrl }) {
+      // If the url is relative, prepend the base url
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // If the url is already absolute and on the same domain, allow it
+      if (new URL(url).origin === baseUrl) return url;
+      // Default redirect to student dashboard after login
+      return `${baseUrl}/?view=student-dashboard`;
     },
   },
   pages: {
@@ -92,6 +123,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET || 'stack-assignment-secret-key-2024',
 };

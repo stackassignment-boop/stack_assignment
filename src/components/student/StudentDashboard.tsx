@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { User, FileText, Package, LogOut, Clock, CheckCircle, AlertCircle, Eye, Download, Plus, ChevronRight } from 'lucide-react';
+import { User, FileText, Package, LogOut, Clock, CheckCircle, AlertCircle, Eye, Download, Plus, ChevronRight, Mail, Phone, Calendar, Settings, Edit2, Save, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface StudentDashboardProps {
@@ -32,11 +32,25 @@ interface Order {
   createdAt: string;
 }
 
+interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  avatar?: string;
+  createdAt: string;
+  lastLoginAt?: string;
+}
+
 export default function StudentDashboard({ user, onNavigate, onLogout }: StudentDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [samples, setSamples] = useState<Sample[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editedName, setEditedName] = useState(user.name);
+  const [editedPhone, setEditedPhone] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +68,15 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
           const ordersData = await ordersRes.json();
           setOrders(ordersData.orders || []);
         }
+
+        // Fetch user profile
+        const profileRes = await fetch('/api/student/profile');
+        if (profileRes.ok) {
+          const profileData = await profileRes.json();
+          setProfile(profileData.profile);
+          setEditedName(profileData.profile?.name || user.name);
+          setEditedPhone(profileData.profile?.phone || '');
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -62,7 +85,27 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
     };
 
     fetchData();
-  }, []);
+  }, [user.name]);
+
+  const handleUpdateProfile = async () => {
+    try {
+      const response = await fetch('/api/student/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: editedName,
+          phone: editedPhone,
+        }),
+      });
+
+      if (response.ok) {
+        setProfile(prev => prev ? { ...prev, name: editedName, phone: editedPhone } : null);
+        setEditingProfile(false);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -104,6 +147,21 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
     });
   };
 
+  const formatDateTime = (dateString: string) => {
+    return new Date(dateString).toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+  };
+
+  // Get initials for avatar
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
       {/* Header */}
@@ -116,7 +174,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-900 dark:text-white">Student Dashboard</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Welcome, {user.name}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Welcome back, {user.name}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -144,40 +202,148 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-xl flex items-center justify-center">
-                <FileText className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+        {/* Profile Card & Stats */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Profile Card */}
+          <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
+            <div className="bg-gradient-to-r from-teal-500 to-teal-600 h-20"></div>
+            <div className="px-6 pb-6 -mt-10">
+              {/* Avatar */}
+              <div className="flex justify-center">
+                {profile?.avatar ? (
+                  <img 
+                    src={profile.avatar} 
+                    alt={profile.name}
+                    className="w-20 h-20 rounded-full border-4 border-white dark:border-slate-900 shadow-lg"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-full border-4 border-white dark:border-slate-900 shadow-lg bg-teal-100 dark:bg-teal-900 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-teal-600 dark:text-teal-400">
+                      {getInitials(profile?.name || user.name)}
+                    </span>
+                  </div>
+                )}
               </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{samples.length}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Available Samples</p>
+              
+              <div className="text-center mt-4">
+                {editingProfile ? (
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      value={editedName}
+                      onChange={(e) => setEditedName(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-center font-semibold"
+                      placeholder="Your name"
+                    />
+                    <input
+                      type="tel"
+                      value={editedPhone}
+                      onChange={(e) => setEditedPhone(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-center"
+                      placeholder="Phone number"
+                    />
+                    <div className="flex gap-2 justify-center">
+                      <Button size="sm" onClick={handleUpdateProfile} className="bg-teal-600 hover:bg-teal-700">
+                        <Save className="w-4 h-4 mr-1" /> Save
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setEditingProfile(false)}>
+                        <X className="w-4 h-4 mr-1" /> Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                      {profile?.name || user.name}
+                    </h2>
+                    <p className="text-gray-500 dark:text-gray-400">{profile?.email || user.email}</p>
+                    {profile?.phone && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{profile.phone}</p>
+                    )}
+                    <button 
+                      onClick={() => setEditingProfile(true)}
+                      className="mt-3 text-sm text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1 justify-center mx-auto"
+                    >
+                      <Edit2 className="w-3 h-3" /> Edit Profile
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Profile Details */}
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                  <Mail className="w-4 h-4 text-gray-400" />
+                  <span>{profile?.email || user.email}</span>
+                </div>
+                {profile?.phone && (
+                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                    <Phone className="w-4 h-4 text-gray-400" />
+                    <span>{profile.phone}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                  <Calendar className="w-4 h-4 text-gray-400" />
+                  <span>Member since {profile?.createdAt ? formatDate(profile.createdAt) : 'N/A'}</span>
+                </div>
+                {profile?.lastLoginAt && (
+                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                    <Clock className="w-4 h-4 text-gray-400" />
+                    <span>Last login: {formatDateTime(profile.lastLoginAt)}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
-                <Package className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{orders.length}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Total Orders</p>
+
+          {/* Stats Cards */}
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-xl flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{samples.length}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Available Samples</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
-                <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
+                  <Package className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{orders.length}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Total Orders</p>
+                </div>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {orders.filter(o => o.status === 'pending' || o.status === 'in_progress').length}
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Active Orders</p>
+            </div>
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {orders.filter(o => o.status === 'pending' || o.status === 'in_progress').length}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Active Orders</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {orders.filter(o => o.status === 'completed' || o.status === 'delivered').length}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Completed Orders</p>
+                </div>
               </div>
             </div>
           </div>
@@ -214,6 +380,17 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             }`}
           >
             My Orders
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
+              activeTab === 'settings'
+                ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
+                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            <Settings className="w-4 h-4 inline mr-1" />
+            Settings
           </button>
         </div>
 
@@ -449,6 +626,74 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                     </Button>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Settings Tab */}
+            {activeTab === 'settings' && (
+              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
+                <div className="p-4 border-b border-gray-200 dark:border-slate-800">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Account Settings</h3>
+                </div>
+                <div className="p-6 space-y-6">
+                  {/* Profile Section */}
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Profile Information</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Full Name</label>
+                        <input
+                          type="text"
+                          value={profile?.name || user.name}
+                          readOnly
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Email</label>
+                        <input
+                          type="email"
+                          value={profile?.email || user.email}
+                          readOnly
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Phone</label>
+                        <input
+                          type="tel"
+                          value={profile?.phone || 'Not set'}
+                          readOnly
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Member Since</label>
+                        <input
+                          type="text"
+                          value={profile?.createdAt ? formatDate(profile.createdAt) : 'N/A'}
+                          readOnly
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="pt-4 border-t border-gray-200 dark:border-slate-800">
+                    <Button
+                      variant="outline"
+                      className="text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      onClick={() => {
+                        if (onLogout) onLogout();
+                        onNavigate?.('home');
+                      }}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out of All Devices
+                    </Button>
+                  </div>
+                </div>
               </div>
             )}
           </>
