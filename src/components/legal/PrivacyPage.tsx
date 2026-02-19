@@ -133,7 +133,7 @@ export default function PrivacyPage() {
               <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow text-center">
                 <Phone className="w-6 h-6 text-indigo-600 dark:text-indigo-400 mx-auto mb-2" />
                 <p className="font-bold">Phone / WhatsApp</p>
-                <p className="text-sm">+91-91269-43297</p>
+                <p className="text-sm">+91-99073-00710</p>
               </div>
               <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow text-center">
                 <Clock className="w-6 h-6 text-indigo-600 dark:text-indigo-400 mx-auto mb-2" />

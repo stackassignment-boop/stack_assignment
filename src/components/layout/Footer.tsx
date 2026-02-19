@@ -75,10 +75,10 @@ export default function Footer({ onNavigate }: FooterProps) {
               <h4 className="text-white font-semibold mb-4 text-lg">Support</h4>
               <p className="text-sm mb-2 opacity-90">24/7 Assistance</p>
               <a
-                href="tel:+919126943297"
+                href="tel:+919907300710"
                 className="block text-sm hover:text-white transition-colors mb-1.5 flex items-center gap-2"
               >
-                <Phone className="w-4 h-4 text-indigo-400" /> +91 91269 43297
+                <Phone className="w-4 h-4 text-indigo-400" /> +91 99073 00710
               </a>
               <a
                 href="mailto:stackassignment@gmail.com"
@@ -157,7 +157,7 @@ export default function Footer({ onNavigate }: FooterProps) {
 
       {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/919126943297?text=Hi%2C%20I%20need%20help%20with%20my%20assignment%20%E2%80%93%20can%20you%20help%3F%20Please%20tell%20me%20the%20subject%2C%20deadline%20and%20word%20count."
+        href="https://wa.me/919907300710?text=Hi%2C%20I%20need%20help%20with%20my%20assignment%20%E2%80%93%20can%20you%20help%3F%20Please%20tell%20me%20the%20subject%2C%20deadline%20and%20word%20count."
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-[100] flex items-center justify-center w-16 h-16 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 group"

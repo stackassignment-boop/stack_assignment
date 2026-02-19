@@ -176,8 +176,8 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
 
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
               Need help? Contact us at{' '}
-              <a href="tel:+919126943297" className="text-teal-600 dark:text-teal-400 hover:underline">
-                +91-91269-43297
+              <a href="tel:+919907300710" className="text-teal-600 dark:text-teal-400 hover:underline">
+                +91-99073-00710
               </a>
             </p>
           </div>
@@ -457,12 +457,12 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
               <div className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-700">
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                   Having trouble? Contact us at{' '}
-                  <a href="tel:+919126943297" className="text-teal-600 dark:text-teal-400 hover:underline">
-                    +91-91269-43297
+                  <a href="tel:+919907300710" className="text-teal-600 dark:text-teal-400 hover:underline">
+                    +91-99073-00710
                   </a>
                   {' '}or{' '}
                   <a 
-                    href="https://wa.me/919126943297?text=Hi, I need help with payment for order: ${order.orderNumber}"
+                    href="https://wa.me/919907300710?text=Hi, I need help with payment for order: ${order.orderNumber}"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-teal-600 dark:text-teal-400 hover:underline"

@@ -107,10 +107,10 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
             </button>
 
             <a
-              href="tel:+919126943297"
+              href="tel:+919907300710"
               className="hidden sm:flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
             >
-              <Phone className="w-4 h-4" /> +91-91269-43297
+              <Phone className="w-4 h-4" /> +91-99073-00710
             </a>
 
             <Button

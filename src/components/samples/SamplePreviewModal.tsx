@@ -246,7 +246,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                                   Login
                                 </a>
                                 <a
-                                  href={`https://wa.me/919876543210?text=Hi, I'm interested in getting full access to sample: ${encodeURIComponent(sample.title)}`}
+                                  href={`https://wa.me/919907300710?text=Hi, I'm interested in getting full access to sample: ${encodeURIComponent(sample.title)}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-medium transition"
