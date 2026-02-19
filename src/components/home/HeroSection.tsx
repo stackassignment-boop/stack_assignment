@@ -65,13 +65,13 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
         <div className="flex flex-col sm:flex-row gap-5 justify-center">
           <Button
             onClick={() => handleNav('order')}
-            className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-6 rounded-xl text-xl font-bold transition shadow-lg"
+            className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-6 rounded-xl text-xl font-bold transition shadow-lg min-w-[280px]"
           >
             Get Quote in 60 Seconds →
           </Button>
           <button
             onClick={() => handleNav('samples')}
-            className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-6 rounded-xl text-xl font-bold transition shadow-lg"
+            className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-6 rounded-xl text-xl font-bold transition shadow-lg min-w-[280px]"
           >
             View Samples
           </button>

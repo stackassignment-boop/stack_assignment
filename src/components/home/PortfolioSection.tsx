@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { FileText, BookOpen, GraduationCap } from 'lucide-react';
+import { FileText, BookOpen, ArrowRight } from 'lucide-react';
 
 interface Sample {
   id: string;
@@ -16,65 +16,55 @@ interface Sample {
 }
 
 // Gradient colors and images for different subjects
-const subjectStyles: Record<string, { banner: string; badge: string; icon: typeof FileText; image: string }> = {
+const subjectStyles: Record<string, { banner: string; badge: string; image: string }> = {
   'Business': { 
     banner: 'from-blue-500 to-cyan-500', 
     badge: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', 
-    icon: FileText,
     image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop'
   },
   'Nursing': { 
     banner: 'from-teal-500 to-emerald-500', 
     badge: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400', 
-    icon: BookOpen,
     image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop'
   },
   'Literature': { 
     banner: 'from-purple-500 to-violet-600', 
     badge: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400', 
-    icon: FileText,
     image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop'
   },
   'Law': { 
     banner: 'from-amber-500 to-orange-500', 
     badge: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400', 
-    icon: FileText,
     image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&h=400&fit=crop'
   },
   'STEM': { 
     banner: 'from-indigo-500 to-blue-600', 
     badge: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', 
-    icon: FileText,
     image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop'
   },
   'Computer Science': { 
     banner: 'from-green-500 to-lime-500', 
     badge: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', 
-    icon: FileText,
     image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=400&fit=crop'
   },
   'Psychology': { 
     banner: 'from-pink-500 to-rose-500', 
     badge: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400', 
-    icon: BookOpen,
     image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&h=400&fit=crop'
   },
   'Economics': { 
     banner: 'from-yellow-500 to-amber-500', 
     badge: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', 
-    icon: FileText,
     image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop'
   },
   'Education': { 
     banner: 'from-cyan-500 to-teal-500', 
     badge: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400', 
-    icon: BookOpen,
     image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop'
   },
   'default': { 
     banner: 'from-gray-500 to-slate-600', 
     badge: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400', 
-    icon: FileText,
     image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&h=400&fit=crop'
   },
 };
@@ -104,7 +94,6 @@ interface PortfolioSectionProps {
 export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) {
   const [samples, setSamples] = useState<Sample[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('all');
 
   useEffect(() => {
     fetchSamples();
@@ -122,13 +111,40 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
     }
   };
 
-  // Get unique subjects for filters
-  const subjects = ['all', ...Array.from(new Set(samples.map(s => s.subject).filter(Boolean)))];
-  
-  // Filter samples by subject
-  const filteredSamples = activeFilter === 'all' 
-    ? samples 
-    : samples.filter(s => s.subject === activeFilter);
+  // Group samples by subject and limit to 6 total
+  const groupedSamples = samples.reduce((acc, sample) => {
+    const subject = sample.subject || 'General';
+    if (!acc[subject]) {
+      acc[subject] = [];
+    }
+    acc[subject].push(sample);
+    return acc;
+  }, {} as Record<string, Sample[]>);
+
+  // Get up to 6 samples, prioritizing variety across subjects
+  const getDisplaySamples = () => {
+    const result: Sample[] = [];
+    const subjects = Object.keys(groupedSamples);
+    
+    // Take one from each subject first, then fill remaining
+    let index = 0;
+    while (result.length < 6 && subjects.length > 0) {
+      for (const subject of subjects) {
+        if (result.length >= 6) break;
+        if (groupedSamples[subject][index]) {
+          result.push(groupedSamples[subject][index]);
+        }
+      }
+      index++;
+      // If we've gone through all samples and still have room, break
+      if (index > 10) break;
+    }
+    
+    return result.slice(0, 6);
+  };
+
+  const displaySamples = getDisplaySamples();
+  const uniqueSubjects = [...new Set(samples.map(s => s.subject).filter(Boolean))];
 
   // Get style for subject
   const getSubjectStyle = (subject?: string) => {
@@ -155,22 +171,20 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
           </p>
         </div>
 
-        {/* Filter Tabs */}
-        {subjects.length > 1 && (
-          <div className="flex flex-wrap gap-3 justify-center mb-12">
-            {subjects.map(subject => (
-              <button
-                key={subject}
-                onClick={() => setActiveFilter(subject)}
-                className={`px-5 py-2.5 rounded-full text-sm font-semibold border-2 transition-all ${
-                  activeFilter === subject
-                    ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg'
-                    : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-400 hover:border-indigo-400 hover:text-indigo-600'
-                }`}
-              >
-                {subject === 'all' ? 'All' : subject}
-              </button>
-            ))}
+        {/* Subject Categories */}
+        {uniqueSubjects.length > 0 && (
+          <div className="flex flex-wrap gap-2 justify-center mb-12">
+            {uniqueSubjects.map(subject => {
+              const style = getSubjectStyle(subject);
+              return (
+                <span 
+                  key={subject}
+                  className={`text-sm font-semibold px-4 py-2 rounded-full ${style.badge}`}
+                >
+                  {subject}
+                </span>
+              );
+            })}
           </div>
         )}
 
@@ -194,10 +208,10 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
           </div>
         )}
 
-        {/* Cards Grid */}
-        {!loading && samples.length > 0 && (
+        {/* Cards Grid - Limited to 6 */}
+        {!loading && displaySamples.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredSamples.map(sample => (
+            {displaySamples.map(sample => (
               <PortfolioCard key={sample.id} sample={sample} getSubjectStyle={getSubjectStyle} />
             ))}
           </div>
@@ -206,11 +220,15 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
         {/* CTA */}
         {samples.length > 0 && (
           <div className="text-center mt-12">
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
+              Showing {Math.min(6, samples.length)} of {samples.length} samples across {uniqueSubjects.length} subjects
+            </p>
             <Button 
               onClick={() => onNavigate?.('samples')}
               className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-6 rounded-xl font-bold text-lg shadow-lg"
             >
-              View Full Portfolio →
+              View Full Portfolio
+              <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </div>
         )}
@@ -219,7 +237,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
   );
 }
 
-function PortfolioCard({ sample, getSubjectStyle }: { sample: Sample; getSubjectStyle: (subject?: string) => { banner: string; badge: string; icon: typeof FileText; image: string } }) {
+function PortfolioCard({ sample, getSubjectStyle }: { sample: Sample; getSubjectStyle: (subject?: string) => { banner: string; badge: string; image: string } }) {
   const style = getSubjectStyle(sample.subject);
   
   return (

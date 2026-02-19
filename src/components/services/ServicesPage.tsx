@@ -233,14 +233,14 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               onClick={() => onNavigate?.('order')}
-              className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-xl"
+              className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-xl min-w-[200px]"
             >
               Get Started Now
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
             <button
               onClick={() => onNavigate?.('pricing')}
-              className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-xl transition"
+              className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-xl transition min-w-[200px]"
             >
               View Pricing
             </button>
