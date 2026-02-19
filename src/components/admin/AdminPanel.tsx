@@ -42,7 +42,8 @@ import {
   Clock,
   AlertCircle,
   Eye,
-  Trash2
+  Trash2,
+  Settings
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -178,6 +179,28 @@ export default function AdminPanel() {
   const [creatingSample, setCreatingSample] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
 
+  // Settings state
+  const [currencySettings, setCurrencySettings] = useState({
+    defaultCurrency: 'USD',
+    currencySymbol: '$',
+    currencyRate: 0.012,
+  });
+  const [savingCurrency, setSavingCurrency] = useState(false);
+
+  // Available currencies
+  const AVAILABLE_CURRENCIES = [
+    { code: 'USD', symbol: '$', name: 'US Dollar', rate: 0.012 },
+    { code: 'INR', symbol: '₹', name: 'Indian Rupee', rate: 1 },
+    { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.011 },
+    { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.0095 },
+    { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 0.018 },
+    { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', rate: 0.016 },
+    { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', rate: 0.044 },
+    { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', rate: 0.016 },
+    { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', rate: 0.020 },
+    { code: 'ZAR', symbol: 'R', name: 'South African Rand', rate: 0.22 },
+  ];
+
   // Check auth status
   useEffect(() => {
     checkAuth();
@@ -202,12 +225,13 @@ export default function AdminPanel() {
 
   const loadDashboardData = async () => {
     try {
-      const [statsRes, ordersRes, inquiriesRes, blogsRes, samplesRes] = await Promise.all([
+      const [statsRes, ordersRes, inquiriesRes, blogsRes, samplesRes, settingsRes] = await Promise.all([
         fetch('/api/dashboard/stats'),
         fetch('/api/orders'),
         fetch('/api/inquiries'),
         fetch('/api/blogs'),
         fetch('/api/samples'),
+        fetch('/api/admin/settings'),
       ]);
 
       if (statsRes.ok) {
@@ -229,6 +253,10 @@ export default function AdminPanel() {
       if (samplesRes.ok) {
         const data = await samplesRes.json();
         setSamples(data.samples || []);
+      }
+      if (settingsRes.ok) {
+        const data = await settingsRes.json();
+        setCurrencySettings(data.settings);
       }
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
@@ -522,10 +550,40 @@ export default function AdminPanel() {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
+    // Convert INR to selected currency using stored rate
+    const convertedPrice = price * currencySettings.currencyRate;
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'INR',
-    }).format(price);
+      currency: currencySettings.defaultCurrency,
+    }).format(convertedPrice);
+  };
+
+  const handleSaveCurrency = async (currencyCode: string) => {
+    setSavingCurrency(true);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'defaultCurrency', value: currencyCode }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setCurrencySettings({
+          defaultCurrency: currencyCode,
+          currencySymbol: data.setting.currencySymbol,
+          currencyRate: data.setting.currencyRate,
+        });
+        toast.success(`Currency updated to ${currencyCode}`);
+      } else {
+        toast.error('Failed to update currency');
+      }
+    } catch (error) {
+      console.error('Error saving currency:', error);
+      toast.error('Failed to update currency');
+    } finally {
+      setSavingCurrency(false);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -620,26 +678,30 @@ export default function AdminPanel() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid grid-cols-5 w-full max-w-xl">
-            <TabsTrigger value="dashboard" className="flex items-center gap-2">
+          <TabsList className="grid grid-cols-3 sm:grid-cols-6 w-full max-w-2xl gap-1">
+            <TabsTrigger value="dashboard" className="flex items-center gap-1 sm:gap-2">
               <LayoutDashboard className="h-4 w-4" />
               <span className="hidden sm:inline">Dashboard</span>
             </TabsTrigger>
-            <TabsTrigger value="orders" className="flex items-center gap-2">
+            <TabsTrigger value="orders" className="flex items-center gap-1 sm:gap-2">
               <Package className="h-4 w-4" />
               <span className="hidden sm:inline">Orders</span>
             </TabsTrigger>
-            <TabsTrigger value="inquiries" className="flex items-center gap-2">
+            <TabsTrigger value="inquiries" className="flex items-center gap-1 sm:gap-2">
               <MessageSquare className="h-4 w-4" />
               <span className="hidden sm:inline">Inquiries</span>
             </TabsTrigger>
-            <TabsTrigger value="blogs" className="flex items-center gap-2">
+            <TabsTrigger value="blogs" className="flex items-center gap-1 sm:gap-2">
               <FileText className="h-4 w-4" />
               <span className="hidden sm:inline">Blogs</span>
             </TabsTrigger>
-            <TabsTrigger value="samples" className="flex items-center gap-2">
+            <TabsTrigger value="samples" className="flex items-center gap-1 sm:gap-2">
               <BookOpen className="h-4 w-4" />
               <span className="hidden sm:inline">Samples</span>
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-1 sm:gap-2">
+              <Settings className="h-4 w-4" />
+              <span className="hidden sm:inline">Settings</span>
             </TabsTrigger>
           </TabsList>
 
@@ -1045,6 +1107,111 @@ export default function AdminPanel() {
                       )}
                     </TableBody>
                   </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Settings Tab */}
+          <TabsContent value="settings" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5" />
+                  General Settings
+                </CardTitle>
+                <CardDescription>
+                  Configure your application settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Currency Settings */}
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Currency Settings</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Set the default currency for displaying prices across the platform
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="currency">Default Currency</Label>
+                      <Select
+                        value={currencySettings.defaultCurrency}
+                        onValueChange={handleSaveCurrency}
+                        disabled={savingCurrency}
+                      >
+                        <SelectTrigger id="currency">
+                          <SelectValue placeholder="Select currency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {AVAILABLE_CURRENCIES.map((currency) => (
+                            <SelectItem key={currency.code} value={currency.code}>
+                              {currency.symbol} {currency.name} ({currency.code})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Current Selection</Label>
+                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                        <span className="text-2xl font-bold text-teal-600 dark:text-teal-400">
+                          {currencySettings.currencySymbol}
+                        </span>
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">
+                            {AVAILABLE_CURRENCIES.find(c => c.code === currencySettings.defaultCurrency)?.name || 'US Dollar'}
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            1 INR = {currencySettings.currencyRate} {currencySettings.defaultCurrency}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                      <strong>Note:</strong> Prices are stored in INR (Indian Rupee) in the database and converted to the selected currency for display. 
+                      The conversion rate is approximate and may need to be updated periodically.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Exchange Rates Table */}
+                <div className="space-y-4 pt-6 border-t border-gray-200 dark:border-slate-700">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Exchange Rates (Base: INR)</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Current exchange rates used for currency conversion
+                    </p>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Currency</TableHead>
+                          <TableHead>Symbol</TableHead>
+                          <TableHead>Code</TableHead>
+                          <TableHead>Rate (1 INR = ?)</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {AVAILABLE_CURRENCIES.map((currency) => (
+                          <TableRow key={currency.code} className={currency.code === currencySettings.defaultCurrency ? 'bg-teal-50 dark:bg-teal-900/20' : ''}>
+                            <TableCell className="font-medium">{currency.name}</TableCell>
+                            <TableCell className="text-xl">{currency.symbol}</TableCell>
+                            <TableCell>{currency.code}</TableCell>
+                            <TableCell>{currency.rate}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </div>
               </CardContent>
             </Card>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { CreditCard, Wallet, Clock, CheckCircle, AlertCircle, ArrowLeft, Copy, Check } from 'lucide-react';
+import { CreditCard, Wallet, Clock, CheckCircle, AlertCircle, ArrowLeft, Copy, Check, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface PaymentPageProps {
@@ -24,30 +24,69 @@ interface OrderDetails {
   createdAt: string;
 }
 
+// Currency options with conversion rates (base: INR)
+const CURRENCIES = {
+  INR: { symbol: '₹', name: 'Indian Rupee', rate: 1 },
+  USD: { symbol: '$', name: 'US Dollar', rate: 0.012 },
+  EUR: { symbol: '€', name: 'Euro', rate: 0.011 },
+  GBP: { symbol: '£', name: 'British Pound', rate: 0.0095 },
+  AUD: { symbol: 'A$', name: 'Australian Dollar', rate: 0.018 },
+  CAD: { symbol: 'C$', name: 'Canadian Dollar', rate: 0.016 },
+  AED: { symbol: 'د.إ', name: 'UAE Dirham', rate: 0.044 },
+  SGD: { symbol: 'S$', name: 'Singapore Dollar', rate: 0.016 },
+  NZD: { symbol: 'NZ$', name: 'New Zealand Dollar', rate: 0.020 },
+  ZAR: { symbol: 'R', name: 'South African Rand', rate: 0.22 },
+};
+
+type CurrencyCode = keyof typeof CURRENCIES;
+
 export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
   const { data: session } = useSession();
   const [order, setOrder] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'bank' | 'upi'>('razorpay');
   const [copied, setCopied] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode>('USD');
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+
+  const formatPrice = (priceInINR: number, currency: CurrencyCode): string => {
+    const converted = priceInINR * CURRENCIES[currency].rate;
+    const symbol = CURRENCIES[currency].symbol;
+    
+    // Round to 2 decimal places for non-INR currencies
+    if (currency === 'INR') {
+      return `${symbol}${Math.round(converted)}`;
+    }
+    return `${symbol}${converted.toFixed(2)}`;
+  };
 
   useEffect(() => {
-    const fetchOrder = async () => {
+    const fetchData = async () => {
       try {
+        // Fetch currency settings first
+        const settingsRes = await fetch('/api/settings');
+        if (settingsRes.ok) {
+          const settingsData = await settingsRes.json();
+          if (settingsData.currency?.code) {
+            setSelectedCurrency(settingsData.currency.code as CurrencyCode);
+          }
+        }
+
+        // Fetch order details
         const response = await fetch(`/api/student/orders/${orderId}`);
         if (response.ok) {
           const data = await response.json();
           setOrder(data.order);
         }
       } catch (error) {
-        console.error('Error fetching order:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
     if (orderId) {
-      fetchOrder();
+      fetchData();
     }
   }, [orderId]);
 
@@ -189,10 +228,59 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                 </div>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-slate-700">
+              {/* Currency Selector */}
+              <div className="mb-4">
+                <div className="relative">
+                  <button
+                    onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+                    className="w-full flex items-center justify-between px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-gray-500" />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        {CURRENCIES[selectedCurrency].name}
+                      </span>
+                    </div>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {CURRENCIES[selectedCurrency].symbol}
+                    </span>
+                  </button>
+                  
+                  {showCurrencyDropdown && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                      {Object.entries(CURRENCIES).map(([code, info]) => (
+                        <button
+                          key={code}
+                          onClick={() => {
+                            setSelectedCurrency(code as CurrencyCode);
+                            setShowCurrencyDropdown(false);
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2 hover:bg-gray-50 dark:hover:bg-slate-700 transition ${
+                            selectedCurrency === code ? 'bg-teal-50 dark:bg-teal-900/20' : ''
+                          }`}
+                        >
+                          <span className="text-sm text-gray-700 dark:text-gray-300">{info.name}</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{info.symbol}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-gray-200 dark:border-slate-700">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600 dark:text-gray-400">Amount to Pay</span>
-                  <span className="text-2xl font-bold text-gray-900 dark:text-white">₹{order.totalPrice}</span>
+                  <div className="text-right">
+                    <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {formatPrice(order.totalPrice, selectedCurrency)}
+                    </span>
+                    {selectedCurrency !== 'INR' && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        ≈ ₹{order.totalPrice} INR (for payment)
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -250,8 +338,13 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                     onClick={handlePayment}
                     className="w-full py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-lg"
                   >
-                    Pay ₹{order.totalPrice} with Razorpay
+                    Pay {formatPrice(order.totalPrice, selectedCurrency)} with Razorpay
                   </Button>
+                  {selectedCurrency !== 'INR' && (
+                    <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+                      Payment will be processed in INR (₹{order.totalPrice})
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -262,6 +355,14 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                     Pay directly using UPI. Scan the QR code or use the UPI ID below.
                   </p>
                   <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-6 text-center">
+                    <p className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      Amount: {formatPrice(order.totalPrice, selectedCurrency)}
+                      {selectedCurrency !== 'INR' && (
+                        <span className="text-sm font-normal text-gray-500 dark:text-gray-400 block mt-1">
+                          (₹{order.totalPrice} INR)
+                        </span>
+                      )}
+                    </p>
                     <div className="w-48 h-48 bg-white mx-auto mb-4 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
                       <span className="text-gray-400 text-sm">QR Code</span>
                     </div>
@@ -289,23 +390,65 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                   <p className="text-gray-600 dark:text-gray-400">
                     Transfer the amount to our bank account and share the screenshot for confirmation.
                   </p>
-                  <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-6 space-y-3">
+                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-6 space-y-3">
+                    <div className="text-center pb-3 border-b border-gray-200 dark:border-slate-600">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Amount to Transfer</p>
+                      <p className="text-2xl font-bold text-teal-600 dark:text-teal-400">
+                        {formatPrice(order.totalPrice, selectedCurrency)}
+                      </p>
+                      {selectedCurrency !== 'INR' && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          ≈ ₹{order.totalPrice} INR
+                        </p>
+                      )}
+                    </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500 dark:text-gray-400">Account Name</span>
                       <span className="font-medium text-gray-900 dark:text-white">Stack Assignment</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500 dark:text-gray-400">Account Number</span>
-                      <span className="font-medium text-gray-900 dark:text-white">1234567890123</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-gray-900 dark:text-white">1234567890123</span>
+                        <button
+                          onClick={() => handleCopy('1234567890123')}
+                          className="p-1 hover:bg-gray-200 dark:hover:bg-slate-600 rounded"
+                        >
+                          {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
+                        </button>
+                      </div>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500 dark:text-gray-400">IFSC Code</span>
-                      <span className="font-medium text-gray-900 dark:text-white">ABCD0123456</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-gray-900 dark:text-white">ABCD0123456</span>
+                        <button
+                          onClick={() => handleCopy('ABCD0123456')}
+                          className="p-1 hover:bg-gray-200 dark:hover:bg-slate-600 rounded"
+                        >
+                          <Copy className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500 dark:text-gray-400">Bank Name</span>
                       <span className="font-medium text-gray-900 dark:text-white">State Bank of India</span>
                     </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500 dark:text-gray-400">SWIFT Code</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-gray-900 dark:text-white">SBININBB123</span>
+                        <button
+                          onClick={() => handleCopy('SBININBB123')}
+                          className="p-1 hover:bg-gray-200 dark:hover:bg-slate-600 rounded"
+                        >
+                          <Copy className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 pt-3 border-t border-gray-200 dark:border-slate-600">
+                      For international transfers (SWIFT), additional bank fees may apply.
+                    </p>
                   </div>
                 </div>
               )}

@@ -43,6 +43,13 @@ interface UserProfile {
   lastLoginAt?: string;
 }
 
+interface CurrencySettings {
+  code: string;
+  symbol: string;
+  rate: number;
+  name: string;
+}
+
 export default function StudentDashboard({ user, onNavigate, onLogout }: StudentDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [samples, setSamples] = useState<Sample[]>([]);
@@ -53,10 +60,31 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   const [editedName, setEditedName] = useState(user.name);
   const [editedPhone, setEditedPhone] = useState('');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [currencySettings, setCurrencySettings] = useState<CurrencySettings>({
+    code: 'USD',
+    symbol: '$',
+    rate: 0.012,
+    name: 'US Dollar',
+  });
+
+  const formatPrice = (priceInINR: number): string => {
+    const converted = priceInINR * currencySettings.rate;
+    if (currencySettings.code === 'INR') {
+      return `${currencySettings.symbol}${Math.round(converted)}`;
+    }
+    return `${currencySettings.symbol}${converted.toFixed(2)}`;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch currency settings first
+        const settingsRes = await fetch('/api/settings');
+        if (settingsRes.ok) {
+          const settingsData = await settingsRes.json();
+          setCurrencySettings(settingsData.currency);
+        }
+
         // Fetch samples
         const samplesRes = await fetch('/api/samples');
         if (samplesRes.ok) {
@@ -567,7 +595,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                             <td className="px-4 py-4">
                               {order.totalPrice > 0 ? (
                                 <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                  ₹{order.totalPrice}
+                                  {formatPrice(order.totalPrice)}
                                 </span>
                               ) : (
                                 <span className="text-sm text-amber-600 dark:text-amber-400">Pending Quote</span>
