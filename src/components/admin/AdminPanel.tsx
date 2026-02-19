@@ -41,7 +41,9 @@ import {
   DollarSign,
   Clock,
   AlertCircle,
-  Eye
+  Eye,
+  Trash2,
+  Upload
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -120,7 +122,12 @@ interface Sample {
   id: string;
   title: string;
   slug: string;
-  category: string;
+  description?: string;
+  subject?: string;
+  academicLevel?: string;
+  paperType?: string;
+  pages?: number;
+  fileUrl?: string;
   isPublished: boolean;
   createdAt: string;
 }
@@ -153,6 +160,21 @@ export default function AdminPanel() {
     isPublished: false,
   });
   const [creatingBlog, setCreatingBlog] = useState(false);
+
+  // Sample dialog states
+  const [showSampleDialog, setShowSampleDialog] = useState(false);
+  const [sampleForm, setSampleForm] = useState({
+    title: '',
+    description: '',
+    subject: '',
+    academicLevel: '',
+    paperType: '',
+    pages: 1,
+    fileUrl: '',
+    isPublished: true,
+  });
+  const [creatingSample, setCreatingSample] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
 
   // Check auth status
   useEffect(() => {
@@ -350,6 +372,112 @@ export default function AdminPanel() {
       } else {
         const data = await res.json();
         toast.error(data.error || 'Failed to delete blog');
+      }
+    } catch (error) {
+      toast.error('An error occurred');
+    }
+  };
+
+  const uploadFile = async (file: File): Promise<string | null> => {
+    setUploadingFile(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        return data.file.url;
+      } else {
+        toast.error(data.error || 'Failed to upload file');
+        return null;
+      }
+    } catch (error) {
+      toast.error('Failed to upload file');
+      return null;
+    } finally {
+      setUploadingFile(false);
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const url = await uploadFile(file);
+    if (url) {
+      setSampleForm({ ...sampleForm, fileUrl: url });
+      toast.success('File uploaded successfully');
+    }
+  };
+
+  const createSample = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreatingSample(true);
+
+    try {
+      const res = await fetch('/api/samples', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: sampleForm.title,
+          description: sampleForm.description || undefined,
+          subject: sampleForm.subject || undefined,
+          academicLevel: sampleForm.academicLevel || undefined,
+          paperType: sampleForm.paperType || undefined,
+          pages: sampleForm.pages || undefined,
+          fileUrl: sampleForm.fileUrl || undefined,
+          isPublished: sampleForm.isPublished,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success('Sample created successfully!');
+        setSampleForm({
+          title: '',
+          description: '',
+          subject: '',
+          academicLevel: '',
+          paperType: '',
+          pages: 1,
+          fileUrl: '',
+          isPublished: true,
+        });
+        setShowSampleDialog(false);
+        loadDashboardData();
+      } else {
+        toast.error(data.error || 'Failed to create sample');
+      }
+    } catch (error) {
+      toast.error('An error occurred');
+    } finally {
+      setCreatingSample(false);
+    }
+  };
+
+  const deleteSample = async (slug: string) => {
+    if (!confirm('Are you sure you want to delete this sample? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/samples/${slug}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        toast.success('Sample deleted successfully');
+        loadDashboardData();
+      } else {
+        const data = await res.json();
+        toast.error(data.error || 'Failed to delete sample');
       }
     } catch (error) {
       toast.error('An error occurred');
@@ -819,9 +947,15 @@ export default function AdminPanel() {
           {/* Samples Tab */}
           <TabsContent value="samples" className="space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>All Samples</CardTitle>
-                <CardDescription>Manage sample papers</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>All Samples</CardTitle>
+                  <CardDescription>Manage sample papers</CardDescription>
+                </div>
+                <Button onClick={() => setShowSampleDialog(true)}>
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Add Sample
+                </Button>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -829,26 +963,63 @@ export default function AdminPanel() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Title</TableHead>
-                        <TableHead>Slug</TableHead>
-                        <TableHead>Category</TableHead>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>Level</TableHead>
+                        <TableHead>Pages</TableHead>
+                        <TableHead>File</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Date</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {samples.map((sample) => (
-                        <TableRow key={sample.id}>
-                          <TableCell className="font-medium">{sample.title}</TableCell>
-                          <TableCell className="text-muted-foreground">{sample.slug}</TableCell>
-                          <TableCell>{sample.category}</TableCell>
-                          <TableCell>
-                            <Badge variant={sample.isPublished ? "default" : "secondary"}>
-                              {sample.isPublished ? 'Published' : 'Draft'}
-                            </Badge>
+                      {samples.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+                            No samples yet. Click "Add Sample" to create one.
                           </TableCell>
-                          <TableCell>{formatDate(sample.createdAt)}</TableCell>
                         </TableRow>
-                      ))}
+                      ) : (
+                        samples.map((sample) => (
+                          <TableRow key={sample.id}>
+                            <TableCell className="font-medium">{sample.title}</TableCell>
+                            <TableCell>{sample.subject || '-'}</TableCell>
+                            <TableCell>{sample.academicLevel?.replace('_', ' ') || '-'}</TableCell>
+                            <TableCell>{sample.pages || '-'}</TableCell>
+                            <TableCell>
+                              {sample.fileUrl ? (
+                                <a 
+                                  href={sample.fileUrl} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-primary hover:underline flex items-center gap-1"
+                                >
+                                  <FileText className="h-4 w-4" />
+                                  PDF
+                                </a>
+                              ) : (
+                                <span className="text-muted-foreground">-</span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={sample.isPublished ? "default" : "secondary"}>
+                                {sample.isPublished ? 'Published' : 'Draft'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>{formatDate(sample.createdAt)}</TableCell>
+                            <TableCell>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                onClick={() => deleteSample(sample.slug)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
                     </TableBody>
                   </Table>
                 </div>
@@ -1061,6 +1232,156 @@ export default function AdminPanel() {
               </Button>
               <Button type="submit" disabled={creatingBlog}>
                 {creatingBlog ? 'Creating...' : 'Create Blog'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Sample Dialog */}
+      <Dialog open={showSampleDialog} onOpenChange={setShowSampleDialog}>
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Add New Sample</DialogTitle>
+            <DialogDescription>
+              Upload a sample paper with details
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={createSample} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="sample-title">Title *</Label>
+              <Input
+                id="sample-title"
+                value={sampleForm.title}
+                onChange={(e) => setSampleForm({ ...sampleForm, title: e.target.value })}
+                placeholder="Sample Research Paper on Machine Learning"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="sample-description">Description</Label>
+              <textarea
+                id="sample-description"
+                className="w-full min-h-[80px] p-3 rounded-md border border-input bg-background text-sm"
+                value={sampleForm.description}
+                onChange={(e) => setSampleForm({ ...sampleForm, description: e.target.value })}
+                placeholder="Brief description of the sample paper..."
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="sample-subject">Subject</Label>
+                <Input
+                  id="sample-subject"
+                  value={sampleForm.subject}
+                  onChange={(e) => setSampleForm({ ...sampleForm, subject: e.target.value })}
+                  placeholder="Computer Science, Business, etc."
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="sample-level">Academic Level</Label>
+                <Select 
+                  value={sampleForm.academicLevel} 
+                  onValueChange={(value) => setSampleForm({ ...sampleForm, academicLevel: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="high_school">High School</SelectItem>
+                    <SelectItem value="bachelor">Bachelor</SelectItem>
+                    <SelectItem value="master">Master</SelectItem>
+                    <SelectItem value="phd">PhD</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="sample-type">Paper Type</Label>
+                <Select 
+                  value={sampleForm.paperType} 
+                  onValueChange={(value) => setSampleForm({ ...sampleForm, paperType: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="essay">Essay</SelectItem>
+                    <SelectItem value="research_paper">Research Paper</SelectItem>
+                    <SelectItem value="dissertation">Dissertation</SelectItem>
+                    <SelectItem value="thesis">Thesis</SelectItem>
+                    <SelectItem value="coursework">Coursework</SelectItem>
+                    <SelectItem value="case_study">Case Study</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="sample-pages">Number of Pages</Label>
+                <Input
+                  id="sample-pages"
+                  type="number"
+                  min="1"
+                  value={sampleForm.pages}
+                  onChange={(e) => setSampleForm({ ...sampleForm, pages: parseInt(e.target.value) || 1 })}
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="sample-file">Upload PDF File</Label>
+              <div className="flex items-center gap-3">
+                <Input
+                  id="sample-file"
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleFileUpload}
+                  disabled={uploadingFile}
+                  className="flex-1"
+                />
+                {uploadingFile && (
+                  <span className="text-sm text-muted-foreground">Uploading...</span>
+                )}
+              </div>
+              {sampleForm.fileUrl && (
+                <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                  <FileText className="h-4 w-4" />
+                  File uploaded successfully
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Max file size: 10MB. Only PDF files are accepted.
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="sample-published"
+                checked={sampleForm.isPublished}
+                onChange={(e) => setSampleForm({ ...sampleForm, isPublished: e.target.checked })}
+                className="w-4 h-4 rounded border-gray-300"
+              />
+              <Label htmlFor="sample-published" className="cursor-pointer">
+                Publish immediately
+              </Label>
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowSampleDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={creatingSample || uploadingFile}>
+                {creatingSample ? 'Creating...' : 'Create Sample'}
               </Button>
             </div>
           </form>
