@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/home/HeroSection';
@@ -21,13 +22,8 @@ import OrderPage from '@/components/order/OrderPage';
 import StudentLoginPage from '@/components/student/StudentLoginPage';
 import StudentDashboard from '@/components/student/StudentDashboard';
 
-interface StudentUser {
-  name: string;
-  email: string;
-}
-
-// Get initial page from URL
-function getInitialPage(): string {
+// Get page from URL
+function getPageFromURL(): string {
   if (typeof window !== 'undefined') {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('view') || 'home';
@@ -36,7 +32,7 @@ function getInitialPage(): string {
 }
 
 // Get slug from URL
-function getInitialSlug(): string {
+function getSlugFromURL(): string {
   if (typeof window !== 'undefined') {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('slug') || '';
@@ -44,31 +40,13 @@ function getInitialSlug(): string {
   return '';
 }
 
-export default function HomePage() {
-  const [currentPage, setCurrentPage] = useState(getInitialPage);
-  const [blogSlug, setBlogSlug] = useState(getInitialSlug);
-  const [studentUser, setStudentUser] = useState<StudentUser | null>(null);
-
-  // Check for existing session on mount
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await fetch('/api/student/auth');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.user) {
-            setStudentUser(data.user);
-          }
-        }
-      } catch (error) {
-        console.error('Session check error:', error);
-      }
-    };
-    checkSession();
-  }, []);
+function HomeContent() {
+  const { data: session } = useSession();
+  const [currentPage, setCurrentPage] = useState(getPageFromURL);
+  const [blogSlug, setBlogSlug] = useState(getSlugFromURL);
 
   // Update URL when page changes
-  const handleNavigate = (page: string, params?: Record<string, string>) => {
+  const handleNavigate = useCallback((page: string, params?: Record<string, string>) => {
     setCurrentPage(page);
     setBlogSlug(params?.slug || '');
     
@@ -81,23 +59,25 @@ export default function HomePage() {
     
     window.history.pushState({}, '', `/?${urlParams.toString()}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
   // Handle student login
-  const handleStudentLogin = (user: StudentUser) => {
-    setStudentUser(user);
-  };
+  const handleStudentLogin = useCallback((user: { name: string; email: string }) => {
+    // Session is managed by NextAuth
+    handleNavigate('student-dashboard');
+  }, [handleNavigate]);
 
   // Handle student logout
-  const handleStudentLogout = async () => {
-    try {
-      await fetch('/api/student/auth', { method: 'DELETE' });
-      setStudentUser(null);
-      handleNavigate('home');
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
+  const handleStudentLogout = useCallback(async () => {
+    await signOut({ redirect: false });
+    handleNavigate('home');
+  }, [handleNavigate]);
+
+  // Get student user from session
+  const studentUser = session?.user ? {
+    name: session.user.name || 'Student',
+    email: session.user.email || '',
+  } : null;
 
   // Admin panel has its own layout
   if (currentPage === 'admin') {
@@ -184,4 +164,8 @@ export default function HomePage() {
       <Footer onNavigate={handleNavigate} />
     </div>
   );
+}
+
+export default function HomePage() {
+  return <HomeContent />;
 }
