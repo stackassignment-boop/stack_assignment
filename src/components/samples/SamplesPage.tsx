@@ -112,7 +112,7 @@ export default function SamplesPage() {
               Assignment & Essay Samples
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Preview our sample papers (1/3rd visible) • Login or contact admin for full access
+              Preview 1/3rd of each sample free • Login or contact admin for full access
             </p>
           </div>
 
@@ -145,7 +145,7 @@ export default function SamplesPage() {
                     )}
                     {/* Preview badge */}
                     <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">
-                      Preview: {getPreviewPages(sample.pages)}/{sample.pages || '?'} pages
+                      Preview: {getPreviewPages(sample.pages)}/{sample.pages || '?'} pages free
                     </div>
                   </div>
 
