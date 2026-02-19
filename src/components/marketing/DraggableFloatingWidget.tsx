@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { MessageCircle, GripVertical } from 'lucide-react';
-import Image from 'next/image';
 
 interface Position {
   x: number;
@@ -21,7 +20,7 @@ const getInitialPosition = (): Position => {
       }
     }
   }
-  return { x: 20, y: 80 };
+  return { x: 20, y: 20 };
 };
 
 export default function DraggableFloatingWidget() {
@@ -81,7 +80,7 @@ export default function DraggableFloatingWidget() {
       const newY = e.clientY - dragOffset.y;
       
       // Constrain to viewport
-      const maxX = window.innerWidth - 180;
+      const maxX = window.innerWidth - 80;
       const maxY = window.innerHeight - 120;
       
       setPosition({
@@ -118,7 +117,7 @@ export default function DraggableFloatingWidget() {
       const newY = touch.clientY - dragOffset.y;
       
       // Constrain to viewport
-      const maxX = window.innerWidth - 180;
+      const maxX = window.innerWidth - 80;
       const maxY = window.innerHeight - 120;
       
       setPosition({
@@ -170,8 +169,8 @@ export default function DraggableFloatingWidget() {
           </span>
         </div>
 
-        {/* Logo + WhatsApp Widget */}
-        <div className="relative flex items-center gap-3">
+        {/* WhatsApp Widget */}
+        <div className="relative flex items-center gap-2">
           {/* Drag Handle Indicator */}
           <div 
             className="bg-gradient-to-b from-green-500 to-green-600 rounded-lg p-1.5 opacity-70 hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing shadow-lg"
@@ -181,18 +180,7 @@ export default function DraggableFloatingWidget() {
             <GripVertical className="w-4 h-4 text-white" />
           </div>
           
-          {/* Logo Button - Same size as WhatsApp */}
-          <div className="w-14 h-14 rounded-full shadow-xl overflow-hidden bg-white dark:bg-slate-800 border-2 border-indigo-500 flex items-center justify-center hover:scale-110 transition-transform duration-300">
-            <Image 
-              src="/logo.png" 
-              alt="Stack Assignment" 
-              width={56} 
-              height={56}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          
-          {/* WhatsApp Button - Same size as Logo */}
+          {/* WhatsApp Button */}
           <a
             href="https://wa.me/919907300710?text=Hi%2C%20I%20need%20help%20with%20my%20assignment%20%E2%80%93%20can%20you%20help%3F%20Please%20tell%20me%20the%20subject%2C%20deadline%20and%20word%20count."
             target="_blank"
