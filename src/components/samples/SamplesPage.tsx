@@ -85,7 +85,11 @@ const getSubjectStyle = (subject?: string) => {
   return subjectStyles[subject] || subjectStyles.default;
 };
 
-export default function SamplesPage() {
+interface SamplesPageProps {
+  previewSlug?: string;
+}
+
+export default function SamplesPage({ previewSlug }: SamplesPageProps) {
   const [samples, setSamples] = useState<Sample[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
@@ -94,6 +98,17 @@ export default function SamplesPage() {
   useEffect(() => {
     fetchSamples();
   }, []);
+
+  // Auto-open preview when previewSlug is provided
+  useEffect(() => {
+    if (previewSlug && samples.length > 0) {
+      const sampleToPreview = samples.find(s => s.slug === previewSlug);
+      if (sampleToPreview) {
+        setSelectedSample(sampleToPreview);
+        setShowPreview(true);
+      }
+    }
+  }, [previewSlug, samples]);
 
   const fetchSamples = async () => {
     try {

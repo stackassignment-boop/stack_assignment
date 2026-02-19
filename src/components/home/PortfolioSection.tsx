@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { BookOpen, ArrowRight } from 'lucide-react';
+import { BookOpen, ArrowRight, Eye } from 'lucide-react';
 
 interface Sample {
   id: string;
@@ -52,7 +52,7 @@ const paperTypes: Record<string, string> = {
 };
 
 interface PortfolioSectionProps {
-  onNavigate?: (page: string) => void;
+  onNavigate?: (page: string, params?: Record<string, string>) => void;
 }
 
 export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) {
@@ -73,6 +73,11 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
     }
     loadSamples();
   }, []);
+
+  // Handle sample click - navigate to samples page and open preview
+  const handleSampleClick = (slug: string) => {
+    onNavigate?.('samples', { preview: slug });
+  };
 
   // Get 6 samples, one from each category if possible
   const displaySamples = (() => {
@@ -160,19 +165,30 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
         {displaySamples.length > 0 && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
             {displaySamples.map(sample => (
-              <div key={sample.id} className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+              <div 
+                key={sample.id} 
+                onClick={() => handleSampleClick(sample.slug)}
+                className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer hover:-translate-y-1 group"
+              >
                 <div className="relative h-40">
                   <img 
                     src={getImage(sample.subject)} 
                     alt={sample.subject || 'Sample'}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
                   <div className={`absolute bottom-0 left-0 right-0 h-1 ${getColor(sample.subject)}`}></div>
                   {sample.pages && (
                     <span className="absolute top-3 right-3 bg-black/50 text-white text-xs px-2 py-1 rounded">
                       {sample.pages} pages
                     </span>
                   )}
+                  {/* Preview icon on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="bg-white/90 rounded-full p-3 shadow-lg">
+                      <Eye className="w-6 h-6 text-indigo-600" />
+                    </div>
+                  </div>
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2">
@@ -185,7 +201,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
                       </span>
                     )}
                   </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                  <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
                     {sample.title}
                   </h3>
                   {sample.description && (

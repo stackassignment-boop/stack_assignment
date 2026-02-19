@@ -41,21 +41,35 @@ function getSlugFromURL(): string {
   return '';
 }
 
+// Get preview from URL
+function getPreviewFromURL(): string {
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('preview') || '';
+  }
+  return '';
+}
+
 function HomeContent() {
   const { data: session } = useSession();
   const [currentPage, setCurrentPage] = useState(getPageFromURL);
   const [blogSlug, setBlogSlug] = useState(getSlugFromURL);
+  const [previewSlug, setPreviewSlug] = useState(getPreviewFromURL);
 
   // Update URL when page changes
   const handleNavigate = useCallback((page: string, params?: Record<string, string>) => {
     setCurrentPage(page);
     setBlogSlug(params?.slug || '');
+    setPreviewSlug(params?.preview || '');
     
     // Build URL with params
     const urlParams = new URLSearchParams();
     urlParams.set('view', page);
     if (params?.slug) {
       urlParams.set('slug', params.slug);
+    }
+    if (params?.preview) {
+      urlParams.set('preview', params.preview);
     }
     
     window.history.pushState({}, '', `/?${urlParams.toString()}`);
@@ -114,7 +128,7 @@ function HomeContent() {
       case 'pricing':
         return <PricingPage onNavigate={handleNavigate} />;
       case 'samples':
-        return <SamplesPage />;
+        return <SamplesPage previewSlug={previewSlug} />;
       case 'blog':
         return <BlogPage onNavigate={handleNavigate} />;
       case 'blog-detail':
