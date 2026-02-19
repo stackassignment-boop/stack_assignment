@@ -25,6 +25,12 @@ import StudentDashboard from '@/components/student/StudentDashboard';
 import LiveActivityFeed from '@/components/fomo/LiveActivityFeed';
 import UrgencyBanner from '@/components/fomo/UrgencyBanner';
 import SocialProofWidget from '@/components/fomo/SocialProofWidget';
+import FloatingActions from '@/components/marketing/FloatingActions';
+import GradeGuaranteeBadge from '@/components/marketing/GradeGuaranteeBadge';
+import PriceMatchGuarantee from '@/components/marketing/PriceMatchGuarantee';
+import TrustBadges from '@/components/marketing/TrustBadges';
+import ReferralBanner from '@/components/marketing/ReferralBanner';
+import ExamStressBanner from '@/components/marketing/ExamStressBanner';
 
 // Get page from URL
 function getPageFromURL(): string {
@@ -151,13 +157,48 @@ function HomeContent() {
             <UrgencyBanner onNavigate={handleNavigate} />
             <HeroSection onNavigate={handleNavigate} />
             <StatsSection />
+            
+            {/* Marketing Guarantees */}
+            <section className="py-8 bg-gray-50 dark:bg-slate-900">
+              <div className="max-w-6xl mx-auto px-6 space-y-4">
+                <GradeGuaranteeBadge variant="inline" onNavigate={handleNavigate} />
+                <PriceMatchGuarantee variant="inline" />
+              </div>
+            </section>
+            
             <PricingPage onNavigate={handleNavigate} />
+            
+            {/* Exam Stress Banner */}
+            <section className="py-8 bg-white dark:bg-slate-950">
+              <div className="max-w-6xl mx-auto px-6">
+                <ExamStressBanner variant="banner" />
+              </div>
+            </section>
+            
             <TestimonialsSection onNavigate={handleNavigate} />
             <PortfolioSection onNavigate={handleNavigate} />
+            
+            {/* Referral Program */}
+            <section className="py-8 bg-gray-50 dark:bg-slate-900">
+              <div className="max-w-6xl mx-auto px-6">
+                <ReferralBanner variant="full" />
+              </div>
+            </section>
+            
             <FAQSection />
             <UniversitiesSection />
+            
+            {/* Trust Badges Full */}
+            <section className="py-8 bg-white dark:bg-slate-950">
+              <div className="max-w-6xl mx-auto px-6">
+                <TrustBadges variant="full" />
+              </div>
+            </section>
+            
+            {/* FOMO Elements */}
             <LiveActivityFeed />
             <SocialProofWidget />
+            <FloatingActions />
           </>
         );
     }

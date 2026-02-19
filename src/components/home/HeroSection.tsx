@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import GradeGuaranteeBadge from '@/components/marketing/GradeGuaranteeBadge';
+import TrustBadges from '@/components/marketing/TrustBadges';
+import WhatsAppOrderButton from '@/components/marketing/WhatsAppOrderButton';
 
 interface HeroSectionProps {
   onNavigate?: (page: string) => void;
@@ -43,6 +46,11 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
       )}
 
       <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
+        {/* Grade Guarantee Badge */}
+        <div className="mb-8">
+          <GradeGuaranteeBadge variant="hero" onNavigate={onNavigate} />
+        </div>
+        
         {/* Mini stats in hero */}
         <div className="flex flex-wrap justify-center mb-8 gap-3">
           <HeroMiniStat icon="users" text="60,000+ Students" delay={0.2} />
@@ -62,7 +70,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
           PhD-qualified writers · 100% original · On-time delivery · Money-back guarantee
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-5 justify-center">
+        <div className="flex flex-col sm:flex-row gap-5 justify-center mb-8">
           <Button
             onClick={() => handleNav('order')}
             className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-6 rounded-xl text-xl font-bold transition shadow-lg min-w-[280px]"
@@ -76,6 +84,14 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
             View Samples
           </button>
         </div>
+
+        {/* WhatsApp Order Button */}
+        <div className="flex justify-center mb-8">
+          <WhatsAppOrderButton variant="large" />
+        </div>
+
+        {/* Trust Badges */}
+        <TrustBadges variant="compact" />
       </div>
     </section>
   );

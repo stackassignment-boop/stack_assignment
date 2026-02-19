@@ -1,6 +1,7 @@
 'use client';
 
-import { GraduationCap, Phone, Mail, MessageCircle } from 'lucide-react';
+import { GraduationCap, Phone, Mail, MessageCircle, Instagram } from 'lucide-react';
+import TrustBadges from '@/components/marketing/TrustBadges';
 
 interface FooterProps {
   onNavigate?: (page: string) => void;
@@ -17,6 +18,11 @@ export default function Footer({ onNavigate }: FooterProps) {
     <>
       <footer className="bg-slate-900 text-slate-300 py-12 mt-auto relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          {/* Trust Badges */}
+          <div className="mb-10">
+            <TrustBadges variant="footer" />
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
             {/* Brand */}
             <div>
@@ -133,6 +139,15 @@ export default function Footer({ onNavigate }: FooterProps) {
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
                 </svg>
+              </a>
+              <a
+                href="https://instagram.com/stackassignment"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-pink-400 transition-colors text-2xl"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-6 h-6" />
               </a>
               <a
                 href="https://linkedin.com/company/stackassignment"
