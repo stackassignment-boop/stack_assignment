@@ -11,13 +11,6 @@ const testimonials = [
   { name: 'Sophie T.', uni: 'Cambridge University', rating: 5, text: 'Professional and on-time delivery every time.', time: '31 min ago' },
 ];
 
-const stats = [
-  { label: 'Orders Today', value: '127', icon: '📦' },
-  { label: 'Active Writers', value: '89', icon: '✍️' },
-  { label: 'Success Rate', value: '99.2%', icon: '🎯' },
-  { label: 'Avg. Response', value: '< 2 min', icon: '⚡' },
-];
-
 export default function SocialProofWidget() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -36,19 +29,6 @@ export default function SocialProofWidget() {
 
   return (
     <div className="fixed bottom-20 md:bottom-24 left-4 right-4 md:left-auto md:right-4 md:w-80 z-30 pointer-events-none">
-      {/* Stats Bar */}
-      <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 p-3 mb-3 pointer-events-auto">
-        <div className="grid grid-cols-4 gap-2 text-center">
-          {stats.map((stat, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <span className="text-lg">{stat.icon}</span>
-              <span className="text-xs font-bold text-gray-900 dark:text-white">{stat.value}</span>
-              <span className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">{stat.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Testimonial Card */}
       <div 
         className={`bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 p-4 transition-all duration-300 pointer-events-auto ${
