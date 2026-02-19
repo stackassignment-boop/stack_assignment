@@ -61,9 +61,83 @@ const updateOrderSchema = z.object({
   notes: z.string().optional(),
   // Admin only fields
   status: z.enum(['pending', 'confirmed', 'in_progress', 'review', 'completed', 'cancelled', 'refunded']).optional(),
-  paymentStatus: z.enum(['pending', 'paid', 'refunded']).optional(),
+  paymentStatus: z.enum(['pending', 'pending_quote', 'pending_payment', 'paid', 'refunded']).optional(),
   assignedWriter: z.string().optional(),
+  totalPrice: z.number().positive().optional(),
 });
+
+// PATCH /api/orders/[id] - Partial update order
+export async function PATCH(request: NextRequest, { params }: RouteParams) {
+  try {
+    const user = await getCurrentUser();
+    
+    if (!user) {
+      return apiError('Not authenticated', 401);
+    }
+    
+    const { id } = await params;
+    
+    const order = await db.order.findUnique({
+      where: { id },
+    });
+    
+    if (!order) {
+      return apiError('Order not found', 404);
+    }
+    
+    // Only admin can use PATCH
+    if (user.role !== 'admin') {
+      return apiError('Access denied', 403);
+    }
+    
+    const body = await request.json();
+    
+    const updateData: Record<string, unknown> = {};
+    
+    if (body.status) {
+      updateData.status = body.status;
+      if (body.status === 'completed') {
+        updateData.completedAt = new Date();
+      }
+    }
+    if (body.paymentStatus) {
+      updateData.paymentStatus = body.paymentStatus;
+    }
+    if (body.totalPrice !== undefined && body.totalPrice > 0) {
+      updateData.totalPrice = body.totalPrice;
+      // Also update payment status when price is set
+      if (order.paymentStatus === 'pending_quote' || order.totalPrice === 0) {
+        updateData.paymentStatus = 'pending_payment';
+      }
+    }
+    if (body.assignedWriter) {
+      updateData.assignedWriter = body.assignedWriter;
+    }
+    
+    const updatedOrder = await db.order.update({
+      where: { id },
+      data: updateData,
+      include: {
+        customer: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+    
+    return apiResponse({
+      success: true,
+      message: 'Order updated successfully',
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error('Update order error:', error);
+    return apiError('Internal server error', 500);
+  }
+}
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {

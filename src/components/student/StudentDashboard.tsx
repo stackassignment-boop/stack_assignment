@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { User, FileText, Package, LogOut, Clock, CheckCircle, AlertCircle, Eye, Download, Plus, ChevronRight, Mail, Phone, Calendar, Settings, Edit2, Save, X } from 'lucide-react';
+import { User, FileText, Package, LogOut, Clock, CheckCircle, AlertCircle, Eye, Download, Plus, ChevronRight, Mail, Phone, Calendar, Settings, Edit2, Save, X, CreditCard, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import PaymentPage from './PaymentPage';
 
 interface StudentDashboardProps {
   user: { name: string; email: string };
-  onNavigate?: (page: string) => void;
+  onNavigate?: (page: string, params?: Record<string, string>) => void;
   onLogout?: () => void;
 }
 
@@ -51,6 +52,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   const [editingProfile, setEditingProfile] = useState(false);
   const [editedName, setEditedName] = useState(user.name);
   const [editedPhone, setEditedPhone] = useState('');
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,6 +89,26 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
     fetchData();
   }, [user.name]);
 
+  // If showing payment page for a specific order
+  if (selectedOrderId) {
+    return (
+      <PaymentPage 
+        orderId={selectedOrderId} 
+        onNavigate={(page) => {
+          if (page === 'student-dashboard') {
+            setSelectedOrderId(null);
+            // Refresh orders
+            fetch('/api/student/orders')
+              .then(res => res.json())
+              .then(data => setOrders(data.orders || []));
+          } else {
+            onNavigate?.(page);
+          }
+        }} 
+      />
+    );
+  }
+
   const handleUpdateProfile = async () => {
     try {
       const response = await fetch('/api/student/profile', {
@@ -108,35 +130,50 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   };
 
   const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'completed':
-      case 'delivered':
-      case 'paid':
-        return 'text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400';
-      case 'in_progress':
-      case 'processing':
-        return 'text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400';
-      case 'pending':
-        return 'text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400';
-      case 'cancelled':
-      case 'failed':
-        return 'text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400';
-      default:
-        return 'text-gray-600 bg-gray-100 dark:bg-gray-900/30 dark:text-gray-400';
+    const s = status.toLowerCase();
+    if (s === 'completed' || s === 'delivered' || s === 'paid') {
+      return 'text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400';
     }
+    if (s === 'in_progress' || s === 'processing') {
+      return 'text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400';
+    }
+    if (s === 'pending_quote') {
+      return 'text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400';
+    }
+    if (s === 'pending_payment') {
+      return 'text-orange-600 bg-orange-100 dark:bg-orange-900/30 dark:text-orange-400';
+    }
+    if (s === 'cancelled' || s === 'failed') {
+      return 'text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400';
+    }
+    return 'text-gray-600 bg-gray-100 dark:bg-gray-900/30 dark:text-gray-400';
   };
 
   const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'completed':
-      case 'delivered':
-      case 'paid':
-        return <CheckCircle className="w-4 h-4" />;
-      case 'pending':
-        return <Clock className="w-4 h-4" />;
-      default:
-        return <AlertCircle className="w-4 h-4" />;
+    const s = status.toLowerCase();
+    if (s === 'completed' || s === 'delivered' || s === 'paid') {
+      return <CheckCircle className="w-4 h-4" />;
     }
+    if (s === 'pending_quote') {
+      return <Clock className="w-4 h-4" />;
+    }
+    if (s === 'pending_payment') {
+      return <Wallet className="w-4 h-4" />;
+    }
+    return <AlertCircle className="w-4 h-4" />;
+  };
+
+  const getPaymentStatusLabel = (status: string, totalPrice: number) => {
+    if (totalPrice === 0 || status === 'pending_quote') {
+      return 'Awaiting Quote';
+    }
+    if (status === 'pending' || status === 'pending_payment') {
+      return 'Payment Due';
+    }
+    if (status === 'paid') {
+      return 'Paid';
+    }
+    return status;
   };
 
   const formatDate = (dateString: string) => {
@@ -157,7 +194,6 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
     });
   };
 
-  // Get initials for avatar
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   };
@@ -208,7 +244,6 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
           <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
             <div className="bg-gradient-to-r from-teal-500 to-teal-600 h-20"></div>
             <div className="px-6 pb-6 -mt-10">
-              {/* Avatar */}
               <div className="flex justify-center">
                 {profile?.avatar ? (
                   <img 
@@ -270,7 +305,6 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                 )}
               </div>
 
-              {/* Profile Details */}
               <div className="mt-6 space-y-3">
                 <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
                   <Mail className="w-4 h-4 text-gray-400" />
@@ -286,12 +320,6 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                   <Calendar className="w-4 h-4 text-gray-400" />
                   <span>Member since {profile?.createdAt ? formatDate(profile.createdAt) : 'N/A'}</span>
                 </div>
-                {profile?.lastLoginAt && (
-                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                    <Clock className="w-4 h-4 text-gray-400" />
-                    <span>Last login: {formatDateTime(profile.lastLoginAt)}</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -322,14 +350,14 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             </div>
             <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
+                  <Wallet className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {orders.filter(o => o.status === 'pending' || o.status === 'in_progress').length}
+                    {orders.filter(o => o.totalPrice > 0 && (o.paymentStatus === 'pending' || o.paymentStatus === 'pending_payment')).length}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Active Orders</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Payment Due</p>
                 </div>
               </div>
             </div>
@@ -362,16 +390,6 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             Overview
           </button>
           <button
-            onClick={() => setActiveTab('samples')}
-            className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
-              activeTab === 'samples'
-                ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
-                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
-            }`}
-          >
-            Samples
-          </button>
-          <button
             onClick={() => setActiveTab('orders')}
             className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
               activeTab === 'orders'
@@ -380,6 +398,16 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             }`}
           >
             My Orders
+          </button>
+          <button
+            onClick={() => setActiveTab('samples')}
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
+              activeTab === 'samples'
+                ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
+                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            Samples
           </button>
           <button
             onClick={() => setActiveTab('settings')}
@@ -425,9 +453,8 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                               {order.orderNumber} • {order.pages} pages
                             </p>
                           </div>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(order.status)}`}>
-                            {getStatusIcon(order.status)}
-                            {order.status}
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(order.paymentStatus)}`}>
+                            {getPaymentStatusLabel(order.paymentStatus, order.totalPrice)}
                           </span>
                         </div>
                       </div>
@@ -491,60 +518,6 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
               </div>
             )}
 
-            {/* Samples Tab */}
-            {activeTab === 'samples' && (
-              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
-                <div className="p-4 border-b border-gray-200 dark:border-slate-800">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
-                    All Samples ({samples.length})
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    As a registered student, you have full access to all samples
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-                  {samples.map((sample) => (
-                    <div key={sample.id} className="border border-gray-200 dark:border-slate-800 rounded-lg p-4 hover:border-teal-500 transition">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center shrink-0">
-                          <FileText className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-medium text-gray-900 dark:text-white truncate">{sample.title}</h4>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">{sample.subject}</p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-slate-800 rounded">
-                              {sample.academicLevel}
-                            </span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                              {sample.pages} pages
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-3 flex gap-2">
-                        <Button
-                          onClick={() => onNavigate?.('samples')}
-                          size="sm"
-                          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white"
-                        >
-                          <Eye className="w-4 h-4 mr-1" />
-                          View Full
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="border-gray-300 dark:border-slate-700"
-                        >
-                          <Download className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Orders Tab */}
             {activeTab === 'orders' && (
               <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
@@ -552,7 +525,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white">My Orders</h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Track your order status and download completed work
+                      Track your order status and make payments
                     </p>
                   </div>
                   <Button
@@ -574,7 +547,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                           <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Deadline</th>
                           <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Amount</th>
                           <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Status</th>
-                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Payment</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200 dark:divide-slate-800">
@@ -591,19 +564,37 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                             <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
                               {formatDate(order.deadline)}
                             </td>
-                            <td className="px-4 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                              ₹{order.totalPrice.toFixed(2)}
+                            <td className="px-4 py-4">
+                              {order.totalPrice > 0 ? (
+                                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                  ₹{order.totalPrice}
+                                </span>
+                              ) : (
+                                <span className="text-sm text-amber-600 dark:text-amber-400">Pending Quote</span>
+                              )}
                             </td>
                             <td className="px-4 py-4">
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit ${getStatusColor(order.status)}`}>
-                                {getStatusIcon(order.status)}
-                                {order.status}
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit ${getStatusColor(order.paymentStatus)}`}>
+                                {getPaymentStatusLabel(order.paymentStatus, order.totalPrice)}
                               </span>
                             </td>
                             <td className="px-4 py-4">
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.paymentStatus)}`}>
-                                {order.paymentStatus}
-                              </span>
+                              {order.totalPrice > 0 && (order.paymentStatus === 'pending' || order.paymentStatus === 'pending_payment') ? (
+                                <Button
+                                  onClick={() => setSelectedOrderId(order.id)}
+                                  size="sm"
+                                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                                >
+                                  <CreditCard className="w-4 h-4 mr-1" />
+                                  Pay Now
+                                </Button>
+                              ) : order.totalPrice === 0 ? (
+                                <span className="text-xs text-gray-500 dark:text-gray-400">Awaiting quote</span>
+                              ) : order.paymentStatus === 'paid' ? (
+                                <span className="text-xs text-green-600 dark:text-green-400">Paid ✓</span>
+                              ) : (
+                                <span className="text-xs text-gray-500 dark:text-gray-400">-</span>
+                              )}
                             </td>
                           </tr>
                         ))}
@@ -629,6 +620,45 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
               </div>
             )}
 
+            {/* Samples Tab */}
+            {activeTab === 'samples' && (
+              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
+                <div className="p-4 border-b border-gray-200 dark:border-slate-800">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                    All Samples ({samples.length})
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    As a registered student, you have full access to all samples
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                  {samples.map((sample) => (
+                    <div key={sample.id} className="border border-gray-200 dark:border-slate-800 rounded-lg p-4 hover:border-teal-500 transition">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center shrink-0">
+                          <FileText className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-gray-900 dark:text-white truncate">{sample.title}</h4>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{sample.subject}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <Button
+                          onClick={() => onNavigate?.('samples')}
+                          size="sm"
+                          className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                        >
+                          <Eye className="w-4 h-4 mr-1" />
+                          View Full
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Settings Tab */}
             {activeTab === 'settings' && (
               <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
@@ -636,7 +666,6 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                   <h3 className="font-semibold text-gray-900 dark:text-white">Account Settings</h3>
                 </div>
                 <div className="p-6 space-y-6">
-                  {/* Profile Section */}
                   <div>
                     <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Profile Information</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -678,8 +707,6 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                       </div>
                     </div>
                   </div>
-
-                  {/* Actions */}
                   <div className="pt-4 border-t border-gray-200 dark:border-slate-800">
                     <Button
                       variant="outline"
@@ -690,7 +717,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                       }}
                     >
                       <LogOut className="w-4 h-4 mr-2" />
-                      Sign Out of All Devices
+                      Sign Out
                     </Button>
                   </div>
                 </div>

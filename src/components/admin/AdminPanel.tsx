@@ -150,6 +150,7 @@ export default function AdminPanel() {
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showInquiryDialog, setShowInquiryDialog] = useState(false);
+  const [priceInput, setPriceInput] = useState<string>('');
   const [showBlogDialog, setShowBlogDialog] = useState(false);
   const [blogForm, setBlogForm] = useState({
     title: '',
@@ -287,6 +288,29 @@ export default function AdminPanel() {
         setShowOrderDialog(false);
       } else {
         toast.error('Failed to update order');
+      }
+    } catch (error) {
+      toast.error('An error occurred');
+    }
+  };
+
+  const updateOrderPrice = async (orderId: string, price: number) => {
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          totalPrice: price,
+          paymentStatus: 'pending_payment'
+        }),
+      });
+
+      if (res.ok) {
+        toast.success('Price updated successfully! Student will be notified.');
+        loadDashboardData();
+        setShowOrderDialog(false);
+      } else {
+        toast.error('Failed to update price');
       }
     } catch (error) {
       toast.error('An error occurred');
@@ -1046,8 +1070,8 @@ export default function AdminPanel() {
                   <p className="text-sm text-muted-foreground">{selectedOrder.customer.email}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Amount</Label>
-                  <p className="font-medium text-lg">{formatPrice(selectedOrder.totalPrice)}</p>
+                  <Label className="text-muted-foreground">Payment Status</Label>
+                  <p className="font-medium">{selectedOrder.paymentStatus.replace('_', ' ')}</p>
                 </div>
               </div>
               <div>
@@ -1068,6 +1092,50 @@ export default function AdminPanel() {
                   <p className="font-medium">{formatDate(selectedOrder.createdAt)}</p>
                 </div>
               </div>
+              
+              {/* Price Setting Section */}
+              <div className="space-y-2 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                <Label className="text-amber-800 dark:text-amber-200 font-semibold">
+                  Set Price (INR)
+                </Label>
+                {selectedOrder.totalPrice > 0 ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-green-600 dark:text-green-400">
+                      Current: {formatPrice(selectedOrder.totalPrice)}
+                    </span>
+                    <span className="text-xs text-muted-foreground">(Price already set)</span>
+                  </div>
+                ) : (
+                  <p className="text-sm text-amber-700 dark:text-amber-300 mb-2">
+                    No price set yet. Enter the amount below:
+                  </p>
+                )}
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="Enter price"
+                    value={priceInput}
+                    onChange={(e) => setPriceInput(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button 
+                    onClick={() => {
+                      const price = parseFloat(priceInput);
+                      if (price > 0) {
+                        updateOrderPrice(selectedOrder.id, price);
+                        setPriceInput('');
+                      } else {
+                        toast.error('Please enter a valid price');
+                      }
+                    }}
+                    className="bg-amber-600 hover:bg-amber-700 text-white"
+                  >
+                    Set Price
+                  </Button>
+                </div>
+              </div>
+
+              {/* Status Update Section */}
               <div className="space-y-2">
                 <Label>Update Status</Label>
                 <Select onValueChange={(value) => updateOrderStatus(selectedOrder.id, value)}>
@@ -1080,6 +1148,33 @@ export default function AdminPanel() {
                     <SelectItem value="in_progress">In Progress</SelectItem>
                     <SelectItem value="completed">Completed</SelectItem>
                     <SelectItem value="cancelled">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Payment Status Update Section */}
+              <div className="space-y-2">
+                <Label>Update Payment Status</Label>
+                <Select onValueChange={(value) => {
+                  fetch(`/api/orders/${selectedOrder.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ paymentStatus: value }),
+                  }).then(res => {
+                    if (res.ok) {
+                      toast.success('Payment status updated');
+                      loadDashboardData();
+                      setShowOrderDialog(false);
+                    }
+                  });
+                }}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select payment status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending_quote">Awaiting Quote</SelectItem>
+                    <SelectItem value="pending_payment">Payment Due</SelectItem>
+                    <SelectItem value="paid">Paid</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
