@@ -17,6 +17,7 @@ import BlogDetailPage from '@/components/blog/BlogDetailPage';
 import PrivacyPage from '@/components/legal/PrivacyPage';
 import TermsPage from '@/components/legal/TermsPage';
 import IntegrityPage from '@/components/legal/IntegrityPage';
+import ServicesPage from '@/components/services/ServicesPage';
 import AdminPanel from '@/components/admin/AdminPanel';
 import OrderPage from '@/components/order/OrderPage';
 import StudentLoginPage from '@/components/student/StudentLoginPage';
@@ -109,15 +110,7 @@ function HomeContent() {
   const renderPage = () => {
     switch (currentPage) {
       case 'services':
-        return (
-          <>
-            <HeroSection onNavigate={handleNavigate} />
-            <StatsSection />
-            <PortfolioSection onNavigate={handleNavigate} />
-            <FAQSection />
-            <UniversitiesSection />
-          </>
-        );
+        return <ServicesPage onNavigate={handleNavigate} />;
       case 'pricing':
         return <PricingPage onNavigate={handleNavigate} />;
       case 'samples':
