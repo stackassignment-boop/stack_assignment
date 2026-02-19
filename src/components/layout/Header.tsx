@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { GraduationCap, Moon, Sun, Phone, Menu, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { GraduationCap, Moon, Sun, Phone, Menu, X, ChevronDown, User, Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface HeaderProps {
   currentPage?: string;
   onNavigate?: (page: string) => void;
+  studentUser?: { name: string; email: string } | null;
+  onLogout?: () => void;
 }
 
 // Get initial theme
@@ -19,14 +21,27 @@ function getInitialTheme(): boolean {
   return false;
 }
 
-export default function Header({ currentPage = 'home', onNavigate }: HeaderProps) {
+export default function Header({ currentPage = 'home', onNavigate, studentUser, onLogout }: HeaderProps) {
   const [isDark, setIsDark] = useState(getInitialTheme);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Apply theme to document
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark);
   }, [isDark]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setLoginDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const toggleTheme = () => {
     const newDark = !isDark;
@@ -41,7 +56,6 @@ export default function Header({ currentPage = 'home', onNavigate }: HeaderProps
     { id: 'pricing', label: 'Pricing' },
     { id: 'samples', label: 'Samples' },
     { id: 'blog', label: 'Blog' },
-    { id: 'admin', label: 'Admin' },
   ];
 
   const handleNav = (page: string) => {
@@ -49,6 +63,7 @@ export default function Header({ currentPage = 'home', onNavigate }: HeaderProps
       onNavigate(page);
     }
     setMobileMenuOpen(false);
+    setLoginDropdownOpen(false);
   };
 
   return (
@@ -100,10 +115,100 @@ export default function Header({ currentPage = 'home', onNavigate }: HeaderProps
 
             <Button
               onClick={() => handleNav('order')}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white hidden sm:flex"
             >
               Order Now
             </Button>
+
+            {/* Login Dropdown or User Menu */}
+            {studentUser ? (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                  </div>
+                  <span className="hidden lg:block text-sm font-medium">{studentUser.name}</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${loginDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {loginDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-2">
+                    <div className="px-4 py-2 border-b border-gray-200 dark:border-slate-700">
+                      <p className="text-sm font-medium">{studentUser.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{studentUser.email}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        handleNav('student-dashboard');
+                        setLoginDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2"
+                    >
+                      <User className="w-4 h-4" /> Dashboard
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (onLogout) onLogout();
+                        setLoginDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" /> Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
+                  className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
+                    loginDropdownOpen || currentPage === 'admin' || currentPage === 'student-login'
+                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-900/20'
+                      : 'hover:bg-gray-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  Login
+                  <ChevronDown className={`w-4 h-4 transition-transform ${loginDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {loginDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-2 z-50">
+                    <button
+                      onClick={() => {
+                        handleNav('student-login');
+                      }}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-3"
+                    >
+                      <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
+                        <User className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Student</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">View samples & orders</p>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleNav('admin');
+                      }}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-3"
+                    >
+                      <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
+                        <Shield className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Admin</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Manage website</p>
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -132,6 +237,23 @@ export default function Header({ currentPage = 'home', onNavigate }: HeaderProps
                 {item.label}
               </button>
             ))}
+            <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Login as:</p>
+              <button
+                onClick={() => handleNav('student-login')}
+                className="flex items-center gap-3 w-full text-left py-3 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
+              >
+                <User className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                <span>Student</span>
+              </button>
+              <button
+                onClick={() => handleNav('admin')}
+                className="flex items-center gap-3 w-full text-left py-3 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
+              >
+                <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <span>Admin</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
