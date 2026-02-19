@@ -180,7 +180,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
             Sample Work
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white" style={{ fontFamily: 'Sora, sans-serif' }}>
-            Our Writing Portfolio
+            Sample Work Portfolio
           </h2>
           <p className="text-gray-500 dark:text-slate-400 text-lg max-w-2xl mx-auto">
             Browse through a selection of our expert-written papers across diverse subjects and academic levels.
