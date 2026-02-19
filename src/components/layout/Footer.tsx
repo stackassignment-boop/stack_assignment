@@ -1,6 +1,6 @@
 'use client';
 
-import { GraduationCap, Phone, Mail, MessageCircle, Instagram } from 'lucide-react';
+import { GraduationCap, Phone, Mail, Instagram } from 'lucide-react';
 import TrustBadges from '@/components/marketing/TrustBadges';
 
 interface FooterProps {
@@ -130,7 +130,7 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div className="mt-10 pt-6 border-t border-slate-700">
             <div className="flex justify-center gap-8">
               <a
-                href="https://facebook.com/stackassignment"
+                href="https://www.facebook.com/profile.php?id=61587947056193"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-white transition-colors text-2xl"
@@ -150,7 +150,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                 <Instagram className="w-6 h-6" />
               </a>
               <a
-                href="https://linkedin.com/company/stackassignment"
+                href="http://www.linkedin.com/in/stack-assignment-6925ba280"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-white transition-colors text-2xl"
@@ -169,21 +169,6 @@ export default function Footer({ onNavigate }: FooterProps) {
           </div>
         </div>
       </footer>
-
-      {/* Floating WhatsApp Button */}
-      <a
-        href="https://wa.me/919907300710?text=Hi%2C%20I%20need%20help%20with%20my%20assignment%20%E2%80%93%20can%20you%20help%3F%20Please%20tell%20me%20the%20subject%2C%20deadline%20and%20word%20count."
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-[100] flex items-center justify-center w-16 h-16 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 group"
-        aria-label="Chat on WhatsApp"
-      >
-        <MessageCircle className="w-8 h-8" />
-        {/* Tooltip */}
-        <span className="absolute right-20 bottom-1/2 translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/90 text-white text-sm px-4 py-2.5 rounded-lg whitespace-nowrap shadow-xl pointer-events-none">
-          Chat with us on WhatsApp!
-        </span>
-      </a>
     </>
   );
 }

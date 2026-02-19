@@ -26,6 +26,7 @@ import LiveActivityFeed from '@/components/fomo/LiveActivityFeed';
 import UrgencyBanner from '@/components/fomo/UrgencyBanner';
 import SocialProofWidget from '@/components/fomo/SocialProofWidget';
 import FloatingActions from '@/components/marketing/FloatingActions';
+import DraggableFloatingWidget from '@/components/marketing/DraggableFloatingWidget';
 import GradeGuaranteeBadge from '@/components/marketing/GradeGuaranteeBadge';
 import PriceMatchGuarantee from '@/components/marketing/PriceMatchGuarantee';
 import TrustBadges from '@/components/marketing/TrustBadges';
@@ -199,6 +200,7 @@ function HomeContent() {
             <LiveActivityFeed />
             <SocialProofWidget />
             <FloatingActions />
+            <DraggableFloatingWidget />
           </>
         );
     }

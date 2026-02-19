@@ -126,19 +126,6 @@ export default function LiveActivityFeed() {
           </div>
         </div>
       </div>
-
-      {/* Live Activity Counter - Bottom Right */}
-      <div className="fixed bottom-4 right-4 z-50">
-        <div className="bg-white dark:bg-slate-800 rounded-full shadow-lg border border-gray-200 dark:border-slate-700 px-4 py-2 flex items-center gap-2">
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-          </span>
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            <span className="text-green-600 dark:text-green-400 font-bold">{viewerCount}</span> people viewing
-          </span>
-        </div>
-      </div>
     </>
   );
 }
