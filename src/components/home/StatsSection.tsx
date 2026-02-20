@@ -82,7 +82,7 @@ export default function StatsSection() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {stats.map((stat, index) => (
             <StatCard 
               key={index} 
@@ -145,7 +145,7 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
 
   return (
     <div 
-      className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 text-center transition-all duration-300 hover:bg-white/20 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden"
+      className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 text-center transition-all duration-300 hover:bg-white/20 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden"
       style={{
         animation: isVisible ? `fadeSlideUp 0.6s ease forwards` : 'none',
         animationDelay: `${delay}s`,
@@ -173,7 +173,7 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
         {stat.label}
       </div>
       
-      <div className="text-sm text-white/60 mt-2 relative z-10">
+      <div className="text-sm text-white/60 mt-2 relative z-10 leading-relaxed">
         {stat.sub}
       </div>
     </div>
