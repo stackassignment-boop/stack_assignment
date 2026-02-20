@@ -26,25 +26,31 @@ model User {
 }
 
 model Order {
-  id              String    @id @default(cuid())
-  orderNumber     String    @unique
-  customerId      String
-  title           String
-  description     String
-  subject         String
-  pages           Int
-  deadline        DateTime
-  deadlineTime    String    @default("12:00")
-  service         String    @default("writing")
-  coupon          String?
-  totalPrice      Float     @default(0)
-  status          String    @default("pending")
-  paymentStatus   String    @default("pending_quote")
-  attachments     String?   // JSON string with file URLs from Vercel Blob
-  notes           String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  customer        User      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  id                String    @id @default(cuid())
+  orderNumber       String    @unique
+  customerId        String
+  title             String
+  description       String
+  subject           String
+  academicLevel     String    @default("bachelor")
+  paperType         String    @default("essay")
+  pages             Int
+  words             Int?
+  deadline          DateTime
+  deadlineTime      String    @default("12:00")
+  service           String    @default("writing")
+  coupon            String?
+  pricePerPage      Float     @default(0)
+  urgencyMultiplier Float     @default(1)
+  totalPrice        Float     @default(0)
+  status            String    @default("pending")
+  paymentStatus     String    @default("pending_quote")
+  requirements      String?
+  attachments       String?   // JSON string with file URLs from Vercel Blob
+  notes             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  customer          User      @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
 model Service {
