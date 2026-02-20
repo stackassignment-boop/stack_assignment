@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -64,6 +64,18 @@ function HomeContent() {
   const [currentPage, setCurrentPage] = useState(getPageFromURL);
   const [blogSlug, setBlogSlug] = useState(getSlugFromURL);
   const [previewSlug, setPreviewSlug] = useState(getPreviewFromURL);
+
+  // Handle browser back/forward button
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPage(getPageFromURL());
+      setBlogSlug(getSlugFromURL());
+      setPreviewSlug(getPreviewFromURL());
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Update URL when page changes
   const handleNavigate = useCallback((page: string, params?: Record<string, string>) => {
