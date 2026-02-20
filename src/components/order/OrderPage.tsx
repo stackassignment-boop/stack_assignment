@@ -72,18 +72,30 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFiles(Array.from(e.target.files));
+      const newFiles = Array.from(e.target.files);
+      
+      // Validate file sizes (10MB limit per file)
+      for (const file of newFiles) {
+        if (file.size > 10 * 1024 * 1024) {
+          setError(`File "${file.name}" exceeds 10MB limit. Please choose a smaller file.`);
+          return;
+        }
+      }
+      
+      // Check total size (25MB total limit)
+      const totalSize = [...files, ...newFiles].reduce((acc, file) => acc + file.size, 0);
+      if (totalSize > 25 * 1024 * 1024) {
+        setError('Total file size exceeds 25MB limit. Please remove some files.');
+        return;
+      }
+      
+      setFiles(prev => [...prev, ...newFiles]);
+      setError(''); // Clear any previous errors
     }
   };
 
-  // Convert file to base64
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
+  const removeFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -92,58 +104,35 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     setSubmitting(true);
 
     try {
-      // Convert files to base64 if any (Vercel-compatible - no filesystem writes)
-      let uploadedFiles: Array<{ name: string; type: string; size: number; data: string }> = [];
-      if (files.length > 0) {
-        console.log('Converting files to base64:', files.map(f => f.name));
-        
-        for (const file of files) {
-          // Check file size (5MB limit for base64)
-          if (file.size > 5 * 1024 * 1024) {
-            setError(`File "${file.name}" exceeds 5MB limit. Please choose a smaller file.`);
-            setSubmitting(false);
-            return;
-          }
-          
-          try {
-            const base64 = await fileToBase64(file);
-            uploadedFiles.push({
-              name: file.name,
-              type: file.type || 'application/octet-stream',
-              size: file.size,
-              data: base64
-            });
-          } catch (convertErr) {
-            console.error('File conversion error:', convertErr);
-            setError(`Failed to process file "${file.name}". Please try again.`);
-            setSubmitting(false);
-            return;
-          }
-        }
-        console.log('Files converted successfully:', uploadedFiles.length);
+      // Use FormData for proper file upload handling
+      const formDataToSend = new FormData();
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', `${formData.timezone}${formData.phone}`);
+      formDataToSend.append('subject', formData.subject);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('deadline', formData.deadlineDate);
+      formDataToSend.append('deadlineTime', formData.deadlineTime);
+      formDataToSend.append('pages', pages.toString());
+      formDataToSend.append('service', service);
+      if (formData.coupon) {
+        formDataToSend.append('coupon', formData.coupon);
       }
-
-      console.log('Submitting order with attachments:', uploadedFiles.length, 'files');
+      
+      // Append files
+      for (const file of files) {
+        formDataToSend.append('files', file);
+      }
+      
+      console.log('Submitting order with', files.length, 'files');
       
       const response = await fetch('/api/orders/public', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email,
-          phone: `${formData.timezone}${formData.phone}`,
-          subject: formData.subject,
-          description: formData.description,
-          deadline: formData.deadlineDate,
-          deadlineTime: formData.deadlineTime,
-          pages: pages,
-          service: service,
-          coupon: formData.coupon,
-          attachments: uploadedFiles,
-        }),
+        body: formDataToSend,
+        // Don't set Content-Type header - let the browser set it with the boundary
       });
 
       const data = await response.json();
-
+      
       if (response.ok && data.success) {
         setOrderNumber(data.order.orderNumber);
         setSubmitted(true);
@@ -152,7 +141,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
       }
     } catch (err) {
       console.error('Order submission error:', err);
-      setError('An error occurred. Please try again.');
+      setError('An error occurred. Please check your connection and try again.');
     } finally {
       setSubmitting(false);
     }
@@ -201,6 +190,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                     terms: false
                   });
                   setPages(1);
+                  setFiles([]);
                 }}
                 variant="outline"
                 className="px-8"
@@ -408,28 +398,42 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                 <div className="mt-4">
                   <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold text-sm cursor-pointer transition">
                     📎 Add Files
-                    <input type="file" multiple className="hidden" onChange={handleFileChange} accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt,.zip" />
+                    <input 
+                      type="file" 
+                      multiple 
+                      className="hidden" 
+                      onChange={handleFileChange} 
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt,.zip,.xlsx,.xls,.ppt,.pptx" 
+                    />
                   </label>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Accepted formats: PDF, DOC, DOCX, JPG, PNG, GIF, TXT, ZIP, XLSX, XLS, PPT, PPTX (Max 10MB per file, 25MB total)
+                  </p>
+                  
                   {files.length > 0 && (
                     <div className="mt-3 space-y-2">
                       <p className="text-sm text-green-600 font-medium">✓ {files.length} file(s) selected:</p>
-                      <div className="space-y-1">
+                      <div className="space-y-1 max-h-48 overflow-y-auto">
                         {files.map((file, index) => (
                           <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-700 rounded-lg px-3 py-2">
-                            <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[200px]">{file.name}</span>
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-gray-500">{(file.size / 1024).toFixed(1)} KB</span>
-                              <button
-                                type="button"
-                                onClick={() => setFiles(files.filter((_, i) => i !== index))}
-                                className="text-red-500 hover:text-red-700 text-sm"
-                              >
-                                ✕
-                              </button>
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className="text-sm">📄</span>
+                              <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[200px]">{file.name}</span>
+                              <span className="text-xs text-gray-500 whitespace-nowrap">({(file.size / 1024).toFixed(1)} KB)</span>
                             </div>
+                            <button
+                              type="button"
+                              onClick={() => removeFile(index)}
+                              className="text-red-500 hover:text-red-700 text-sm font-bold px-2"
+                            >
+                              ✕
+                            </button>
                           </div>
                         ))}
                       </div>
+                      <p className="text-xs text-gray-500">
+                        Total size: {(files.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024)).toFixed(2)} MB
+                      </p>
                     </div>
                   )}
                 </div>
