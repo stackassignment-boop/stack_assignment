@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// POST /api/upload - Upload files to Vercel Blob using REST API
+// POST /api/upload - Upload files to Vercel Blob using REST API (no SDK)
 export async function POST(request: NextRequest) {
-  console.log('=== UPLOAD API START v3 ===');
+  console.log('=== UPLOAD API v4 (REST only) ===');
   
   try {
     const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log('Blob token exists:', !!blobToken);
+    console.log('Blob token found, length:', blobToken.length);
     
     const contentType = request.headers.get('content-type') || '';
     console.log('Content-Type:', contentType);
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log('File received:', file.name, file.size, 'bytes', file.type);
+    console.log('File received:', file.name, file.size, 'bytes');
     
     // Check file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
@@ -52,30 +52,31 @@ export async function POST(request: NextRequest) {
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
     const filename = `orders/${Date.now()}-${safeName}`;
     
-    console.log('Uploading with filename:', filename);
+    console.log('Uploading to blob storage...');
     
-    // Get file as ArrayBuffer
+    // Get file as ArrayBuffer and convert to Buffer
     const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
     
-    // Upload directly using Vercel Blob REST API
-    const uploadResponse = await fetch(
-      `https://blob.vercel-storage.com/${filename}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${blobToken}`,
-          'Content-Type': file.type || 'application/octet-stream',
-          'x-content-type': file.type || 'application/octet-stream',
-        },
-        body: arrayBuffer,
-      }
-    );
+    // Upload using Vercel Blob REST API
+    const blobUrl = `https://blob.vercel-storage.com/${filename}`;
+    
+    const uploadResponse = await fetch(blobUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${blobToken}`,
+        'Content-Type': file.type || 'application/octet-stream',
+      },
+      body: buffer,
+    });
+    
+    console.log('Blob API response status:', uploadResponse.status);
     
     if (!uploadResponse.ok) {
       const errorText = await uploadResponse.text();
       console.error('Blob upload failed:', uploadResponse.status, errorText);
       return NextResponse.json(
-        { error: `Upload failed: ${uploadResponse.status}` },
+        { error: `Upload failed: ${uploadResponse.statusText}` },
         { status: 500 }
       );
     }
@@ -93,8 +94,7 @@ export async function POST(request: NextRequest) {
     
   } catch (error) {
     console.error('=== UPLOAD ERROR ===');
-    console.error('Error type:', error?.constructor?.name);
-    console.error('Error message:', error instanceof Error ? error.message : String(error));
+    console.error('Error:', error);
     
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Upload failed' },

@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  
+  // Experimental features for serverless
+  experimental: {
+    serverComponentsExternalPackages: ['@vercel/blob'],
+  },
 };
 
 export default nextConfig;
