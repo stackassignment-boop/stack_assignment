@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { X, Lock, MessageCircle, LogIn, Loader2, BookOpen, GraduationCap, FileCheck, Shield, AlertTriangle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, Lock, MessageCircle, LogIn, Loader2, Shield, FileText } from 'lucide-react';
 
 interface SamplePreviewModalProps {
   sample: {
@@ -25,6 +25,7 @@ interface PreviewData {
   academicLevel?: string;
   paperType?: string;
   description?: string;
+  totalLength: number;
 }
 
 export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePreviewModalProps) {
@@ -39,7 +40,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
     }
   }, [isOpen, sample.slug]);
 
-  // Copyright protection - disable right-click
+  // Copyright protection - disable right-click and shortcuts
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
@@ -47,24 +48,8 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
       setTimeout(() => setShowCopyright(false), 2000);
     };
 
-    if (isOpen) {
-      document.addEventListener('contextmenu', handleContextMenu);
-      // Disable text selection
-      document.body.style.userSelect = 'none';
-      document.body.style.webkitUserSelect = 'none';
-    }
-
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.body.style.userSelect = '';
-      document.body.style.webkitUserSelect = '';
-    };
-  }, [isOpen]);
-
-  // Disable keyboard shortcuts for copying
-  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isOpen && (e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'p' || e.key === 's')) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'p' || e.key === 's')) {
         e.preventDefault();
         setShowCopyright(true);
         setTimeout(() => setShowCopyright(false), 2000);
@@ -72,11 +57,17 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
     };
 
     if (isOpen) {
+      document.addEventListener('contextmenu', handleContextMenu);
       document.addEventListener('keydown', handleKeyDown);
+      document.body.style.userSelect = 'none';
+      document.body.style.webkitUserSelect = 'none';
     }
 
     return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.userSelect = '';
+      document.body.style.webkitUserSelect = '';
     };
   }, [isOpen]);
 
@@ -117,23 +108,6 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
     phd: 'PhD',
   };
 
-  // Split content into pages for display
-  const contentPages: string[] = [];
-  if (previewData?.preview) {
-    const content = previewData.preview;
-    const charsPerPage = 2000; // Approximate characters per page
-    for (let i = 0; i < previewPages; i++) {
-      const start = i * charsPerPage;
-      const end = Math.min(start + charsPerPage, content.length);
-      if (start < content.length) {
-        contentPages.push(content.substring(start, end));
-      }
-    }
-    if (contentPages.length === 0) {
-      contentPages.push(content);
-    }
-  }
-
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center" 
@@ -142,9 +116,9 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
     >
       {/* Copyright Warning Toast */}
       {showCopyright && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[60] bg-red-600 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-2 animate-pulse">
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[60] bg-red-600 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-2">
           <Shield className="h-5 w-5" />
-          <span className="font-medium">© Content Protected - Unauthorized copying is prohibited</span>
+          <span className="font-medium">© Content Protected</span>
         </div>
       )}
 
@@ -178,12 +152,12 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
         <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
           <Shield className="h-4 w-4 text-amber-600 dark:text-amber-400" />
           <span className="text-xs text-amber-700 dark:text-amber-300">
-            © Copyright Protected - This content is for preview only. Unauthorized distribution is prohibited.
+            © Copyright Protected - Preview Only - Unauthorized distribution is prohibited
           </span>
         </div>
 
         {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto bg-gray-100 dark:bg-slate-800 p-4">
+        <div className="flex-1 overflow-y-auto bg-gray-100 dark:bg-slate-800">
           {loading ? (
             <div className="flex items-center justify-center h-64">
               <Loader2 className="h-8 w-8 animate-spin text-teal-600" />
@@ -193,123 +167,121 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
               <p className="text-red-500">{error}</p>
             </div>
           ) : (
-            <div className="space-y-6">
-              {/* Preview Pages - Displayed as Images */}
-              {contentPages.map((pageContent, index) => (
-                <div key={index} className="relative">
-                  {/* Page Image Container */}
-                  <div 
-                    className="bg-white dark:bg-slate-900 rounded-lg shadow-lg overflow-hidden mx-auto"
-                    style={{ 
-                      maxWidth: '700px',
-                      aspectRatio: '8.5/11',
-                      position: 'relative'
-                    }}
-                  >
-                    {/* Watermark */}
-                    <div 
-                      className="absolute inset-0 pointer-events-none z-10"
-                      style={{
-                        backgroundImage: `repeating-linear-gradient(
-                          45deg,
-                          transparent,
-                          transparent 100px,
-                          rgba(20, 184, 166, 0.03) 100px,
-                          rgba(20, 184, 166, 0.03) 200px
-                        )`
-                      }}
-                    />
-                    <div 
-                      className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
-                      style={{
-                        background: 'radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.1) 100%)'
-                      }}
-                    >
-                      <div className="text-6xl font-bold text-gray-200/30 dark:text-slate-700/30 rotate-[-30deg] select-none">
-                        PREVIEW
-                      </div>
-                    </div>
-
-                    {/* Page Content */}
-                    <div className="p-8 h-full overflow-hidden relative z-0">
-                      {/* Page Header */}
-                      <div className="border-b border-gray-200 dark:border-slate-700 pb-4 mb-4">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="text-sm font-bold text-gray-900 dark:text-white">{previewData?.title || sample.title}</h3>
-                            <div className="flex gap-2 mt-1">
-                              {previewData?.subject && (
-                                <span className="text-xs text-gray-500">{previewData.subject}</span>
-                              )}
-                              {previewData?.academicLevel && (
-                                <span className="text-xs text-gray-500">• {academicLevels[previewData.academicLevel] || previewData.academicLevel}</span>
-                              )}
-                            </div>
-                          </div>
-                          <span className="text-xs text-gray-400">Page {index + 1} of {totalPages}</span>
-                        </div>
-                      </div>
-
-                      {/* Content Area - Styled like a document */}
-                      <div className="prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 text-xs leading-relaxed whitespace-pre-wrap overflow-hidden">
-                        {pageContent}
-                      </div>
-
-                      {/* Copyright footer on each page */}
-                      <div className="absolute bottom-4 left-8 right-8 border-t border-gray-200 dark:border-slate-700 pt-2">
-                        <p className="text-[10px] text-gray-400 text-center">
-                          © Stack Assignment - Preview Only - Not for Distribution
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Preview Badge */}
-                    <div className="absolute top-2 right-2 bg-teal-500 text-white text-[10px] px-2 py-1 rounded font-medium z-20">
-                      PREVIEW
+            <div className="p-4">
+              {/* Preview Pages Container */}
+              <div className="max-w-3xl mx-auto space-y-4">
+                {/* Meta Info Card */}
+                {previewData && (
+                  <div className="bg-white dark:bg-slate-900 rounded-lg p-4 shadow-sm mb-4">
+                    <div className="flex flex-wrap gap-2">
+                      {previewData.subject && (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
+                          {previewData.subject}
+                        </span>
+                      )}
+                      {previewData.academicLevel && (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+                          {academicLevels[previewData.academicLevel] || previewData.academicLevel}
+                        </span>
+                      )}
+                      {previewData.paperType && (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium">
+                          {previewData.paperType.replace('_', ' ')}
+                        </span>
+                      )}
+                      {previewData.fileName && (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-sm">
+                          <FileText className="h-3 w-3" />
+                          {previewData.fileName}
+                        </span>
+                      )}
                     </div>
                   </div>
-                </div>
-              ))}
+                )}
 
-              {/* Locked Pages Indicator */}
-              <div className="relative">
-                <div 
-                  className="bg-gray-200 dark:bg-slate-700 rounded-lg shadow-lg overflow-hidden mx-auto"
-                  style={{ 
-                    maxWidth: '700px',
-                    aspectRatio: '8.5/11'
-                  }}
-                >
-                  {/* Blurred locked content */}
-                  <div className="h-full flex flex-col items-center justify-center relative overflow-hidden">
-                    {/* Blurred background lines */}
-                    <div className="absolute inset-0 backdrop-blur-[2px] bg-gradient-to-b from-gray-300/50 to-gray-400/50 dark:from-slate-600/50 dark:to-slate-500/50">
-                      <div className="p-8 space-y-3">
-                        {[...Array(12)].map((_, i) => (
-                          <div 
-                            key={i} 
-                            className="h-3 bg-gray-400/40 dark:bg-slate-500/40 rounded"
-                            style={{ width: `${50 + Math.random() * 45}%` }}
-                          />
-                        ))}
+                {/* Visible Preview Section */}
+                <div className="relative bg-white dark:bg-slate-900 rounded-lg shadow-lg overflow-hidden">
+                  {/* Watermark */}
+                  <div 
+                    className="absolute inset-0 pointer-events-none z-10 opacity-5"
+                    style={{
+                      backgroundImage: `repeating-linear-gradient(
+                        45deg,
+                        transparent,
+                        transparent 50px,
+                        rgba(20, 184, 166, 0.5) 50px,
+                        rgba(20, 184, 166, 0.5) 100px
+                      )`
+                    }}
+                  />
+
+                  {/* Content */}
+                  <div className="relative p-6 md:p-8">
+                    {/* Page Header */}
+                    <div className="border-b border-gray-200 dark:border-slate-700 pb-3 mb-4">
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-bold text-gray-900 dark:text-white">{previewData?.title || sample.title}</h3>
+                        <span className="text-xs text-gray-400 bg-teal-100 dark:bg-teal-900/30 px-2 py-1 rounded">
+                          Preview: Page 1 of {totalPages}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Lock overlay */}
-                    <div className="relative z-10 text-center p-6">
-                      <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Lock className="h-10 w-10 text-amber-600 dark:text-amber-400" />
+                    {/* Preview Content */}
+                    <div className="prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap min-h-[200px]">
+                      {previewData?.preview || 'No preview content available.'}
+                    </div>
+
+                    {/* Preview Footer */}
+                    <div className="mt-4 pt-3 border-t border-gray-200 dark:border-slate-700 flex justify-between items-center">
+                      <span className="text-xs text-teal-600 dark:text-teal-400 font-medium">
+                        ✓ Preview: First {previewPages} of {totalPages} pages visible
+                      </span>
+                      <span className="text-[10px] text-gray-400">
+                        © Stack Assignment
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Preview Badge */}
+                  <div className="absolute top-2 right-2 bg-teal-500 text-white text-[10px] px-2 py-1 rounded font-medium z-20">
+                    PREVIEW
+                  </div>
+                </div>
+
+                {/* Locked Pages Section */}
+                <div className="relative bg-gray-200 dark:bg-slate-700 rounded-lg shadow-lg overflow-hidden" style={{ minHeight: '300px' }}>
+                  {/* Blurred content simulation */}
+                  <div className="absolute inset-0 backdrop-blur-[3px] bg-gradient-to-b from-gray-300/60 to-gray-400/60 dark:from-slate-600/60 dark:to-slate-500/60">
+                    <div className="p-6 space-y-3">
+                      {[...Array(10)].map((_, i) => (
+                        <div 
+                          key={i} 
+                          className="h-3 bg-gray-400/50 dark:bg-slate-500/50 rounded animate-pulse"
+                          style={{ width: `${50 + Math.random() * 45}%` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Lock overlay */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 mx-4 text-center max-w-sm border border-gray-200 dark:border-slate-700">
+                      <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Lock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                         {lockedPages} Pages Locked
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-xs mx-auto">
-                        This document has {lockedPages} more pages. Contact admin to unlock full access.
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-5">
+                        This document has {lockedPages} more pages. 
+                        <br />
+                        Contact admin to unlock full access.
                       </p>
-                      <div className="flex gap-3 justify-center">
+                      <div className="flex gap-3">
                         <a
                           href="/?view=student-login"
-                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition"
+                          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition"
                         >
                           <LogIn className="h-4 w-4" />
                           Login
@@ -318,7 +290,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                           href={`https://wa.me/919907300710?text=Hi, I'm interested in getting full access to sample: ${encodeURIComponent(sample.title)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition"
+                          className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition"
                         >
                           <MessageCircle className="h-4 w-4" />
                           WhatsApp
