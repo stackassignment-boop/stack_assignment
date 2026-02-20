@@ -167,7 +167,7 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
               Assignment & Essay Samples
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Preview 1/3rd of each sample free • Login or contact admin for full access
+              Preview 1/3rd of each sample free • Contact admin for full access
             </p>
           </div>
 
