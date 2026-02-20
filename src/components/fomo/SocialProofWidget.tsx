@@ -22,7 +22,7 @@ export default function SocialProofWidget() {
         setCurrentTestimonial(prev => (prev + 1) % testimonials.length);
         setIsAnimating(false);
       }, 300);
-    }, 5000);
+    }, 300000); // 5 minutes
 
     return () => clearInterval(interval);
   }, []);
