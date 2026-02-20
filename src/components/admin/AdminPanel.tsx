@@ -46,7 +46,6 @@ import {
   Settings
 } from 'lucide-react';
 import { toast } from 'sonner';
-import DraggableFloatingWidget from '@/components/marketing/DraggableFloatingWidget';
 
 interface User {
   id: string;
@@ -1714,8 +1713,6 @@ export default function AdminPanel() {
           </form>
         </DialogContent>
       </Dialog>
-      {/* WhatsApp Floating Widget */}
-      <DraggableFloatingWidget />
     </div>
   );
 }
