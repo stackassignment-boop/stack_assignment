@@ -165,7 +165,7 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
         {iconMap[stat.icon]}
       </div>
       
-      <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-none relative z-10" style={{ fontFamily: 'Sora, sans-serif' }}>
+      <div className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-none relative z-10 px-2" style={{ fontFamily: 'Sora, sans-serif' }}>
         {count.toLocaleString('en-IN')}{stat.suffix}
       </div>
       
@@ -173,7 +173,7 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
         {stat.label}
       </div>
       
-      <div className="text-xs sm:text-sm text-white/60 mt-1 sm:mt-2 relative z-10 leading-relaxed px-1">
+      <div className="text-xs sm:text-sm text-white/60 mt-1 sm:mt-2 relative z-10 leading-relaxed px-2">
         {stat.sub}
       </div>
     </div>
