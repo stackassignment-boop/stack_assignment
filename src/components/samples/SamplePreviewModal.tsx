@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { X, Lock, MessageCircle, LogIn, FileText, Shield } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { X, Lock, MessageCircle, LogIn } from 'lucide-react';
 
 interface SamplePreviewModalProps {
   sample: {
@@ -16,61 +16,141 @@ interface SamplePreviewModalProps {
 }
 
 export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePreviewModalProps) {
-  const [showCopyright, setShowCopyright] = useState(false);
+  const [totalPages, setTotalPages] = useState(sample.pages || 0);
+  const [loading, setLoading] = useState(true);
+  const [pdfDoc, setPdfDoc] = useState<any>(null);
+  const [pageImages, setPageImages] = useState<string[]>([]);
+  const [containerWidth, setContainerWidth] = useState(600);
+  const [visiblePages, setVisiblePages] = useState<Set<number>>(new Set());
+  const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Copyright protection
+  // Calculate preview pages (1/3 of total, rounded up, minimum 1)
+  const previewPages = Math.max(1, Math.ceil((sample.pages || totalPages || 3) / 3));
+
+  // Load PDF document
   useEffect(() => {
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-      setShowCopyright(true);
-      setTimeout(() => setShowCopyright(false), 2000);
-    };
+    if (!isOpen || typeof window === 'undefined') return;
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'p' || e.key === 's')) {
-        e.preventDefault();
-        setShowCopyright(true);
-        setTimeout(() => setShowCopyright(false), 2000);
+    const loadPdf = async () => {
+      try {
+        setLoading(true);
+        setPageImages([]);
+        setVisiblePages(new Set());
+        
+        const pdfjsLib = await import('pdfjs-dist');
+        
+        // Set worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
+        
+        const loadingTask = pdfjsLib.getDocument(`/api/samples/${sample.slug}/download`);
+        const pdf = await loadingTask.promise;
+        setPdfDoc(pdf);
+        setTotalPages(pdf.numPages);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading PDF:', error);
+        setLoading(false);
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('contextmenu', handleContextMenu);
-      document.addEventListener('keydown', handleKeyDown);
-      document.body.style.userSelect = 'none';
-    }
+    loadPdf();
+  }, [isOpen, sample.slug]);
 
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.userSelect = '';
+  // Render all pages
+  useEffect(() => {
+    if (!pdfDoc || typeof window === 'undefined') return;
+
+    const renderAllPages = async () => {
+      const images: string[] = [];
+      
+      for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+        try {
+          const page = await pdfDoc.getPage(pageNum);
+          const viewport = page.getViewport({ scale: 1 });
+          
+          // Calculate scale to fit container
+          const scale = containerWidth / viewport.width;
+          const scaledViewport = page.getViewport({ scale });
+
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.height = scaledViewport.height;
+          canvas.width = scaledViewport.width;
+
+          await page.render({
+            canvasContext: context,
+            viewport: scaledViewport,
+          }).promise;
+
+          images.push(canvas.toDataURL());
+        } catch (error) {
+          console.error(`Error rendering page ${pageNum}:`, error);
+          images.push('');
+        }
+      }
+      
+      setPageImages(images);
     };
-  }, [isOpen]);
 
-  if (!isOpen) return null;
+    renderAllPages();
+  }, [pdfDoc, containerWidth]);
 
-  const totalPages = sample.pages || 3;
-  const previewPages = Math.max(1, Math.ceil(totalPages / 3));
-  const lockedPages = totalPages - previewPages;
+  // Handle container resize
+  useEffect(() => {
+    const handleResize = () => {
+      const width = Math.min(window.innerWidth - 48, 700);
+      setContainerWidth(width);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  // Intersection observer for lazy loading visibility
+  useEffect(() => {
+    if (typeof window === 'undefined' || !containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const pageNum = parseInt(entry.target.getAttribute('data-page') || '0');
+          if (entry.isIntersecting) {
+            setVisiblePages((prev) => new Set(prev).add(pageNum));
+          }
+        });
+      },
+      { root: containerRef.current, threshold: 0.1 }
+    );
+
+    pageRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [pageImages]);
+
+  // Handle keyboard
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') onClose();
-  };
+  }, [onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, handleKeyDown]);
+
+  if (!isOpen || typeof window === 'undefined') return null;
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center" 
-      onKeyDown={handleKeyDown}
-      style={{ userSelect: 'none' }}
-    >
-      {/* Copyright Warning */}
-      {showCopyright && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[60] bg-red-600 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-2 animate-pulse">
-          <Shield className="h-5 w-5" />
-          <span className="font-medium">© Content Protected</span>
-        </div>
-      )}
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -78,15 +158,15 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
       />
 
       {/* Modal */}
-      <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col m-4 overflow-hidden">
+      <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col m-4">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700 shrink-0">
           <div className="flex-1 pr-4">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
               {sample.title}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {totalPages} pages total • Preview: {previewPages} page(s) unlocked, {lockedPages} page(s) locked
+              {totalPages} pages total • {previewPages} preview pages available
             </p>
           </div>
           <button
@@ -97,101 +177,121 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
           </button>
         </div>
 
-        {/* Copyright Notice */}
-        <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
-          <Shield className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-          <span className="text-xs text-amber-700 dark:text-amber-300">
-            © Copyright Protected - Unauthorized copying or distribution is prohibited
-          </span>
+        {/* PDF Viewer - Scrollable */}
+        <div 
+          ref={containerRef}
+          className="flex-1 overflow-y-auto p-4 bg-gray-100 dark:bg-slate-800"
+        >
+          {loading && (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
+            </div>
+          )}
+          
+          {!loading && pageImages.length > 0 && (
+            <div className="flex flex-col items-center gap-4">
+              {pageImages.map((imageSrc, index) => {
+                const pageNum = index + 1;
+                const isBlurredPage = pageNum > previewPages;
+                const isVisible = visiblePages.has(pageNum);
+                
+                return (
+                  <div
+                    key={pageNum}
+                    ref={(el) => { pageRefs.current[index] = el; }}
+                    data-page={pageNum}
+                    className="relative shrink-0"
+                  >
+                    {/* Page number indicator */}
+                    <div className="absolute -left-8 top-2 text-xs text-gray-400 font-medium">
+                      {pageNum}
+                    </div>
+                    
+                    {isVisible && imageSrc && (
+                      <>
+                        <img
+                          src={imageSrc}
+                          alt={`Page ${pageNum}`}
+                          className={`shadow-lg transition-all duration-300 ${
+                            isBlurredPage ? 'blur-xl' : ''
+                          }`}
+                          style={{ width: containerWidth }}
+                        />
+
+                        {/* Watermark overlay for preview pages */}
+                        {!isBlurredPage && (
+                          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                            <div className="text-gray-300 dark:text-gray-600 text-4xl font-bold opacity-20 rotate-[-45deg] select-none whitespace-nowrap">
+                              PREVIEW
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Locked overlay for blurred pages */}
+                        {isBlurredPage && (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/30 dark:bg-slate-900/30 backdrop-blur-[2px]">
+                            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-4 text-center max-w-[280px]">
+                              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/50 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <Lock className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                              </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                Page {pageNum} locked
+                              </p>
+                              <div className="flex flex-col gap-2">
+                                <a
+                                  href="/?view=admin"
+                                  className="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-medium transition"
+                                >
+                                  <LogIn className="h-3 w-3" />
+                                  Login
+                                </a>
+                                <a
+                                  href={`https://wa.me/919907300710?text=Hi, I'm interested in getting full access to sample: ${encodeURIComponent(sample.title)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-medium transition"
+                                >
+                                  <MessageCircle className="h-3 w-3" />
+                                  Contact Admin
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+                    
+                    {/* Placeholder while loading */}
+                    {isVisible && !imageSrc && (
+                      <div 
+                        className="bg-gray-200 dark:bg-slate-700 animate-pulse rounded"
+                        style={{ width: containerWidth, height: 400 }}
+                      />
+                    )}
+                    
+                    {/* Placeholder before intersection */}
+                    {!isVisible && (
+                      <div 
+                        className="bg-gray-200 dark:bg-slate-700 rounded"
+                        style={{ width: containerWidth, height: 400 }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-4 space-y-4">
-            {/* Preview Section (1/3 Visible) */}
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-teal-200 dark:border-teal-800 overflow-hidden">
-              <div className="bg-teal-50 dark:bg-teal-900/30 px-4 py-2 border-b border-teal-200 dark:border-teal-800">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-teal-700 dark:text-teal-300">
-                    📄 Preview Available ({previewPages} page{previewPages > 1 ? 's' : ''})
-                  </span>
-                  <span className="text-xs bg-teal-600 text-white px-2 py-0.5 rounded">
-                    UNLOCKED
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 text-center">
-                <div className="w-16 h-16 bg-teal-100 dark:bg-teal-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileText className="h-8 w-8 text-teal-600 dark:text-teal-400" />
-                </div>
-                <p className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-                  {sample.fileName || 'Sample Document'}
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  First {previewPages} of {totalPages} pages available for preview
-                </p>
-              </div>
-            </div>
-
-            {/* Locked Section (2/3 Blurred) */}
-            <div className="relative rounded-xl overflow-hidden" style={{ minHeight: '200px' }}>
-              {/* Blurred Background */}
-              <div className="absolute inset-0 bg-gradient-to-b from-gray-300/80 to-gray-400/80 dark:from-slate-600/80 dark:to-slate-700/80 backdrop-blur-sm">
-                {/* Fake content lines */}
-                <div className="p-6 space-y-3">
-                  {[...Array(6)].map((_, i) => (
-                    <div 
-                      key={i} 
-                      className="h-3 bg-gray-400/50 dark:bg-slate-500/50 rounded"
-                      style={{ width: `${50 + Math.random() * 45}%` }}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Lock Overlay */}
-              <div className="relative flex flex-col items-center justify-center py-12 px-6 text-center">
-                <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mb-4">
-                  <Lock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                  {lockedPages} Pages Locked
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 max-w-xs">
-                  This document has {lockedPages} more pages. Contact admin to get full access.
-                </p>
-                <div className="flex gap-3">
-                  <a
-                    href="/?view=student-login"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition"
-                  >
-                    <LogIn className="h-4 w-4" />
-                    Login
-                  </a>
-                  <a
-                    href={`https://wa.me/919907300710?text=Hi, I'm interested in getting full access to sample: ${encodeURIComponent(sample.title)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition"
-                  >
-                    <MessageCircle className="h-4 w-4" />
-                    WhatsApp
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Legend */}
-        <div className="flex items-center justify-center gap-6 py-3 px-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-xs text-gray-600 dark:text-gray-400">
+        {/* Legend */}
+        <div className="flex items-center justify-center gap-6 py-3 px-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-xs text-gray-600 dark:text-gray-400 shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-4 h-4 rounded bg-teal-600"></span>
-            <span>Preview ({previewPages})</span>
+            <span>Preview Pages ({previewPages})</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-4 h-4 rounded bg-amber-500"></span>
-            <span>Locked ({lockedPages})</span>
+            <span>Locked Pages ({(totalPages || 0) - previewPages})</span>
           </div>
         </div>
       </div>
