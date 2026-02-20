@@ -85,32 +85,18 @@ interface DashboardStats {
   }>;
 }
 
-interface OrderAttachment {
-  id: string;
-  fileName: string;
-  fileType: string;
-  fileSize: number;
-  createdAt: string;
-}
-
 interface Order {
   id: string;
   orderNumber: string;
   title: string;
   description: string;
   subject: string;
-  academicLevel: string;
-  paperType: string;
   pages: number;
-  words?: number;
-  pageCount: number;
   totalPrice: number;
   status: string;
   paymentStatus: string;
   deadline: string;
-  requirements?: string;
-  attachments?: string; // JSON string (backward compatibility)
-  orderAttachments?: OrderAttachment[]; // New attachment relation
+  attachments?: string; // JSON string with file URLs
   notes?: string;
   createdAt: string;
   customer: { name: string; email: string; phone?: string };
@@ -166,8 +152,6 @@ export default function AdminPanel() {
   
   // Dialog states
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [orderAttachments, setOrderAttachments] = useState<OrderAttachment[]>([]);
-  const [loadingAttachments, setLoadingAttachments] = useState(false);
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showInquiryDialog, setShowInquiryDialog] = useState(false);
@@ -319,21 +303,6 @@ export default function AdminPanel() {
       toast.success('Logged out successfully');
     } catch (error) {
       toast.error('Logout failed');
-    }
-  };
-
-  const loadOrderAttachments = async (orderId: string) => {
-    setLoadingAttachments(true);
-    try {
-      const res = await fetch(`/api/orders/${orderId}/attachments`);
-      if (res.ok) {
-        const data = await res.json();
-        setOrderAttachments(data.attachments || []);
-      }
-    } catch (error) {
-      console.error('Failed to load attachments:', error);
-    } finally {
-      setLoadingAttachments(false);
     }
   };
 
@@ -899,7 +868,6 @@ export default function AdminPanel() {
                         <TableHead>Order #</TableHead>
                         <TableHead>Title</TableHead>
                         <TableHead>Customer</TableHead>
-                        <TableHead>Level</TableHead>
                         <TableHead>Pages</TableHead>
                         <TableHead>Amount</TableHead>
                         <TableHead>Status</TableHead>
@@ -919,8 +887,7 @@ export default function AdminPanel() {
                               <div className="text-xs text-muted-foreground">{order.customer.email}</div>
                             </div>
                           </TableCell>
-                          <TableCell className="capitalize">{order.academicLevel.replace('_', ' ')}</TableCell>
-                          <TableCell>{order.pageCount}</TableCell>
+                          <TableCell>{order.pages}</TableCell>
                           <TableCell>{formatPrice(order.totalPrice)}</TableCell>
                           <TableCell>{getStatusBadge(order.status)}</TableCell>
                           <TableCell>{getStatusBadge(order.paymentStatus)}</TableCell>
@@ -931,9 +898,7 @@ export default function AdminPanel() {
                               size="sm"
                               onClick={() => {
                                 setSelectedOrder(order);
-                                setOrderAttachments([]);
                                 setShowOrderDialog(true);
-                                loadOrderAttachments(order.id);
                               }}
                             >
                               <Eye className="h-4 w-4" />
@@ -1297,20 +1262,8 @@ export default function AdminPanel() {
                   <p className="font-medium">{selectedOrder.subject || '-'}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Academic Level</Label>
-                  <p className="font-medium capitalize">{selectedOrder.academicLevel.replace('_', ' ')}</p>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Paper Type</Label>
-                  <p className="font-medium capitalize">{selectedOrder.paperType?.replace('_', ' ') || '-'}</p>
-                </div>
-                <div>
                   <Label className="text-muted-foreground">Pages</Label>
-                  <p className="font-medium">{selectedOrder.pages || selectedOrder.pageCount}</p>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Words</Label>
-                  <p className="font-medium">{selectedOrder.words || 'Not specified'}</p>
+                  <p className="font-medium">{selectedOrder.pages}</p>
                 </div>
                 <div>
                   <Label className="text-muted-foreground">Deadline</Label>
@@ -1330,74 +1283,41 @@ export default function AdminPanel() {
                 </div>
               )}
 
-              {/* Requirements */}
-              {selectedOrder.requirements && (
-                <div>
-                  <Label className="text-muted-foreground">Requirements</Label>
-                  <p className="text-sm bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mt-1 whitespace-pre-wrap">{selectedOrder.requirements}</p>
-                </div>
-              )}
-
               {/* Attachments */}
-              {(orderAttachments.length > 0 || selectedOrder.attachments) && (
+              {selectedOrder.attachments && (
                 <div>
                   <Label className="text-muted-foreground">Attachments</Label>
                   <div className="mt-2 space-y-2">
-                    {loadingAttachments ? (
-                      <div className="text-sm text-muted-foreground">Loading attachments...</div>
-                    ) : orderAttachments.length > 0 ? (
-                      // New attachments from OrderAttachment table
-                      orderAttachments.map((file) => (
-                        <div key={file.id} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
-                          <div className="flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-gray-500" />
-                            <div>
-                              <span className="text-sm font-medium">{file.fileName}</span>
-                              <span className="text-xs text-gray-500 ml-2">({(file.fileSize / 1024).toFixed(1)} KB)</span>
-                            </div>
-                          </div>
-                          <a
-                            href={`/api/orders/${selectedOrder.id}/attachments/${file.id}`}
-                            download={file.fileName}
-                            className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:opacity-90"
-                          >
-                            Download
-                          </a>
-                        </div>
-                      ))
-                    ) : selectedOrder.attachments ? (
-                      // Fallback to JSON attachments (backward compatibility)
-                      (() => {
-                        try {
-                          const files = JSON.parse(selectedOrder.attachments);
-                          if (!files || files.length === 0) return null;
-                          return files.map((file: { name: string; type: string; size: number; url?: string; data?: string }, index: number) => (
-                            <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
-                              <div className="flex items-center gap-2">
-                                <FileText className="w-4 h-4 text-gray-500" />
-                                <div>
-                                  <span className="text-sm font-medium">{file.name}</span>
-                                  <span className="text-xs text-gray-500 ml-2">({(file.size / 1024).toFixed(1)} KB)</span>
-                                </div>
+                    {(() => {
+                      try {
+                        const files = JSON.parse(selectedOrder.attachments);
+                        if (!files || files.length === 0) return null;
+                        return files.map((file: { name: string; type: string; size: number; url?: string }, index: number) => (
+                          <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                            <div className="flex items-center gap-2">
+                              <FileText className="w-4 h-4 text-gray-500" />
+                              <div>
+                                <span className="text-sm font-medium">{file.name}</span>
+                                <span className="text-xs text-gray-500 ml-2">({(file.size / 1024).toFixed(1)} KB)</span>
                               </div>
-                              {file.url || file.data ? (
-                                <a
-                                  href={file.url || file.data}
-                                  download={file.name}
-                                  target={file.url ? "_blank" : undefined}
-                                  rel={file.url ? "noopener noreferrer" : undefined}
-                                  className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:opacity-90"
-                                >
-                                  {file.url ? 'View' : 'Download'}
-                                </a>
-                              ) : null}
                             </div>
-                          ));
-                        } catch {
-                          return <span className="text-sm text-muted-foreground">{selectedOrder.attachments}</span>;
-                        }
-                      })()
-                    ) : null}
+                            {file.url && (
+                              <a
+                                href={file.url}
+                                download={file.name}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:opacity-90"
+                              >
+                                Download
+                              </a>
+                            )}
+                          </div>
+                        ));
+                      } catch {
+                        return <span className="text-sm text-muted-foreground">{selectedOrder.attachments}</span>;
+                      }
+                    })()}
                   </div>
                 </div>
               )}

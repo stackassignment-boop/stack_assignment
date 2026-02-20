@@ -26,44 +26,25 @@ model User {
 }
 
 model Order {
-  id                String    @id @default(cuid())
-  orderNumber       String    @unique
-  customerId        String
-  title             String
-  description       String
-  subject           String
-  academicLevel     String
-  paperType         String
-  pages             Int
-  words             Int?
-  pricePerPage      Float
-  urgencyMultiplier Float
-  totalPrice        Float
-  currency          String    @default("INR")
-  deadline          DateTime
-  status            String    @default("pending")
-  paymentStatus     String    @default("pending")
-  requirements      String?
-  attachments       String?   // JSON string with file info (kept for backward compatibility)
-  notes             String?
-  assignedWriter    String?
-  completedAt       DateTime?
-  deliveredAt       DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  customer          User      @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  orderAttachments  OrderAttachment[]
-}
-
-model OrderAttachment {
-  id        String   @id @default(cuid())
-  orderId   String
-  fileName  String
-  fileType  String
-  fileSize  Int
-  fileData  Bytes
-  createdAt DateTime @default(now())
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  id              String    @id @default(cuid())
+  orderNumber     String    @unique
+  customerId      String
+  title           String
+  description     String
+  subject         String
+  pages           Int
+  deadline        DateTime
+  deadlineTime    String    @default("12:00")
+  service         String    @default("writing")
+  coupon          String?
+  totalPrice      Float     @default(0)
+  status          String    @default("pending")
+  paymentStatus   String    @default("pending_quote")
+  attachments     String?   // JSON string with file URLs from Vercel Blob
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  customer        User      @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
 model Service {
