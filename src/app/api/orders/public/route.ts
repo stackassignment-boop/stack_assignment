@@ -17,13 +17,6 @@ function generateOrderNumber(): string {
   return `SA-${timestamp}-${random}`;
 }
 
-// Convert file to base64
-async function fileToBase64(file: File): Promise<string> {
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  return `data:${file.type};base64,${buffer.toString('base64')}`;
-}
-
 // POST /api/orders/public - Create order (guest or logged-in user)
 export async function POST(request: NextRequest) {
   try {
@@ -37,10 +30,10 @@ export async function POST(request: NextRequest) {
     let deadline: string, deadlineTime: string, pages: number;
     let service: string = 'writing';
     let coupon: string | null = null;
-    let attachments: Array<{ name: string; type: string; size: number; data: string }> = [];
+    let attachments: Array<{ name: string; type: string; size: number; url?: string; data?: string }> = [];
     
     if (contentType.includes('multipart/form-data')) {
-      // Handle FormData upload (better for files)
+      // Handle FormData upload
       console.log('Processing multipart/form-data request');
       const formData = await request.formData();
       
@@ -54,40 +47,18 @@ export async function POST(request: NextRequest) {
       service = (formData.get('service') as string) || 'writing';
       coupon = formData.get('coupon') as string | null;
       
-      // Handle multiple files
-      const files = formData.getAll('files') as File[];
-      console.log('Files received:', files.length);
-      
-      for (const file of files) {
-        if (file && file.size > 0) {
-          // Check file size (10MB limit per file for FormData)
-          if (file.size > 10 * 1024 * 1024) {
-            return NextResponse.json(
-              { error: `File "${file.name}" exceeds 10MB limit. Please choose a smaller file.` },
-              { status: 400 }
-            );
-          }
-          
-          try {
-            const base64 = await fileToBase64(file);
-            attachments.push({
-              name: file.name,
-              type: file.type || 'application/octet-stream',
-              size: file.size,
-              data: base64
-            });
-            console.log(`Processed file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`);
-          } catch (fileErr) {
-            console.error('Error processing file:', file.name, fileErr);
-            return NextResponse.json(
-              { error: `Failed to process file "${file.name}". Please try again.` },
-              { status: 400 }
-            );
-          }
+      // Handle file uploads - expect JSON string with file info
+      const attachmentsJson = formData.get('attachments') as string;
+      if (attachmentsJson) {
+        try {
+          attachments = JSON.parse(attachmentsJson);
+          console.log('Attachments from client:', attachments.length, 'files');
+        } catch (e) {
+          console.error('Failed to parse attachments JSON:', e);
         }
       }
     } else {
-      // Handle JSON request (backwards compatibility)
+      // Handle JSON request
       console.log('Processing JSON request');
       const body = await request.json();
       
@@ -218,15 +189,7 @@ export async function POST(request: NextRequest) {
     let errorMessage = 'Failed to submit order. Please try again.';
     if (error instanceof Error) {
       console.error('Error details:', error.message);
-      
-      // Handle specific error types
-      if (error.message.includes('body') && error.message.includes('limit')) {
-        errorMessage = 'Files are too large. Please reduce file sizes or use fewer files.';
-      } else if (error.message.includes('JSON')) {
-        errorMessage = 'Invalid request format. Please try again.';
-      } else {
-        errorMessage = error.message;
-      }
+      errorMessage = error.message;
     }
     
     return NextResponse.json(

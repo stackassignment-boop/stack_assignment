@@ -1319,7 +1319,7 @@ export default function AdminPanel() {
                       try {
                         const files = JSON.parse(selectedOrder.attachments);
                         if (!files || files.length === 0) return null;
-                        return files.map((file: { name: string; type: string; size: number; data: string }, index: number) => (
+                        return files.map((file: { name: string; type: string; size: number; url?: string; data?: string }, index: number) => (
                           <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
                             <div className="flex items-center gap-2">
                               <FileText className="w-4 h-4 text-gray-500" />
@@ -1329,11 +1329,13 @@ export default function AdminPanel() {
                               </div>
                             </div>
                             <a
-                              href={file.data}
+                              href={file.url || file.data}
                               download={file.name}
+                              target={file.url ? "_blank" : undefined}
+                              rel={file.url ? "noopener noreferrer" : undefined}
                               className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:opacity-90"
                             >
-                              Download
+                              {file.url ? 'View' : 'Download'}
                             </a>
                           </div>
                         ));

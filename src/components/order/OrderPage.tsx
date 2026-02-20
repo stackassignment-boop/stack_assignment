@@ -5,16 +5,78 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { CheckCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, Loader2, Upload, X } from 'lucide-react';
 
 interface OrderPageProps {
   onNavigate?: (page: string) => void;
 }
 
+interface UploadedFile {
+  name: string;
+  size: number;
+  type: string;
+  url?: string; // Cloudinary URL
+  data?: string; // Base64 data for small files
+  uploading?: boolean;
+  error?: string;
+}
+
+// Cloudinary configuration - set these in your .env file
+const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || '';
+const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || '';
+
+// Check if Cloudinary is configured
+const isCloudinaryConfigured = () => {
+  return CLOUDINARY_CLOUD_NAME && CLOUDINARY_UPLOAD_PRESET;
+};
+
+// Upload file to Cloudinary
+async function uploadToCloudinary(file: File): Promise<{ url: string; publicId: string } | null> {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  formData.append('resource_type', 'auto');
+  formData.append('folder', 'stack-assignment/orders');
+
+  try {
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      console.error('Cloudinary upload failed');
+      return null;
+    }
+
+    const data = await response.json();
+    return {
+      url: data.secure_url,
+      publicId: data.public_id,
+    };
+  } catch (error) {
+    console.error('Upload error:', error);
+    return null;
+  }
+}
+
+// Convert file to base64 (for small files fallback)
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
 export default function OrderPage({ onNavigate }: OrderPageProps) {
   const [service, setService] = useState('writing');
   const [pages, setPages] = useState(1);
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<UploadedFile[]>([]);
   const [expertCount, setExpertCount] = useState(178);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -70,27 +132,88 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     fetchUserSession();
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      
-      // Validate file sizes (10MB limit per file)
-      for (const file of newFiles) {
-        if (file.size > 10 * 1024 * 1024) {
-          setError(`File "${file.name}" exceeds 10MB limit. Please choose a smaller file.`);
-          return;
-        }
-      }
-      
-      // Check total size (25MB total limit)
-      const totalSize = [...files, ...newFiles].reduce((acc, file) => acc + file.size, 0);
-      if (totalSize > 25 * 1024 * 1024) {
-        setError('Total file size exceeds 25MB limit. Please remove some files.');
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    
+    const newFiles = Array.from(e.target.files);
+    
+    // Validate file sizes
+    for (const file of newFiles) {
+      if (file.size > 20 * 1024 * 1024) { // 20MB limit
+        setError(`File "${file.name}" exceeds 20MB limit.`);
         return;
       }
+    }
+    
+    // Add files with uploading status
+    const filesWithStatus: UploadedFile[] = newFiles.map(file => ({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      uploading: true,
+    }));
+    
+    setFiles(prev => [...prev, ...filesWithStatus]);
+    setError('');
+    
+    // Upload each file
+    for (let i = 0; i < newFiles.length; i++) {
+      const file = newFiles[i];
+      const fileIndex = files.length + i;
       
-      setFiles(prev => [...prev, ...newFiles]);
-      setError(''); // Clear any previous errors
+      try {
+        if (isCloudinaryConfigured()) {
+          // Upload to Cloudinary
+          const result = await uploadToCloudinary(file);
+          
+          if (result) {
+            setFiles(prev => prev.map((f, idx) => 
+              idx === fileIndex 
+                ? { ...f, url: result.url, uploading: false }
+                : f
+            ));
+          } else {
+            // Fallback to base64 for small files
+            if (file.size < 500 * 1024) { // 500KB limit for base64
+              const base64 = await fileToBase64(file);
+              setFiles(prev => prev.map((f, idx) => 
+                idx === fileIndex 
+                  ? { ...f, data: base64, uploading: false }
+                  : f
+              ));
+            } else {
+              setFiles(prev => prev.map((f, idx) => 
+                idx === fileIndex 
+                  ? { ...f, uploading: false, error: 'Upload failed - file too large' }
+                  : f
+              ));
+            }
+          }
+        } else {
+          // No Cloudinary - use base64 for small files only
+          if (file.size < 500 * 1024) { // 500KB limit
+            const base64 = await fileToBase64(file);
+            setFiles(prev => prev.map((f, idx) => 
+              idx === fileIndex 
+                ? { ...f, data: base64, uploading: false }
+                : f
+            ));
+          } else {
+            setFiles(prev => prev.map((f, idx) => 
+              idx === fileIndex 
+                ? { ...f, uploading: false, error: 'File too large (max 500KB without Cloudinary)' }
+                : f
+            ));
+          }
+        }
+      } catch (err) {
+        console.error('File processing error:', err);
+        setFiles(prev => prev.map((f, idx) => 
+          idx === fileIndex 
+            ? { ...f, uploading: false, error: 'Failed to process file' }
+            : f
+        ));
+      }
     }
   };
 
@@ -101,34 +224,51 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    
+    // Check if any files are still uploading
+    if (files.some(f => f.uploading)) {
+      setError('Please wait for files to finish uploading.');
+      return;
+    }
+    
+    // Check for files with errors
+    const errorFiles = files.filter(f => f.error);
+    if (errorFiles.length > 0) {
+      setError('Some files failed to upload. Please remove them and try again.');
+      return;
+    }
+    
     setSubmitting(true);
 
     try {
-      // Use FormData for proper file upload handling
-      const formDataToSend = new FormData();
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('phone', `${formData.timezone}${formData.phone}`);
-      formDataToSend.append('subject', formData.subject);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('deadline', formData.deadlineDate);
-      formDataToSend.append('deadlineTime', formData.deadlineTime);
-      formDataToSend.append('pages', pages.toString());
-      formDataToSend.append('service', service);
-      if (formData.coupon) {
-        formDataToSend.append('coupon', formData.coupon);
-      }
+      // Prepare attachments data
+      const attachments = files
+        .filter(f => f.url || f.data)
+        .map(f => ({
+          name: f.name,
+          type: f.type,
+          size: f.size,
+          url: f.url,
+          data: f.data,
+        }));
       
-      // Append files
-      for (const file of files) {
-        formDataToSend.append('files', file);
-      }
-      
-      console.log('Submitting order with', files.length, 'files');
+      console.log('Submitting order with', attachments.length, 'files');
       
       const response = await fetch('/api/orders/public', {
         method: 'POST',
-        body: formDataToSend,
-        // Don't set Content-Type header - let the browser set it with the boundary
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          phone: `${formData.timezone}${formData.phone}`,
+          subject: formData.subject,
+          description: formData.description,
+          deadline: formData.deadlineDate,
+          deadlineTime: formData.deadlineTime,
+          pages: pages,
+          service: service,
+          coupon: formData.coupon || null,
+          attachments: attachments,
+        }),
       });
 
       const data = await response.json();
@@ -397,7 +537,8 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                 {/* File Upload */}
                 <div className="mt-4">
                   <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold text-sm cursor-pointer transition">
-                    📎 Add Files
+                    <Upload className="w-4 h-4" />
+                    Add Files
                     <input 
                       type="file" 
                       multiple 
@@ -407,32 +548,51 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                     />
                   </label>
                   <p className="text-xs text-gray-500 mt-2">
-                    Accepted formats: PDF, DOC, DOCX, JPG, PNG, GIF, TXT, ZIP, XLSX, XLS, PPT, PPTX (Max 10MB per file, 25MB total)
+                    Max 20MB per file. Accepted: PDF, DOC, DOCX, JPG, PNG, GIF, TXT, ZIP, XLSX, XLS, PPT, PPTX
                   </p>
                   
                   {files.length > 0 && (
                     <div className="mt-3 space-y-2">
-                      <p className="text-sm text-green-600 font-medium">✓ {files.length} file(s) selected:</p>
+                      <p className="text-sm text-green-600 font-medium">
+                        ✓ {files.filter(f => f.url || f.data).length} of {files.length} file(s) uploaded
+                      </p>
                       <div className="space-y-1 max-h-48 overflow-y-auto">
                         {files.map((file, index) => (
                           <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-700 rounded-lg px-3 py-2">
                             <div className="flex items-center gap-2 min-w-0">
-                              <span className="text-sm">📄</span>
-                              <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[200px]">{file.name}</span>
-                              <span className="text-xs text-gray-500 whitespace-nowrap">({(file.size / 1024).toFixed(1)} KB)</span>
+                              <span className="text-sm">
+                                {file.uploading ? '⏳' : file.error ? '❌' : '📄'}
+                              </span>
+                              <div className="min-w-0">
+                                <span className="text-sm text-gray-700 dark:text-gray-300 truncate block max-w-[200px]">
+                                  {file.name}
+                                </span>
+                                {file.error && (
+                                  <span className="text-xs text-red-500">{file.error}</span>
+                                )}
+                              </div>
+                              <span className="text-xs text-gray-500 whitespace-nowrap">
+                                ({(file.size / 1024).toFixed(1)} KB)
+                              </span>
                             </div>
                             <button
                               type="button"
                               onClick={() => removeFile(index)}
-                              className="text-red-500 hover:text-red-700 text-sm font-bold px-2"
+                              className="text-red-500 hover:text-red-700 p-1"
                             >
-                              ✕
+                              <X className="w-4 h-4" />
                             </button>
                           </div>
                         ))}
                       </div>
-                      <p className="text-xs text-gray-500">
-                        Total size: {(files.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024)).toFixed(2)} MB
+                    </div>
+                  )}
+                  
+                  {!isCloudinaryConfigured() && (
+                    <div className="mt-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                      <p className="text-xs text-yellow-700 dark:text-yellow-300">
+                        ⚠️ Cloudinary not configured. File uploads limited to 500KB. 
+                        Contact admin to enable larger file uploads.
                       </p>
                     </div>
                   )}
@@ -476,13 +636,18 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                 {/* Submit Button */}
                 <Button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || files.some(f => f.uploading)}
                   className="mt-6 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-extrabold py-6 rounded-xl text-lg shadow-lg disabled:opacity-50"
                 >
                   {submitting ? (
                     <span className="flex items-center gap-2">
                       <Loader2 className="w-5 h-5 animate-spin" />
                       Submitting...
+                    </span>
+                  ) : files.some(f => f.uploading) ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Uploading files...
                     </span>
                   ) : (
                     'Submit Order'
