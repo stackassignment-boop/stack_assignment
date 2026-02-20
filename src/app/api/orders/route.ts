@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
-import { getCurrentUser, requireAdmin, generateOrderNumber, calculatePrice, apiResponse, apiError } from '@/lib/auth';
+import { getCurrentUser, generateOrderNumber, calculatePrice, apiResponse, apiError } from '@/lib/auth';
 import { z } from 'zod';
 
 // Schema for creating an order
@@ -14,7 +14,6 @@ const createOrderSchema = z.object({
   words: z.number().int().optional(),
   deadline: z.string().transform(val => new Date(val)),
   requirements: z.string().optional(),
-  attachments: z.array(z.string()).optional(),
 });
 
 // GET /api/orders - List orders (admin sees all, customer sees their own)
@@ -44,7 +43,7 @@ export async function GET(request: NextRequest) {
       where.status = status;
     }
     
-    // Get orders with pagination
+    // Get orders with pagination, including attachments
     const [orders, total] = await Promise.all([
       db.order.findMany({
         where,
@@ -57,6 +56,15 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
+              phone: true,
+            },
+          },
+          attachments: {
+            select: {
+              id: true,
+              fileName: true,
+              fileType: true,
+              fileSize: true,
             },
           },
         },
@@ -130,7 +138,6 @@ export async function POST(request: NextRequest) {
         totalPrice: pricing.totalPrice,
         deadline: data.deadline,
         requirements: data.requirements,
-        attachments: data.attachments ? JSON.stringify(data.attachments) : null,
       },
       include: {
         customer: {
@@ -138,6 +145,14 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             email: true,
+          },
+        },
+        attachments: {
+          select: {
+            id: true,
+            fileName: true,
+            fileType: true,
+            fileSize: true,
           },
         },
       },

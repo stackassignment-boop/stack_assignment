@@ -1,18 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-// Create a fresh Prisma client for this request
-const getPrismaClient = () => {
-  const NEON_DATABASE_URL = "postgresql://neondb_owner:npg_A8kgUBsheXJ3@ep-floral-sun-aikg04vz-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
-  
-  return new PrismaClient({
-    datasources: {
-      db: {
-        url: NEON_DATABASE_URL,
-      },
-    },
-  });
-};
+import { db } from '@/lib/db';
 
 // Generate unique order number
 function generateOrderNumber(): string {
@@ -23,8 +10,6 @@ function generateOrderNumber(): string {
 
 // POST /api/orders/public - Create order (guest or logged-in user)
 export async function POST(request: NextRequest) {
-  const prisma = getPrismaClient();
-  
   try {
     const body = await request.json();
     console.log('Received order request:', { ...body, description: body.description?.substring(0, 50) + '...' });
@@ -39,8 +24,7 @@ export async function POST(request: NextRequest) {
       deadline, 
       pages,
       hasAttachments: !!attachments,
-      attachmentsCount: attachments?.length || 0,
-      attachments: attachments
+      attachmentsCount: attachments?.length || 0
     });
 
     if (!email || !phone || !subject || !description || !deadline || !pages) {
@@ -55,19 +39,14 @@ export async function POST(request: NextRequest) {
     console.log('Parsed deadline:', deadlineDate.toISOString());
 
     // Check for existing user or create one
-    let user;
-    try {
-      user = await prisma.user.findUnique({
-        where: { email: email },
-      });
-    } catch (e) {
-      console.error('Error finding user:', e);
-    }
+    let user = await db.user.findUnique({
+      where: { email: email },
+    });
 
     if (!user) {
       // Create a new customer account
       try {
-        user = await prisma.user.create({
+        user = await db.user.create({
           data: {
             email: email,
             phone: phone,
@@ -80,18 +59,21 @@ export async function POST(request: NextRequest) {
       } catch (createError: unknown) {
         console.error('Error creating user:', createError);
         // User might have been created by another request, try to find again
-        user = await prisma.user.findUnique({
+        user = await db.user.findUnique({
           where: { email: email },
         });
         if (!user) {
-          throw new Error('Failed to create or find user');
+          return NextResponse.json(
+            { error: 'Failed to create user account' },
+            { status: 500 }
+          );
         }
       }
     } else {
       // Update phone if provided and different
       if (phone && user.phone !== phone) {
         try {
-          await prisma.user.update({
+          await db.user.update({
             where: { id: user.id },
             data: { phone: phone },
           });
@@ -102,8 +84,8 @@ export async function POST(request: NextRequest) {
       console.log('Found existing user:', user.id);
     }
 
-    // Create order WITHOUT price - admin will set it later
-    const order = await prisma.order.create({
+    // Create order with attachments stored in separate table
+    const order = await db.order.create({
       data: {
         orderNumber: generateOrderNumber(),
         customerId: user.id,
@@ -122,17 +104,54 @@ export async function POST(request: NextRequest) {
           service: service || 'writing',
           coupon: coupon || null,
         }),
-        attachments: attachments && attachments.length > 0 ? JSON.stringify(attachments) : null,
         status: 'pending',
         paymentStatus: 'pending_quote', // Special status - waiting for admin to set price
       },
     });
 
-    console.log('Order created successfully:', order.orderNumber);
-    console.log('Order attachments saved:', order.attachments);
+    // Store attachments in separate table
+    if (attachments && attachments.length > 0) {
+      console.log('Saving attachments to database...');
+      
+      for (const file of attachments) {
+        try {
+          // Convert base64 to buffer
+          const base64Data = file.data.split(',')[1]; // Remove data:mime;base64, prefix
+          const buffer = Buffer.from(base64Data, 'base64');
+          
+          await db.orderAttachment.create({
+            data: {
+              orderId: order.id,
+              fileName: file.name,
+              fileType: file.type,
+              fileSize: file.size,
+              fileData: buffer,
+            },
+          });
+          
+          console.log('Saved attachment:', file.name, file.size, 'bytes');
+        } catch (attachError) {
+          console.error('Error saving attachment:', file.name, attachError);
+        }
+      }
+    }
 
-    // Disconnect prisma
-    await prisma.$disconnect();
+    console.log('Order created successfully:', order.orderNumber);
+
+    // Fetch order with attachments for response
+    const orderWithAttachments = await db.order.findUnique({
+      where: { id: order.id },
+      include: {
+        attachments: {
+          select: {
+            id: true,
+            fileName: true,
+            fileType: true,
+            fileSize: true,
+          },
+        },
+      },
+    });
 
     return NextResponse.json({
       success: true,
@@ -143,12 +162,17 @@ export async function POST(request: NextRequest) {
         totalPrice: order.totalPrice,
         deadline: order.deadline,
         status: order.status,
+        attachments: orderWithAttachments?.attachments?.map(a => ({
+          id: a.id,
+          name: a.fileName,
+          type: a.fileType,
+          size: a.fileSize,
+        })),
       },
     }, { status: 201 });
 
   } catch (error: unknown) {
     console.error('Create public order error:', error);
-    await prisma.$disconnect();
     
     let errorMessage = 'Failed to submit order. Please try again.';
     if (error instanceof Error) {
