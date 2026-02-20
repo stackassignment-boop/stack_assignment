@@ -1318,22 +1318,47 @@ export default function AdminPanel() {
                     {(() => {
                       try {
                         const files = JSON.parse(selectedOrder.attachments);
-                        return files.map((file: string, index: number) => (
-                          <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
-                            <div className="flex items-center gap-2">
-                              <FileText className="w-4 h-4 text-gray-500" />
-                              <span className="text-sm">{file}</span>
+                        // Handle both old format (string URLs) and new format (base64 objects)
+                        return files.map((file: string | { name: string; type: string; size: number; data: string }, index: number) => {
+                          // Check if it's the new base64 format
+                          if (typeof file === 'object' && file.name && file.data) {
+                            return (
+                              <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                                <div className="flex items-center gap-2">
+                                  <FileText className="w-4 h-4 text-gray-500" />
+                                  <div>
+                                    <span className="text-sm font-medium">{file.name}</span>
+                                    <span className="text-xs text-gray-500 ml-2">({(file.size / 1024).toFixed(1)} KB)</span>
+                                  </div>
+                                </div>
+                                <a
+                                  href={file.data}
+                                  download={file.name}
+                                  className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:opacity-90"
+                                >
+                                  Download
+                                </a>
+                              </div>
+                            );
+                          }
+                          // Old format (URL string)
+                          return (
+                            <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                              <div className="flex items-center gap-2">
+                                <FileText className="w-4 h-4 text-gray-500" />
+                                <span className="text-sm">{file}</span>
+                              </div>
+                              <a
+                                href={file}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary hover:underline text-sm"
+                              >
+                                Download
+                              </a>
                             </div>
-                            <a
-                              href={file}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-primary hover:underline text-sm"
-                            >
-                              Download
-                            </a>
-                          </div>
-                        ));
+                          );
+                        });
                       } catch {
                         return <span className="text-sm text-muted-foreground">{selectedOrder.attachments}</span>;
                       }

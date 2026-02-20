@@ -76,47 +76,54 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     }
   };
 
+  // Convert file to base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSubmitting(true);
 
     try {
-      // Upload files first if any
-      let uploadedFiles: string[] = [];
+      // Convert files to base64 if any (Vercel-compatible - no filesystem writes)
+      let uploadedFiles: Array<{ name: string; type: string; size: number; data: string }> = [];
       if (files.length > 0) {
-        console.log('Uploading files:', files.map(f => f.name));
-        const formDataFiles = new FormData();
-        files.forEach((file) => {
-          formDataFiles.append('files', file);
-        });
+        console.log('Converting files to base64:', files.map(f => f.name));
         
-        try {
-          const uploadRes = await fetch('/api/upload', {
-            method: 'POST',
-            body: formDataFiles,
-          });
-          
-          if (uploadRes.ok) {
-            const uploadData = await uploadRes.json();
-            uploadedFiles = uploadData.urls || [];
-            console.log('Files uploaded successfully:', uploadedFiles);
-          } else {
-            const uploadError = await uploadRes.json();
-            console.error('Upload failed:', uploadError);
-            setError(uploadError.error || 'Failed to upload files. Please try again.');
+        for (const file of files) {
+          // Check file size (5MB limit for base64)
+          if (file.size > 5 * 1024 * 1024) {
+            setError(`File "${file.name}" exceeds 5MB limit. Please choose a smaller file.`);
             setSubmitting(false);
             return;
           }
-        } catch (uploadErr) {
-          console.error('Upload error:', uploadErr);
-          setError('Failed to upload files. Please try again.');
-          setSubmitting(false);
-          return;
+          
+          try {
+            const base64 = await fileToBase64(file);
+            uploadedFiles.push({
+              name: file.name,
+              type: file.type || 'application/octet-stream',
+              size: file.size,
+              data: base64
+            });
+          } catch (convertErr) {
+            console.error('File conversion error:', convertErr);
+            setError(`Failed to process file "${file.name}". Please try again.`);
+            setSubmitting(false);
+            return;
+          }
         }
+        console.log('Files converted successfully:', uploadedFiles.length);
       }
 
-      console.log('Submitting order with attachments:', uploadedFiles);
+      console.log('Submitting order with attachments:', uploadedFiles.length, 'files');
       
       const response = await fetch('/api/orders/public', {
         method: 'POST',
