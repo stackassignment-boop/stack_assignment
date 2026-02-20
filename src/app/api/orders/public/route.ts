@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Configure route for larger payloads and longer execution time
+// Configure route for longer execution time
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   try {
     const db = await getDb();
     
-    // Check content type to determine how to parse the request
+    // Check content type
     const contentType = request.headers.get('content-type') || '';
     console.log('Content-Type:', contentType);
     
@@ -30,10 +30,10 @@ export async function POST(request: NextRequest) {
     let deadline: string, deadlineTime: string, pages: number;
     let service: string = 'writing';
     let coupon: string | null = null;
-    let attachments: Array<{ name: string; type: string; size: number; url?: string; data?: string }> = [];
+    let files: File[] = [];
     
     if (contentType.includes('multipart/form-data')) {
-      // Handle FormData upload
+      // Handle FormData upload (same as sample upload)
       console.log('Processing multipart/form-data request');
       const formData = await request.formData();
       
@@ -47,18 +47,23 @@ export async function POST(request: NextRequest) {
       service = (formData.get('service') as string) || 'writing';
       coupon = formData.get('coupon') as string | null;
       
-      // Handle file uploads - expect JSON string with file info
-      const attachmentsJson = formData.get('attachments') as string;
-      if (attachmentsJson) {
-        try {
-          attachments = JSON.parse(attachmentsJson);
-          console.log('Attachments from client:', attachments.length, 'files');
-        } catch (e) {
-          console.error('Failed to parse attachments JSON:', e);
+      // Get all files (same approach as sample upload)
+      const filesEntries = formData.getAll('files');
+      files = filesEntries.filter(f => f instanceof File) as File[];
+      
+      console.log('Files received:', files.length);
+      
+      // Validate file sizes (10MB limit, same as samples)
+      for (const file of files) {
+        if (file.size > 10 * 1024 * 1024) {
+          return NextResponse.json(
+            { error: `File "${file.name}" exceeds 10MB limit.` },
+            { status: 400 }
+          );
         }
       }
     } else {
-      // Handle JSON request
+      // Handle JSON request (backward compatibility)
       console.log('Processing JSON request');
       const body = await request.json();
       
@@ -71,16 +76,13 @@ export async function POST(request: NextRequest) {
       pages = body.pages;
       service = body.service || 'writing';
       coupon = body.coupon || null;
-      attachments = body.attachments || [];
       
       console.log('Order data received:', { 
         email, 
         phone, 
         subject, 
         deadline, 
-        pages,
-        hasAttachments: !!attachments,
-        attachmentsCount: attachments?.length || 0
+        pages 
       });
     }
 
@@ -102,7 +104,6 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      // Create a new customer account
       try {
         user = await db.user.create({
           data: {
@@ -116,7 +117,6 @@ export async function POST(request: NextRequest) {
         console.log('Created new user:', user.id);
       } catch (createError: unknown) {
         console.error('Error creating user:', createError);
-        // User might have been created by another request, try to find again
         user = await db.user.findUnique({
           where: { email: email },
         });
@@ -128,7 +128,6 @@ export async function POST(request: NextRequest) {
         }
       }
     } else {
-      // Update phone if provided and different
       if (phone && user.phone !== phone) {
         try {
           await db.user.update({
@@ -142,7 +141,7 @@ export async function POST(request: NextRequest) {
       console.log('Found existing user:', user.id);
     }
 
-    // Create order with attachments as JSON string
+    // Create order
     const order = await db.order.create({
       data: {
         orderNumber: generateOrderNumber(),
@@ -154,21 +153,62 @@ export async function POST(request: NextRequest) {
         paperType: 'essay',
         pages: parseInt(String(pages)),
         words: parseInt(String(pages)) * 250,
-        pricePerPage: 0, // Will be set by admin
-        urgencyMultiplier: 1, // Will be set by admin
-        totalPrice: 0, // Will be set by admin - 0 means pending quote
+        pricePerPage: 0,
+        urgencyMultiplier: 1,
+        totalPrice: 0,
         deadline: deadlineDate,
         requirements: JSON.stringify({
           service: service || 'writing',
           coupon: coupon || null,
         }),
-        attachments: attachments && attachments.length > 0 ? JSON.stringify(attachments) : null,
         status: 'pending',
-        paymentStatus: 'pending_quote', // Special status - waiting for admin to set price
+        paymentStatus: 'pending_quote',
       },
     });
 
-    console.log('Order created successfully:', order.orderNumber, 'with', attachments.length, 'attachments');
+    console.log('Order created:', order.orderNumber);
+
+    // Store files in OrderAttachment table (same as sample upload)
+    if (files.length > 0) {
+      console.log('Processing', files.length, 'files for storage...');
+      
+      for (const file of files) {
+        try {
+          // Read file as buffer (same as sample upload)
+          const arrayBuffer = await file.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
+          
+          await db.orderAttachment.create({
+            data: {
+              orderId: order.id,
+              fileName: file.name,
+              fileType: file.type || 'application/octet-stream',
+              fileSize: file.size,
+              fileData: buffer,
+            },
+          });
+          
+          console.log('Stored file:', file.name);
+        } catch (fileError) {
+          console.error('Error storing file:', file.name, fileError);
+          // Continue with other files even if one fails
+        }
+      }
+      
+      // Update order attachments field with file info (for backward compatibility)
+      const attachmentsInfo = files.map(f => ({
+        name: f.name,
+        type: f.type,
+        size: f.size,
+      }));
+      
+      await db.order.update({
+        where: { id: order.id },
+        data: { attachments: JSON.stringify(attachmentsInfo) },
+      });
+    }
+
+    console.log('Order created successfully:', order.orderNumber, 'with', files.length, 'attachments');
 
     return NextResponse.json({
       success: true,
@@ -179,7 +219,7 @@ export async function POST(request: NextRequest) {
         totalPrice: order.totalPrice,
         deadline: order.deadline,
         status: order.status,
-        attachmentsCount: attachments.length,
+        attachmentsCount: files.length,
       },
     }, { status: 201 });
 
