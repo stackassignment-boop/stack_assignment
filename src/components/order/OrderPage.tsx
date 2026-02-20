@@ -11,10 +11,19 @@ interface OrderPageProps {
   onNavigate?: (page: string) => void;
 }
 
+interface UploadedFile {
+  name: string;
+  size: number;
+  type: string;
+  url: string;
+  uploading: boolean;
+  error?: string;
+}
+
 export default function OrderPage({ onNavigate }: OrderPageProps) {
   const [service, setService] = useState('writing');
   const [pages, setPages] = useState(1);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [expertCount, setExpertCount] = useState(178);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -69,67 +78,117 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     fetchUserSession();
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     
     const newFiles = Array.from(e.target.files);
+    e.target.value = '';
     
-    // Validate file sizes (10MB limit)
     for (const file of newFiles) {
+      // Validate file size (10MB limit)
       if (file.size > 10 * 1024 * 1024) {
         setError(`File "${file.name}" exceeds 10MB limit.`);
-        return;
+        continue;
+      }
+      
+      // Add file with uploading status
+      const fileEntry: UploadedFile = {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        url: '',
+        uploading: true,
+      };
+      
+      setUploadedFiles(prev => [...prev, fileEntry]);
+      
+      try {
+        // Upload file to blob storage
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', file);
+        
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: uploadFormData,
+        });
+        
+        const uploadData = await uploadRes.json();
+        
+        if (uploadRes.ok && uploadData.url) {
+          setUploadedFiles(prev => prev.map(f => 
+            f.name === file.name && f.size === file.size
+              ? { ...f, url: uploadData.url, uploading: false }
+              : f
+          ));
+        } else {
+          setUploadedFiles(prev => prev.map(f => 
+            f.name === file.name && f.size === file.size
+              ? { ...f, uploading: false, error: uploadData.error || 'Upload failed' }
+              : f
+          ));
+        }
+      } catch (err) {
+        console.error('Upload error:', err);
+        setUploadedFiles(prev => prev.map(f => 
+          f.name === file.name && f.size === file.size
+            ? { ...f, uploading: false, error: 'Upload failed' }
+            : f
+        ));
       }
     }
-    
-    setSelectedFiles(prev => [...prev, ...newFiles]);
-    setError('');
-    e.target.value = '';
   };
 
   const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    
+    // Check if any files are still uploading
+    if (uploadedFiles.some(f => f.uploading)) {
+      setError('Please wait for files to finish uploading.');
+      return;
+    }
+    
+    // Check for files with errors
+    const errorFiles = uploadedFiles.filter(f => f.error);
+    if (errorFiles.length > 0) {
+      setError('Some files failed to upload. Please remove them and try again.');
+      return;
+    }
+    
     setSubmitting(true);
 
     try {
-      // Create FormData - exactly like sample upload
-      const formDataToSend = new FormData();
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('phone', `${formData.timezone}${formData.phone}`);
-      formDataToSend.append('subject', formData.subject);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('deadline', formData.deadlineDate);
-      formDataToSend.append('deadlineTime', formData.deadlineTime);
-      formDataToSend.append('pages', pages.toString());
-      formDataToSend.append('service', service);
-      if (formData.coupon) {
-        formDataToSend.append('coupon', formData.coupon);
-      }
+      // Prepare attachments data (only successfully uploaded files)
+      const attachments = uploadedFiles
+        .filter(f => f.url)
+        .map(f => ({
+          name: f.name,
+          type: f.type,
+          size: f.size,
+          url: f.url,
+        }));
       
-      // Append files - same approach as sample upload uses 'file'
-      // Using 'file' for each (same as admin sample upload)
-      for (let i = 0; i < selectedFiles.length; i++) {
-        formDataToSend.append('file', selectedFiles[i]);
-      }
-      
-      console.log('Submitting order with', selectedFiles.length, 'files');
-      console.log('FormData entries:');
-      for (const [key, value] of formDataToSend.entries()) {
-        if (value instanceof File) {
-          console.log(`  ${key}: File(${value.name}, ${value.size} bytes)`);
-        } else {
-          console.log(`  ${key}: ${value}`);
-        }
-      }
+      console.log('Submitting order with', attachments.length, 'files');
       
       const response = await fetch('/api/orders/public', {
         method: 'POST',
-        body: formDataToSend,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          phone: `${formData.timezone}${formData.phone}`,
+          subject: formData.subject,
+          description: formData.description,
+          deadline: formData.deadlineDate,
+          deadlineTime: formData.deadlineTime,
+          pages: pages,
+          service: service,
+          coupon: formData.coupon || null,
+          attachments: attachments,
+        }),
       });
 
       const data = await response.json();
@@ -191,7 +250,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                     terms: false
                   });
                   setPages(1);
-                  setSelectedFiles([]);
+                  setUploadedFiles([]);
                 }}
                 variant="outline"
                 className="px-8"
@@ -409,19 +468,21 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                     />
                   </label>
                   <p className="text-xs text-gray-500 mt-2">
-                    Max 10MB per file. Accepted: PDF, DOC, DOCX, JPG, PNG, GIF, TXT, ZIP, XLSX, XLS, PPT, PPTX
+                    Max 10MB per file. Files upload instantly to cloud storage.
                   </p>
                   
-                  {selectedFiles.length > 0 && (
+                  {uploadedFiles.length > 0 && (
                     <div className="mt-3 space-y-2">
                       <p className="text-sm text-green-600 font-medium">
-                        ✓ {selectedFiles.length} file(s) selected
+                        ✓ {uploadedFiles.filter(f => f.url).length} of {uploadedFiles.length} file(s) uploaded
                       </p>
                       <div className="space-y-1 max-h-48 overflow-y-auto">
-                        {selectedFiles.map((file, index) => (
+                        {uploadedFiles.map((file, index) => (
                           <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-700 rounded-lg px-3 py-2">
                             <div className="flex items-center gap-2 min-w-0">
-                              <span className="text-sm">📄</span>
+                              <span className="text-sm">
+                                {file.uploading ? '⏳' : file.error ? '❌' : '✅'}
+                              </span>
                               <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[200px]">
                                 {file.name}
                               </span>
@@ -481,13 +542,18 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                 {/* Submit Button */}
                 <Button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || uploadedFiles.some(f => f.uploading)}
                   className="mt-6 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-extrabold py-6 rounded-xl text-lg shadow-lg disabled:opacity-50"
                 >
                   {submitting ? (
                     <span className="flex items-center gap-2">
                       <Loader2 className="w-5 h-5 animate-spin" />
                       Submitting...
+                    </span>
+                  ) : uploadedFiles.some(f => f.uploading) ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Uploading files...
                     </span>
                   ) : (
                     'Submit Order'

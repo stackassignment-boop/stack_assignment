@@ -14,74 +14,26 @@ export async function POST(request: NextRequest) {
   try {
     const { db } = await import('@/lib/db');
     
-    const contentType = request.headers.get('content-type') || '';
-    console.log('Content-Type:', contentType);
+    const body = await request.json();
+    console.log('Order data received:', {
+      email: body.email,
+      subject: body.subject,
+      pages: body.pages,
+      attachmentsCount: body.attachments?.length || 0
+    });
     
-    let email: string, phone: string, subject: string, description: string;
-    let deadline: string, deadlineTime: string, pages: number;
-    let service: string = 'writing';
-    let coupon: string | null = null;
-    let files: File[] = [];
-    
-    if (contentType.includes('multipart/form-data')) {
-      // Handle FormData - same as sample upload
-      console.log('Processing multipart/form-data');
-      
-      const formData = await request.formData();
-      
-      // Log all entries
-      console.log('FormData entries:');
-      for (const [key, value] of formData.entries()) {
-        if (value instanceof File) {
-          console.log(`  ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
-        } else {
-          console.log(`  ${key}: ${value}`);
-        }
-      }
-      
-      // Get form fields
-      email = formData.get('email') as string;
-      phone = formData.get('phone') as string;
-      subject = formData.get('subject') as string;
-      description = formData.get('description') as string;
-      deadline = formData.get('deadline') as string;
-      deadlineTime = (formData.get('deadlineTime') as string) || '12:00';
-      pages = parseInt(formData.get('pages') as string) || 1;
-      service = (formData.get('service') as string) || 'writing';
-      coupon = formData.get('coupon') as string | null;
-      
-      // Get all files - using 'file' same as sample upload
-      const fileEntries = formData.getAll('file');
-      console.log('File entries count:', fileEntries.length);
-      
-      files = fileEntries.filter(f => f instanceof File) as File[];
-      console.log('Files after filter:', files.length);
-      
-      // Validate file sizes
-      for (const file of files) {
-        console.log(`File: ${file.name}, size: ${file.size}, type: ${file.type}`);
-        if (file.size > 10 * 1024 * 1024) {
-          return NextResponse.json(
-            { error: `File "${file.name}" exceeds 10MB limit.` },
-            { status: 400 }
-          );
-        }
-      }
-    } else {
-      // JSON fallback
-      console.log('Processing JSON');
-      const body = await request.json();
-      
-      email = body.email;
-      phone = body.phone;
-      subject = body.subject;
-      description = body.description;
-      deadline = body.deadline;
-      deadlineTime = body.deadlineTime || '12:00';
-      pages = body.pages;
-      service = body.service || 'writing';
-      coupon = body.coupon || null;
-    }
+    const { 
+      email, 
+      phone, 
+      subject, 
+      description, 
+      deadline, 
+      deadlineTime, 
+      pages, 
+      service, 
+      coupon, 
+      attachments 
+    } = body;
 
     // Validate
     if (!email || !phone || !subject || !description || !deadline || !pages) {
@@ -91,7 +43,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const deadlineDate = new Date(`${deadline}T${deadlineTime}:00`);
+    const deadlineDate = new Date(`${deadline}T${deadlineTime || '12:00'}:00`);
 
     // Find or create user
     let user = await db.user.findUnique({
@@ -152,50 +104,14 @@ export async function POST(request: NextRequest) {
         }),
         status: 'pending',
         paymentStatus: 'pending_quote',
+        // Store attachments as JSON with URLs
+        attachments: attachments && attachments.length > 0 
+          ? JSON.stringify(attachments) 
+          : null,
       },
     });
 
-    console.log('Order created:', order.orderNumber);
-
-    // Store files - same approach as sample upload
-    let storedCount = 0;
-    for (const file of files) {
-      try {
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        
-        await db.orderAttachment.create({
-          data: {
-            orderId: order.id,
-            fileName: file.name,
-            fileType: file.type || 'application/octet-stream',
-            fileSize: file.size,
-            fileData: buffer,
-          },
-        });
-        
-        storedCount++;
-        console.log('Stored file:', file.name);
-      } catch (fileError) {
-        console.error('Error storing file:', file.name, fileError);
-      }
-    }
-    
-    // Update order with attachment info
-    if (files.length > 0) {
-      const attachmentsInfo = files.map(f => ({
-        name: f.name,
-        type: f.type,
-        size: f.size,
-      }));
-      
-      await db.order.update({
-        where: { id: order.id },
-        data: { attachments: JSON.stringify(attachmentsInfo) },
-      });
-    }
-
-    console.log(`=== ORDER COMPLETE: ${order.orderNumber}, files stored: ${storedCount} ===`);
+    console.log('Order created:', order.orderNumber, 'with', attachments?.length || 0, 'attachments');
 
     return NextResponse.json({
       success: true,
@@ -206,7 +122,7 @@ export async function POST(request: NextRequest) {
         totalPrice: order.totalPrice,
         deadline: order.deadline,
         status: order.status,
-        attachmentsCount: storedCount,
+        attachmentsCount: attachments?.length || 0,
       },
     }, { status: 201 });
 
