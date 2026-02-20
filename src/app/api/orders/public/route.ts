@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       console.log('Found existing user:', user.id);
     }
 
-    // Create order with attachments stored in separate table
+    // Create order with attachments as JSON string
     const order = await db.order.create({
       data: {
         orderNumber: generateOrderNumber(),
@@ -104,54 +104,13 @@ export async function POST(request: NextRequest) {
           service: service || 'writing',
           coupon: coupon || null,
         }),
+        attachments: attachments && attachments.length > 0 ? JSON.stringify(attachments) : null,
         status: 'pending',
         paymentStatus: 'pending_quote', // Special status - waiting for admin to set price
       },
     });
 
-    // Store attachments in separate table
-    if (attachments && attachments.length > 0) {
-      console.log('Saving attachments to database...');
-      
-      for (const file of attachments) {
-        try {
-          // Convert base64 to buffer
-          const base64Data = file.data.split(',')[1]; // Remove data:mime;base64, prefix
-          const buffer = Buffer.from(base64Data, 'base64');
-          
-          await db.orderAttachment.create({
-            data: {
-              orderId: order.id,
-              fileName: file.name,
-              fileType: file.type,
-              fileSize: file.size,
-              fileData: buffer,
-            },
-          });
-          
-          console.log('Saved attachment:', file.name, file.size, 'bytes');
-        } catch (attachError) {
-          console.error('Error saving attachment:', file.name, attachError);
-        }
-      }
-    }
-
     console.log('Order created successfully:', order.orderNumber);
-
-    // Fetch order with attachments for response
-    const orderWithAttachments = await db.order.findUnique({
-      where: { id: order.id },
-      include: {
-        attachments: {
-          select: {
-            id: true,
-            fileName: true,
-            fileType: true,
-            fileSize: true,
-          },
-        },
-      },
-    });
 
     return NextResponse.json({
       success: true,
@@ -162,12 +121,6 @@ export async function POST(request: NextRequest) {
         totalPrice: order.totalPrice,
         deadline: order.deadline,
         status: order.status,
-        attachments: orderWithAttachments?.attachments?.map(a => ({
-          id: a.id,
-          name: a.fileName,
-          type: a.fileType,
-          size: a.fileSize,
-        })),
       },
     }, { status: 201 });
 

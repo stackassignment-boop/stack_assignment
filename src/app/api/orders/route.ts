@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       where.status = status;
     }
     
-    // Get orders with pagination, including attachments
+    // Get orders with pagination
     const [orders, total] = await Promise.all([
       db.order.findMany({
         where,
@@ -57,14 +57,6 @@ export async function GET(request: NextRequest) {
               name: true,
               email: true,
               phone: true,
-            },
-          },
-          attachments: {
-            select: {
-              id: true,
-              fileName: true,
-              fileType: true,
-              fileSize: true,
             },
           },
         },
@@ -145,14 +137,6 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             email: true,
-          },
-        },
-        attachments: {
-          select: {
-            id: true,
-            fileName: true,
-            fileType: true,
-            fileSize: true,
           },
         },
       },

@@ -101,15 +101,10 @@ interface Order {
   paymentStatus: string;
   deadline: string;
   requirements?: string;
+  attachments?: string; // JSON string
   notes?: string;
   createdAt: string;
   customer: { name: string; email: string; phone?: string };
-  attachments?: Array<{
-    id: string;
-    fileName: string;
-    fileType: string;
-    fileSize: number;
-  }>;
 }
 
 interface Inquiry {
@@ -1316,28 +1311,36 @@ export default function AdminPanel() {
               )}
 
               {/* Attachments */}
-              {selectedOrder.attachments && selectedOrder.attachments.length > 0 && (
+              {selectedOrder.attachments && (
                 <div>
-                  <Label className="text-muted-foreground">Attachments ({selectedOrder.attachments.length})</Label>
+                  <Label className="text-muted-foreground">Attachments</Label>
                   <div className="mt-2 space-y-2">
-                    {selectedOrder.attachments.map((file) => (
-                      <div key={file.id} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
-                        <div className="flex items-center gap-2">
-                          <FileText className="w-4 h-4 text-gray-500" />
-                          <div>
-                            <span className="text-sm font-medium">{file.fileName}</span>
-                            <span className="text-xs text-gray-500 ml-2">({(file.fileSize / 1024).toFixed(1)} KB)</span>
+                    {(() => {
+                      try {
+                        const files = JSON.parse(selectedOrder.attachments);
+                        if (!files || files.length === 0) return null;
+                        return files.map((file: { name: string; type: string; size: number; data: string }, index: number) => (
+                          <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                            <div className="flex items-center gap-2">
+                              <FileText className="w-4 h-4 text-gray-500" />
+                              <div>
+                                <span className="text-sm font-medium">{file.name}</span>
+                                <span className="text-xs text-gray-500 ml-2">({(file.size / 1024).toFixed(1)} KB)</span>
+                              </div>
+                            </div>
+                            <a
+                              href={file.data}
+                              download={file.name}
+                              className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:opacity-90"
+                            >
+                              Download
+                            </a>
                           </div>
-                        </div>
-                        <a
-                          href={`/api/orders/attachments/${file.id}?XTransformPort=3000`}
-                          download={file.fileName}
-                          className="bg-primary text-primary-foreground px-3 py-1 rounded text-sm hover:opacity-90"
-                        >
-                          Download
-                        </a>
-                      </div>
-                    ))}
+                        ));
+                      } catch {
+                        return <span className="text-sm text-muted-foreground">{selectedOrder.attachments}</span>;
+                      }
+                    })()}
                   </div>
                 </div>
               )}

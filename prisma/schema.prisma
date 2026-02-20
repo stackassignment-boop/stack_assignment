@@ -44,6 +44,7 @@ model Order {
   status            String    @default("pending")
   paymentStatus     String    @default("pending")
   requirements      String?
+  attachments       String?   // JSON string with base64 file data
   notes             String?
   assignedWriter    String?
   completedAt       DateTime?
@@ -51,18 +52,6 @@ model Order {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   customer          User      @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  attachments       OrderAttachment[]
-}
-
-model OrderAttachment {
-  id          String   @id @default(cuid())
-  orderId     String
-  fileName    String
-  fileType    String
-  fileSize    Int
-  fileData    Bytes
-  createdAt   DateTime @default(now())
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Service {
