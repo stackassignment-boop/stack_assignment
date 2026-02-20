@@ -109,7 +109,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                 <li>
                   <button
                     onClick={() => handleNav('privacy')}
-                    className="hover:text-white transition-colors text-indigo-400"
+                    className="hover:text-white transition-colors"
                   >
                     Privacy Policy
                   </button>
