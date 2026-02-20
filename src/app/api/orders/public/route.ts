@@ -9,13 +9,11 @@ function generateOrderNumber(): string {
 
 // POST /api/orders/public - Create order (guest or logged-in user)
 export async function POST(request: NextRequest) {
-  console.log('=== ORDER API CALLED ===');
-  console.log('Request headers:', Object.fromEntries(request.headers.entries()));
+  console.log('=== ORDER API START ===');
   
   try {
     const { db } = await import('@/lib/db');
     
-    // Check content type
     const contentType = request.headers.get('content-type') || '';
     console.log('Content-Type:', contentType);
     
@@ -26,66 +24,52 @@ export async function POST(request: NextRequest) {
     let files: File[] = [];
     
     if (contentType.includes('multipart/form-data')) {
-      // Handle FormData upload
-      console.log('Processing multipart/form-data request');
+      // Handle FormData - same as sample upload
+      console.log('Processing multipart/form-data');
       
-      try {
-        const formData = await request.formData();
-        console.log('FormData received, entries:');
-        for (const [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            console.log(`  ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
-          } else {
-            console.log(`  ${key}: ${value}`);
-          }
+      const formData = await request.formData();
+      
+      // Log all entries
+      console.log('FormData entries:');
+      for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(`  ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
+        } else {
+          console.log(`  ${key}: ${value}`);
         }
-        
-        email = formData.get('email') as string;
-        phone = formData.get('phone') as string;
-        subject = formData.get('subject') as string;
-        description = formData.get('description') as string;
-        deadline = formData.get('deadline') as string;
-        deadlineTime = (formData.get('deadlineTime') as string) || '12:00';
-        pages = parseInt(formData.get('pages') as string) || 1;
-        service = (formData.get('service') as string) || 'writing';
-        coupon = formData.get('coupon') as string | null;
-        
-        // Get all files
-        const filesEntries = formData.getAll('files');
-        console.log('Files entries count:', filesEntries.length);
-        
-        files = filesEntries.filter(f => {
-          const isFile = f instanceof File;
-          console.log('Entry:', f, 'isFile:', isFile);
-          return isFile;
-        }) as File[];
-        
-        console.log('Files filtered count:', files.length);
-        
-        // Log each file
-        for (const file of files) {
-          console.log(`File: ${file.name}, size: ${file.size}, type: ${file.type}`);
+      }
+      
+      // Get form fields
+      email = formData.get('email') as string;
+      phone = formData.get('phone') as string;
+      subject = formData.get('subject') as string;
+      description = formData.get('description') as string;
+      deadline = formData.get('deadline') as string;
+      deadlineTime = (formData.get('deadlineTime') as string) || '12:00';
+      pages = parseInt(formData.get('pages') as string) || 1;
+      service = (formData.get('service') as string) || 'writing';
+      coupon = formData.get('coupon') as string | null;
+      
+      // Get all files - using 'file' same as sample upload
+      const fileEntries = formData.getAll('file');
+      console.log('File entries count:', fileEntries.length);
+      
+      files = fileEntries.filter(f => f instanceof File) as File[];
+      console.log('Files after filter:', files.length);
+      
+      // Validate file sizes
+      for (const file of files) {
+        console.log(`File: ${file.name}, size: ${file.size}, type: ${file.type}`);
+        if (file.size > 10 * 1024 * 1024) {
+          return NextResponse.json(
+            { error: `File "${file.name}" exceeds 10MB limit.` },
+            { status: 400 }
+          );
         }
-        
-        // Validate file sizes (10MB limit)
-        for (const file of files) {
-          if (file.size > 10 * 1024 * 1024) {
-            return NextResponse.json(
-              { error: `File "${file.name}" exceeds 10MB limit.` },
-              { status: 400 }
-            );
-          }
-        }
-      } catch (formError) {
-        console.error('FormData parsing error:', formError);
-        return NextResponse.json(
-          { error: 'Failed to parse form data. Please try again with smaller files.' },
-          { status: 400 }
-        );
       }
     } else {
-      // Handle JSON request (backward compatibility)
-      console.log('Processing JSON request');
+      // JSON fallback
+      console.log('Processing JSON');
       const body = await request.json();
       
       email = body.email;
@@ -99,20 +83,17 @@ export async function POST(request: NextRequest) {
       coupon = body.coupon || null;
     }
 
-    // Validate required fields
+    // Validate
     if (!email || !phone || !subject || !description || !deadline || !pages) {
-      console.log('Validation failed. Missing fields:', { email: !!email, phone: !!phone, subject: !!subject, description: !!description, deadline: !!deadline, pages: !!pages });
       return NextResponse.json(
         { error: 'Please fill all required fields' },
         { status: 400 }
       );
     }
 
-    // Parse deadline
     const deadlineDate = new Date(`${deadline}T${deadlineTime}:00`);
-    console.log('Parsed deadline:', deadlineDate.toISOString());
 
-    // Check for existing user or create one
+    // Find or create user
     let user = await db.user.findUnique({
       where: { email: email },
     });
@@ -128,9 +109,8 @@ export async function POST(request: NextRequest) {
             password: '',
           },
         });
-        console.log('Created new user:', user.id);
-      } catch (createError: unknown) {
-        console.error('Error creating user:', createError);
+        console.log('Created user:', user.id);
+      } catch {
         user = await db.user.findUnique({
           where: { email: email },
         });
@@ -143,16 +123,11 @@ export async function POST(request: NextRequest) {
       }
     } else {
       if (phone && user.phone !== phone) {
-        try {
-          await db.user.update({
-            where: { id: user.id },
-            data: { phone: phone },
-          });
-        } catch (e) {
-          console.error('Error updating user phone:', e);
-        }
+        await db.user.update({
+          where: { id: user.id },
+          data: { phone: phone },
+        }).catch(() => {});
       }
-      console.log('Found existing user:', user.id);
     }
 
     // Create order
@@ -182,36 +157,32 @@ export async function POST(request: NextRequest) {
 
     console.log('Order created:', order.orderNumber);
 
-    // Store files in OrderAttachment table
-    if (files.length > 0) {
-      console.log('Processing', files.length, 'files for storage...');
-      
-      for (const file of files) {
-        try {
-          // Read file as buffer
-          const arrayBuffer = await file.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
-          
-          console.log(`Creating OrderAttachment for ${file.name}, buffer size: ${buffer.length}`);
-          
-          await db.orderAttachment.create({
-            data: {
-              orderId: order.id,
-              fileName: file.name,
-              fileType: file.type || 'application/octet-stream',
-              fileSize: file.size,
-              fileData: buffer,
-            },
-          });
-          
-          console.log('Stored file:', file.name);
-        } catch (fileError) {
-          console.error('Error storing file:', file.name, fileError);
-          // Continue with other files even if one fails
-        }
+    // Store files - same approach as sample upload
+    let storedCount = 0;
+    for (const file of files) {
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        
+        await db.orderAttachment.create({
+          data: {
+            orderId: order.id,
+            fileName: file.name,
+            fileType: file.type || 'application/octet-stream',
+            fileSize: file.size,
+            fileData: buffer,
+          },
+        });
+        
+        storedCount++;
+        console.log('Stored file:', file.name);
+      } catch (fileError) {
+        console.error('Error storing file:', file.name, fileError);
       }
-      
-      // Update order attachments field with file info
+    }
+    
+    // Update order with attachment info
+    if (files.length > 0) {
       const attachmentsInfo = files.map(f => ({
         name: f.name,
         type: f.type,
@@ -224,7 +195,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    console.log('Order created successfully:', order.orderNumber, 'with', files.length, 'attachments');
+    console.log(`=== ORDER COMPLETE: ${order.orderNumber}, files stored: ${storedCount} ===`);
 
     return NextResponse.json({
       success: true,
@@ -235,23 +206,16 @@ export async function POST(request: NextRequest) {
         totalPrice: order.totalPrice,
         deadline: order.deadline,
         status: order.status,
-        attachmentsCount: files.length,
+        attachmentsCount: storedCount,
       },
     }, { status: 201 });
 
   } catch (error: unknown) {
-    console.error('=== CREATE PUBLIC ORDER ERROR ===');
-    console.error('Error type:', error?.constructor?.name);
-    console.error('Error message:', error instanceof Error ? error.message : String(error));
-    console.error('Full error:', error);
-    
-    let errorMessage = 'Failed to submit order. Please try again.';
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
+    console.error('=== ORDER ERROR ===');
+    console.error(error);
     
     return NextResponse.json(
-      { error: errorMessage },
+      { error: error instanceof Error ? error.message : 'Failed to submit order' },
       { status: 500 }
     );
   }

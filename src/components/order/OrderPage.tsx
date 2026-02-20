@@ -11,17 +11,10 @@ interface OrderPageProps {
   onNavigate?: (page: string) => void;
 }
 
-interface SelectedFile {
-  file: File;
-  name: string;
-  size: number;
-  type: string;
-}
-
 export default function OrderPage({ onNavigate }: OrderPageProps) {
   const [service, setService] = useState('writing');
   const [pages, setPages] = useState(1);
-  const [files, setFiles] = useState<SelectedFile[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [expertCount, setExpertCount] = useState(178);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -55,7 +48,6 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
               email: data.user.email
             }));
             setIsSignedIn(true);
-            // Also try to fetch profile for phone
             const profileRes = await fetch('/api/student/profile');
             if (profileRes.ok) {
               const profileData = await profileRes.json();
@@ -82,7 +74,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     
     const newFiles = Array.from(e.target.files);
     
-    // Validate file sizes (10MB limit per file, same as samples)
+    // Validate file sizes (10MB limit)
     for (const file of newFiles) {
       if (file.size > 10 * 1024 * 1024) {
         setError(`File "${file.name}" exceeds 10MB limit.`);
@@ -90,23 +82,13 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
       }
     }
     
-    // Add files to list
-    const filesWithInfo: SelectedFile[] = newFiles.map(file => ({
-      file,
-      name: file.name,
-      size: file.size,
-      type: file.type,
-    }));
-    
-    setFiles(prev => [...prev, ...filesWithInfo]);
+    setSelectedFiles(prev => [...prev, ...newFiles]);
     setError('');
-    
-    // Reset the input so same file can be selected again
     e.target.value = '';
   };
 
   const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -115,7 +97,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     setSubmitting(true);
 
     try {
-      // Use FormData - same approach as sample upload
+      // Create FormData - exactly like sample upload
       const formDataToSend = new FormData();
       formDataToSend.append('email', formData.email);
       formDataToSend.append('phone', `${formData.timezone}${formData.phone}`);
@@ -129,20 +111,29 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
         formDataToSend.append('coupon', formData.coupon);
       }
       
-      // Append all files
-      for (const fileObj of files) {
-        formDataToSend.append('files', fileObj.file);
+      // Append files - same approach as sample upload uses 'file'
+      // Using 'file' for each (same as admin sample upload)
+      for (let i = 0; i < selectedFiles.length; i++) {
+        formDataToSend.append('file', selectedFiles[i]);
       }
       
-      console.log('Submitting order with', files.length, 'files using FormData');
+      console.log('Submitting order with', selectedFiles.length, 'files');
+      console.log('FormData entries:');
+      for (const [key, value] of formDataToSend.entries()) {
+        if (value instanceof File) {
+          console.log(`  ${key}: File(${value.name}, ${value.size} bytes)`);
+        } else {
+          console.log(`  ${key}: ${value}`);
+        }
+      }
       
       const response = await fetch('/api/orders/public', {
         method: 'POST',
         body: formDataToSend,
-        // Don't set Content-Type - let browser set it with boundary
       });
 
       const data = await response.json();
+      console.log('Response:', data);
       
       if (response.ok && data.success) {
         setOrderNumber(data.order.orderNumber);
@@ -160,7 +151,6 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
 
   const wordCount = pages * 250;
 
-  // Success state
   if (submitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 dark:from-slate-950 dark:to-slate-900 py-10 md:py-14">
@@ -201,7 +191,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                     terms: false
                   });
                   setPages(1);
-                  setFiles([]);
+                  setSelectedFiles([]);
                 }}
                 variant="outline"
                 className="px-8"
@@ -422,13 +412,13 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                     Max 10MB per file. Accepted: PDF, DOC, DOCX, JPG, PNG, GIF, TXT, ZIP, XLSX, XLS, PPT, PPTX
                   </p>
                   
-                  {files.length > 0 && (
+                  {selectedFiles.length > 0 && (
                     <div className="mt-3 space-y-2">
                       <p className="text-sm text-green-600 font-medium">
-                        ✓ {files.length} file(s) selected
+                        ✓ {selectedFiles.length} file(s) selected
                       </p>
                       <div className="space-y-1 max-h-48 overflow-y-auto">
-                        {files.map((file, index) => (
+                        {selectedFiles.map((file, index) => (
                           <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-700 rounded-lg px-3 py-2">
                             <div className="flex items-center gap-2 min-w-0">
                               <span className="text-sm">📄</span>
