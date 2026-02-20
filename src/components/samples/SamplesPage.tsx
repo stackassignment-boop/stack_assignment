@@ -214,23 +214,29 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
                   {/* Content */}
                   <div className="p-6 flex flex-col flex-grow">
                     {/* Meta info - fixed height */}
-                    <div className="flex flex-wrap gap-3 mb-4 min-h-[36px]">
-                      {sample.academicLevel && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
-                          <GraduationCap className="h-4 w-4" />
-                          {academicLevels[sample.academicLevel] || sample.academicLevel}
-                        </span>
-                      )}
-                      {sample.paperType && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
-                          <FileCheck className="h-4 w-4" />
-                          {paperTypes[sample.paperType] || sample.paperType}
-                        </span>
-                      )}
+                    <div className="mb-4">
+                      {/* First row: Academic level and paper type */}
+                      <div className="flex flex-wrap gap-3">
+                        {sample.academicLevel && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
+                            <GraduationCap className="h-4 w-4" />
+                            {academicLevels[sample.academicLevel] || sample.academicLevel}
+                          </span>
+                        )}
+                        {sample.paperType && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+                            <FileCheck className="h-4 w-4" />
+                            {paperTypes[sample.paperType] || sample.paperType}
+                          </span>
+                        )}
+                      </div>
+                      {/* Second row: Pages */}
                       {sample.pages && (
-                        <span className="inline-flex items-center px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-sm">
-                          {sample.pages} {sample.pages === 1 ? 'page' : 'pages'}
-                        </span>
+                        <div className="mt-2">
+                          <span className="inline-flex items-center px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-sm">
+                            {sample.pages} {sample.pages === 1 ? 'page' : 'pages'}
+                          </span>
+                        </div>
                       )}
                     </div>
 
