@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { MessageCircle, GripVertical } from 'lucide-react';
+import { MessageCircle, GripVertical, X } from 'lucide-react';
 
 interface Position {
   x: number;
@@ -23,18 +23,38 @@ const getInitialPosition = (): Position => {
   return { x: 20, y: 20 };
 };
 
+// Check if widget was dismissed
+const getInitialDismissed = (): boolean => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('floatingWidgetDismissed') === 'true';
+  }
+  return false;
+};
+
 export default function DraggableFloatingWidget() {
   const [position, setPosition] = useState<Position>(getInitialPosition);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<Position>({ x: 0, y: 0 });
   const [viewerCount, setViewerCount] = useState(38);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(getInitialDismissed);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Save position to localStorage
   const savePosition = useCallback((pos: Position) => {
     localStorage.setItem('floatingWidgetPosition', JSON.stringify(pos));
   }, []);
+
+  // Handle dismiss
+  const handleDismiss = useCallback(() => {
+    setIsDismissed(true);
+    localStorage.setItem('floatingWidgetDismissed', 'true');
+  }, []);
+
+  // Don't render if dismissed
+  if (isDismissed) {
+    return null;
+  }
 
   // Update viewer count periodically
   useEffect(() => {
@@ -158,6 +178,15 @@ export default function DraggableFloatingWidget() {
     >
       {/* Combined Widget */}
       <div className="flex flex-col items-end gap-2">
+        {/* Close Button - Mobile Only */}
+        <button
+          onClick={handleDismiss}
+          className="md:hidden bg-gray-200 dark:bg-slate-700 rounded-full p-1.5 shadow-md hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors"
+          aria-label="Close widget"
+        >
+          <X className="w-3 h-3 text-gray-600 dark:text-gray-300" />
+        </button>
+
         {/* Viewer Count Badge */}
         <div className="bg-white dark:bg-slate-800 rounded-full shadow-lg border border-gray-200 dark:border-slate-700 px-3 py-1.5 flex items-center gap-2">
           <span className="relative flex h-2.5 w-2.5">
