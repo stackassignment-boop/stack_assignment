@@ -61,7 +61,7 @@ export default function StatsSection() {
         }}
       />
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 bg-white/15 border border-white/30 rounded-full px-5 py-2 text-sm font-semibold text-white mb-6">
@@ -82,7 +82,7 @@ export default function StatsSection() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {stats.map((stat, index) => (
             <StatCard 
               key={index} 
@@ -145,7 +145,7 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
 
   return (
     <div 
-      className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 text-center transition-all duration-300 hover:bg-white/20 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden"
+      className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 text-center transition-all duration-300 hover:bg-white/20 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden flex flex-col min-h-[220px] sm:min-h-[260px]"
       style={{
         animation: isVisible ? `fadeSlideUp 0.6s ease forwards` : 'none',
         animationDelay: `${delay}s`,
@@ -161,19 +161,19 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
         }}
       />
       
-      <div className="w-[70px] h-[70px] bg-white/15 rounded-2xl flex items-center justify-center mx-auto mb-5 text-white relative z-10">
+      <div className="w-[50px] h-[50px] sm:w-[70px] sm:h-[70px] bg-white/15 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-5 text-white relative z-10 shrink-0">
         {iconMap[stat.icon]}
       </div>
       
-      <div className="text-4xl md:text-5xl font-extrabold text-white leading-none relative z-10" style={{ fontFamily: 'Sora, sans-serif' }}>
+      <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-none relative z-10" style={{ fontFamily: 'Sora, sans-serif' }}>
         {count.toLocaleString('en-IN')}{stat.suffix}
       </div>
       
-      <div className="text-lg font-semibold text-white/95 mt-2 relative z-10">
+      <div className="text-base sm:text-lg font-semibold text-white/95 mt-1 sm:mt-2 relative z-10">
         {stat.label}
       </div>
       
-      <div className="text-sm text-white/60 mt-2 relative z-10 leading-relaxed">
+      <div className="text-xs sm:text-sm text-white/60 mt-1 sm:mt-2 relative z-10 leading-relaxed px-1">
         {stat.sub}
       </div>
     </div>
