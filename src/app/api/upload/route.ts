@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { put } from '@vercel/blob';
 
-// POST /api/upload - Upload files to Vercel Blob
-// Version: 2 - Added comprehensive error handling
+// POST /api/upload - Upload files to Vercel Blob using REST API
 export async function POST(request: NextRequest) {
-  console.log('=== UPLOAD API START ===');
-  console.log('Environment check - BLOB token exists:', !!process.env.BLOB_READ_WRITE_TOKEN);
+  console.log('=== UPLOAD API START v3 ===');
   
   try {
-    // Check if Blob token is configured
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+    
+    if (!blobToken) {
       console.error('ERROR: BLOB_READ_WRITE_TOKEN not configured');
       return NextResponse.json(
         { error: 'File upload not configured. Please contact support.' },
         { status: 500 }
       );
     }
+    
+    console.log('Blob token exists:', !!blobToken);
     
     const contentType = request.headers.get('content-type') || '';
     console.log('Content-Type:', contentType);
@@ -52,18 +52,40 @@ export async function POST(request: NextRequest) {
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
     const filename = `orders/${Date.now()}-${safeName}`;
     
-    console.log('Uploading to blob with filename:', filename);
+    console.log('Uploading with filename:', filename);
     
-    // Upload to Vercel Blob
-    const blob = await put(filename, file, {
-      access: 'public',
-    });
+    // Get file as ArrayBuffer
+    const arrayBuffer = await file.arrayBuffer();
     
-    console.log('Upload successful! Blob URL:', blob.url);
+    // Upload directly using Vercel Blob REST API
+    const uploadResponse = await fetch(
+      `https://blob.vercel-storage.com/${filename}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${blobToken}`,
+          'Content-Type': file.type || 'application/octet-stream',
+          'x-content-type': file.type || 'application/octet-stream',
+        },
+        body: arrayBuffer,
+      }
+    );
+    
+    if (!uploadResponse.ok) {
+      const errorText = await uploadResponse.text();
+      console.error('Blob upload failed:', uploadResponse.status, errorText);
+      return NextResponse.json(
+        { error: `Upload failed: ${uploadResponse.status}` },
+        { status: 500 }
+      );
+    }
+    
+    const blobData = await uploadResponse.json();
+    console.log('Upload successful! URL:', blobData.url);
     
     return NextResponse.json({
       success: true,
-      url: blob.url,
+      url: blobData.url,
       name: file.name,
       size: file.size,
       type: file.type,
@@ -73,16 +95,9 @@ export async function POST(request: NextRequest) {
     console.error('=== UPLOAD ERROR ===');
     console.error('Error type:', error?.constructor?.name);
     console.error('Error message:', error instanceof Error ? error.message : String(error));
-    console.error('Full error:', error);
-    
-    // Return specific error message
-    let errorMessage = 'Upload failed';
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
     
     return NextResponse.json(
-      { error: errorMessage },
+      { error: error instanceof Error ? error.message : 'Upload failed' },
       { status: 500 }
     );
   }
