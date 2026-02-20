@@ -135,10 +135,10 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                 </button>
                 
                 {loginDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-2">
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-2 z-50">
                     <div className="px-4 py-2 border-b border-gray-200 dark:border-slate-700">
-                      <p className="text-sm font-medium">{studentUser.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{studentUser.email}</p>
+                      <p className="text-sm font-medium truncate">{studentUser.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 break-all">{studentUser.email}</p>
                     </div>
                     <button
                       onClick={() => {
