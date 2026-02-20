@@ -189,18 +189,18 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
                 return (
                   <div
                     key={sample.id}
-                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 group"
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 group flex flex-col"
                   >
                     {/* Header with image */}
-                    <div className="relative h-44 overflow-hidden">
-                      <img 
+                    <div className="relative h-44 overflow-hidden flex-shrink-0">
+                      <img
                         src={style.image}
                         alt={sample.subject || 'Sample'}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} opacity-60`}></div>
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
-                        <h3 className="text-xl font-bold leading-tight drop-shadow-lg">{sample.title}</h3>
+                        <h3 className="text-xl font-bold leading-tight drop-shadow-lg line-clamp-2">{sample.title}</h3>
                         {sample.subject && (
                           <p className="text-white/90 mt-2 text-sm font-medium">{sample.subject}</p>
                         )}
@@ -212,9 +212,9 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
                     </div>
 
                   {/* Content */}
-                  <div className="p-6">
-                    {/* Meta info */}
-                    <div className="flex flex-wrap gap-3 mb-4">
+                  <div className="p-6 flex flex-col flex-grow">
+                    {/* Meta info - fixed height */}
+                    <div className="flex flex-wrap gap-3 mb-4 min-h-[36px]">
                       {sample.academicLevel && (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
                           <GraduationCap className="h-4 w-4" />
@@ -234,32 +234,38 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
                       )}
                     </div>
 
-                    {/* Description */}
-                    {sample.description && (
-                      <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
-                        {sample.description}
+                    {/* Description - fixed height */}
+                    <div className="min-h-[72px] mb-4">
+                      <p className="text-gray-600 dark:text-gray-400 line-clamp-3">
+                        {sample.description || 'No description available.'}
                       </p>
-                    )}
+                    </div>
 
-                    {/* File info */}
-                    {sample.fileName && (
-                      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4 bg-gray-50 dark:bg-slate-700 rounded-lg p-3">
-                        <FileText className="h-4 w-4 text-red-500" />
-                        <span className="truncate flex-1">{sample.fileName}</span>
-                        {sample.fileSize && (
-                          <span className="text-xs">({formatFileSize(sample.fileSize)})</span>
-                        )}
-                      </div>
-                    )}
+                    {/* File info - fixed height */}
+                    <div className="min-h-[48px] mb-4">
+                      {sample.fileName ? (
+                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-slate-700 rounded-lg p-3">
+                          <FileText className="h-4 w-4 text-red-500 flex-shrink-0" />
+                          <span className="truncate flex-1">{sample.fileName}</span>
+                          {sample.fileSize && (
+                            <span className="text-xs flex-shrink-0">({formatFileSize(sample.fileSize)})</span>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="h-full"></div>
+                      )}
+                    </div>
 
-                    {/* Preview Button */}
-                    <button
-                      onClick={() => handlePreview(sample)}
-                      className="flex items-center justify-center gap-2 w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition"
-                    >
-                      <Eye className="h-5 w-5" />
-                      Preview Sample
-                    </button>
+                    {/* Preview Button - pushed to bottom */}
+                    <div className="mt-auto">
+                      <button
+                        onClick={() => handlePreview(sample)}
+                        className="flex items-center justify-center gap-2 w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition"
+                      >
+                        <Eye className="h-5 w-5" />
+                        Preview Sample
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
