@@ -145,7 +145,7 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
 
   return (
     <div 
-      className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 text-center transition-all duration-300 hover:bg-white/20 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden flex flex-col min-h-[220px] sm:min-h-[260px]"
+      className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-7 text-center transition-all duration-300 hover:bg-white/20 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden flex flex-col min-h-[220px] sm:min-h-[260px]"
       style={{
         animation: isVisible ? `fadeSlideUp 0.6s ease forwards` : 'none',
         animationDelay: `${delay}s`,
@@ -165,7 +165,7 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
         {iconMap[stat.icon]}
       </div>
       
-      <div className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-none relative z-10 px-2" style={{ fontFamily: 'Sora, sans-serif' }}>
+      <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-none relative z-10 px-2" style={{ fontFamily: 'Sora, sans-serif' }}>
         {count.toLocaleString('en-IN')}{stat.suffix}
       </div>
       
