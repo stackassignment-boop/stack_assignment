@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, User, UserPlus, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { signIn } from 'next-auth/react';
+import DraggableFloatingWidget from '@/components/marketing/DraggableFloatingWidget';
 
 interface StudentLoginPageProps {
   onNavigate?: (page: string) => void;
@@ -402,6 +403,8 @@ export default function StudentLoginPage({ onNavigate, onLogin }: StudentLoginPa
           </div>
         </div>
       </main>
+      {/* WhatsApp Floating Widget */}
+      <DraggableFloatingWidget />
     </div>
   );
 }

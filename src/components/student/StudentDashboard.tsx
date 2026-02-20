@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { User, FileText, Package, LogOut, Clock, CheckCircle, AlertCircle, Eye, Download, Plus, ChevronRight, Mail, Phone, Calendar, Settings, Edit2, Save, X, CreditCard, Wallet, XCircle, Paperclip, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PaymentPage from './PaymentPage';
+import DraggableFloatingWidget from '@/components/marketing/DraggableFloatingWidget';
 
 interface StudentDashboardProps {
   user: { name: string; email: string };
@@ -953,6 +954,8 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
           </div>
         </div>
       )}
+      {/* WhatsApp Floating Widget */}
+      <DraggableFloatingWidget />
     </div>
   );
 }

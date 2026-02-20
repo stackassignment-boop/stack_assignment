@@ -210,7 +210,6 @@ function HomeContent() {
             {/* FOMO Elements */}
             <LiveActivityFeed />
             <SocialProofWidget />
-            <DraggableFloatingWidget />
           </>
         );
     }
@@ -218,8 +217,8 @@ function HomeContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100">
-      <Header 
-        currentPage={currentPage} 
+      <Header
+        currentPage={currentPage}
         onNavigate={handleNavigate}
         studentUser={studentUser}
         onLogout={handleStudentLogout}
@@ -228,6 +227,8 @@ function HomeContent() {
         {renderPage()}
       </main>
       <Footer onNavigate={handleNavigate} />
+      {/* WhatsApp Floating Widget - visible on all pages */}
+      <DraggableFloatingWidget />
     </div>
   );
 }
