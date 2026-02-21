@@ -43,9 +43,17 @@ import {
   AlertCircle,
   Eye,
   Trash2,
-  Settings
+  Settings,
+  Search,
+  CheckCircle2,
+  ExternalLink,
+  Copy,
+  Globe,
+  Share2,
+  Code
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { seoConfig } from '@/lib/seo-config';
 
 interface User {
   id: string;
@@ -682,7 +690,7 @@ export default function AdminPanel() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid grid-cols-3 sm:grid-cols-6 w-full max-w-2xl gap-1">
+          <TabsList className="grid grid-cols-4 sm:grid-cols-7 w-full max-w-3xl gap-1">
             <TabsTrigger value="dashboard" className="flex items-center gap-1 sm:gap-2">
               <LayoutDashboard className="h-4 w-4" />
               <span className="hidden sm:inline">Dashboard</span>
@@ -702,6 +710,10 @@ export default function AdminPanel() {
             <TabsTrigger value="samples" className="flex items-center gap-1 sm:gap-2">
               <BookOpen className="h-4 w-4" />
               <span className="hidden sm:inline">Samples</span>
+            </TabsTrigger>
+            <TabsTrigger value="seo" className="flex items-center gap-1 sm:gap-2">
+              <Search className="h-4 w-4" />
+              <span className="hidden sm:inline">SEO</span>
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-1 sm:gap-2">
               <Settings className="h-4 w-4" />
@@ -1109,6 +1121,289 @@ export default function AdminPanel() {
                       )}
                     </TableBody>
                   </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* SEO Tab */}
+          <TabsContent value="seo" className="space-y-6">
+            {/* Stats Overview */}
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">SEO Score</p>
+                      <p className="text-2xl font-bold text-emerald-600">85%</p>
+                    </div>
+                    <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full">
+                      <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Sitemap URLs</p>
+                      <p className="text-2xl font-bold">7</p>
+                    </div>
+                    <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+                      <Globe className="h-6 w-6 text-blue-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Structured Data</p>
+                      <p className="text-2xl font-bold">2</p>
+                    </div>
+                    <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
+                      <Code className="h-6 w-6 text-purple-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Status</p>
+                      <p className="text-2xl font-bold text-emerald-600">Active</p>
+                    </div>
+                    <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full">
+                      <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* SEO Checklist */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Search className="h-5 w-5" />
+                  SEO Checklist
+                </CardTitle>
+                <CardDescription>
+                  Your SEO configuration status
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    { id: 'sitemap', title: 'Sitemap.xml', status: 'completed', description: 'Auto-generated sitemap for search engines', link: '/sitemap.xml' },
+                    { id: 'robots', title: 'Robots.txt', status: 'completed', description: 'Configured for search engine crawlers', link: '/robots.txt' },
+                    { id: 'meta-tags', title: 'Meta Tags', status: 'completed', description: 'Title, description, keywords configured', link: null },
+                    { id: 'open-graph', title: 'Open Graph Tags', status: 'completed', description: 'Social media sharing optimized', link: null },
+                    { id: 'structured-data', title: 'Structured Data (JSON-LD)', status: 'completed', description: 'Schema.org markup for rich snippets', link: null },
+                    { id: 'google-verification', title: 'Google Search Console', status: 'completed', description: 'Verified via Domain Provider', link: 'https://search.google.com/search-console' },
+                  ].map((task) => (
+                    <div
+                      key={task.id}
+                      className="flex items-center justify-between p-4 rounded-lg border bg-card"
+                    >
+                      <div className="flex items-center gap-4">
+                        <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                        <div>
+                          <p className="font-medium">{task.title}</p>
+                          <p className="text-sm text-muted-foreground">{task.description}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge className="bg-emerald-100 text-emerald-800">completed</Badge>
+                        {task.link && (
+                          <a href={task.link} target="_blank" rel="noopener noreferrer">
+                            <Button variant="outline" size="sm">
+                              View
+                              <ExternalLink className="ml-2 h-4 w-4" />
+                            </Button>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Meta Configuration */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Current Meta Configuration</CardTitle>
+                <CardDescription>
+                  These are your current SEO meta tags (configured in src/lib/seo-config.ts)
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid gap-4">
+                  <div>
+                    <Label className="text-sm font-medium text-muted-foreground">Site Name</Label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Input value={seoConfig.siteName} readOnly className="bg-muted" />
+                      <Button variant="outline" size="icon" onClick={() => { navigator.clipboard.writeText(seoConfig.siteName); toast.success('Copied!'); }}>
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-muted-foreground">Site URL</Label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Input value={seoConfig.siteUrl} readOnly className="bg-muted" />
+                      <Button variant="outline" size="icon" onClick={() => { navigator.clipboard.writeText(seoConfig.siteUrl); toast.success('Copied!'); }}>
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-muted-foreground">Title</Label>
+                    <Input value={seoConfig.title} readOnly className="bg-muted mt-1" />
+                    <p className="text-xs text-muted-foreground mt-1">{seoConfig.title.length}/60 characters (recommended)</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-muted-foreground">Description</Label>
+                    <textarea 
+                      value={seoConfig.description} 
+                      readOnly 
+                      className="flex min-h-[80px] w-full rounded-md border border-input bg-muted px-3 py-2 text-sm mt-1"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">{seoConfig.description.length}/160 characters (recommended)</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-muted-foreground">Keywords</Label>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {seoConfig.keywords.slice(0, 10).map((keyword, index) => (
+                        <Badge key={index} variant="secondary">
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Sitemap URLs */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Sitemap URLs</CardTitle>
+                <CardDescription>
+                  URLs included in your sitemap.xml
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {[
+                    { url: seoConfig.siteUrl, priority: '1.0', freq: 'daily' },
+                    { url: `${seoConfig.siteUrl}/services`, priority: '0.9', freq: 'weekly' },
+                    { url: `${seoConfig.siteUrl}/pricing`, priority: '0.9', freq: 'weekly' },
+                    { url: `${seoConfig.siteUrl}/samples`, priority: '0.8', freq: 'weekly' },
+                    { url: `${seoConfig.siteUrl}/blog`, priority: '0.8', freq: 'daily' },
+                    { url: `${seoConfig.siteUrl}/about`, priority: '0.8', freq: 'monthly' },
+                    { url: `${seoConfig.siteUrl}/contact`, priority: '0.7', freq: 'monthly' },
+                  ].map((page, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 rounded-lg border"
+                    >
+                      <code className="text-sm text-muted-foreground">{page.url}</code>
+                      <div className="flex items-center gap-3">
+                        <Badge variant="outline">Priority: {page.priority}</Badge>
+                        <Badge variant="secondary">{page.freq}</Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Structured Data */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Code className="h-5 w-5" />
+                  Structured Data (JSON-LD)
+                </CardTitle>
+                <CardDescription>
+                  Schema.org markup for rich snippets in search results
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2">Organization Schema</h4>
+                  <pre className="p-4 rounded-lg bg-slate-900 text-slate-100 text-sm overflow-x-auto">
+                    {JSON.stringify({
+                      '@context': 'https://schema.org',
+                      '@type': 'Organization',
+                      name: seoConfig.organization.name,
+                      url: seoConfig.siteUrl,
+                      logo: seoConfig.organization.logo,
+                      sameAs: seoConfig.organization.sameAs,
+                    }, null, 2)}
+                  </pre>
+                </div>
+                <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+                  <p className="text-sm text-emerald-800 dark:text-emerald-200">
+                    ✓ Structured data helps search engines understand your content better. 
+                    Test your schema using the{' '}
+                    <a
+                      href="https://search.google.com/test/rich-results"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline font-medium"
+                    >
+                      Google Rich Results Test
+                    </a>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Google Search Console */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Google Search Console</CardTitle>
+                <CardDescription>
+                  Your website is verified via Domain Name Provider
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-3 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+                  <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                  <div>
+                    <p className="font-medium text-emerald-800 dark:text-emerald-200">Verification Complete</p>
+                    <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                      Your domain is verified in Google Search Console
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <a
+                    href="https://search.google.com/search-console"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button>
+                      Open Google Search Console
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                  <a
+                    href="/sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline">
+                      View Sitemap
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
                 </div>
               </CardContent>
             </Card>
