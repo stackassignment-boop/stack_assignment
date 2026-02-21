@@ -103,6 +103,10 @@ export default function RootLayout({
         {/* Preconnect to important origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Facebook App ID - Add your App ID in seo-config.ts */}
+        {seoConfig.social.facebookAppId && (
+          <meta property="fb:app_id" content={seoConfig.social.facebookAppId} />
+        )}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}

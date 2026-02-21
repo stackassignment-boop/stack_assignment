@@ -37,7 +37,8 @@ export const seoConfig = {
   // Social Media
   social: {
     twitter: '@stackassignment',
-    facebook: 'https://facebook.com/stackassignment'
+    facebook: 'https://facebook.com/stackassignment',
+    facebookAppId: '', // Add your Facebook App ID here (optional - for Facebook analytics)
   },
   
   // Google Search Console Verification
