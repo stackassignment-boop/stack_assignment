@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { StructuredData } from '@/components/seo/StructuredData';
 
 interface Blog {
   id: string;
@@ -95,15 +96,41 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
   }
 
   return (
-    <main className="flex-grow py-12 md:py-16">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Page Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Academic Writing Blog</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Practical tips, guides, referencing help, study strategies and updates for students
-          </p>
-        </div>
+    <>
+      {/* Structured Data for SEO */}
+      <StructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Blog',
+          name: 'Stack Assignment Blog',
+          description: 'Academic writing tips, guides, referencing help, study strategies and updates for students',
+          url: 'https://www.stackassignment.com/blog',
+          publisher: {
+            '@type': 'Organization',
+            name: 'Stack Assignment',
+            url: 'https://www.stackassignment.com',
+          },
+          blogPost: blogs.map((blog) => ({
+            '@type': 'BlogPosting',
+            headline: blog.title,
+            url: `https://www.stackassignment.com/blog/${blog.slug}`,
+            datePublished: blog.createdAt,
+            author: {
+              '@type': 'Person',
+              name: blog.author?.name || 'Stack Assignment',
+            },
+          })),
+        }}
+      />
+      <main className="flex-grow py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Page Header */}
+          <div className="text-center mb-12 md:mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Academic Writing Blog</h1>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              Practical tips, guides, referencing help, study strategies and updates for students
+            </p>
+          </div>
 
         {blogs.length === 0 ? (
           <div className="text-center py-16">
@@ -160,5 +187,6 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
         )}
       </div>
     </main>
+    </>
   );
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FileText, BookOpen, GraduationCap, FileCheck, Eye } from 'lucide-react';
 import SamplePreviewModal from './SamplePreviewModal';
+import { StructuredData } from '@/components/seo/StructuredData';
 
 interface Sample {
   id: string;
@@ -159,6 +160,30 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
 
   return (
     <>
+      {/* Structured Data for SEO */}
+      <StructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Assignment & Essay Samples',
+          description: 'Preview academic writing samples including essays, research papers, dissertations, and more. Free preview of 1/3rd of each sample.',
+          url: 'https://www.stackassignment.com/samples',
+          mainEntity: {
+            '@type': 'ItemList',
+            itemListElement: samples.map((sample, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              name: sample.title,
+              url: `https://www.stackassignment.com/samples/${sample.slug}`,
+            })),
+          },
+          provider: {
+            '@type': 'Organization',
+            name: 'Stack Assignment',
+            url: 'https://www.stackassignment.com',
+          },
+        }}
+      />
       <main className="flex-grow py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-6">
           {/* Page Header */}

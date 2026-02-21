@@ -156,3 +156,101 @@ export function generateFAQSchema(faqs: { question: string; answer: string }[]) 
     })),
   }
 }
+
+// Generate Sample/Learning Resource Schema for SEO
+export function generateSampleSchema(sample: {
+  title: string
+  description: string
+  slug: string
+  subject?: string
+  academicLevel?: string
+  paperType?: string
+  pages?: number
+  publishedAt?: string
+  image?: string
+}) {
+  const academicLevelLabels: Record<string, string> = {
+    high_school: 'High School',
+    bachelor: "Bachelor's Degree",
+    master: "Master's Degree",
+    phd: 'PhD',
+  }
+
+  const paperTypeLabels: Record<string, string> = {
+    essay: 'Essay',
+    research_paper: 'Research Paper',
+    dissertation: 'Dissertation',
+    thesis: 'Thesis',
+    coursework: 'Coursework',
+    case_study: 'Case Study',
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: sample.title,
+    description: sample.description,
+    url: `${seoConfig.siteUrl}/samples/${sample.slug}`,
+    educationalLevel: sample.academicLevel ? academicLevelLabels[sample.academicLevel] || sample.academicLevel : undefined,
+    learningResourceType: sample.paperType ? paperTypeLabels[sample.paperType] || sample.paperType : 'Academic Paper',
+    about: sample.subject ? {
+      '@type': 'Thing',
+      name: sample.subject,
+    } : undefined,
+    provider: {
+      '@type': 'Organization',
+      name: seoConfig.siteName,
+      url: seoConfig.siteUrl,
+    },
+    datePublished: sample.publishedAt,
+    image: sample.image || `${seoConfig.siteUrl}/og-image.png`,
+    // Also include as CreativeWork for better search visibility
+    additionalType: 'CreativeWork',
+    author: {
+      '@type': 'Organization',
+      name: seoConfig.siteName,
+    },
+  }
+}
+
+// Generate Product Schema for Sample (for rich snippets)
+export function generateSampleProductSchema(sample: {
+  title: string
+  description: string
+  slug: string
+  subject?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: sample.title,
+    description: sample.description,
+    url: `${seoConfig.siteUrl}/samples/${sample.slug}`,
+    category: sample.subject || 'Academic Writing Sample',
+    brand: {
+      '@type': 'Brand',
+      name: seoConfig.siteName,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      description: 'Free preview available. Contact for full access.',
+    },
+  }
+}
+
+// Generate BreadcrumbList Schema for navigation
+export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url.startsWith('http') ? item.url : `${seoConfig.siteUrl}${item.url}`,
+    })),
+  }
+}
