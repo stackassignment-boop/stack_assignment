@@ -1407,6 +1407,76 @@ export default function AdminPanel() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Google Analytics */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.02 10.18C12.49 9.76 13.21 9.76 13.68 10.18L22.4 18.05C22.91 18.5 22.91 19.29 22.4 19.74L19.6 22.27C19.13 22.69 18.41 22.69 17.94 22.27L9.22 14.4C8.71 13.95 8.71 13.16 9.22 12.71L12.02 10.18Z"/>
+                    <path d="M19.6 1.73L22.4 4.27C22.91 4.72 22.91 5.51 22.4 5.95L10.89 16.33C10.42 16.76 9.7 16.76 9.23 16.33L6.43 13.8C5.92 13.35 5.92 12.56 6.43 12.11L17.94 1.73C18.41 1.3 19.13 1.3 19.6 1.73Z"/>
+                    <path d="M1.6 1.73L4.4 4.27C4.91 4.72 4.91 5.51 4.4 5.95L1.6 8.49C1.09 8.93 1.09 9.72 1.6 10.17L4.4 12.71C4.91 13.16 4.91 13.95 4.4 14.4L1.6 16.93C1.09 17.38 1.09 18.17 1.6 18.62L4.4 21.16C4.87 21.58 5.59 21.58 6.06 21.16L8.86 18.62C9.37 18.17 9.37 17.38 8.86 16.93L6.06 14.4C5.55 13.95 5.55 13.16 6.06 12.71L8.86 10.17C9.37 9.72 9.37 8.93 8.86 8.49L6.06 5.95C5.55 5.51 5.55 4.72 6.06 4.27L8.86 1.73C9.33 1.3 10.05 1.3 10.52 1.73L13.32 4.27C13.83 4.72 13.83 5.51 13.32 5.95L10.52 8.49C10.01 8.93 10.01 9.72 10.52 10.17L13.32 12.71C13.83 13.16 13.83 13.95 13.32 14.4L10.52 16.93C10.01 17.38 10.01 18.17 10.52 18.62L13.32 21.16C13.79 21.58 14.51 21.58 14.98 21.16L17.78 18.62C18.29 18.17 18.29 17.38 17.78 16.93L14.98 14.4C14.47 13.95 14.47 13.16 14.98 12.71L17.78 10.17C18.29 9.72 18.29 8.93 17.78 8.49L14.98 5.95C14.47 5.51 14.47 4.72 14.98 4.27L17.78 1.73C18.25 1.3 18.97 1.3 19.44 1.73L1.6 1.73Z"/>
+                  </svg>
+                  Google Analytics 4
+                </CardTitle>
+                <CardDescription>
+                  Track website traffic and user behavior
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                  <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                    <strong>Setup Instructions:</strong>
+                  </p>
+                  <ol className="text-sm text-blue-700 dark:text-blue-300 space-y-2 list-decimal list-inside">
+                    <li>Go to <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="underline font-medium">Google Analytics</a></li>
+                    <li>Create a new GA4 property for your website</li>
+                    <li>Copy your Measurement ID (format: G-XXXXXXXXXX)</li>
+                    <li>Add it to your environment variables as <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">NEXT_PUBLIC_GA_MEASUREMENT_ID</code></li>
+                    <li>Deploy your changes</li>
+                  </ol>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">Your Measurement ID</Label>
+                  <div className="flex items-center gap-2">
+                    <Input 
+                      value={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'Not configured'} 
+                      readOnly 
+                      className="bg-muted" 
+                    />
+                    <a
+                      href="https://analytics.google.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline">
+                        Open GA4
+                        <ExternalLink className="ml-2 h-4 w-4" />
+                      </Button>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                  <div className="p-4 rounded-lg border">
+                    <p className="text-sm text-muted-foreground">Page Views</p>
+                    <p className="text-2xl font-bold text-blue-600">Auto</p>
+                    <p className="text-xs text-muted-foreground">Tracked automatically</p>
+                  </div>
+                  <div className="p-4 rounded-lg border">
+                    <p className="text-sm text-muted-foreground">Events</p>
+                    <p className="text-2xl font-bold text-purple-600">Custom</p>
+                    <p className="text-xs text-muted-foreground">Orders, inquiries, etc.</p>
+                  </div>
+                  <div className="p-4 rounded-lg border">
+                    <p className="text-sm text-muted-foreground">Real-time</p>
+                    <p className="text-2xl font-bold text-emerald-600">Active</p>
+                    <p className="text-xs text-muted-foreground">Live tracking</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Settings Tab */}
