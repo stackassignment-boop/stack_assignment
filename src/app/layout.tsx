@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import SessionProvider from "@/components/providers/SessionProvider";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import { seoConfig } from "@/lib/seo-config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,24 +17,77 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stack Assignment - Expert Academic Writing Help",
-  description: "Professional academic writing & assignment assistance since 2010. PhD-qualified writers, 100% original content, on-time delivery. Expert help for essays, dissertations, research papers, and more.",
-  keywords: ["academic writing", "assignment help", "essay writing", "dissertation help", "research paper", "thesis writing", "homework help", "university assignment", "Stack Assignment"],
-  authors: [{ name: "Stack Assignment" }],
+  metadataBase: new URL(seoConfig.siteUrl),
+  title: {
+    default: seoConfig.title,
+    template: `%s | ${seoConfig.siteName}`,
+  },
+  description: seoConfig.description,
+  keywords: seoConfig.keywords,
+  authors: [{ name: seoConfig.siteName }],
+  creator: seoConfig.siteName,
+  publisher: seoConfig.siteName,
+  
+  // Verification
+  verification: {
+    google: seoConfig.googleSiteVerification || undefined,
+    other: seoConfig.bingSiteVerification ? {
+      'msvalidate.01': seoConfig.bingSiteVerification,
+    } : undefined,
+  },
+  
+  // Icons
   icons: {
-    icon: "/favicon.png",
+    icon: [
+      { url: '/favicon.png' },
+      { url: '/favicon.ico' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
+  
+  // Open Graph
   openGraph: {
-    title: "Stack Assignment - Expert Academic Writing Help",
-    description: "Professional academic writing & assignment assistance since 2010. PhD-qualified writers, 100% original content.",
-    url: "https://stackassignment.com",
-    siteName: "Stack Assignment",
-    type: "website",
+    type: 'website',
+    locale: 'en_US',
+    url: seoConfig.siteUrl,
+    siteName: seoConfig.siteName,
+    title: seoConfig.title,
+    description: seoConfig.description,
+    images: [
+      {
+        url: `${seoConfig.siteUrl}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: seoConfig.siteName,
+      },
+    ],
   },
+  
+  // Twitter
   twitter: {
-    card: "summary_large_image",
-    title: "Stack Assignment - Expert Academic Writing Help",
-    description: "Professional academic writing & assignment assistance since 2010.",
+    card: 'summary_large_image',
+    title: seoConfig.title,
+    description: seoConfig.description,
+    site: seoConfig.social.twitter,
+    images: [`${seoConfig.siteUrl}/twitter-image`],
+  },
+  
+  // Robots
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  
+  // Alternates
+  alternates: {
+    canonical: seoConfig.siteUrl,
   },
 };
 
@@ -44,6 +98,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Preconnect to important origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >

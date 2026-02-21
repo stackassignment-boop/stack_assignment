@@ -1135,7 +1135,7 @@ export default function AdminPanel() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-muted-foreground">SEO Score</p>
-                      <p className="text-2xl font-bold text-emerald-600">85%</p>
+                      <p className="text-2xl font-bold text-emerald-600">90%</p>
                     </div>
                     <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full">
                       <CheckCircle2 className="h-6 w-6 text-emerald-600" />
@@ -1173,16 +1173,63 @@ export default function AdminPanel() {
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Status</p>
+                      <p className="text-sm text-muted-foreground">OG Image</p>
                       <p className="text-2xl font-bold text-emerald-600">Active</p>
                     </div>
                     <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full">
-                      <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                      <Share2 className="h-6 w-6 text-emerald-600" />
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
+
+            {/* OG Image Preview */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Share2 className="h-5 w-5" />
+                  Open Graph Image
+                </CardTitle>
+                <CardDescription>
+                  Social media preview image (1200x630px) - auto-generated
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="border rounded-lg overflow-hidden bg-muted">
+                  <img 
+                    src="/opengraph-image" 
+                    alt="OG Image Preview" 
+                    className="w-full h-auto"
+                    onError={(e) => {
+                      e.currentTarget.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect fill="%230f172a" width="1200" height="630"/><text x="600" y="315" text-anchor="middle" fill="white" font-size="48" font-family="Arial">Stack Assignment</text></svg>'
+                    }}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <a
+                    href="/opengraph-image"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline">
+                      View Full Image
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                  <a
+                    href="https://developers.facebook.com/tools/debug/?q=https://www.stackassignment.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline">
+                      Test on Facebook
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* SEO Checklist */}
             <Card>
@@ -1401,6 +1448,59 @@ export default function AdminPanel() {
                   >
                     <Button variant="outline">
                       View Sitemap
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Bing Webmaster Tools */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5 3v18l4.5-3.5V9.5l5.5 3.5-4.5 3.5L9 21l10-7.5V8l-6-2.5L5 3z"/>
+                  </svg>
+                  Bing Webmaster Tools
+                </CardTitle>
+                <CardDescription>
+                  Submit your site to Bing and Yahoo search engines
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+                  <p className="text-sm text-amber-800 dark:text-amber-200 mb-3">
+                    <strong>Setup Instructions:</strong>
+                  </p>
+                  <ol className="text-sm text-amber-700 dark:text-amber-300 space-y-2 list-decimal list-inside">
+                    <li>Go to <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener noreferrer" className="underline font-medium">Bing Webmaster Tools</a></li>
+                    <li>Add your site: <code className="bg-amber-100 dark:bg-amber-800 px-1 rounded">www.stackassignment.com</code></li>
+                    <li>Choose HTML meta tag verification method</li>
+                    <li>Copy the content value from the meta tag</li>
+                    <li>Add it to <code className="bg-amber-100 dark:bg-amber-800 px-1 rounded">src/lib/seo-config.ts</code> as <code>bingSiteVerification</code></li>
+                    <li>Deploy and click Verify in Bing</li>
+                  </ol>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-muted-foreground">Verification Status</Label>
+                  <div className="flex items-center gap-2 p-3 rounded-lg border">
+                    <AlertCircle className="h-5 w-5 text-amber-500" />
+                    <span className="text-sm text-muted-foreground">
+                      {seoConfig.bingSiteVerification ? 'Configured - Verify in Bing Webmaster Tools' : 'Not configured - Follow setup instructions'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <a
+                    href="https://www.bing.com/webmasters"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button>
+                      Open Bing Webmaster Tools
                       <ExternalLink className="ml-2 h-4 w-4" />
                     </Button>
                   </a>

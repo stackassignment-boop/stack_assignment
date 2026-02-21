@@ -42,7 +42,12 @@ export const seoConfig = {
   
   // Google Search Console Verification
   // Since you used domain provider verification, this can be left empty or used for meta tag verification
-  googleSiteVerification: ''
+  googleSiteVerification: '',
+  
+  // Bing Webmaster Tools Verification
+  // Get your verification code from Bing Webmaster Tools
+  // Format: A long alphanumeric string
+  bingSiteVerification: '', // Add your Bing verification code here
 }
 
 // Generate JSON-LD structured data
