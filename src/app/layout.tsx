@@ -36,13 +36,17 @@ export const metadata: Metadata = {
     } : undefined,
   },
   
-  // Icons
+  // Icons - Next.js handles these automatically via icon.tsx and apple-icon.tsx
+  // But we also provide static fallbacks for search engines
   icons: {
     icon: [
-      { url: '/favicon.png' },
-      { url: '/favicon.ico' },
+      { url: '/icon', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: 'any' },
     ],
-    apple: '/apple-touch-icon.png',
+    apple: [
+      { url: '/apple-icon', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-touch-icon.png' },
+    ],
   },
   
   // Open Graph
