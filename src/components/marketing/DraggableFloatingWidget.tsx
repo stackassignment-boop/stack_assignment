@@ -15,7 +15,7 @@ const getInitialPosition = (): Position => {
     if (savedPosition) {
       try {
         return JSON.parse(savedPosition);
-      } catch (e) {
+      } catch {
         // Use default position if parsing fails
       }
     }
@@ -51,11 +51,6 @@ export default function DraggableFloatingWidget() {
     localStorage.setItem('floatingWidgetDismissed', 'true');
   }, []);
 
-  // Don't render if dismissed
-  if (isDismissed) {
-    return null;
-  }
-
   // Update viewer count periodically
   useEffect(() => {
     const viewerInterval = setInterval(() => {
@@ -66,30 +61,6 @@ export default function DraggableFloatingWidget() {
     }, 10000);
     return () => clearInterval(viewerInterval);
   }, []);
-
-  // Handle mouse down for dragging
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    e.preventDefault();
-    const rect = containerRef.current.getBoundingClientRect();
-    setDragOffset({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    });
-    setIsDragging(true);
-  };
-
-  // Handle touch start for mobile dragging
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (!containerRef.current) return;
-    const touch = e.touches[0];
-    const rect = containerRef.current.getBoundingClientRect();
-    setDragOffset({
-      x: touch.clientX - rect.left,
-      y: touch.clientY - rect.top
-    });
-    setIsDragging(true);
-  };
 
   // Handle mouse move
   useEffect(() => {
@@ -163,6 +134,35 @@ export default function DraggableFloatingWidget() {
       document.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isDragging, dragOffset, position, savePosition]);
+
+  // Don't render if dismissed - must be after all hooks
+  if (isDismissed) {
+    return null;
+  }
+
+  // Handle mouse down for dragging
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    e.preventDefault();
+    const rect = containerRef.current.getBoundingClientRect();
+    setDragOffset({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+    setIsDragging(true);
+  };
+
+  // Handle touch start for mobile dragging
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!containerRef.current) return;
+    const touch = e.touches[0];
+    const rect = containerRef.current.getBoundingClientRect();
+    setDragOffset({
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top
+    });
+    setIsDragging(true);
+  };
 
   return (
     <div
