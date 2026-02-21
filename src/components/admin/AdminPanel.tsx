@@ -1192,23 +1192,23 @@ export default function AdminPanel() {
                   Open Graph Image
                 </CardTitle>
                 <CardDescription>
-                  Social media preview image (1200x630px) - auto-generated
+                  Social media preview image (1344x768px) - static image
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="border rounded-lg overflow-hidden bg-muted">
                   <img 
-                    src="/opengraph-image" 
+                    src="/og-image.png" 
                     alt="OG Image Preview" 
                     className="w-full h-auto"
                     onError={(e) => {
-                      e.currentTarget.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect fill="%230f172a" width="1200" height="630"/><text x="600" y="315" text-anchor="middle" fill="white" font-size="48" font-family="Arial">Stack Assignment</text></svg>'
+                      e.currentTarget.style.display = 'none'
                     }}
                   />
                 </div>
                 <div className="flex gap-4">
                   <a
-                    href="/opengraph-image"
+                    href="/og-image.png"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

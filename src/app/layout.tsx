@@ -55,9 +55,9 @@ export const metadata: Metadata = {
     description: seoConfig.description,
     images: [
       {
-        url: `${seoConfig.siteUrl}/opengraph-image.png`,
-        width: 1200,
-        height: 630,
+        url: `${seoConfig.siteUrl}/og-image.png`,
+        width: 1344,
+        height: 768,
         alt: seoConfig.siteName,
         type: 'image/png',
       },
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     title: seoConfig.title,
     description: seoConfig.description,
     site: seoConfig.social.twitter,
-    images: [`${seoConfig.siteUrl}/twitter-image.png`],
+    images: [`${seoConfig.siteUrl}/og-image.png`],
   },
   
   // Robots
