@@ -103,3 +103,56 @@ export function generateServiceSchema(service: {
     } : undefined
   }
 }
+
+// Generate Blog Article Schema for SEO
+export function generateArticleSchema(article: {
+  title: string
+  description: string
+  slug: string
+  publishedAt: string
+  authorName: string
+  image?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.description,
+    url: `${seoConfig.siteUrl}/blog/${article.slug}`,
+    datePublished: article.publishedAt,
+    author: {
+      '@type': 'Person',
+      name: article.authorName,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: seoConfig.siteName,
+      url: seoConfig.siteUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: seoConfig.organization.logo,
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${seoConfig.siteUrl}/blog/${article.slug}`,
+    },
+    image: article.image || `${seoConfig.siteUrl}/og-image.png`,
+  }
+}
+
+// Generate FAQ Schema for SEO
+export function generateFAQSchema(faqs: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
+}
