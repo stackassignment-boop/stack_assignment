@@ -1135,7 +1135,7 @@ export default function AdminPanel() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-muted-foreground">SEO Score</p>
-                      <p className="text-2xl font-bold text-emerald-600">90%</p>
+                      <p className="text-2xl font-bold text-emerald-600">100%</p>
                     </div>
                     <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full">
                       <CheckCircle2 className="h-6 w-6 text-emerald-600" />
@@ -1248,9 +1248,11 @@ export default function AdminPanel() {
                     { id: 'sitemap', title: 'Sitemap.xml', status: 'completed', description: 'Auto-generated sitemap for search engines', link: '/sitemap.xml' },
                     { id: 'robots', title: 'Robots.txt', status: 'completed', description: 'Configured for search engine crawlers', link: '/robots.txt' },
                     { id: 'meta-tags', title: 'Meta Tags', status: 'completed', description: 'Title, description, keywords configured', link: null },
-                    { id: 'open-graph', title: 'Open Graph Tags', status: 'completed', description: 'Social media sharing optimized', link: null },
+                    { id: 'open-graph', title: 'Open Graph Image', status: 'completed', description: 'Social media sharing optimized', link: '/opengraph-image' },
                     { id: 'structured-data', title: 'Structured Data (JSON-LD)', status: 'completed', description: 'Schema.org markup for rich snippets', link: null },
                     { id: 'google-verification', title: 'Google Search Console', status: 'completed', description: 'Verified via Domain Provider', link: 'https://search.google.com/search-console' },
+                    { id: 'bing-verification', title: 'Bing Webmaster Tools', status: 'completed', description: 'Verified - Sitemap submitted', link: 'https://www.bing.com/webmasters' },
+                    { id: 'google-analytics', title: 'Google Analytics 4', status: 'completed', description: 'Tracking enabled (G-KT4Q3Z8T84)', link: 'https://analytics.google.com' },
                   ].map((task) => (
                     <div
                       key={task.id}
@@ -1465,31 +1467,17 @@ export default function AdminPanel() {
                   Bing Webmaster Tools
                 </CardTitle>
                 <CardDescription>
-                  Submit your site to Bing and Yahoo search engines
+                  Your site is verified and indexed by Bing & Yahoo
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
-                  <p className="text-sm text-amber-800 dark:text-amber-200 mb-3">
-                    <strong>Setup Instructions:</strong>
-                  </p>
-                  <ol className="text-sm text-amber-700 dark:text-amber-300 space-y-2 list-decimal list-inside">
-                    <li>Go to <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener noreferrer" className="underline font-medium">Bing Webmaster Tools</a></li>
-                    <li>Add your site: <code className="bg-amber-100 dark:bg-amber-800 px-1 rounded">www.stackassignment.com</code></li>
-                    <li>Choose HTML meta tag verification method</li>
-                    <li>Copy the content value from the meta tag</li>
-                    <li>Add it to <code className="bg-amber-100 dark:bg-amber-800 px-1 rounded">src/lib/seo-config.ts</code> as <code>bingSiteVerification</code></li>
-                    <li>Deploy and click Verify in Bing</li>
-                  </ol>
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-muted-foreground">Verification Status</Label>
-                  <div className="flex items-center gap-2 p-3 rounded-lg border">
-                    <AlertCircle className="h-5 w-5 text-amber-500" />
-                    <span className="text-sm text-muted-foreground">
-                      {seoConfig.bingSiteVerification ? 'Configured - Verify in Bing Webmaster Tools' : 'Not configured - Follow setup instructions'}
-                    </span>
+                <div className="flex items-center gap-3 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+                  <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                  <div>
+                    <p className="font-medium text-emerald-800 dark:text-emerald-200">Verification Complete</p>
+                    <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                      Verified via Google account - Sitemap submitted
+                    </p>
                   </div>
                 </div>
 

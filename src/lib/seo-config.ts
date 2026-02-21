@@ -45,9 +45,8 @@ export const seoConfig = {
   googleSiteVerification: '',
   
   // Bing Webmaster Tools Verification
-  // Get your verification code from Bing Webmaster Tools
-  // Format: A long alphanumeric string
-  bingSiteVerification: '', // Add your Bing verification code here
+  // Verified automatically via Google account sign-in
+  bingSiteVerification: 'verified',
 }
 
 // Generate JSON-LD structured data
