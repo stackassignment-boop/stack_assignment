@@ -5,7 +5,7 @@ export const revalidate = 3600 // Revalidate every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.stackassignment.com'
-  
+
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -54,6 +54,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Fetch all published blog posts from database
+    if (!db) {
+      throw new Error('Database not available')
+    }
+
     const posts = await db.post.findMany({
       where: {
         published: true,
@@ -77,8 +81,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [...staticPages, ...blogUrls]
   } catch (error) {
-    console.error('Error fetching posts for sitemap:', error)
-    // Return static pages only if database query fails
+    // If database is not available, log and return static pages only
+    console.log('Database not available for sitemap, returning static pages only')
     return staticPages
   }
 }

@@ -21,14 +21,24 @@ export async function generateMetadata() {
 }
 
 export default async function BlogPage() {
-  const posts = await db.post.findMany({
-    where: {
-      published: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
+  let posts = []
+
+  try {
+    if (!db) {
+      throw new Error('Database not available')
+    }
+    posts = await db.post.findMany({
+      where: {
+        published: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+  } catch (error) {
+    console.log('Database not available, showing empty blog')
+    // Keep posts as empty array if database is unavailable
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-950 dark:to-slate-900">

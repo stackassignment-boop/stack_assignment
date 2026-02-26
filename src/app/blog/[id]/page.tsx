@@ -15,6 +15,10 @@ interface PageProps {
 
 export async function generateStaticParams() {
   try {
+    if (!db) {
+      throw new Error('Database not available')
+    }
+    // Try to fetch posts at build time
     const posts = await db.post.findMany({
       where: {
         published: true,
@@ -28,12 +32,21 @@ export async function generateStaticParams() {
       id: post.id,
     }))
   } catch (error) {
-    console.error('Error generating static params:', error)
+    // If database is not available at build time, return empty array
+    // Pages will be generated on-demand at runtime
+    console.log('Database not available at build time, using on-demand generation')
     return []
   }
 }
 
 export async function generateMetadata({ params }: PageProps) {
+  if (!db) {
+    return {
+      title: 'Blog Post | Stack Assignment',
+      description: 'Read this informative article from Stack Assignment blog.',
+    }
+  }
+
   const post = await db.post.findUnique({
     where: {
       id: params.id,
@@ -66,6 +79,19 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
+  if (!db) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Database Not Available</h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Please check your database configuration.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   const post = await db.post.findUnique({
     where: {
       id: params.id,
