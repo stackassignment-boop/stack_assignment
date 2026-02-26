@@ -27,9 +27,9 @@ export default async function BlogPage() {
     if (!db) {
       throw new Error('Database not available')
     }
-    posts = await db.post.findMany({
+    posts = await db.blog.findMany({
       where: {
-        published: true,
+        isPublished: true,
       },
       orderBy: {
         createdAt: 'desc',
@@ -85,10 +85,10 @@ export default async function BlogPage() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="line-clamp-3 mb-4 min-h-[60px]">
-                    {post.content?.substring(0, 150) || 'Read this article to learn more...'}
+                    {post.excerpt || post.content?.substring(0, 150) || 'Read this article to learn more...'}
                   </CardDescription>
-                  <Link 
-                    href={`/blog/${post.id}`}
+                  <Link
+                    href={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-semibold transition-colors"
                   >
                     Read More

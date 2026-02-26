@@ -58,12 +58,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       throw new Error('Database not available')
     }
 
-    const posts = await db.post.findMany({
+    const posts = await db.blog.findMany({
       where: {
-        published: true,
+        isPublished: true,
       },
       select: {
-        id: true,
+        slug: true,
         updatedAt: true,
       },
       orderBy: {
@@ -73,7 +73,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Generate blog post URLs
     const blogUrls: MetadataRoute.Sitemap = posts.map((post) => ({
-      url: `${baseUrl}/blog/${post.id}`,
+      url: `${baseUrl}/blog/${post.slug}`,
       lastModified: post.updatedAt,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
