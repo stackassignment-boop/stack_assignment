@@ -1,16 +1,14 @@
 import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
-import { requireAdmin, apiResponse, apiError } from '@/lib/auth';
-import { z } from 'zod';
+import { apiResponse, apiError } from '@/lib/auth';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
 }
 
-// GET /api/blogs/[slug] - Get blog post by slug
+// GET /api/blogs/[slug] - Get blog post by slug (public)
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const user = await getCurrentUser();
     const { slug } = await params;
     
     const blog = await db.blog.findUnique({
@@ -27,19 +25,26 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     });
     
     if (!blog) {
+      console.log('Blog not found for slug:', slug);
       return apiError('Blog post not found', 404);
     }
     
-    // Non-admins can only see published posts
-    if (user?.role !== 'admin' && !blog.isPublished) {
+    // Only return published posts for public access
+    if (!blog.isPublished) {
+      console.log('Blog not published:', slug);
       return apiError('Blog post not found', 404);
     }
     
     // Increment view count
-    await db.blog.update({
-      where: { id: blog.id },
-      data: { viewCount: { increment: 1 } },
-    });
+    try {
+      await db.blog.update({
+        where: { id: blog.id },
+        data: { viewCount: { increment: 1 } },
+      });
+    } catch (error) {
+      // Don't fail the request if view count update fails
+      console.error('Failed to increment view count:', error);
+    }
     
     return apiResponse({ blog });
   } catch (error) {
@@ -48,25 +53,20 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-// Import getCurrentUser
-async function getCurrentUser() {
-  const { getCurrentUser: getUser } = await import('@/lib/auth');
-  return getUser();
-}
-
 // PUT /api/blogs/[slug] - Update blog post (admin only)
-const updateBlogSchema = z.object({
-  title: z.string().min(5).optional(),
-  excerpt: z.string().max(300).optional(),
-  content: z.string().min(50).optional(),
-  featuredImage: z.string().url().optional().or(z.literal('')),
-  category: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  isPublished: z.boolean().optional(),
+const updateBlogSchema = require('zod').z.object({
+  title: require('zod').z.string().min(5).optional(),
+  excerpt: require('zod').z.string().max(300).optional(),
+  content: require('zod').z.string().min(50).optional(),
+  featuredImage: require('zod').z.string().url().optional().or(require('zod').z.literal('')),
+  category: require('zod').z.string().optional(),
+  tags: require('zod').z.array(require('zod').z.string()).optional(),
+  isPublished: require('zod').z.boolean().optional(),
 });
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { requireAdmin } = await import('@/lib/auth');
     const authResult = await requireAdmin();
     
     if (!authResult.success) {
@@ -137,6 +137,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 // DELETE /api/blogs/[slug] - Delete blog post (admin only)
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { requireAdmin } = await import('@/lib/auth');
     const authResult = await requireAdmin();
     
     if (!authResult.success) {
