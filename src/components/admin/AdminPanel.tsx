@@ -1006,8 +1006,8 @@ export default function AdminPanel() {
                       {blogs.map((blog) => (
                         <TableRow key={blog.id}>
                           <TableCell className="font-medium">{blog.title}</TableCell>
-                          <TableCell className="text-muted-foreground">{blog.slug}</TableCell>
-                          <TableCell className="max-w-[250px] truncate">{blog.excerpt}</TableCell>
+                          <TableCell className="text-muted-foreground text-xs">{blog.slug}</TableCell>
+                          <TableCell className="max-w-[200px] truncate text-sm">{blog.excerpt}</TableCell>
                           <TableCell>
                             <Badge variant={blog.isPublished ? "default" : "secondary"}>
                               {blog.isPublished ? 'Published' : 'Draft'}
@@ -1015,16 +1015,25 @@ export default function AdminPanel() {
                           </TableCell>
                           <TableCell>{formatDate(blog.createdAt)}</TableCell>
                           <TableCell>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                              onClick={() => deleteBlog(blog.slug)}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                              </svg>
-                            </Button>
+                            <div className="flex gap-1">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => window.open(`/blog/${blog.slug}`, '_blank')}
+                                title="View blog in new tab"
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                onClick={() => deleteBlog(blog.slug)}
+                                title="Delete blog"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -1066,7 +1075,7 @@ export default function AdminPanel() {
                     <TableBody>
                       {samples.length === 0 ? (
                         <TableRow>
-                          <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+                          <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
                             No samples yet. Click "Add Sample" to create one.
                           </TableCell>
                         </TableRow>
@@ -1081,9 +1090,10 @@ export default function AdminPanel() {
                               {sample.fileName ? (
                                 <a 
                                   href={`/api/samples/${sample.slug}/download`}
-                                  className="text-primary hover:underline flex items-center gap-1"
+                                  className="text-primary hover:underline flex items-center gap-1 text-sm"
+                                  title="Download sample file"
                                 >
-                                  <FileText className="h-4 w-4" />
+                                  <FileText className="h-3.5 w-3.5" />
                                   {sample.fileName}
                                 </a>
                               ) : sample.fileUrl ? (
@@ -1092,8 +1102,9 @@ export default function AdminPanel() {
                                   target="_blank" 
                                   rel="noopener noreferrer"
                                   className="text-primary hover:underline flex items-center gap-1"
+                                  title="Download PDF"
                                 >
-                                  <FileText className="h-4 w-4" />
+                                  <FileText className="h-3.5 w-3.5" />
                                   PDF
                                 </a>
                               ) : (
@@ -1107,14 +1118,25 @@ export default function AdminPanel() {
                             </TableCell>
                             <TableCell>{formatDate(sample.createdAt)}</TableCell>
                             <TableCell>
-                              <Button 
-                                variant="ghost" 
-                                size="sm"
-                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                onClick={() => deleteSample(sample.slug)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => window.open(`/samples/${sample.slug}`, '_blank')}
+                                  title="View sample page"
+                                >
+                                  <Eye className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                  onClick={() => deleteSample(sample.slug)}
+                                  title="Delete sample"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))
@@ -1343,31 +1365,94 @@ export default function AdminPanel() {
               <CardHeader>
                 <CardTitle>Sitemap URLs</CardTitle>
                 <CardDescription>
-                  URLs included in your sitemap.xml
+                  URLs included in your sitemap.xml (fetched from database)
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {[
-                    { url: seoConfig.siteUrl, priority: '1.0', freq: 'daily' },
-                    { url: `${seoConfig.siteUrl}/services`, priority: '0.9', freq: 'weekly' },
-                    { url: `${seoConfig.siteUrl}/pricing`, priority: '0.9', freq: 'weekly' },
-                    { url: `${seoConfig.siteUrl}/samples`, priority: '0.8', freq: 'weekly' },
-                    { url: `${seoConfig.siteUrl}/blog`, priority: '0.8', freq: 'daily' },
-                    { url: `${seoConfig.siteUrl}/about`, priority: '0.8', freq: 'monthly' },
-                    { url: `${seoConfig.siteUrl}/contact`, priority: '0.7', freq: 'monthly' },
-                  ].map((page, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-3 rounded-lg border"
-                    >
-                      <code className="text-sm text-muted-foreground">{page.url}</code>
-                      <div className="flex items-center gap-3">
-                        <Badge variant="outline">Priority: {page.priority}</Badge>
-                        <Badge variant="secondary">{page.freq}</Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline">Total URLs</Badge>
+                    <span className="text-sm text-muted-foreground">
+                      {stats?.overview?.totalBlogs || 0} blogs + {stats?.overview?.totalSamples || 0} samples + 8 static pages
+                    </span>
+                  </div>
+                  
+                  {/* Static pages */}
+                  <div className="mt-4">
+                    <h4 className="text-sm font-semibold mb-2">Static Pages</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {[
+                        { url: '/', title: 'Home', priority: '1.0', freq: 'daily' },
+                        { url: '/about', title: 'About Us', priority: '0.8', freq: 'monthly' },
+                        { url: '/services', title: 'Services', priority: '0.9', freq: 'weekly' },
+                        { url: '/pricing', title: 'Pricing', priority: '0.9', freq: 'weekly' },
+                        { url: '/samples', title: 'Samples', priority: '0.8', freq: 'weekly' },
+                        { url: '/blog', title: 'Blog', priority: '0.8', freq: 'daily' },
+                        { url: '/contact', title: 'Contact', priority: '0.7', freq: 'monthly' },
+                        { url: '/privacy', title: 'Privacy Policy', priority: '0.5', freq: 'yearly' },
+                        { url: '/terms', title: 'Terms of Service', priority: '0.5', freq: 'yearly' },
+                        { url: '/integrity', title: 'Academic Integrity', priority: '0.5', freq: 'yearly' },
+                        { url: '/order', title: 'Place Order', priority: '0.8', freq: 'monthly' },
+                      ].map((page, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-2 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-800"
+                        >
+                          <code className="text-xs text-muted-foreground">{page.url}</code>
+                          <span className="text-sm font-medium">{page.title}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Blog posts */}
+                  {blogs.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-semibold mb-2">Blog Posts ({blogs.length} total)</h4>
+                      <div className="space-y-1 max-h-40 overflow-y-auto">
+                        {blogs.map((blog) => (
+                          <div
+                            key={blog.id}
+                            className="flex items-center justify-between p-2 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-800 text-sm"
+                          >
+                            <div className="flex items-center gap-2 flex-1">
+                              <code className="text-xs text-muted-foreground truncate max-w-[200px]">/blog/{blog.slug}</code>
+                              <span className="truncate font-medium">{blog.title}</span>
+                            </div>
+                            <Badge variant={blog.isPublished ? "default" : "secondary"}>
+                              {blog.isPublished ? 'Published' : 'Draft'}
+                            </Badge>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  ))}
+                  )}
+
+                  {/* Samples */}
+                  {samples.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-semibold mb-2">Sample Papers ({samples.length} total)</h4>
+                      <div className="space-y-1 max-h-40 overflow-y-auto">
+                        {samples.map((sample) => (
+                          <div
+                            key={sample.id}
+                            className="flex items-center justify-between p-2 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-800 text-sm"
+                          >
+                            <div className="flex items-center gap-2 flex-1">
+                              <code className="text-xs text-muted-foreground truncate max-w-[200px]">/samples/{sample.slug}</code>
+                              <span className="truncate font-medium">{sample.title}</span>
+                            </div>
+                            <Badge variant={sample.isPublished ? "default" : "secondary"}>
+                              {sample.isPublished ? 'Published' : 'Draft'}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
                 </div>
               </CardContent>
             </Card>
