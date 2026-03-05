@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { apiResponse, apiError } from '@/lib/auth';
+import { z } from 'zod';
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -54,14 +55,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // PUT /api/blogs/[slug] - Update blog post (admin only)
-const updateBlogSchema = require('zod').z.object({
-  title: require('zod').z.string().min(5).optional(),
-  excerpt: require('zod').z.string().max(300).optional(),
-  content: require('zod').z.string().min(50).optional(),
-  featuredImage: require('zod').z.string().url().optional().or(require('zod').z.literal('')),
-  category: require('zod').z.string().optional(),
-  tags: require('zod').z.array(require('zod').z.string()).optional(),
-  isPublished: require('zod').z.boolean().optional(),
+const updateBlogSchema = z.object({
+  title: z.string().min(5).optional(),
+  excerpt: z.string().max(300).optional(),
+  content: z.string().min(50).optional(),
+  featuredImage: z.string().url().optional().or(z.literal('')),
+  category: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  isPublished: z.boolean().optional(),
 });
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {

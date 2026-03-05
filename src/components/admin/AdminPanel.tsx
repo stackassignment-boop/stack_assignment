@@ -1453,9 +1453,6 @@ export default function AdminPanel() {
                 </div>
               </CardContent>
             </Card>
-                </div>
-              </CardContent>
-            </Card>
 
             {/* Structured Data */}
             <Card>
