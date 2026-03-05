@@ -1,28 +1,27 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { db } from '@/lib/db'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // Generate metadata for each service
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+
   try {
-    const baseUrl = 'https://www.stackassignment.com'
-    const res = await fetch(`${baseUrl}/api/services/${params.slug}`, {
-      cache: 'no-store',
+    const service = await db.service.findUnique({
+      where: { slug },
     })
 
-    if (!res.ok) {
+    if (!service) {
       return {
         title: 'Service Not Found - Stack Assignment',
       }
     }
-
-    const data = await res.json()
-    const service = data.service
 
     return {
       title: `${service.title} - Service | Stack Assignment`,
@@ -31,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       openGraph: {
         title: service.title,
         description: service.shortDescription || service.description,
-        url: `${baseUrl}/services/${service.slug}`,
+        url: `https://www.stackassignment.com/services/${service.slug}`,
         type: 'website',
         images: service.image ? [service.image] : [],
       },
@@ -46,19 +45,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // Generate static params for all services
 export async function generateStaticParams() {
   try {
-    const baseUrl = 'https://www.stackassignment.com'
-    const res = await fetch(`${baseUrl}/api/services?limit=100`, {
-      cache: 'no-store',
+    const services = await db.service.findMany({
+      where: { isActive: true },
+      select: { slug: true },
     })
 
-    if (!res.ok) {
-      return []
-    }
-
-    const data = await res.json()
-    const services = data.services || []
-
-    return services.map((service: { slug: string }) => ({
+    return services.map((service) => ({
       slug: service.slug,
     }))
   } catch (error) {
@@ -69,25 +61,20 @@ export async function generateStaticParams() {
 
 async function getService(slug: string) {
   try {
-    const baseUrl = 'https://www.stackassignment.com'
-    const res = await fetch(`${baseUrl}/api/services/${slug}`, {
-      cache: 'no-store',
+    const service = await db.service.findUnique({
+      where: { slug },
     })
 
-    if (!res.ok) {
-      return null
-    }
-
-    const data = await res.json()
-    return data.service
+    return service
   } catch (error) {
     console.error('Failed to fetch service:', error)
     return null
   }
 }
 
-export default function ServiceDetailPage({ params }: PageProps) {
-  const service = getService(params.slug)
+export default async function ServiceDetailPage({ params }: PageProps) {
+  const { slug } = await params
+  const service = await getService(slug)
 
   if (!service) {
     notFound()

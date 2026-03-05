@@ -1,29 +1,28 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import SamplePageClient from '@/components/samples/SamplePageClient'
+import { db } from '@/lib/db'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // Generate metadata for each sample
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+
   try {
-    const baseUrl = 'https://www.stackassignment.com'
-    const res = await fetch(`${baseUrl}/api/samples/${params.slug}`, {
-      cache: 'no-store',
+    const sample = await db.sample.findUnique({
+      where: { slug },
     })
 
-    if (!res.ok) {
+    if (!sample) {
       return {
         title: 'Sample Not Found - Stack Assignment',
       }
     }
-
-    const data = await res.json()
-    const sample = data.sample
 
     return {
       title: `${sample.title} - Sample Preview | Stack Assignment`,
@@ -32,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       openGraph: {
         title: `${sample.title} - Sample Preview`,
         description: sample.description || `Preview this academic writing sample`,
-        url: `${baseUrl}/samples/${sample.slug}`,
+        url: `https://www.stackassignment.com/samples/${sample.slug}`,
         type: 'website',
       },
     }
@@ -46,23 +45,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // Generate static params for all samples
 export async function generateStaticParams() {
   try {
-    const baseUrl = 'https://www.stackassignment.com'
-    const res = await fetch(`${baseUrl}/api/samples?limit=100`, {
-      cache: 'no-store',
+    const samples = await db.sample.findMany({
+      where: { isPublished: true },
+      select: { slug: true },
     })
 
-    if (!res.ok) {
-      return []
-    }
-
-    const data = await res.json()
-    const samples = data.samples || []
-
-    return samples.map((sample: { slug: string }) => ({
+    return samples.map((sample) => ({
       slug: sample.slug,
     }))
   } catch (error) {
-    console.error('Failed to generate static params for samples:', error)
+    console.error('Failed to generate params for samples:', error)
     return []
   }
 }

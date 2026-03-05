@@ -1,29 +1,28 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import BlogDetailPage from '@/components/blog/BlogDetailPage'
+import { db } from '@/lib/db'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // Generate metadata for each blog post
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+
   try {
-    const baseUrl = 'https://www.stackassignment.com'
-    const res = await fetch(`${baseUrl}/api/blogs/${params.slug}`, {
-      cache: 'no-store',
+    const blog = await db.blog.findUnique({
+      where: { slug },
     })
 
-    if (!res.ok) {
+    if (!blog) {
       return {
         title: 'Blog Post Not Found - Stack Assignment',
       }
     }
-
-    const data = await res.json()
-    const blog = data.blog
 
     return {
       title: `${blog.title} - Stack Assignment Blog`,
@@ -32,9 +31,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       openGraph: {
         title: blog.title,
         description: blog.excerpt || 'Read this article from Stack Assignment blog',
-        url: `${baseUrl}/blog/${blog.slug}`,
+        url: `https://www.stackassignment.com/blog/${blog.slug}`,
         type: 'article',
-        publishedTime: blog.createdAt,
+        publishedTime: blog.createdAt.toISOString(),
         images: blog.featuredImage ? [blog.featuredImage] : [],
       },
     }
@@ -48,19 +47,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // Generate static params for all blog posts
 export async function generateStaticParams() {
   try {
-    const baseUrl = 'https://www.stackassignment.com'
-    const res = await fetch(`${baseUrl}/api/blogs?limit=100`, {
-      cache: 'no-store',
+    const blogs = await db.blog.findMany({
+      where: { isPublished: true },
+      select: { slug: true },
     })
 
-    if (!res.ok) {
-      return []
-    }
-
-    const data = await res.json()
-    const blogs = data.blogs || []
-
-    return blogs.map((blog: { slug: string }) => ({
+    return blogs.map((blog) => ({
       slug: blog.slug,
     }))
   } catch (error) {
