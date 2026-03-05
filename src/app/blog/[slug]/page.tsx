@@ -61,6 +61,7 @@ export async function generateStaticParams() {
   }
 }
 
-export default function BlogPostPage({ params }: PageProps) {
-  return <BlogDetailPage slug={params.slug} />
+export default async function BlogPostPage({ params }: PageProps) {
+  const { slug } = await params
+  return <BlogDetailPage slug={slug} />
 }

@@ -59,6 +59,7 @@ export async function generateStaticParams() {
   }
 }
 
-export default function SamplePage({ params }: PageProps) {
-  return <SamplePageClient slug={params.slug} />
+export default async function SamplePage({ params }: PageProps) {
+  const { slug } = await params
+  return <SamplePageClient slug={slug} />
 }
