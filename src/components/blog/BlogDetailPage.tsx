@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface BlogDetailPageProps {
   slug: string;
@@ -105,9 +106,17 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
           <p className="text-gray-500 dark:text-gray-400 mb-6">
             {error || 'The blog post you are looking for does not exist.'}
           </p>
-          <Button onClick={() => handleNav('blog')}>
-            ← Back to Blog
-          </Button>
+          {onNavigate ? (
+            <Button onClick={() => handleNav('blog')}>
+              ← Back to Blog
+            </Button>
+          ) : (
+            <Link href="/blog">
+              <Button>
+                ← Back to Blog
+              </Button>
+            </Link>
+          )}
         </div>
       </main>
     );
@@ -117,13 +126,24 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
     <main className="flex-grow py-12">
       <div className="max-w-4xl mx-auto px-6">
         {/* Back Button */}
-        <Button
-          variant="ghost"
-          className="mb-6 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-          onClick={() => handleNav('blog')}
-        >
-          ← Back to Blog
-        </Button>
+        {onNavigate ? (
+          <Button
+            variant="ghost"
+            className="mb-6 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            onClick={() => handleNav('blog')}
+          >
+            ← Back to Blog
+          </Button>
+        ) : (
+          <Link href="/blog" className="mb-6 inline-block">
+            <Button
+              variant="ghost"
+              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            >
+              ← Back to Blog
+            </Button>
+          </Link>
+        )}
 
         {/* Hero Image */}
         {blog.featuredImage && (
@@ -218,13 +238,21 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
 
         {/* Back to Blog */}
         <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-700 text-center">
-          <Button
-            variant="outline"
-            onClick={() => handleNav('blog')}
-            className="px-8"
-          >
-            ← Back to All Articles
-          </Button>
+          {onNavigate ? (
+            <Button
+              variant="outline"
+              onClick={() => handleNav('blog')}
+              className="px-8"
+            >
+              ← Back to All Articles
+            </Button>
+          ) : (
+            <Link href="/blog">
+              <Button variant="outline" className="px-8">
+                ← Back to All Articles
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </main>

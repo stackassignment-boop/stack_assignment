@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { StructuredData } from '@/components/seo/StructuredData';
+import Link from 'next/link';
 
 interface Blog {
   id: string;
@@ -62,12 +63,6 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
       'from-violet-500 to-purple-600',
     ];
     return gradients[index % gradients.length];
-  };
-
-  const handleBlogClick = (slug: string) => {
-    if (onNavigate) {
-      onNavigate('blog-detail', { slug });
-    }
   };
 
   if (loading) {
@@ -143,35 +138,39 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
             {/* Blog Posts Grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
               {blogs.map((blog, index) => (
-                <article
+                <Link
                   key={blog.id}
-                  className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                  onClick={() => handleBlogClick(blog.slug)}
+                  href={`/blog/${blog.slug}`}
+                  className="block"
                 >
-                  {/* Header image */}
-                  {blog.featuredImage ? (
-                    <div 
-                      className="h-48 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${blog.featuredImage})` }}
-                    />
-                  ) : (
-                    <div className={`h-48 bg-gradient-to-br ${getGradient(index)}`} />
-                  )}
+                  <article
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 cursor-pointer h-full"
+                  >
+                    {/* Header image */}
+                    {blog.featuredImage ? (
+                      <div
+                        className="h-48 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${blog.featuredImage})` }}
+                      />
+                    ) : (
+                      <div className={`h-48 bg-gradient-to-br ${getGradient(index)}`} />
+                    )}
 
-                  {/* Content */}
-                  <div className="p-6 md:p-7">
-                    <div className="text-sm text-indigo-600 dark:text-indigo-400 font-medium mb-2">
-                      {blog.category || 'General'} • {formatDate(blog.createdAt)}
+                    {/* Content */}
+                    <div className="p-6 md:p-7">
+                      <div className="text-sm text-indigo-600 dark:text-indigo-400 font-medium mb-2">
+                        {blog.category || 'General'} • {formatDate(blog.createdAt)}
+                      </div>
+                      <h2 className="text-xl font-bold mb-3 line-clamp-2">{blog.title}</h2>
+                      <p className="text-gray-600 dark:text-gray-300 mb-5 line-clamp-3">
+                        {blog.excerpt || 'Click to read more...'}
+                      </p>
+                      <span className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
+                        Read full article →
+                      </span>
                     </div>
-                    <h2 className="text-xl font-bold mb-3 line-clamp-2">{blog.title}</h2>
-                    <p className="text-gray-600 dark:text-gray-300 mb-5 line-clamp-3">
-                      {blog.excerpt || 'Click to read more...'}
-                    </p>
-                    <span className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
-                      Read full article →
-                    </span>
-                  </div>
-                </article>
+                  </article>
+                </Link>
               ))}
             </div>
 
