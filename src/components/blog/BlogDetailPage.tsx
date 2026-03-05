@@ -29,22 +29,34 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [apiResponse, setApiResponse] = useState<any>(null);
 
   useEffect(() => {
     fetchBlog();
   }, [slug]);
 
   const fetchBlog = async () => {
+    console.log('Fetching blog with slug:', slug);
     try {
       const res = await fetch(`/api/blogs/${slug}`);
+      console.log('API Response status:', res.status);
+      
+      const data = await res.json();
+      console.log('API Response data:', data);
+      setApiResponse(data);
+      
       if (res.ok) {
-        const data = await res.json();
-        setBlog(data.blog);
+        if (data.blog) {
+          setBlog(data.blog);
+        } else {
+          setError('No blog data received from API');
+        }
       } else {
-        setError('Blog post not found');
+        setError(data.error || `HTTP ${res.status}: Blog post not found`);
       }
     } catch (err) {
-      setError('Failed to load blog post');
+      const errorMsg = err instanceof Error ? err.message : 'Failed to load blog post';
+      setError(errorMsg);
       console.error('Failed to fetch blog:', err);
     } finally {
       setLoading(false);
@@ -103,9 +115,20 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className="text-6xl mb-4">📄</div>
           <h1 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-2">Blog Not Found</h1>
-          <p className="text-gray-500 dark:text-gray-400 mb-6">
+          <p className="text-gray-500 dark:text-gray-400 mb-4">
             {error || 'The blog post you are looking for does not exist.'}
           </p>
+          
+          {/* Debug info - only show in development or if error */}
+          {error && process.env.NODE_ENV === 'development' && (
+            <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg text-left">
+              <p className="text-sm font-semibold text-red-800 dark:text-red-400 mb-2">Debug Info:</p>
+              <pre className="text-xs text-red-700 dark:text-red-300 overflow-auto max-h-64">
+                {JSON.stringify(apiResponse, null, 2)}
+              </pre>
+            </div>
+          )}
+          
           {onNavigate ? (
             <Button onClick={() => handleNav('blog')}>
               ← Back to Blog
