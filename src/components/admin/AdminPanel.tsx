@@ -1170,7 +1170,9 @@ export default function AdminPanel() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-muted-foreground">Sitemap URLs</p>
-                      <p className="text-2xl font-bold">7</p>
+                      <p className="text-2xl font-bold">
+                        {(stats?.overview?.totalBlogs || 0) + (stats?.overview?.totalSamples || 0) + 11}
+                      </p>
                     </div>
                     <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
                       <Globe className="h-6 w-6 text-blue-600" />
@@ -1183,7 +1185,7 @@ export default function AdminPanel() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-muted-foreground">Structured Data</p>
-                      <p className="text-2xl font-bold">2</p>
+                      <p className="text-2xl font-bold">3</p>
                     </div>
                     <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
                       <Code className="h-6 w-6 text-purple-600" />
@@ -1373,7 +1375,7 @@ export default function AdminPanel() {
                   <div className="flex items-center gap-2">
                     <Badge variant="outline">Total URLs</Badge>
                     <span className="text-sm text-muted-foreground">
-                      {stats?.overview?.totalBlogs || 0} blogs + {stats?.overview?.totalSamples || 0} samples + 8 static pages
+                      {stats?.overview?.totalBlogs || 0} blogs + {stats?.overview?.totalSamples || 0} samples + 11 static pages
                     </span>
                   </div>
                   
