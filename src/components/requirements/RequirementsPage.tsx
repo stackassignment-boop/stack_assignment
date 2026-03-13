@@ -6,10 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FileText, Download, Search, ArrowRight } from 'lucide-react';
+import { FileText, Search, ArrowRight, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import RequirementPreviewModal from '@/components/requirements/RequirementPreviewModal';
 
 interface Requirement {
   id: string;
@@ -28,6 +29,8 @@ export default function RequirementsPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [previewRequirement, setPreviewRequirement] = useState<Requirement | null>(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   // Categories
   const categories = ['all', 'Programming', 'Essay', 'Research Paper', 'Case Study', 'Coursework', 'Lab Report'];
@@ -91,6 +94,16 @@ export default function RequirementsPage() {
       description: requirement.description || `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`,
       ...(requirement.category && { category: requirement.category }),
     });
+  };
+
+  const handlePreview = (requirement: Requirement) => {
+    setPreviewRequirement(requirement);
+    setShowPreviewModal(true);
+  };
+
+  const handleClosePreview = () => {
+    setShowPreviewModal(false);
+    setPreviewRequirement(null);
   };
 
   const formatFileSize = (bytes: number) => {
@@ -209,29 +222,16 @@ export default function RequirementsPage() {
             {filteredRequirements.map((requirement) => (
               <Card key={requirement.id} className="border-2 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-300 hover:shadow-md">
                 <CardHeader>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1">
-                      {requirement.category && (
-                        <Badge className="mb-2" variant="secondary">{requirement.category}</Badge>
-                      )}
-                      <CardTitle className="text-base font-semibold text-gray-900 dark:text-white leading-tight">
-                        {requirement.title}
-                      </CardTitle>
-                      <CardDescription className="line-clamp-2">
-                        {requirement.description || 'No description provided'}
-                      </CardDescription>
-                    </div>
-                    <a
-                      href={requirement.filePath}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-shrink-0"
-                      title="Download requirement file"
-                    >
-                      <Button variant="outline" size="icon" className="rounded-full h-8 w-8">
-                        <Download className="w-4 h-4" />
-                      </Button>
-                    </a>
+                  <div className="flex-1">
+                    {requirement.category && (
+                      <Badge className="mb-2" variant="secondary">{requirement.category}</Badge>
+                    )}
+                    <CardTitle className="text-base font-semibold text-gray-900 dark:text-white leading-tight">
+                      {requirement.title}
+                    </CardTitle>
+                    <CardDescription className="line-clamp-2">
+                      {requirement.description || 'No description provided'}
+                    </CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -248,17 +248,14 @@ export default function RequirementsPage() {
                   </div>
                   
                   <div className="flex flex gap-2">
-                    <a
-                      href={requirement.filePath}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Button
+                      onClick={() => handlePreview(requirement)}
+                      variant="outline"
                       className="flex-1"
                     >
-                      <Button variant="outline" className="flex-1">
-                        <Download className="w-4 h-4 mr-2" />
-                        Preview File
-                      </Button>
-                    </a>
+                      <Eye className="w-4 h-4 mr-2" />
+                      Preview File
+                    </Button>
                     <Button
                       onClick={() => handleGetAnswer(requirement)}
                       className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold"
@@ -266,13 +263,6 @@ export default function RequirementsPage() {
                       Get Answer
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
-                  </div>
-                  
-                  <div className="text-xs text-gray-400 dark:text-gray-500 text-center pt-2 border-t border-gray-100 dark:border-slate-700 mt-2">
-                    <p className="flex items-center justify-center gap-1">
-                      <FileText className="w-3.5 h-3.5" />
-                      <span>Searchable by students</span>
-                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -283,6 +273,15 @@ export default function RequirementsPage() {
       </main>
 
       <Footer onNavigate={handleNavigate} />
+
+      {/* Preview Modal */}
+      {previewRequirement && (
+        <RequirementPreviewModal
+          requirement={previewRequirement}
+          isOpen={showPreviewModal}
+          onClose={handleClosePreview}
+        />
+      )}
     </div>
   );
 }
