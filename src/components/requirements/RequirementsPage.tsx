@@ -236,9 +236,20 @@ export default function RequirementsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">
-                      {requirement.fileName}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500 dark:text-gray-400">
+                        {requirement.fileName}
+                      </span>
+                      {requirement.fileType === 'application/pdf' ? (
+                        <Badge variant="secondary" className="text-xs">
+                          PDF
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="text-xs">
+                          {requirement.fileType.split('/')[1]?.toUpperCase() || 'FILE'}
+                        </Badge>
+                      )}
+                    </div>
                     <span className="bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">
                       {formatFileSize(requirement.fileSize)}
                     </span>
@@ -254,7 +265,7 @@ export default function RequirementsPage() {
                       className="flex-1"
                     >
                       <Eye className="w-4 h-4 mr-2" />
-                      Preview File
+                      {requirement.fileType === 'application/pdf' ? 'Preview' : 'View'}
                     </Button>
                     <Button
                       onClick={() => handleGetAnswer(requirement)}
