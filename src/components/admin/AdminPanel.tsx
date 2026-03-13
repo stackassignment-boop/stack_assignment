@@ -54,7 +54,10 @@ import {
   Code,
   FileCheck,
   Upload,
-  Download
+  Download,
+  Edit2,
+  Save,
+  Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { seoConfig } from '@/lib/seo-config';
@@ -210,6 +213,8 @@ export default function AdminPanel() {
 
   // Requirement dialog states
   const [showRequirementDialog, setShowRequirementDialog] = useState(false);
+  const [isEditingRequirement, setIsEditingRequirement] = useState(false);
+  const [editingRequirementId, setEditingRequirementId] = useState<string | null>(null);
   const [requirementForm, setRequirementForm] = useState({
     title: '',
     description: '',
@@ -217,6 +222,7 @@ export default function AdminPanel() {
   });
   const [selectedRequirementFile, setSelectedRequirementFile] = useState<File | null>(null);
   const [creatingRequirement, setCreatingRequirement] = useState(false);
+  const [updatingRequirement, setUpdatingRequirement] = useState(false);
   const [uploadingRequirementFile, setUploadingRequirementFile] = useState(false);
 
   // Settings state
@@ -665,6 +671,90 @@ export default function AdminPanel() {
     } catch (error) {
       toast.error('An error occurred');
     }
+  };
+
+  const openEditRequirementDialog = (requirement: RequirementFile) => {
+    setIsEditingRequirement(true);
+    setEditingRequirementId(requirement.id);
+    setRequirementForm({
+      title: requirement.title,
+      description: requirement.description || '',
+      category: requirement.category || '',
+    });
+    setSelectedRequirementFile(null);
+    setShowRequirementDialog(true);
+  };
+
+  const updateRequirement = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!editingRequirementId) {
+      toast.error('No requirement selected for editing');
+      return;
+    }
+
+    // At least one field must be updated
+    if (!requirementForm.title && !requirementForm.description && !requirementForm.category && !selectedRequirementFile) {
+      toast.error('Please update at least one field or upload a new file');
+      return;
+    }
+
+    setUpdatingRequirement(true);
+    if (selectedRequirementFile) {
+      setUploadingRequirementFile(true);
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('title', requirementForm.title);
+      formData.append('description', requirementForm.description || '');
+      formData.append('category', requirementForm.category || '');
+
+      if (selectedRequirementFile) {
+        formData.append('file', selectedRequirementFile);
+      }
+
+      const res = await fetch(`/api/admin/requirements/${editingRequirementId}`, {
+        method: 'PUT',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success('Requirement file updated successfully!');
+        // Reset form
+        setRequirementForm({
+          title: '',
+          description: '',
+          category: '',
+        });
+        setSelectedRequirementFile(null);
+        setShowRequirementDialog(false);
+        setIsEditingRequirement(false);
+        setEditingRequirementId(null);
+        loadDashboardData();
+      } else {
+        toast.error(data.error || 'Failed to update requirement file');
+      }
+    } catch (error) {
+      toast.error('An error occurred');
+    } finally {
+      setUpdatingRequirement(false);
+      setUploadingRequirementFile(false);
+    }
+  };
+
+  const closeRequirementDialog = () => {
+    setShowRequirementDialog(false);
+    setIsEditingRequirement(false);
+    setEditingRequirementId(null);
+    setRequirementForm({
+      title: '',
+      description: '',
+      category: '',
+    });
+    setSelectedRequirementFile(null);
   };
 
   const formatFileSize = (bytes: number) => {
@@ -1851,6 +1941,14 @@ export default function AdminPanel() {
                                   <Download className="h-3.5 w-3.5" />
                                 </Button>
                                 <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => openEditRequirementDialog(requirement)}
+                                  title="Edit requirement"
+                                >
+                                  <Edit2 className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button
                                   variant="ghost"
                                   size="sm"
                                   className="text-red-600 hover:text-red-700 hover:bg-red-50"
@@ -2468,19 +2566,19 @@ export default function AdminPanel() {
               </Button>
             </div>
           </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Create Requirement Dialog */}
-      <Dialog open={showRequirementDialog} onOpenChange={setShowRequirementDialog}>
+      {/* Create/Edit Requirement Dialog */}
+      <Dialog open={showRequirementDialog} onOpenChange={closeRequirementDialog}>
         <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Upload Requirement File</DialogTitle>
+            <DialogTitle>{isEditingRequirement ? 'Edit Requirement File' : 'Upload Requirement File'}</DialogTitle>
             <DialogDescription>
-              Upload a requirement file for Assignment & Coursework Help
+              {isEditingRequirement
+                ? 'Update the requirement file details or upload a new file'
+                : 'Upload a requirement file for Assignment & Coursework Help'
+              }
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={createRequirement} className="space-y-4">
+          <form onSubmit={isEditingRequirement ? updateRequirement : createRequirement} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="requirement-title">Title *</Label>
               <Input
@@ -2488,7 +2586,7 @@ export default function AdminPanel() {
                 value={requirementForm.title}
                 onChange={(e) => setRequirementForm({ ...requirementForm, title: e.target.value })}
                 placeholder="e.g., CS101 Programming Assignment"
-                required
+                required={isEditingRequirement ? false : true}
                 minLength={3}
               />
             </div>
@@ -2515,16 +2613,17 @@ export default function AdminPanel() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="requirement-file">Upload File *</Label>
+              <Label htmlFor="requirement-file">{isEditingRequirement ? 'Replace File (Optional)' : 'Upload File *'}</Label>
               <Input
                 id="requirement-file"
                 type="file"
                 onChange={handleRequirementFileSelect}
                 accept=".pdf,.doc,.docx,.txt"
-                required
+                required={isEditingRequirement ? false : true}
               />
               <p className="text-xs text-muted-foreground">
                 Accepted formats: PDF, DOC, DOCX, TXT (Max 10MB)
+                {isEditingRequirement && ' - Leave empty to keep existing file'}
               </p>
               {selectedRequirementFile && (
                 <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-md">
@@ -2541,21 +2640,41 @@ export default function AdminPanel() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => {
-                  setShowRequirementDialog(false);
-                  setRequirementForm({ title: '', description: '', category: '' });
-                  setSelectedRequirementFile(null);
-                }}
+                onClick={closeRequirementDialog}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={creatingRequirement || uploadingRequirementFile}>
-                {creatingRequirement ? 'Uploading...' : 'Upload File'}
+              <Button
+                type="submit"
+                disabled={(isEditingRequirement ? updatingRequirement : creatingRequirement) || uploadingRequirementFile}
+              >
+                {(isEditingRequirement ? updatingRequirement : creatingRequirement) || uploadingRequirementFile ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    {uploadingRequirementFile ? 'Uploading...' : (isEditingRequirement ? 'Updating...' : 'Creating...')}
+                  </>
+                ) : (
+                  <>
+                    {isEditingRequirement ? (
+                      <>
+                        <Save className="h-4 w-4 mr-2" />
+                        Update Requirement
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload Requirement
+                      </>
+                    )}
+                  </>
+                )}
               </Button>
             </div>
           </form>
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
   );
 }
