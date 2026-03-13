@@ -2571,13 +2571,17 @@ export default function AdminPanel() {
       {/* Create/Edit Requirement Dialog */}
       <Dialog open={showRequirementDialog} onOpenChange={closeRequirementDialog}>
         <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{isEditingRequirement ? 'Edit Requirement File' : 'Upload Requirement File'}</DialogTitle>
+            <DialogDescription>
               {isEditingRequirement
                 ? 'Update the requirement file details or upload a new file'
                 : 'Upload a requirement file for Assignment & Coursework Help'
-              }
             </DialogDescription>
           </DialogHeader>
+
           <form onSubmit={isEditingRequirement ? updateRequirement : createRequirement} className="space-y-4">
+
             <div className="space-y-2">
               <Label htmlFor="requirement-title">Title *</Label>
               <Input
