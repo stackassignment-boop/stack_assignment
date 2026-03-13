@@ -693,21 +693,20 @@ export default function AdminPanel() {
       return;
     }
 
-    // For editing, we allow any field to be updated
-    // Check if at least one field has a value or a file is selected
-    const hasTitle = requirementForm.title.trim().length > 0;
-    const hasDescription = requirementForm.description.trim().length > 0;
-    const hasCategory = requirementForm.category.trim().length > 0;
-    const hasFile = selectedRequirementFile !== null;
-
-    if (!hasTitle && !hasDescription && !hasCategory && !hasFile) {
-      toast.error('Please update at least one field or upload a new file');
+    // Validate title if provided (must be at least 3 characters)
+    if (requirementForm.title && requirementForm.title.trim().length > 0 && requirementForm.title.trim().length < 3) {
+      toast.error('Title must be at least 3 characters');
       return;
     }
 
-    // Validate title if provided (must be at least 3 characters)
-    if (hasTitle && requirementForm.title.trim().length < 3) {
-      toast.error('Title must be at least 3 characters');
+    // Check if there's anything to update
+    const hasChanges = requirementForm.title.trim() !== '' ||
+                      requirementForm.description.trim() !== '' ||
+                      requirementForm.category.trim() !== '' ||
+                      selectedRequirementFile !== null;
+
+    if (!hasChanges) {
+      toast.error('Please update at least one field or upload a new file');
       return;
     }
 
@@ -719,14 +718,18 @@ export default function AdminPanel() {
     try {
       const formData = new FormData();
 
-      // Include all non-empty fields
-      if (hasTitle) {
+      // Always send the title if it has a value (even if unchanged)
+      if (requirementForm.title.trim()) {
         formData.append('title', requirementForm.title.trim());
       }
-      if (hasDescription) {
+
+      // Always send description if it has a value
+      if (requirementForm.description.trim()) {
         formData.append('description', requirementForm.description.trim());
       }
-      if (hasCategory) {
+
+      // Always send category if it has a value
+      if (requirementForm.category.trim()) {
         formData.append('category', requirementForm.category.trim());
       }
 
@@ -734,13 +737,9 @@ export default function AdminPanel() {
         formData.append('file', selectedRequirementFile);
       }
 
-      console.log('Updating requirement with fields:', {
-        hasTitle,
-        hasDescription,
-        hasCategory,
-        hasFile,
-        title: hasTitle ? requirementForm.title : 'not sent',
-        category: hasCategory ? requirementForm.category : 'not sent',
+      console.log('Updating requirement:', {
+        id: editingRequirementId,
+        formData: Object.fromEntries(formData),
       });
 
       const res = await fetch(`/api/admin/requirements/${editingRequirementId}`, {
@@ -750,7 +749,7 @@ export default function AdminPanel() {
 
       const data = await res.json();
 
-      console.log('Update response:', data);
+      console.log('Update response:', res.status, data);
 
       if (res.ok) {
         toast.success('Requirement file updated successfully!');
