@@ -2577,6 +2577,8 @@ export default function AdminPanel() {
               {isEditingRequirement
                 ? 'Update the requirement file details or upload a new file'
                 : 'Upload a requirement file for Assignment & Coursework Help'
+              }
+
             </DialogDescription>
           </DialogHeader>
 
