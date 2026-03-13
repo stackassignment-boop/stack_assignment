@@ -694,7 +694,7 @@ export default function AdminPanel() {
     }
 
     // At least one field must be updated
-    if (!requirementForm.title && !requirementForm.description && !requirementForm.category && !selectedRequirementFile) {
+    if (!requirementForm.title.trim() && !requirementForm.description.trim() && !requirementForm.category.trim() && !selectedRequirementFile) {
       toast.error('Please update at least one field or upload a new file');
       return;
     }
@@ -706,9 +706,17 @@ export default function AdminPanel() {
 
     try {
       const formData = new FormData();
-      formData.append('title', requirementForm.title);
-      formData.append('description', requirementForm.description || '');
-      formData.append('category', requirementForm.category || '');
+
+      // Only include fields that have non-empty values
+      if (requirementForm.title.trim()) {
+        formData.append('title', requirementForm.title);
+      }
+      if (requirementForm.description.trim()) {
+        formData.append('description', requirementForm.description);
+      }
+      if (requirementForm.category.trim()) {
+        formData.append('category', requirementForm.category);
+      }
 
       if (selectedRequirementFile) {
         formData.append('file', selectedRequirementFile);
@@ -1889,7 +1897,17 @@ export default function AdminPanel() {
                   <CardTitle>Requirement Files</CardTitle>
                   <CardDescription>Upload and manage requirement files for Assignment & Coursework Help</CardDescription>
                 </div>
-                <Button onClick={() => setShowRequirementDialog(true)}>
+                <Button onClick={() => {
+                  setIsEditingRequirement(false);
+                  setEditingRequirementId(null);
+                  setRequirementForm({
+                    title: '',
+                    description: '',
+                    category: '',
+                  });
+                  setSelectedRequirementFile(null);
+                  setShowRequirementDialog(true);
+                }}>
                   <Upload className="h-4 w-4 mr-2" />
                   Upload Requirement
                 </Button>

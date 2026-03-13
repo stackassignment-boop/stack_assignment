@@ -41,22 +41,33 @@ export async function PUT(
       const formData = await request.formData();
       const file = formData.get('file') as File | null;
 
-      // Extract other fields
+      // Extract other fields (will be null if not provided)
       const title = formData.get('title') as string | null;
       const description = formData.get('description') as string | null;
       const category = formData.get('category') as string | null;
 
       // Validate at least one field is being updated
+      // Note: formData.get() returns null for missing fields, empty string for empty values
       if (!title && !description && !category && !file) {
         return apiError('At least one field must be provided for update', 400);
       }
 
-      // Build update data object
+      // Build update data object - only include fields that were actually provided
       const updateData: any = {};
 
-      if (title) updateData.title = title;
-      if (description !== null) updateData.description = description;
-      if (category !== null) updateData.category = category;
+      if (title !== null) {
+        // Validate title if provided
+        if (title.length < 3) {
+          return apiError('Title must be at least 3 characters', 400);
+        }
+        updateData.title = title;
+      }
+      if (description !== null) {
+        updateData.description = description;
+      }
+      if (category !== null) {
+        updateData.category = category;
+      }
 
       // If file is provided, upload it
       if (file) {
