@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { X } from 'lucide-react';
+import { X, FileText, AlertCircle } from 'lucide-react';
 
 interface RequirementPreviewModalProps {
   requirement: {
@@ -9,6 +9,7 @@ interface RequirementPreviewModalProps {
     title: string;
     fileName: string;
     filePath: string;
+    fileType: string;
   };
   isOpen: boolean;
   onClose: () => void;
@@ -20,6 +21,8 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
   const [pdfDoc, setPdfDoc] = useState<any>(null);
   const [pageImages, setPageImages] = useState<string[]>([]);
   const [containerWidth, setContainerWidth] = useState(600);
+  const [error, setError] = useState<string | null>(null);
+
   const containerRef = useCallback((node: HTMLDivElement | null) => {
     if (node) {
       const width = Math.min(window.innerWidth - 48, 700);
@@ -27,13 +30,24 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
     }
   }, []);
 
+  // Check if file is a PDF
+  const isPdf = requirement.fileType === 'application/pdf';
+
   // Load PDF document
   useEffect(() => {
     if (!isOpen || typeof window === 'undefined') return;
 
+    // Check if it's a PDF file
+    if (!isPdf) {
+      setLoading(false);
+      setError(`This file type (${requirement.fileType}) cannot be previewed. Only PDF files are supported for preview.`);
+      return;
+    }
+
     const loadPdf = async () => {
       try {
         setLoading(true);
+        setError(null);
         setPageImages([]);
 
         // Dynamically import pdfjs-dist to avoid SSR issues
@@ -47,14 +61,15 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
         setPdfDoc(pdf);
         setTotalPages(pdf.numPages);
         setLoading(false);
-      } catch (error) {
-        console.error('Error loading PDF:', error);
+      } catch (err) {
+        console.error('Error loading PDF:', err);
+        setError('Failed to load the PDF file. Please try again.');
         setLoading(false);
       }
     };
 
     loadPdf();
-  }, [isOpen, requirement.filePath]);
+  }, [isOpen, requirement.filePath, isPdf]);
 
   // Render all pages
   useEffect(() => {
@@ -142,7 +157,11 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
               {requirement.title}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {totalPages} pages • {requirement.fileName}
+              {isPdf ? (
+                <>{totalPages} pages • {requirement.fileName}</>
+              ) : (
+                <>{requirement.fileName} • {requirement.fileType}</>
+              )}
             </p>
           </div>
           <button
@@ -165,8 +184,36 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
               <span className="ml-4 text-gray-600 dark:text-gray-400">Loading preview...</span>
             </div>
           )}
+
+          {error && (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center max-w-md">
+                <AlertCircle className="w-16 h-16 text-amber-500 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  Preview Not Available
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  {error}
+                </p>
+                <div className="flex flex-col gap-3">
+                  <a
+                    href={requirement.filePath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Open {requirement.fileName}
+                  </a>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    Opens in a new tab
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
           
-          {!loading && pageImages.length > 0 && (
+          {!loading && !error && pageImages.length > 0 && (
             <div className="flex flex-col items-center gap-4">
               {pageImages.map((imageSrc, index) => {
                 const pageNum = index + 1;
@@ -203,7 +250,11 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
 
         {/* Footer */}
         <div className="flex items-center justify-center py-3 px-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-xs text-gray-600 dark:text-gray-400 shrink-0">
-          <span>Full preview • All {totalPages} pages visible</span>
+          {error ? (
+            <span>Preview not available • Click to open externally</span>
+          ) : (
+            <span>Full preview • All {totalPages} pages visible</span>
+          )}
         </div>
       </div>
     </div>
