@@ -1,9 +1,6 @@
 import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { requireAdmin, apiResponse, apiError } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
 import { z } from 'zod';
 
 // Schema for creating a requirement file
@@ -88,24 +85,43 @@ export async function POST(request: NextRequest) {
       return apiError('File size exceeds 10MB limit', 400);
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'requirements');
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
+    // Upload to Vercel Blob storage
+    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+
+    if (!blobToken) {
+      console.error('BLOB_READ_WRITE_TOKEN not configured');
+      return apiError('File upload not configured. Please contact support.', 500);
     }
 
-    // Generate unique filename
-    const timestamp = Date.now();
+    // Generate safe filename
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const fileName = `${timestamp}-${safeName}`;
-    const filePath = join(uploadsDir, fileName);
+    const fileName = `requirements/${Date.now()}-${safeName}`;
+    const blobUrl = `https://blob.vercel-storage.com/${fileName}`;
 
-    // Convert file to buffer and save
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filePath, buffer);
+    // Get file as ArrayBuffer and convert to Buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    // Save to database
+    // Upload using Vercel Blob REST API
+    const uploadResponse = await fetch(blobUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${blobToken}`,
+        'Content-Type': file.type || 'application/octet-stream',
+      },
+      body: buffer,
+    });
+
+    if (!uploadResponse.ok) {
+      const errorText = await uploadResponse.text();
+      console.error('Blob upload failed:', uploadResponse.status, errorText);
+      return apiError(`Upload failed: ${uploadResponse.statusText}`, 500);
+    }
+
+    const blobData = await uploadResponse.json();
+    console.log('Upload successful! URL:', blobData.url);
+
+    // Save to database with Blob URL
     const requirement = await db.requirementFile.create({
       data: {
         title,
@@ -114,7 +130,7 @@ export async function POST(request: NextRequest) {
         fileName: file.name,
         fileSize: file.size,
         fileType: file.type,
-        filePath: `/uploads/requirements/${fileName}`,
+        filePath: blobData.url, // Use Blob URL instead of local path
       },
     });
 

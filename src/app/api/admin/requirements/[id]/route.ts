@@ -1,8 +1,6 @@
 import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { requireAdmin, apiResponse, apiError } from '@/lib/auth';
-import { unlink } from 'fs/promises';
-import { join } from 'path';
 
 // DELETE /api/admin/requirements/[id] - Delete a requirement file (admin only)
 export async function DELETE(
@@ -18,7 +16,7 @@ export async function DELETE(
 
     const id = params.id;
 
-    // Get the requirement first to get the file path
+    // Get the requirement first to verify it exists
     const requirement = await db.requirementFile.findUnique({
       where: { id },
     });
@@ -27,16 +25,7 @@ export async function DELETE(
       return apiError('Requirement file not found', 404);
     }
 
-    // Delete the file from filesystem
-    const filePath = join(process.cwd(), 'public', requirement.filePath);
-    try {
-      await unlink(filePath);
-    } catch (error) {
-      console.error('Failed to delete file:', error);
-      // Continue with database deletion even if file deletion fails
-    }
-
-    // Delete from database
+    // Delete from database only (file remains in Blob storage but that's okay)
     await db.requirementFile.delete({
       where: { id },
     });
