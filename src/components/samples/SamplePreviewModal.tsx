@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { X, Lock, MessageCircle, LogIn } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
 
 interface SamplePreviewModalProps {
   sample: {
@@ -38,6 +37,9 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
         setLoading(true);
         setPageImages([]);
         setVisiblePages(new Set());
+
+        // Dynamically import pdfjs-dist to avoid SSR issues
+        const pdfjsLib = await import('pdfjs-dist');
 
         // Set worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
