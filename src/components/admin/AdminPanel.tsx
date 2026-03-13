@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -50,7 +51,10 @@ import {
   Copy,
   Globe,
   Share2,
-  Code
+  Code,
+  FileCheck,
+  Upload,
+  Download
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { seoConfig } from '@/lib/seo-config';
@@ -146,6 +150,18 @@ interface Sample {
   createdAt: string;
 }
 
+interface RequirementFile {
+  id: string;
+  title: string;
+  description?: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  filePath: string;
+  category?: string;
+  createdAt: string;
+}
+
 export default function AdminPanel() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -156,6 +172,7 @@ export default function AdminPanel() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [samples, setSamples] = useState<Sample[]>([]);
+  const [requirements, setRequirements] = useState<RequirementFile[]>([]);
   const [activeTab, setActiveTab] = useState('dashboard');
   
   // Dialog states
@@ -190,6 +207,17 @@ export default function AdminPanel() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [creatingSample, setCreatingSample] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+
+  // Requirement dialog states
+  const [showRequirementDialog, setShowRequirementDialog] = useState(false);
+  const [requirementForm, setRequirementForm] = useState({
+    title: '',
+    description: '',
+    category: '',
+  });
+  const [selectedRequirementFile, setSelectedRequirementFile] = useState<File | null>(null);
+  const [creatingRequirement, setCreatingRequirement] = useState(false);
+  const [uploadingRequirementFile, setUploadingRequirementFile] = useState(false);
 
   // Settings state
   const [currencySettings, setCurrencySettings] = useState({
@@ -237,12 +265,13 @@ export default function AdminPanel() {
 
   const loadDashboardData = async () => {
     try {
-      const [statsRes, ordersRes, inquiriesRes, blogsRes, samplesRes, settingsRes] = await Promise.all([
+      const [statsRes, ordersRes, inquiriesRes, blogsRes, samplesRes, requirementsRes, settingsRes] = await Promise.all([
         fetch('/api/dashboard/stats'),
         fetch('/api/orders'),
         fetch('/api/inquiries'),
         fetch('/api/blogs'),
         fetch('/api/samples'),
+        fetch('/api/admin/requirements'),
         fetch('/api/admin/settings'),
       ]);
 
@@ -265,6 +294,10 @@ export default function AdminPanel() {
       if (samplesRes.ok) {
         const data = await samplesRes.json();
         setSamples(data.samples || []);
+      }
+      if (requirementsRes.ok) {
+        const data = await requirementsRes.json();
+        setRequirements(data.requirements || []);
       }
       if (settingsRes.ok) {
         const data = await settingsRes.json();
@@ -539,6 +572,109 @@ export default function AdminPanel() {
     }
   };
 
+  const handleRequirementFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Accept PDF, DOC, DOCX, and TXT files
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Only PDF, DOC, DOCX, and TXT files are allowed');
+      return;
+    }
+
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File size exceeds 10MB limit');
+      return;
+    }
+
+    setSelectedRequirementFile(file);
+    toast.success('File selected: ' + file.name);
+  };
+
+  const createRequirement = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!selectedRequirementFile) {
+      toast.error('Please select a file');
+      return;
+    }
+
+    setCreatingRequirement(true);
+    setUploadingRequirementFile(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('title', requirementForm.title);
+      formData.append('description', requirementForm.description || '');
+      formData.append('category', requirementForm.category || '');
+      formData.append('file', selectedRequirementFile);
+
+      const res = await fetch('/api/admin/requirements', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success('Requirement file uploaded successfully!');
+        setRequirementForm({
+          title: '',
+          description: '',
+          category: '',
+        });
+        setSelectedRequirementFile(null);
+        setShowRequirementDialog(false);
+        loadDashboardData();
+      } else {
+        toast.error(data.error || 'Failed to upload requirement file');
+      }
+    } catch (error) {
+      toast.error('An error occurred');
+    } finally {
+      setCreatingRequirement(false);
+      setUploadingRequirementFile(false);
+    }
+  };
+
+  const deleteRequirement = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this requirement file? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/admin/requirements/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        toast.success('Requirement file deleted successfully');
+        loadDashboardData();
+      } else {
+        const data = await res.json();
+        toast.error(data.error || 'Failed to delete requirement file');
+      }
+    } catch (error) {
+      toast.error('An error occurred');
+    }
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  };
+
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; className: string }> = {
       pending: { variant: "secondary", className: "bg-yellow-100 text-yellow-800" },
@@ -714,6 +850,10 @@ export default function AdminPanel() {
             <TabsTrigger value="seo" className="flex items-center gap-1 sm:gap-2">
               <Search className="h-4 w-4" />
               <span className="hidden sm:inline">SEO</span>
+            </TabsTrigger>
+            <TabsTrigger value="requirements" className="flex items-center gap-1 sm:gap-2">
+              <FileCheck className="h-4 w-4" />
+              <span className="hidden sm:inline">Requirements</span>
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-1 sm:gap-2">
               <Settings className="h-4 w-4" />
@@ -1651,6 +1791,86 @@ export default function AdminPanel() {
             </Card>
           </TabsContent>
 
+          {/* Requirements Tab */}
+          <TabsContent value="requirements" className="space-y-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Requirement Files</CardTitle>
+                  <CardDescription>Upload and manage requirement files for Assignment & Coursework Help</CardDescription>
+                </div>
+                <Button onClick={() => setShowRequirementDialog(true)}>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Upload Requirement
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>File Name</TableHead>
+                        <TableHead>File Size</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {requirements.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                            No requirement files yet. Click "Upload Requirement" to add one.
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        requirements.map((requirement) => (
+                          <TableRow key={requirement.id}>
+                            <TableCell className="font-medium">{requirement.title}</TableCell>
+                            <TableCell className="max-w-[150px] truncate text-sm">{requirement.description || '-'}</TableCell>
+                            <TableCell>
+                              {requirement.category ? (
+                                <Badge variant="secondary">{requirement.category}</Badge>
+                              ) : (
+                                '-'
+                              )}
+                            </TableCell>
+                            <TableCell className="max-w-[150px] truncate text-sm">{requirement.fileName}</TableCell>
+                            <TableCell className="text-sm">{formatFileSize(requirement.fileSize)}</TableCell>
+                            <TableCell>{formatDate(requirement.createdAt)}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => window.open(requirement.filePath, '_blank')}
+                                  title="Download file"
+                                >
+                                  <Download className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                  onClick={() => deleteRequirement(requirement.id)}
+                                  title="Delete requirement"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
             <Card>
@@ -2245,6 +2465,92 @@ export default function AdminPanel() {
               </Button>
               <Button type="submit" disabled={creatingSample || uploadingFile}>
                 {creatingSample ? 'Creating...' : 'Create Sample'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Requirement Dialog */}
+      <Dialog open={showRequirementDialog} onOpenChange={setShowRequirementDialog}>
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Upload Requirement File</DialogTitle>
+            <DialogDescription>
+              Upload a requirement file for Assignment & Coursework Help
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={createRequirement} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="requirement-title">Title *</Label>
+              <Input
+                id="requirement-title"
+                value={requirementForm.title}
+                onChange={(e) => setRequirementForm({ ...requirementForm, title: e.target.value })}
+                placeholder="e.g., CS101 Programming Assignment"
+                required
+                minLength={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="requirement-description">Description</Label>
+              <Textarea
+                id="requirement-description"
+                value={requirementForm.description}
+                onChange={(e) => setRequirementForm({ ...requirementForm, description: e.target.value })}
+                placeholder="Describe the requirement..."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="requirement-category">Category</Label>
+              <Input
+                id="requirement-category"
+                value={requirementForm.category}
+                onChange={(e) => setRequirementForm({ ...requirementForm, category: e.target.value })}
+                placeholder="e.g., Programming, Essay, Research Paper"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="requirement-file">Upload File *</Label>
+              <Input
+                id="requirement-file"
+                type="file"
+                onChange={handleRequirementFileSelect}
+                accept=".pdf,.doc,.docx,.txt"
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Accepted formats: PDF, DOC, DOCX, TXT (Max 10MB)
+              </p>
+              {selectedRequirementFile && (
+                <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-md">
+                  <FileCheck className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">{selectedRequirementFile.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    ({formatFileSize(selectedRequirementFile.size)})
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowRequirementDialog(false);
+                  setRequirementForm({ title: '', description: '', category: '' });
+                  setSelectedRequirementFile(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={creatingRequirement || uploadingRequirementFile}>
+                {creatingRequirement ? 'Uploading...' : 'Upload File'}
               </Button>
             </div>
           </form>
