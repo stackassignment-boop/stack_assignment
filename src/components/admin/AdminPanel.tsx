@@ -693,9 +693,21 @@ export default function AdminPanel() {
       return;
     }
 
-    // At least one field must be updated
-    if (!requirementForm.title.trim() && !requirementForm.description.trim() && !requirementForm.category.trim() && !selectedRequirementFile) {
+    // For editing, we allow any field to be updated
+    // Check if at least one field has a value or a file is selected
+    const hasTitle = requirementForm.title.trim().length > 0;
+    const hasDescription = requirementForm.description.trim().length > 0;
+    const hasCategory = requirementForm.category.trim().length > 0;
+    const hasFile = selectedRequirementFile !== null;
+
+    if (!hasTitle && !hasDescription && !hasCategory && !hasFile) {
       toast.error('Please update at least one field or upload a new file');
+      return;
+    }
+
+    // Validate title if provided (must be at least 3 characters)
+    if (hasTitle && requirementForm.title.trim().length < 3) {
+      toast.error('Title must be at least 3 characters');
       return;
     }
 
@@ -707,20 +719,29 @@ export default function AdminPanel() {
     try {
       const formData = new FormData();
 
-      // Only include fields that have non-empty values
-      if (requirementForm.title.trim()) {
-        formData.append('title', requirementForm.title);
+      // Include all non-empty fields
+      if (hasTitle) {
+        formData.append('title', requirementForm.title.trim());
       }
-      if (requirementForm.description.trim()) {
-        formData.append('description', requirementForm.description);
+      if (hasDescription) {
+        formData.append('description', requirementForm.description.trim());
       }
-      if (requirementForm.category.trim()) {
-        formData.append('category', requirementForm.category);
+      if (hasCategory) {
+        formData.append('category', requirementForm.category.trim());
       }
 
       if (selectedRequirementFile) {
         formData.append('file', selectedRequirementFile);
       }
+
+      console.log('Updating requirement with fields:', {
+        hasTitle,
+        hasDescription,
+        hasCategory,
+        hasFile,
+        title: hasTitle ? requirementForm.title : 'not sent',
+        category: hasCategory ? requirementForm.category : 'not sent',
+      });
 
       const res = await fetch(`/api/admin/requirements/${editingRequirementId}`, {
         method: 'PUT',
@@ -728,6 +749,8 @@ export default function AdminPanel() {
       });
 
       const data = await res.json();
+
+      console.log('Update response:', data);
 
       if (res.ok) {
         toast.success('Requirement file updated successfully!');
@@ -743,9 +766,11 @@ export default function AdminPanel() {
         setEditingRequirementId(null);
         loadDashboardData();
       } else {
+        console.error('Update failed:', data);
         toast.error(data.error || 'Failed to update requirement file');
       }
     } catch (error) {
+      console.error('Update error:', error);
       toast.error('An error occurred');
     } finally {
       setUpdatingRequirement(false);
@@ -2603,15 +2628,17 @@ export default function AdminPanel() {
           <form onSubmit={isEditingRequirement ? updateRequirement : createRequirement} className="space-y-4">
 
             <div className="space-y-2">
-              <Label htmlFor="requirement-title">Title *</Label>
+              <Label htmlFor="requirement-title">Title {!isEditingRequirement && '*'}</Label>
               <Input
                 id="requirement-title"
                 value={requirementForm.title}
                 onChange={(e) => setRequirementForm({ ...requirementForm, title: e.target.value })}
                 placeholder="e.g., CS101 Programming Assignment"
-                required={isEditingRequirement ? false : true}
-                minLength={3}
+                required={!isEditingRequirement}
               />
+              {isEditingRequirement && requirementForm.title && requirementForm.title.length < 3 && (
+                <p className="text-xs text-muted-foreground">Title must be at least 3 characters</p>
+              )}
             </div>
 
             <div className="space-y-2">

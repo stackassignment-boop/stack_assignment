@@ -46,9 +46,21 @@ export async function PUT(
       const description = formData.get('description') as string | null;
       const category = formData.get('category') as string | null;
 
+      console.log('PUT request received:', {
+        id,
+        hasTitle: title !== null,
+        title: title,
+        hasDescription: description !== null,
+        description: description,
+        hasCategory: category !== null,
+        category: category,
+        hasFile: file !== null,
+      });
+
       // Validate at least one field is being updated
       // Note: formData.get() returns null for missing fields, empty string for empty values
       if (!title && !description && !category && !file) {
+        console.log('Validation failed: No fields provided');
         return apiError('At least one field must be provided for update', 400);
       }
 
@@ -58,6 +70,7 @@ export async function PUT(
       if (title !== null) {
         // Validate title if provided
         if (title.length < 3) {
+          console.log('Validation failed: Title too short', { title, length: title.length });
           return apiError('Title must be at least 3 characters', 400);
         }
         updateData.title = title;
@@ -68,6 +81,8 @@ export async function PUT(
       if (category !== null) {
         updateData.category = category;
       }
+
+      console.log('Update data prepared:', updateData);
 
       // If file is provided, upload it
       if (file) {
@@ -132,10 +147,13 @@ export async function PUT(
       }
 
       // Update the requirement
+      console.log('Updating requirement in database with data:', updateData);
       const updatedRequirement = await db.requirementFile.update({
         where: { id },
         data: updateData,
       });
+
+      console.log('Requirement updated successfully:', updatedRequirement);
 
       return apiResponse({
         success: true,
