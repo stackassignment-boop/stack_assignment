@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  // Empty turbopack config to use Turbopack defaults
+  turbopack: {},
 };
 
 export default nextConfig;
