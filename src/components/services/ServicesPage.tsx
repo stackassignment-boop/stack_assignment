@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PenTool, BookOpen, FlaskConical, ClipboardList, Edit3, Laptop, Check } from 'lucide-react';
+import { PenTool, BookOpen, FlaskConical, ClipboardList, Edit3, Laptop, Check, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ServicesPageProps {
