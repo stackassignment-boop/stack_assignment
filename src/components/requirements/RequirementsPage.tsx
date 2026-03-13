@@ -97,8 +97,14 @@ export default function RequirementsPage() {
   };
 
   const handlePreview = (requirement: Requirement) => {
-    setPreviewRequirement(requirement);
-    setShowPreviewModal(true);
+    // For PDF files, show the preview modal
+    if (requirement.fileType === 'application/pdf') {
+      setPreviewRequirement(requirement);
+      setShowPreviewModal(true);
+    } else {
+      // For non-PDF files, open directly in a new tab
+      window.open(requirement.filePath, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const handleClosePreview = () => {
@@ -265,7 +271,7 @@ export default function RequirementsPage() {
                       className="flex-1"
                     >
                       <Eye className="w-4 h-4 mr-2" />
-                      {requirement.fileType === 'application/pdf' ? 'Preview' : 'View'}
+                      {requirement.fileType === 'application/pdf' ? 'Preview' : 'Open File'}
                     </Button>
                     <Button
                       onClick={() => handleGetAnswer(requirement)}
