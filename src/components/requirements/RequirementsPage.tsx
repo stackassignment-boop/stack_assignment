@@ -97,13 +97,13 @@ export default function RequirementsPage() {
   };
 
   const handlePreview = (requirement: Requirement) => {
-    // For PDF files, show the preview modal
+    // Only PDF files can be previewed
     if (requirement.fileType === 'application/pdf') {
       setPreviewRequirement(requirement);
       setShowPreviewModal(true);
     } else {
-      // For non-PDF files, open directly in a new tab
-      window.open(requirement.filePath, '_blank', 'noopener,noreferrer');
+      // Show toast error for non-PDF files
+      toast.error('Only PDF files can be previewed. Please upload a PDF version of this file.');
     }
   };
 
@@ -269,9 +269,10 @@ export default function RequirementsPage() {
                       onClick={() => handlePreview(requirement)}
                       variant="outline"
                       className="flex-1"
+                      disabled={requirement.fileType !== 'application/pdf'}
                     >
                       <Eye className="w-4 h-4 mr-2" />
-                      {requirement.fileType === 'application/pdf' ? 'Preview' : 'Open File'}
+                      Preview
                     </Button>
                     <Button
                       onClick={() => handleGetAnswer(requirement)}

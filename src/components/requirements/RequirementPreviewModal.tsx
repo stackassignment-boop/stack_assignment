@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { X, FileText, AlertCircle } from 'lucide-react';
+import { X, AlertCircle } from 'lucide-react';
 
 interface RequirementPreviewModalProps {
   requirement: {
@@ -192,22 +192,18 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   Preview Not Available
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
                   {error}
                 </p>
-                <div className="flex flex-col gap-3">
-                  <a
-                    href={requirement.filePath}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition"
-                  >
-                    <FileText className="h-4 w-4" />
-                    Open {requirement.fileName}
-                  </a>
-                  <p className="text-xs text-gray-500 dark:text-gray-500">
-                    Opens in a new tab
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 text-left">
+                  <p className="text-sm font-medium text-amber-800 dark:text-amber-200 mb-2">
+                    To fix this:
                   </p>
+                  <ol className="text-sm text-amber-700 dark:text-amber-300 list-decimal list-inside space-y-1">
+                    <li>Delete this file from the admin panel</li>
+                    <li>Upload a PDF version of the same content</li>
+                    <li>The PDF will be fully previewable</li>
+                  </ol>
                 </div>
               </div>
             </div>
@@ -229,8 +225,10 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
                       <img
                         src={imageSrc}
                         alt={`Page ${pageNum}`}
-                        className="shadow-lg"
+                        className="shadow-lg select-none"
                         style={{ width: containerWidth }}
+                        onContextMenu={(e) => e.preventDefault()}
+                        onDragStart={(e) => e.preventDefault()}
                       />
                     )}
                     
@@ -251,7 +249,7 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
         {/* Footer */}
         <div className="flex items-center justify-center py-3 px-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-xs text-gray-600 dark:text-gray-400 shrink-0">
           {error ? (
-            <span>Preview not available • Click to open externally</span>
+            <span>Preview not available for this file type</span>
           ) : (
             <span>Full preview • All {totalPages} pages visible</span>
           )}
