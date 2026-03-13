@@ -5,10 +5,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
-  
+
   // Production optimizations
   poweredByHeader: false,
-  
+
   // Image optimization domains
   images: {
     remotePatterns: [
@@ -20,4 +20,5 @@ const nextConfig: NextConfig = {
   },
 };
 
+// Updated to trigger server restart
 export default nextConfig;

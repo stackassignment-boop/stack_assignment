@@ -179,7 +179,8 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                       </li>
                     ))}
                   </ul>
-                  
+                </div>
+              );
             })}
           </div>
         </div>
