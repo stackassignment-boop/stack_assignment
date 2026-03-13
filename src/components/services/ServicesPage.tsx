@@ -156,11 +156,23 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
             {services.map((service, index) => {
               const isAssignmentService = service.title === 'Assignment & Coursework Help';
-              
+
               return (
                 <div
                   key={index}
-                  className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-7 md:p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border border-gray-100 dark:border-slate-700"
+                  className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-7 md:p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100 dark:border-slate-700 cursor-pointer"
+                  onClick={() => {
+                    if (isAssignmentService) {
+                      // Navigate to requirements page for Assignment & Coursework Help
+                      window.location.href = '/requirements';
+                    } else {
+                      // Navigate to order page for other services
+                      const params = new URLSearchParams();
+                      params.set('view', 'order');
+                      params.set('subject', service.title);
+                      window.location.href = `/?${params.toString()}`;
+                    }
+                  }}
                 >
                   <div className="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center mb-6">
                     <service.icon className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
@@ -216,6 +228,12 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
               <div
                 key={index}
                 className="bg-gray-50 dark:bg-slate-800 rounded-lg p-3 text-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 transition cursor-pointer"
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  params.set('view', 'order');
+                  params.set('subject', item);
+                  window.location.href = `/?${params.toString()}`;
+                }}
               >
                 {item}
               </div>
@@ -254,7 +272,13 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
             ].map((subject, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition"
+                className="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition cursor-pointer"
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  params.set('view', 'order');
+                  params.set('subject', subject.name);
+                  window.location.href = `/?${params.toString()}`;
+                }}
               >
                 <span className="text-2xl">{subject.icon}</span>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
