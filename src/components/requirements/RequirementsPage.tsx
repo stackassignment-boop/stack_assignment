@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FileText, Download, Search, ArrowRight, Filter } from 'lucide-react';
+import { FileText, Download, Search, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 interface Requirement {
   id: string;
@@ -29,6 +31,22 @@ export default function RequirementsPage() {
 
   // Categories
   const categories = ['all', 'Programming', 'Essay', 'Research Paper', 'Case Study', 'Coursework', 'Lab Report'];
+
+  // Handle navigation
+  const handleNavigate = useCallback((page: string, params?: Record<string, string>) => {
+    const urlParams = new URLSearchParams();
+    urlParams.set('view', page);
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          urlParams.set(key, value);
+        }
+      });
+    }
+
+    window.location.href = `/?${urlParams.toString()}`;
+  }, []);
 
   // Fetch requirements
   useEffect(() => {
@@ -68,15 +86,11 @@ export default function RequirementsPage() {
 
   const handleGetAnswer = (requirement: Requirement) => {
     // Pre-fill order form with requirement data
-    const params = new URLSearchParams();
-    params.set('view', 'order');
-    params.set('subject', requirement.title);
-    params.set('description', requirement.description || `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`);
-    if (requirement.category) {
-      params.set('category', requirement.category);
-    }
-    
-    window.location.href = `/?${params.toString()}`;
+    handleNavigate('order', {
+      subject: requirement.title,
+      description: requirement.description || `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`,
+      ...(requirement.category && { category: requirement.category }),
+    });
   };
 
   const formatFileSize = (bytes: number) => {
@@ -107,32 +121,39 @@ export default function RequirementsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 dark:from-slate-950">
-      {/* Header */}
-      <header className="bg-white dark:bg-slate-800 shadow-md sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <FileText className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-950">
+      <Header
+        currentPage="requirements"
+        onNavigate={handleNavigate}
+        studentUser={null}
+        onLogout={() => {}}
+      />
+
+      <main className="flex-grow">
+        {/* Page Header */}
+        <div className="bg-white dark:bg-slate-800 border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Assignment & Coursework Help</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  Assignment & Coursework Help
+                </h1>
+                <p className="mt-2 text-gray-600 dark:text-gray-400">
                   Browse requirements and get expert help
                 </p>
               </div>
+              <Button
+                variant="outline"
+                onClick={() => handleNavigate('services')}
+              >
+                ← Back to Services
+              </Button>
             </div>
-            <a
-              href="/?view=services"
-              className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
-            >
-              ← Back to Services
-            </a>
           </div>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Filter */}
         <Card className="mb-8">
           <CardContent className="p-4">
@@ -258,71 +279,10 @@ export default function RequirementsPage() {
             ))}
           </div>
         )}
-
-        {/* SEO Content for Search Engines */}
-        <div className="mt-12">
-          <Card>
-            <CardHeader>
-              <CardTitle>SEO Information</CardTitle>
-              <CardDescription>
-                This page displays all assignment and coursework requirements with their full content for SEO purposes
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
-              <p>
-                <strong>Why this is SEO-friendly:</strong>
-              </p>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>✅ All requirement titles are displayed as visible text on the page</li>
-                <li>✅ Descriptions provide searchable content for students</li>
-                <li>✅ Categories help organize content by subject area</li>
-                <li>✅ File names are indexed and searchable</li>
-                <li>✅ Internal linking from files helps search engines discover related content</li>
-                <li>✅ Fresh content is frequently indexed by search engines</li>
-              </ul>
-              <p className="mt-4">
-                <strong>Searchable by students for:</strong>
-              </p>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>Assignment titles (e.g., "CS101 Programming Assignment")</li>
-                <li>Course names (e.g., "Marketing 101")</li>
-                <li>Keywords in descriptions</li>
-                <li>File names</li>
-                <li>Categories (Programming, Essay, Research Paper, etc.)</li>
-              </ul>
-            </CardContent>
-          </Card>
         </div>
-
-        {/* CTA Section */}
-        <Card className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-900 dark:to-indigo-950">
-          <CardContent className="py-12 text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Can't find what you're looking for?
-            </h2>
-            <p className="text-indigo-100 text-lg mb-6">
-              Contact us and we'll help you find the right requirements for your course
-            </p>
-            <Button
-              onClick={() => window.open('/?view=contact', '_self')}
-              variant="secondary"
-              className="bg-white text-indigo-600 hover:bg-gray-50"
-            >
-              Contact Support
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </CardContent>
-        </Card>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white dark:bg-slate-800 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-            © 2024 StackAssignment. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <Footer onNavigate={handleNavigate} />
     </div>
   );
 }
