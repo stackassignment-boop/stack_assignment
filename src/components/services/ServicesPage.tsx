@@ -81,6 +81,7 @@ const services = [
 export default function ServicesPage({ onNavigate }: ServicesPageProps) {
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [loadingRequirements, setLoadingRequirements] = useState(true);
+  const [expandedService, setExpandedService] = useState<string | null>(null);
 
   // Fetch requirements on mount
   useEffect(() => {
@@ -156,116 +157,129 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-            {services.map((service, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-7 md:p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100 dark:border-slate-700"
-              >
-                <div className="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center mb-6">
-                  <service.icon className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
+            {services.map((service, index) => {
+              const isExpanded = expandedService === service.title;
+              const isAssignmentService = service.title === 'Assignment & Coursework Help';
+              
+              return (
+                <div
+                  key={index}
+                  className={`bg-white dark:bg-slate-800 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border ${
+                    isAssignmentService 
+                      ? 'border-indigo-500 ring-2 ring-indigo-200 dark:ring-indigo-800' 
+                      : 'border-gray-100 dark:border-slate-700'
+                  }`}
+                >
+                  <div 
+                    className={`${isAssignmentService ? 'cursor-pointer' : ''}`}
+                    onClick={() => {
+                      if (isAssignmentService) {
+                        setExpandedService(expandedService === service.title ? null : service.title);
+                      }
+                    }}
+                  >
+                    <div className="p-7 md:p-8">
+                      <div className="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center mb-6">
+                        <service.icon className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
+                      </div>
+                      <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+                        {service.title}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        {service.description}
+                      </p>
+                      <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                        {service.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-center gap-2">
+                            <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Expanded Requirements Section - Only for Assignment & Coursework Help */}
+                  {isAssignmentService && isExpanded && requirements.length > 0 && (
+                    <div className="border-t border-gray-200 dark:border-slate-700 p-6 bg-gradient-to-b from-indigo-50/50 to-purple-50/50 dark:from-slate-800 dark:to-slate-900">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-2 mb-4">
+                          <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                          <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Available Requirements
+                          </h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            Click 'Get Answer' to pre-fill order with requirement details
+                          </p>
+                        </div>
+
+                        {requirements.map((requirement) => (
+                          <Card key={requirement.id} className="border-2 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-300 hover:shadow-md">
+                            <CardHeader className="pb-3">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1">
+                                  {requirement.category && (
+                                    <Badge className="mb-2" variant="secondary">{requirement.category}</Badge>
+                                  )}
+                                  <CardTitle className="text-base font-semibold text-gray-900 dark:text-white leading-tight">
+                                    {requirement.title}
+                                  </CardTitle>
+                                </div>
+                                <a
+                                  href={requirement.filePath}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex-shrink-0"
+                                  title="Download requirement file"
+                                >
+                                  <Button variant="outline" size="icon" className="rounded-full h-8 w-8">
+                                    <Download className="w-4 h-4" />
+                                  </Button>
+                                </a>
+                              </div>
+                            </CardHeader>
+                            <CardContent className="space-y-3 pt-2">
+                              {requirement.description && (
+                                <CardDescription className="line-clamp-2 text-sm">
+                                  {requirement.description}
+                                </CardDescription>
+                              )}
+                              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                                <span className="font-medium">{requirement.fileName}</span>
+                                <span className="bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded">
+                                  {formatFileSize(requirement.fileSize)}
+                                </span>
+                                <span>{formatDate(requirement.createdAt)}</span>
+                              </div>
+                              <Button
+                                type="button"
+                                onClick={() => handleGetAnswer(requirement)}
+                                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold text-sm"
+                              >
+                                Get Answer
+                                <ArrowRight className="ml-2 w-3.5 h-3.5" />
+                              </Button>
+                            </CardContent>
+                          </Card>
+                        ))}
+
+                        {requirements.length === 0 && !loadingRequirements && (
+                          <div className="text-center py-8">
+                            <FileText className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">
+                              No requirements available yet
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  {service.description}
-                </p>
-                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                  {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
-
-      {/* Requirements Section - Assignment & Coursework Help */}
-      {requirements.length > 0 && (
-        <section className="py-12 md:py-16 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-900 dark:to-indigo-950">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 mb-4">
-                <FileText className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-                  Assignment & Coursework Help
-                </h2>
-              </div>
-              <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Browse available requirements and get expert help with your assignments
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {requirements.map((requirement) => (
-                <Card key={requirement.id} className="border-2 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-300 hover:shadow-xl">
-                  <CardHeader>
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        {requirement.category && (
-                          <Badge className="mb-2" variant="secondary">{requirement.category}</Badge>
-                        )}
-                        <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">
-                          {requirement.title}
-                        </CardTitle>
-                      </div>
-                      <a
-                        href={requirement.filePath}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-shrink-0"
-                        title="Download requirement file"
-                      >
-                        <Button variant="outline" size="icon" className="rounded-full">
-                          <Download className="w-4 h-4" />
-                        </Button>
-                      </a>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {requirement.description && (
-                      <CardDescription className="line-clamp-2 min-h-[40px]">
-                        {requirement.description}
-                      </CardDescription>
-                    )}
-                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                      <span>{requirement.fileName}</span>
-                      <span>{formatFileSize(requirement.fileSize)}</span>
-                    </div>
-                    <div className="text-xs text-gray-400 dark:text-gray-500">
-                      Added on {formatDate(requirement.createdAt)}
-                    </div>
-                    <Button
-                      type="button"
-                      onClick={() => handleGetAnswer(requirement)}
-                      className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold"
-                    >
-                      Get Answer
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {requirements.length === 0 && !loadingRequirements && (
-              <div className="text-center py-12">
-                <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                <p className="text-gray-500 dark:text-gray-400 text-lg">
-                  No requirements available at the moment
-                </p>
-                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
-                  Check back later for new assignments
-                </p>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
 
       {/* Additional Services Section */}
       <section className="py-12 bg-white dark:bg-slate-900">
