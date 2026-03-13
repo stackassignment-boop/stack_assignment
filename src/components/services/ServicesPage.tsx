@@ -86,10 +86,17 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
   useEffect(() => {
     const fetchRequirements = async () => {
       try {
+        console.log('Fetching requirements...');
         const res = await fetch('/api/requirements');
+        console.log('Requirements API response status:', res.status);
+        
         if (res.ok) {
           const data = await res.json();
+          console.log('Requirements data:', data);
           setRequirements(data.requirements || []);
+        } else {
+          const errorData = await res.json();
+          console.error('Requirements API error:', errorData);
         }
       } catch (error) {
         console.error('Failed to fetch requirements:', error);
@@ -101,6 +108,8 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
   }, []);
 
   const handleGetAnswer = (requirement: Requirement) => {
+    console.log('Get Answer clicked for requirement:', requirement);
+    
     // Pre-fill order form with requirement data
     const params: Record<string, string> = {
       subject: requirement.title,
@@ -109,6 +118,8 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
     if (requirement.category) {
       params.category = requirement.category;
     }
+    
+    console.log('Navigating to order with params:', params);
     onNavigate?.('order', params);
   };
 
