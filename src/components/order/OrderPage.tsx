@@ -74,6 +74,20 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
       }
     };
     fetchUserSession();
+
+    // Check for pre-filled data from URL parameters
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const subject = urlParams.get('subject');
+      const description = urlParams.get('description');
+      
+      if (subject) {
+        setFormData(prev => ({ ...prev, subject }));
+      }
+      if (description) {
+        setFormData(prev => ({ ...prev, description }));
+      }
+    }
   }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

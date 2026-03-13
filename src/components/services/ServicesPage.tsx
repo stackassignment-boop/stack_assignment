@@ -1,10 +1,24 @@
 'use client';
 
-import { PenTool, BookOpen, FlaskConical, ClipboardList, Edit3, Laptop, ArrowRight, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { PenTool, BookOpen, FlaskConical, ClipboardList, Edit3, Laptop, ArrowRight, Check, Download, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 interface ServicesPageProps {
-  onNavigate?: (page: string) => void;
+  onNavigate?: (page: string, params?: Record<string, string>) => void;
+}
+
+interface Requirement {
+  id: string;
+  title: string;
+  description?: string;
+  category?: string;
+  fileName: string;
+  fileSize: number;
+  filePath: string;
+  createdAt: string;
 }
 
 const services = [
@@ -65,6 +79,54 @@ const services = [
 ];
 
 export default function ServicesPage({ onNavigate }: ServicesPageProps) {
+  const [requirements, setRequirements] = useState<Requirement[]>([]);
+  const [loadingRequirements, setLoadingRequirements] = useState(true);
+
+  // Fetch requirements on mount
+  useEffect(() => {
+    const fetchRequirements = async () => {
+      try {
+        const res = await fetch('/api/requirements');
+        if (res.ok) {
+          const data = await res.json();
+          setRequirements(data.requirements || []);
+        }
+      } catch (error) {
+        console.error('Failed to fetch requirements:', error);
+      } finally {
+        setLoadingRequirements(false);
+      }
+    };
+    fetchRequirements();
+  }, []);
+
+  const handleGetAnswer = (requirement: Requirement) => {
+    // Pre-fill order form with requirement data
+    const params: Record<string, string> = {
+      subject: requirement.title,
+      description: requirement.description || `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`,
+    };
+    if (requirement.category) {
+      params.category = requirement.category;
+    }
+    onNavigate?.('order', params);
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
   return (
     <div className="bg-gray-50 dark:bg-slate-950">
       {/* Hero Section */}
@@ -110,6 +172,88 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Requirements Section - Assignment & Coursework Help */}
+      {requirements.length > 0 && (
+        <section className="py-12 md:py-16 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-900 dark:to-indigo-950">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <FileText className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                  Assignment & Coursework Help
+                </h2>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Browse available requirements and get expert help with your assignments
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {requirements.map((requirement) => (
+                <Card key={requirement.id} className="border-2 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-300 hover:shadow-xl">
+                  <CardHeader>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1">
+                        {requirement.category && (
+                          <Badge className="mb-2" variant="secondary">{requirement.category}</Badge>
+                        )}
+                        <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">
+                          {requirement.title}
+                        </CardTitle>
+                      </div>
+                      <a
+                        href={requirement.filePath}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-shrink-0"
+                        title="Download requirement file"
+                      >
+                        <Button variant="outline" size="icon" className="rounded-full">
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </a>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {requirement.description && (
+                      <CardDescription className="line-clamp-2 min-h-[40px]">
+                        {requirement.description}
+                      </CardDescription>
+                    )}
+                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                      <span>{requirement.fileName}</span>
+                      <span>{formatFileSize(requirement.fileSize)}</span>
+                    </div>
+                    <div className="text-xs text-gray-400 dark:text-gray-500">
+                      Added on {formatDate(requirement.createdAt)}
+                    </div>
+                    <Button
+                      onClick={() => handleGetAnswer(requirement)}
+                      className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold"
+                    >
+                      Get Answer
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {requirements.length === 0 && !loadingRequirements && (
+              <div className="text-center py-12">
+                <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                <p className="text-gray-500 dark:text-gray-400 text-lg">
+                  No requirements available at the moment
+                </p>
+                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
+                  Check back later for new assignments
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Additional Services Section */}
       <section className="py-12 bg-white dark:bg-slate-900">

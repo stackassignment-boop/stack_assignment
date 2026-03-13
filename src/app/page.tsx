@@ -86,11 +86,14 @@ function HomeContent() {
     // Build URL with params
     const urlParams = new URLSearchParams();
     urlParams.set('view', page);
-    if (params?.slug) {
-      urlParams.set('slug', params.slug);
-    }
-    if (params?.preview) {
-      urlParams.set('preview', params.preview);
+    
+    // Add all params to URL
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          urlParams.set(key, value);
+        }
+      });
     }
     
     window.history.pushState({}, '', `/?${urlParams.toString()}`);
