@@ -201,13 +201,17 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log('DELETE request received for requirement ID:', params.id);
+    
     const authResult = await requireAdmin();
 
     if (!authResult.success) {
+      console.log('Auth failed:', authResult);
       return apiError(authResult.error || 'Unauthorized', authResult.status || 401);
     }
 
     const id = params.id;
+    console.log('Authenticated, deleting requirement:', id);
 
     // Get the requirement first to verify it exists
     const requirement = await db.requirementFile.findUnique({
@@ -215,13 +219,18 @@ export async function DELETE(
     });
 
     if (!requirement) {
+      console.log('Requirement not found:', id);
       return apiError('Requirement file not found', 404);
     }
+
+    console.log('Found requirement, deleting:', requirement.title);
 
     // Delete from database only (file remains in Blob storage but that's okay)
     await db.requirementFile.delete({
       where: { id },
     });
+
+    console.log('Requirement deleted successfully');
 
     return apiResponse({
       success: true,

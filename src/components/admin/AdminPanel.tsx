@@ -657,18 +657,24 @@ export default function AdminPanel() {
     }
 
     try {
+      console.log('Deleting requirement with ID:', id);
       const res = await fetch(`/api/admin/requirements/${id}`, {
         method: 'DELETE',
       });
+
+      console.log('Delete response status:', res.status);
+      const data = await res.json();
+      console.log('Delete response data:', data);
 
       if (res.ok) {
         toast.success('Requirement file deleted successfully');
         loadDashboardData();
       } else {
-        const data = await res.json();
+        console.error('Delete failed:', data);
         toast.error(data.error || 'Failed to delete requirement file');
       }
     } catch (error) {
+      console.error('Delete error:', error);
       toast.error('An error occurred');
     }
   };
