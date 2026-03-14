@@ -201,8 +201,6 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   console.log('DELETE request received for requirement ID:', params.id);
-  console.log('Available Prisma models:', Object.keys(db));
-  console.log('Is requirementFile available?', 'requirementFile' in db);
   
   try {
     const authResult = await requireAdmin();
@@ -222,41 +220,50 @@ export async function DELETE(
     }
 
     // Check if requirementFile model exists
-    if (!db.requirementFile) {
-      console.error('requirementFile model not found in Prisma client');
-      console.error('Available models:', Object.keys(db));
-      
-      // Try alternative model names
-      const alternativeNames = ['requirementfile', 'RequirementFile', 'requirement_File', 'requirement', 'Requirement'];
-      for (const name of alternativeNames) {
-        if (name in db) {
-          console.log(`Found model with name: ${name}`);
-        }
-      }
-      
-      return apiError('Database model not found: requirementFile. Available: ' + Object.keys(db).join(', '), 500);
+    console.log('Available Prisma models:', Object.keys(db));
+    
+    // Try to find the correct model name
+    const modelNames = Object.keys(db);
+    const requirementModel = modelNames.find(m => 
+      m.toLowerCase().includes('requirement')
+    );
+    
+    console.log('Found requirement model:', requirementModel);
+    
+    if (!requirementModel) {
+      console.error('No requirement model found in Prisma');
+      return apiError('Database model not found. Available: ' + modelNames.join(', '), 500);
     }
 
-    // Get the requirement first to verify it exists
-    console.log('Looking up requirement with ID:', id);
-    const requirement = await db.requirementFile.findUnique({
+    // Check if record exists using the found model
+    const model = (db as any)[requirementModel];
+    console.log('Using model:', requirementModel);
+    
+    const record = await model.findUnique({
       where: { id },
     });
 
-    if (!requirement) {
+    if (!record) {
       console.log('Requirement not found:', id);
       return apiError('Requirement file not found', 404);
     }
 
-    console.log('Found requirement, deleting:', requirement.title);
+    console.log('Found requirement, deleting:', record.title);
 
-    // Delete from database only (file remains in Blob storage but that's okay)
-    console.log('Attempting to delete with where clause:', { id });
-    await db.requirementFile.delete({
-      where: { id },
-    });
-
-    console.log('Requirement deleted successfully');
+    // Delete using raw SQL to avoid Prisma validation issues
+    try {
+      const tableName = 'RequirementFile'; // Default table name
+      console.log('Deleting with raw SQL from table:', tableName);
+      
+      await db.$executeRaw`DELETE FROM "${tableName}" WHERE id = ${id}`;
+      console.log('Delete successful');
+    } catch (sqlError) {
+      console.error('Raw SQL delete failed, trying Prisma delete:', sqlError);
+      // Fallback to Prisma delete
+      await model.delete({
+        where: { id },
+      });
+    }
 
     return apiResponse({
       success: true,
@@ -266,7 +273,6 @@ export async function DELETE(
     console.error('Delete requirement error:', error);
     console.error('Error name:', error instanceof Error ? error.name : 'Unknown');
     console.error('Error message:', error instanceof Error ? error.message : String(error));
-    console.error('Error details:', JSON.stringify(error, null, 2));
     return apiError(`Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`, 500);
   }
 }
