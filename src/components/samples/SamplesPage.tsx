@@ -1,0 +1,357 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { FileText, BookOpen, GraduationCap, FileCheck, Eye } from 'lucide-react';
+import SamplePreviewModal from './SamplePreviewModal';
+import { StructuredData } from '@/components/seo/StructuredData';
+
+interface Sample {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  subject?: string;
+  academicLevel?: string;
+  paperType?: string;
+  pages?: number;
+  fileName?: string;
+  fileSize?: number;
+}
+
+// Subject-based styles and images
+const subjectStyles: Record<string, { gradient: string; image: string }> = {
+  'Business': { 
+    gradient: 'from-blue-500 to-cyan-600',
+    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop'
+  },
+  'Nursing': { 
+    gradient: 'from-teal-500 to-emerald-600',
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop'
+  },
+  'Literature': { 
+    gradient: 'from-purple-500 to-violet-600',
+    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop'
+  },
+  'Law': { 
+    gradient: 'from-amber-500 to-orange-600',
+    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&h=400&fit=crop'
+  },
+  'STEM': { 
+    gradient: 'from-indigo-500 to-blue-600',
+    image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop'
+  },
+  'Computer Science': { 
+    gradient: 'from-green-500 to-lime-600',
+    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=400&fit=crop'
+  },
+  'Psychology': { 
+    gradient: 'from-pink-500 to-rose-600',
+    image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&h=400&fit=crop'
+  },
+  'Economics': { 
+    gradient: 'from-yellow-500 to-amber-600',
+    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop'
+  },
+  'Education': { 
+    gradient: 'from-cyan-500 to-teal-600',
+    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop'
+  },
+  'default': { 
+    gradient: 'from-gray-500 to-slate-600',
+    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&h=400&fit=crop'
+  },
+};
+
+// Academic level labels
+const academicLevels: Record<string, string> = {
+  high_school: 'High School',
+  bachelor: "Bachelor's",
+  master: "Master's",
+  phd: 'PhD',
+};
+
+// Paper type labels
+const paperTypes: Record<string, string> = {
+  essay: 'Essay',
+  research_paper: 'Research Paper',
+  dissertation: 'Dissertation',
+  thesis: 'Thesis',
+  coursework: 'Coursework',
+  case_study: 'Case Study',
+};
+
+// Get style for subject
+const getSubjectStyle = (subject?: string) => {
+  if (!subject) return subjectStyles.default;
+  return subjectStyles[subject] || subjectStyles.default;
+};
+
+interface SamplesPageProps {
+  previewSlug?: string;
+}
+
+export default function SamplesPage({ previewSlug }: SamplesPageProps) {
+  const [samples, setSamples] = useState<Sample[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
+
+  useEffect(() => {
+    fetchSamples();
+  }, []);
+
+  // Auto-open preview when previewSlug is provided
+  useEffect(() => {
+    if (previewSlug && samples.length > 0) {
+      const sampleToPreview = samples.find(s => s.slug === previewSlug);
+      if (sampleToPreview) {
+        setSelectedSample(sampleToPreview);
+        setShowPreview(true);
+      }
+    }
+  }, [previewSlug, samples]);
+
+  const fetchSamples = async () => {
+    try {
+      const res = await fetch('/api/samples');
+      const data = await res.json();
+      setSamples(data.samples || []);
+    } catch (error) {
+      console.error('Failed to fetch samples:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatFileSize = (bytes?: number) => {
+    if (!bytes) return '';
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  };
+
+  const handlePreview = (sample: Sample) => {
+    setSelectedSample(sample);
+    setShowPreview(true);
+  };
+
+  const handleClosePreview = () => {
+    setShowPreview(false);
+    setSelectedSample(null);
+  };
+
+  // Calculate preview pages
+  const getPreviewPages = (pages?: number) => {
+    if (!pages) return 1;
+    return Math.max(1, Math.ceil(pages / 3));
+  };
+
+  if (loading) {
+    return (
+      <main className="flex-grow py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <>
+      {/* Structured Data for SEO */}
+      <StructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Assignment & Essay Samples',
+          description: 'Preview academic writing samples including essays, research papers, dissertations, and more. Free preview of 1/3rd of each sample.',
+          url: 'https://www.stackassignment.com/samples',
+          mainEntity: {
+            '@type': 'ItemList',
+            itemListElement: samples.map((sample, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              name: sample.title,
+              url: `https://www.stackassignment.com/samples/${sample.slug}`,
+            })),
+          },
+          provider: {
+            '@type': 'Organization',
+            name: 'Stack Assignment',
+            url: 'https://www.stackassignment.com',
+          },
+        }}
+      />
+      <main className="flex-grow py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Page Header */}
+          <div className="text-center mb-12 md:mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+              Assignment & Essay Samples
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              Preview 1/3rd of each sample free • Contact admin for full access
+            </p>
+          </div>
+
+          {/* Samples Grid */}
+          {samples.length === 0 ? (
+            <div className="text-center py-16">
+              <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-medium text-gray-600 dark:text-gray-400">
+                No samples available yet
+              </h3>
+              <p className="text-gray-500 dark:text-gray-500 mt-2">
+                Check back soon for sample papers
+              </p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+              {samples.map((sample) => {
+                const style = getSubjectStyle(sample.subject);
+                return (
+                  <div
+                    key={sample.id}
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 group flex flex-col"
+                  >
+                    {/* Header with image */}
+                    <div className="relative h-44 overflow-hidden flex-shrink-0">
+                      <img
+                        src={style.image}
+                        alt={sample.subject || 'Sample'}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} opacity-60`}></div>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
+                        <h3 className="text-xl font-bold leading-tight drop-shadow-lg line-clamp-2">{sample.title}</h3>
+                        {sample.subject && (
+                          <p className="text-white/90 mt-2 text-sm font-medium">{sample.subject}</p>
+                        )}
+                      </div>
+                      {/* Preview badge */}
+                      <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
+                        Preview: {getPreviewPages(sample.pages)}/{sample.pages || '?'} pages free
+                      </div>
+                    </div>
+
+                  {/* Content */}
+                  <div className="p-6 flex flex-col flex-grow">
+                    {/* Meta info - fixed height */}
+                    <div className="mb-4">
+                      {/* First row: Academic level and paper type */}
+                      <div className="flex flex-wrap gap-3">
+                        {sample.academicLevel && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
+                            <GraduationCap className="h-4 w-4" />
+                            {academicLevels[sample.academicLevel] || sample.academicLevel}
+                          </span>
+                        )}
+                        {sample.paperType && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+                            <FileCheck className="h-4 w-4" />
+                            {paperTypes[sample.paperType] || sample.paperType}
+                          </span>
+                        )}
+                      </div>
+                      {/* Second row: Pages */}
+                      {sample.pages && (
+                        <div className="mt-2">
+                          <span className="inline-flex items-center px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-sm">
+                            {sample.pages} {sample.pages === 1 ? 'page' : 'pages'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Description - fixed height */}
+                    <div className="min-h-[72px] mb-4">
+                      <p className="text-gray-600 dark:text-gray-400 line-clamp-3">
+                        {sample.description || 'No description available.'}
+                      </p>
+                    </div>
+
+                    {/* File info - fixed height */}
+                    <div className="min-h-[48px] mb-4">
+                      {sample.fileName ? (
+                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-slate-700 rounded-lg p-3">
+                          <FileText className="h-4 w-4 text-red-500 flex-shrink-0" />
+                          <span className="truncate flex-1">{sample.fileName}</span>
+                          {sample.fileSize && (
+                            <span className="text-xs flex-shrink-0">({formatFileSize(sample.fileSize)})</span>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="h-full"></div>
+                      )}
+                    </div>
+
+                    {/* Preview Button - pushed to bottom */}
+                    <div className="mt-auto">
+                      <button
+                        onClick={() => handlePreview(sample)}
+                        className="flex items-center justify-center gap-2 w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition"
+                      >
+                        <Eye className="h-5 w-5" />
+                        Preview Sample
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+              })}
+            </div>
+          )}
+
+          {/* Info Section */}
+          <div className="mt-16 bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800 rounded-2xl p-8 md:p-12">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900 dark:text-white">
+                Why Our Samples?
+              </h2>
+              <div className="grid md:grid-cols-3 gap-6 mt-8">
+                <div className="text-center">
+                  <div className="w-14 h-14 bg-teal-100 dark:bg-teal-900 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <FileCheck className="h-7 w-7 text-teal-600 dark:text-teal-400" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Quality Assured</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    Every sample meets academic standards
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <GraduationCap className="h-7 w-7 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">All Levels</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    High school to PhD level work
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-14 h-14 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <BookOpen className="h-7 w-7 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Various Subjects</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    Business, Nursing, Tech & more
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Preview Modal */}
+      {selectedSample && (
+        <SamplePreviewModal
+          sample={selectedSample}
+          isOpen={showPreview}
+          onClose={handleClosePreview}
+        />
+      )}
+    </>
+  );
+}
