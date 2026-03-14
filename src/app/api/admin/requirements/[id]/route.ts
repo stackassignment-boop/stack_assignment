@@ -204,92 +204,57 @@ export async function DELETE(
     const authResult = await requireAdmin();
 
     if (!authResult.success) {
-      console.log('Auth failed:', authResult);
       return apiError(authResult.error || 'Unauthorized', authResult.status || 401);
     }
 
     const id = params.id;
     console.log('DELETE - Authenticated, requirement ID:', id);
 
-    // First, check what tables exist
-    try {
-      const tables = await db.$queryRaw`
-        SELECT table_name 
-        FROM information_schema.tables 
-        WHERE table_schema = 'public'
-        ORDER BY table_name
-      `;
-      console.log('Available tables:', tables);
-    } catch (e) {
-      console.error('Failed to list tables:', e);
-    }
+    // Use the same Prisma model that works in GET endpoint
+    console.log('Prisma models available:', Object.keys(db));
+    console.log('Is db.requirementFile defined?', !!db.requirementFile);
 
-    // Use raw SQL to delete - no Prisma model access
-    try {
-      console.log('Attempting raw SQL delete from RequirementFile...');
-      
-      // First, check if the record exists
-      const checkResult = await db.$queryRaw`
-        SELECT id, title, fileName FROM "RequirementFile" WHERE id = ${id} LIMIT 1
-      `;
-      
-      console.log('Check result:', checkResult);
-      console.log('Check result length:', Array.isArray(checkResult) ? checkResult.length : 0);
-      
-      if (!checkResult || (Array.isArray(checkResult) && checkResult.length === 0)) {
-        console.log('Requirement not found in RequirementFile table, looking for alternatives...');
-        
-        // Try listing all records to see what's there
-        const allRecords = await db.$queryRaw`SELECT id, title, fileName FROM "RequirementFile" LIMIT 10`;
-        console.log('All RequirementFile records:', allRecords);
-        
-        // Try other tables
-        const tablesToTry = ['requirementFile', 'requirement_files', 'requirements', 'Requirement_Files'];
-        
-        for (const tableName of tablesToTry) {
-          console.log(`Checking table: ${tableName}`);
-          const tableRecords = await db.$queryRawUnsafe(`SELECT id, title, fileName FROM "${tableName}" LIMIT 10`);
-          console.log(`Records in ${tableName}:`, tableRecords);
-          
-          if (Array.isArray(tableRecords) && tableRecords.length > 0) {
-            // Try to find the record in this table
-            const found = await db.$queryRawUnsafe(`SELECT id, title, fileName FROM "${tableName}" WHERE id = '${id}' LIMIT 1`);
-            if (found && found.length > 0) {
-              console.log(`Found record in table: ${tableName}`, found[0]);
-              
-              // Delete from this table
-              await db.$queryRawUnsafe(`DELETE FROM "${tableName}" WHERE id = '${id}'`);
-              console.log(`Deleted successfully from ${tableName}`);
-              
-              return apiResponse({
-                success: true,
-                message: 'Requirement file deleted successfully',
-              });
-            }
-          }
-        }
-        
-        console.log('Requirement not found:', id);
-        return apiError('Requirement file not found', 404);
-      }
+    // First, find the requirement
+    const requirement = await db.requirementFile.findUnique({
+      where: { id },
+    });
 
-      // Delete the record
-      await db.$queryRaw`DELETE FROM "RequirementFile" WHERE id = ${id}`;
-      console.log('Delete successful');
-      
-      return apiResponse({
-        success: true,
-        message: 'Requirement file deleted successfully',
+    console.log('Find result:', requirement);
+
+    if (!requirement) {
+      // List all requirements to help debug
+      const allRequirements = await db.requirementFile.findMany({
+        select: { id: true, title: true },
+        take: 5,
       });
-    } catch (sqlError) {
-      console.error('SQL error:', sqlError);
-      console.error('SQL error message:', sqlError instanceof Error ? sqlError.message : String(sqlError));
-      return apiError(`Database error: ${sqlError instanceof Error ? sqlError.message : 'Unknown error'}`, 500);
+      console.log('First 5 requirements in DB:', allRequirements);
+      
+      return apiError('Requirement file not found', 404);
     }
+
+    console.log('Found requirement, deleting:', requirement.title);
+
+    // Delete using Prisma
+    await db.requirementFile.delete({
+      where: { id },
+    });
+
+    console.log('Delete successful');
+
+    return apiResponse({
+      success: true,
+      message: 'Requirement file deleted successfully',
+    });
   } catch (error) {
     console.error('Delete requirement error:', error);
-    console.error('Error type:', error.constructor.name);
-    console.error('Error message:', error instanceof Error ? error.message : String(error));
+    
+    // Try to get more details about the error
+    if (error instanceof Error) {
+      console.error('Error name:', error.name);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
+    
     return apiError(`Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`, 500);
   }
 }
