@@ -211,18 +211,64 @@ export async function DELETE(
     const id = params.id;
     console.log('DELETE - Authenticated, requirement ID:', id);
 
+    // First, check what tables exist
+    try {
+      const tables = await db.$queryRaw`
+        SELECT table_name 
+        FROM information_schema.tables 
+        WHERE table_schema = 'public'
+        ORDER BY table_name
+      `;
+      console.log('Available tables:', tables);
+    } catch (e) {
+      console.error('Failed to list tables:', e);
+    }
+
     // Use raw SQL to delete - no Prisma model access
     try {
-      console.log('Attempting raw SQL delete...');
+      console.log('Attempting raw SQL delete from RequirementFile...');
       
       // First, check if the record exists
       const checkResult = await db.$queryRaw`
-        SELECT id, title FROM "RequirementFile" WHERE id = ${id} LIMIT 1
+        SELECT id, title, fileName FROM "RequirementFile" WHERE id = ${id} LIMIT 1
       `;
       
       console.log('Check result:', checkResult);
+      console.log('Check result length:', Array.isArray(checkResult) ? checkResult.length : 0);
       
-      if (!checkResult || checkResult.length === 0) {
+      if (!checkResult || (Array.isArray(checkResult) && checkResult.length === 0)) {
+        console.log('Requirement not found in RequirementFile table, looking for alternatives...');
+        
+        // Try listing all records to see what's there
+        const allRecords = await db.$queryRaw`SELECT id, title, fileName FROM "RequirementFile" LIMIT 10`;
+        console.log('All RequirementFile records:', allRecords);
+        
+        // Try other tables
+        const tablesToTry = ['requirementFile', 'requirement_files', 'requirements', 'Requirement_Files'];
+        
+        for (const tableName of tablesToTry) {
+          console.log(`Checking table: ${tableName}`);
+          const tableRecords = await db.$queryRawUnsafe(`SELECT id, title, fileName FROM "${tableName}" LIMIT 10`);
+          console.log(`Records in ${tableName}:`, tableRecords);
+          
+          if (Array.isArray(tableRecords) && tableRecords.length > 0) {
+            // Try to find the record in this table
+            const found = await db.$queryRawUnsafe(`SELECT id, title, fileName FROM "${tableName}" WHERE id = '${id}' LIMIT 1`);
+            if (found && found.length > 0) {
+              console.log(`Found record in table: ${tableName}`, found[0]);
+              
+              // Delete from this table
+              await db.$queryRawUnsafe(`DELETE FROM "${tableName}" WHERE id = '${id}'`);
+              console.log(`Deleted successfully from ${tableName}`);
+              
+              return apiResponse({
+                success: true,
+                message: 'Requirement file deleted successfully',
+              });
+            }
+          }
+        }
+        
         console.log('Requirement not found:', id);
         return apiError('Requirement file not found', 404);
       }
@@ -238,25 +284,7 @@ export async function DELETE(
     } catch (sqlError) {
       console.error('SQL error:', sqlError);
       console.error('SQL error message:', sqlError instanceof Error ? sqlError.message : String(sqlError));
-      
-      // Try alternative table names
-      const alternativeTables = ['requirementFile', 'requirement_files', 'requirements'];
-      for (const tableName of alternativeTables) {
-        try {
-          console.log(`Trying table: ${tableName}`);
-          await db.$queryRaw`DELETE FROM "${tableName}" WHERE id = ${id}`;
-          console.log(`Delete successful using table: ${tableName}`);
-          
-          return apiResponse({
-            success: true,
-            message: 'Requirement file deleted successfully',
-          });
-        } catch (e) {
-          console.log(`Failed with table ${tableName}:`, e instanceof Error ? e.message : String(e));
-        }
-      }
-      
-      return apiError('Failed to delete requirement. Please check database configuration.', 500);
+      return apiError(`Database error: ${sqlError instanceof Error ? sqlError.message : 'Unknown error'}`, 500);
     }
   } catch (error) {
     console.error('Delete requirement error:', error);
