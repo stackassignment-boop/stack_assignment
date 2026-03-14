@@ -200,9 +200,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  console.log('DELETE request received for requirement ID:', params.id);
+  
   try {
-    console.log('DELETE request received for requirement ID:', params.id);
-    
     const authResult = await requireAdmin();
 
     if (!authResult.success) {
@@ -213,7 +213,14 @@ export async function DELETE(
     const id = params.id;
     console.log('Authenticated, deleting requirement:', id);
 
+    // Check if db is properly initialized
+    if (!db || !db.requirementFile) {
+      console.error('Database client not properly initialized');
+      return apiError('Database connection error', 500);
+    }
+
     // Get the requirement first to verify it exists
+    console.log('Looking up requirement with ID:', id);
     const requirement = await db.requirementFile.findUnique({
       where: { id },
     });
@@ -238,6 +245,7 @@ export async function DELETE(
     });
   } catch (error) {
     console.error('Delete requirement error:', error);
-    return apiError('Internal server error', 500);
+    console.error('Error details:', JSON.stringify(error, null, 2));
+    return apiError(`Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`, 500);
   }
 }
