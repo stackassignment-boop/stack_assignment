@@ -200,8 +200,6 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  console.log('DELETE request received for requirement ID:', params.id);
-  
   try {
     const authResult = await requireAdmin();
 
@@ -211,67 +209,58 @@ export async function DELETE(
     }
 
     const id = params.id;
-    console.log('Authenticated, deleting requirement:', id);
+    console.log('DELETE - Authenticated, requirement ID:', id);
 
-    // Check if db is properly initialized
-    if (!db) {
-      console.error('Database client not properly initialized');
-      return apiError('Database connection error', 500);
-    }
-
-    // Check if requirementFile model exists
-    console.log('Available Prisma models:', Object.keys(db));
-    
-    // Try to find the correct model name
-    const modelNames = Object.keys(db);
-    const requirementModel = modelNames.find(m => 
-      m.toLowerCase().includes('requirement')
-    );
-    
-    console.log('Found requirement model:', requirementModel);
-    
-    if (!requirementModel) {
-      console.error('No requirement model found in Prisma');
-      return apiError('Database model not found. Available: ' + modelNames.join(', '), 500);
-    }
-
-    // Check if record exists using the found model
-    const model = (db as any)[requirementModel];
-    console.log('Using model:', requirementModel);
-    
-    const record = await model.findUnique({
-      where: { id },
-    });
-
-    if (!record) {
-      console.log('Requirement not found:', id);
-      return apiError('Requirement file not found', 404);
-    }
-
-    console.log('Found requirement, deleting:', record.title);
-
-    // Delete using raw SQL to avoid Prisma validation issues
+    // Use raw SQL to delete - no Prisma model access
     try {
-      const tableName = 'RequirementFile'; // Default table name
-      console.log('Deleting with raw SQL from table:', tableName);
+      console.log('Attempting raw SQL delete...');
       
-      await db.$executeRaw`DELETE FROM "${tableName}" WHERE id = ${id}`;
-      console.log('Delete successful');
-    } catch (sqlError) {
-      console.error('Raw SQL delete failed, trying Prisma delete:', sqlError);
-      // Fallback to Prisma delete
-      await model.delete({
-        where: { id },
-      });
-    }
+      // First, check if the record exists
+      const checkResult = await db.$queryRaw`
+        SELECT id, title FROM "RequirementFile" WHERE id = ${id} LIMIT 1
+      `;
+      
+      console.log('Check result:', checkResult);
+      
+      if (!checkResult || checkResult.length === 0) {
+        console.log('Requirement not found:', id);
+        return apiError('Requirement file not found', 404);
+      }
 
-    return apiResponse({
-      success: true,
-      message: 'Requirement file deleted successfully',
-    });
+      // Delete the record
+      await db.$queryRaw`DELETE FROM "RequirementFile" WHERE id = ${id}`;
+      console.log('Delete successful');
+      
+      return apiResponse({
+        success: true,
+        message: 'Requirement file deleted successfully',
+      });
+    } catch (sqlError) {
+      console.error('SQL error:', sqlError);
+      console.error('SQL error message:', sqlError instanceof Error ? sqlError.message : String(sqlError));
+      
+      // Try alternative table names
+      const alternativeTables = ['requirementFile', 'requirement_files', 'requirements'];
+      for (const tableName of alternativeTables) {
+        try {
+          console.log(`Trying table: ${tableName}`);
+          await db.$queryRaw`DELETE FROM "${tableName}" WHERE id = ${id}`;
+          console.log(`Delete successful using table: ${tableName}`);
+          
+          return apiResponse({
+            success: true,
+            message: 'Requirement file deleted successfully',
+          });
+        } catch (e) {
+          console.log(`Failed with table ${tableName}:`, e instanceof Error ? e.message : String(e));
+        }
+      }
+      
+      return apiError('Failed to delete requirement. Please check database configuration.', 500);
+    }
   } catch (error) {
     console.error('Delete requirement error:', error);
-    console.error('Error name:', error instanceof Error ? error.name : 'Unknown');
+    console.error('Error type:', error.constructor.name);
     console.error('Error message:', error instanceof Error ? error.message : String(error));
     return apiError(`Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`, 500);
   }
