@@ -16,7 +16,7 @@ const universities = [
   { name: 'Victoria University', image: '/universities/0010.jpg' },
   { name: 'Torrens University', image: '/universities/0011.jpg' },
   { name: 'Holmes Institute', image: '/universities/0012.jpg' },
-  { name: 'Melbourne Institute of Technology', image: '/universities/0013.jpg' },
+  { name: 'Melbourne Institute of Technology', image: '/universities/0013.jpg', href: '/melbourne-institute-of-technology-assignment-help' },
   { name: 'Southampton Solent University', image: '/universities/0014.jpg' },
 ];
 

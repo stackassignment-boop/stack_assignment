@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import DraggableFloatingWidget from '@/components/marketing/DraggableFloatingWidget';
 import { useRouter, usePathname } from 'next/navigation';
 
 interface MainLayoutProps {
@@ -77,6 +78,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         {children}
       </main>
       <Footer onNavigate={handleNavigate} />
+      <DraggableFloatingWidget />
     </div>
   );
 }

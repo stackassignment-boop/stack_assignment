@@ -4,95 +4,95 @@ import {
   CheckCircle2,
   BookOpen,
   MapPin,
-  FileText,
   Clock,
   ShieldCheck,
   GraduationCap,
   MessageCircle,
+  Cpu,
 } from 'lucide-react'
 import TrustBadges from '@/components/marketing/TrustBadges'
 
 export const metadata: Metadata = {
-  title: 'Kaplan Business School Assignment Help | Stack Assignment',
+  title: 'Melbourne Institute of Technology Assignment Help | Stack Assignment',
   description:
-    'Assignment and essay help tailored for Kaplan Business School students in Adelaide, Brisbane, Melbourne, Perth and Sydney — written to Kaplan\'s Harvard referencing guide and unit requirements.',
+    'Assignment and essay help for Melbourne Institute of Technology (MIT) students across business, IT, data analytics, and engineering — Melbourne and Sydney campuses.',
   keywords: [
-    'Kaplan assignment help',
-    'Kaplan Business School assignment help',
-    'Kaplan Harvard referencing',
-    'Kaplan essay help',
-    'Kaplan Business School assessment help',
+    'Melbourne Institute of Technology assignment help',
+    'MIT Melbourne assignment help',
+    'MIT Sydney assignment help',
+    'Melbourne Institute of Technology essay help',
   ],
   openGraph: {
-    title: 'Kaplan Business School Assignment Help',
+    title: 'Melbourne Institute of Technology Assignment Help',
     description:
-      'Assignment help tailored for Kaplan Business School students — written to Kaplan\'s Harvard referencing guide and unit requirements.',
-    url: 'https://www.stackassignment.com/kaplan-assignment-help',
+      'Assignment help for Melbourne Institute of Technology students across business, IT, data analytics, and engineering.',
+    url: 'https://www.stackassignment.com/melbourne-institute-of-technology-assignment-help',
     type: 'website',
   },
 }
 
-const campuses = ['Adelaide', 'Brisbane', 'Melbourne', 'Perth', 'Sydney']
+const campuses = ['Melbourne (Argus Building)', 'Sydney']
 
 const courseAreas = [
   'Business & Management',
   'Accounting',
   'Marketing',
-  'Business Analytics',
-  'Hospitality & Tourism Management',
-  'MBA & Postgraduate Business',
+  'Information Technology',
+  'Data Analytics',
+  'Software Engineering',
+  'Computer Networking',
+  'Telecommunications Engineering',
 ]
 
 const faqs = [
   {
-    q: "Do you follow Kaplan's specific Harvard referencing guide?",
-    a: "Yes. Kaplan Business School uses its own Harvard referencing guide rather than a generic Harvard style, and it's a significant part of your assessment weighting. Our writers work directly from Kaplan's referencing guide, not a generic Harvard template.",
+    q: 'Do you cover technical courses like software engineering and networking, not just business?',
+    a: "Yes — alongside business, accounting, and marketing, we cover MIT's IT-focused programs: software engineering, computer networking, telecommunications engineering, and data analytics assignments and reports.",
   },
   {
-    q: 'Can you help with a specific unit or assessment brief?',
-    a: "Yes — upload your unit outline or assessment brief when you place an order, and your writer will work directly from Kaplan's marking rubric and assessment criteria for that unit.",
+    q: 'Can you follow the referencing style my unit outline specifies?',
+    a: "Yes. Referencing conventions can vary by unit and lecturer at MIT — upload your unit outline or assessment brief and your writer will match whatever style (APA, Harvard, or otherwise) it specifies.",
   },
   {
-    q: 'Do you cover both undergraduate and postgraduate (MBA) work?',
-    a: 'Yes, across business, accounting, marketing, business analytics, hospitality and tourism management, at both undergraduate and postgraduate level.',
+    q: 'Do you support both the Melbourne and Sydney campuses?',
+    a: "Yes — our support is 100% online, so it works the same whether you're studying at MIT's Melbourne campus or the Sydney campus.",
   },
   {
-    q: "What about Kaplan's academic integrity policy?",
-    a: "Kaplan publishes a clear assessment and academic integrity policy, and it's worth reading before you order anything from any service, including ours. We provide model answers and reference material intended to help you understand a topic and structure your own original submission — the final piece you submit needs to be your own work. See our Academic Integrity page for details.",
+    q: "What about MIT's academic integrity policy?",
+    a: "Like most institutions, MIT has an academic integrity and plagiarism policy that's worth reading before ordering from any service, including ours. We provide model answers and reference material meant to help you understand a topic and structure your own original submission — what you submit needs to be your own work. See our Academic Integrity page for details.",
   },
 ]
 
-export default function KaplanAssignmentHelpPage() {
+export default function MITAssignmentHelpPage() {
   return (
     <main className="flex-grow">
-      {/* Hero — dark gradient with floating shapes, matching site's HeroSection language */}
+      {/* Hero */}
       <section className="relative text-white py-24 md:py-36 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              'linear-gradient(135deg, rgba(30,41,59,0.95), rgba(15,23,42,0.97)), url(https://picsum.photos/id/1005/1920/1080)',
+              'linear-gradient(135deg, rgba(30,41,59,0.95), rgba(15,23,42,0.97)), url(https://picsum.photos/id/1074/1920/1080)',
           }}
         />
 
-        {/* Floating gradient blobs for visual depth */}
         <div
           className="absolute rounded-full blur-3xl opacity-30 animate-float"
           style={{
-            top: '8%',
-            left: '6%',
-            width: '320px',
-            height: '320px',
+            top: '10%',
+            left: '8%',
+            width: '300px',
+            height: '300px',
             background: 'radial-gradient(circle, #6366f1, transparent 70%)',
           }}
         />
         <div
           className="absolute rounded-full blur-3xl opacity-25 animate-float"
           style={{
-            bottom: '10%',
-            right: '8%',
-            width: '280px',
-            height: '280px',
+            bottom: '12%',
+            right: '10%',
+            width: '260px',
+            height: '260px',
             background: 'radial-gradient(circle, #a855f7, transparent 70%)',
             animationDelay: '7s',
           }}
@@ -101,22 +101,22 @@ export default function KaplanAssignmentHelpPage() {
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm">
             <GraduationCap className="w-4 h-4" />
-            For Kaplan Business School Students
+            For Melbourne Institute of Technology Students
           </div>
 
           <h1
             className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
             style={{ fontFamily: 'Sora, sans-serif' }}
           >
-            Assignment Help Built Around<br />Kaplan's Requirements
+            Assignment Help for<br />MIT Melbourne &amp; Sydney Students
           </h1>
 
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
-            Model answers and study support written to Kaplan's Harvard referencing guide,
-            unit outlines, and marking rubrics — across all five Australian campuses.
+            From business and accounting to software engineering and data analytics —
+            support matched to your unit outline, whichever campus you're on.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-5 justify-center mb-8">
+          <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <Link
               href="/order"
               className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-4 rounded-xl text-lg font-bold transition shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 min-w-[240px]"
@@ -140,11 +140,10 @@ export default function KaplanAssignmentHelpPage() {
             <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-800/50 rounded-2xl p-8 border border-indigo-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="w-6 h-6 text-indigo-600" />
-                <h2 className="text-2xl font-bold">Every Kaplan Campus</h2>
+                <h2 className="text-2xl font-bold">Both MIT Campuses</h2>
               </div>
               <p className="text-gray-600 dark:text-slate-400 mb-5">
-                Whichever campus you're studying at, our support is the same — 100% online, no
-                need to be near a physical location.
+                100% online support — no need to be near either campus in person.
               </p>
               <div className="flex flex-wrap gap-2">
                 {campuses.map((c) => (
@@ -163,9 +162,9 @@ export default function KaplanAssignmentHelpPage() {
                 <BookOpen className="w-6 h-6 text-indigo-600" />
                 <h2 className="text-2xl font-bold">Course Areas We Cover</h2>
               </div>
-              <ul className="space-y-2.5">
+              <ul className="grid grid-cols-1 gap-2.5">
                 {courseAreas.map((c) => (
-                  <li key={c} className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                  <li key={c} className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm">
                     <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
                     {c}
                   </li>
@@ -176,45 +175,44 @@ export default function KaplanAssignmentHelpPage() {
         </div>
       </section>
 
-      {/* Why Kaplan students specifically */}
+      {/* Why MIT students specifically */}
       <section className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
-            Why Kaplan Students Choose Us
+            Why MIT Students Choose Us
           </h2>
           <p className="text-center text-gray-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
-            Built around the specifics of studying at Kaplan Business School — not a generic
-            template.
+            MIT's course mix spans business and heavily technical programs — we cover both.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4">
-                <FileText className="w-7 h-7 text-white" />
+                <Cpu className="w-7 h-7 text-white" />
               </div>
-              <h3 className="font-bold text-lg mb-2">Kaplan's Harvard Referencing Guide</h3>
+              <h3 className="font-bold text-lg mb-2">Technical + Business Coverage</h3>
               <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
-                Kaplan uses its own Harvard referencing guide, not a generic template — a
-                meaningful share of your mark. We reference to that exact guide.
+                From software engineering and networking reports to business case studies —
+                one service that actually covers MIT's full course mix.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4">
                 <Clock className="w-7 h-7 text-white" />
               </div>
-              <h3 className="font-bold text-lg mb-2">Trimester-Ready Turnaround</h3>
+              <h3 className="font-bold text-lg mb-2">Flexible Turnaround</h3>
               <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
-                Kaplan's trimester structure means tight assessment windows. We support
-                deadlines from two weeks down to under 24 hours.
+                Deadlines from two weeks out down to under 24 hours, matched to your
+                assessment schedule.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4">
                 <ShieldCheck className="w-7 h-7 text-white" />
               </div>
-              <h3 className="font-bold text-lg mb-2">Rubric-Matched Work</h3>
+              <h3 className="font-bold text-lg mb-2">Unit-Outline Matched</h3>
               <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
-                Upload your unit outline or marking rubric and your writer works directly
-                from Kaplan's specific assessment criteria.
+                Upload your unit outline or marking rubric and your writer follows it
+                exactly, including whatever referencing style it specifies.
               </p>
             </div>
           </div>
@@ -232,7 +230,7 @@ export default function KaplanAssignmentHelpPage() {
       <section className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>
-            Kaplan Student FAQs
+            MIT Student FAQs
           </h2>
           <div className="space-y-4">
             {faqs.map((item) => (
@@ -274,7 +272,7 @@ export default function KaplanAssignmentHelpPage() {
             Ready to Get Started?
           </h2>
           <p className="text-lg opacity-90 mb-8">
-            Get an instant quote for your Kaplan assignment — takes less than a minute.
+            Get an instant quote for your MIT assignment — takes less than a minute.
           </p>
           <Link
             href="/order"
