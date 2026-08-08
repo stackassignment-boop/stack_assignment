@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { db } from '@/lib/db'
+import { universities } from '@/data/universities'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.stackassignment.com'
@@ -84,7 +85,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/holmes-institute-assignment-help`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    },
   ]
+
+  // Dedicated university landing pages (dynamic route driven by
+  // src/data/universities.ts)
+  const universityPages = universities.map((u) => ({
+    url: `${baseUrl}/universities/${u.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
 
   // Fetch published blog posts
   let blogPosts: { slug: string; updatedAt: Date }[] = []
@@ -143,5 +159,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...blogPages, ...samples, ...services]
+  return [...staticPages, ...universityPages, ...blogPages, ...samples, ...services]
 }
