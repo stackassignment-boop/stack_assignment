@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { MapPin, ArrowRight } from 'lucide-react';
 
 // University logos with local images.
 // NOTE: this list was previously scrambled (every name pointed at the wrong
@@ -8,31 +10,31 @@ import Link from 'next/link';
 // files on 2026-08-08. Also added several logos that existed as unused
 // files but were never wired into this array.
 const universities = [
-  { name: 'CQUniversity Australia', image: '/universities/001.jpg', href: '/universities/cquniversity' },
-  { name: 'Deakin University', image: '/universities/002.jpg', href: '/universities/deakin-university' },
-  { name: 'De Montfort University', image: '/universities/003.jpg', href: '/universities/de-montfort-university' },
-  { name: 'Federation University', image: '/universities/004.jpg', href: '/universities/federation-university' },
-  { name: 'La Trobe University', image: '/universities/005.jpg', href: '/universities/la-trobe-university' },
-  { name: 'Liverpool Hope University', image: '/universities/006.jpg', href: '/universities/liverpool-hope-university' },
-  { name: 'Queensland University of Technology', image: '/universities/007.jpg', href: '/universities/qut' },
-  { name: 'Thompson Rivers University', image: '/universities/008.jpg', href: '/universities/thompson-rivers-university' },
-  { name: 'University of Newcastle', image: '/universities/009.jpg', href: '/universities/university-of-newcastle' },
-  { name: 'University of New England', image: '/universities/0010.jpg', href: '/universities/university-of-new-england' },
-  { name: 'UNSW Sydney', image: '/universities/0011.jpg', href: '/universities/unsw-sydney' },
-  { name: 'University of Canberra', image: '/universities/0012.jpg', href: '/universities/university-of-canberra' },
-  { name: 'University of Sunshine Coast', image: '/universities/0013.jpg', href: '/universities/university-of-sunshine-coast' },
-  { name: 'University of Bedfordshire', image: '/universities/0014.jpg', href: '/universities/university-of-bedfordshire' },
-  { name: 'University of Western Australia', image: '/universities/0015.jpg', href: '/universities/university-of-western-australia' },
-  { name: 'Kaplan Business School', image: '/universities/0016.jpg', href: '/kaplan-assignment-help' },
-  { name: 'Victoria University', image: '/universities/0017.jpg', href: '/universities/victoria-university' },
-  { name: 'Torrens University Australia', image: '/universities/0018.jpg', href: '/universities/torrens-university' },
-  { name: 'Holmes Institute', image: '/universities/0019.jpg', href: '/holmes-institute-assignment-help' },
-  { name: 'Victorian Institute of Technology', image: '/universities/0020.jpg', href: '/universities/victorian-institute-of-technology' },
-  { name: 'Academies Australasia Polytechnic', image: '/universities/0021.jpg', href: '/universities/academies-australasia-polytechnic' },
-  { name: 'Melbourne Institute of Technology', image: '/universities/0022.jpg', href: '/melbourne-institute-of-technology-assignment-help' },
-  { name: 'Southern Cross Institute', image: '/universities/0023.jpg', href: '/universities/southern-cross-institute' },
-  { name: 'Solent University', image: '/universities/0024.jpg', href: '/universities/solent-university' },
-  { name: 'UniSC (University of the Sunshine Coast)', image: '/universities/0025.jpg', href: '/universities/university-of-sunshine-coast' },
+  { name: 'CQUniversity Australia', image: '/universities/001.jpg', href: '/universities/cquniversity', campuses: 'Rockhampton · Bundaberg · Cairns' },
+  { name: 'Deakin University', image: '/universities/002.jpg', href: '/universities/deakin-university', campuses: 'Melbourne · Geelong · Warrnambool' },
+  { name: 'De Montfort University', image: '/universities/003.jpg', href: '/universities/de-montfort-university', campuses: 'Leicester' },
+  { name: 'Federation University', image: '/universities/004.jpg', href: '/universities/federation-university', campuses: 'Ballarat · Berwick · Gippsland' },
+  { name: 'La Trobe University', image: '/universities/005.jpg', href: '/universities/la-trobe-university', campuses: 'Melbourne · Bendigo · Albury-Wodonga' },
+  { name: 'Liverpool Hope University', image: '/universities/006.jpg', href: '/universities/liverpool-hope-university', campuses: 'Liverpool' },
+  { name: 'Queensland University of Technology', image: '/universities/007.jpg', href: '/universities/qut', campuses: 'Brisbane' },
+  { name: 'Thompson Rivers University', image: '/universities/008.jpg', href: '/universities/thompson-rivers-university', campuses: 'Kamloops, BC' },
+  { name: 'University of Newcastle', image: '/universities/009.jpg', href: '/universities/university-of-newcastle', campuses: 'Newcastle · Central Coast · Sydney' },
+  { name: 'University of New England', image: '/universities/0010.jpg', href: '/universities/university-of-new-england', campuses: 'Armidale, NSW' },
+  { name: 'UNSW Sydney', image: '/universities/0011.jpg', href: '/universities/unsw-sydney', campuses: 'Sydney' },
+  { name: 'University of Canberra', image: '/universities/0012.jpg', href: '/universities/university-of-canberra', campuses: 'Canberra, ACT' },
+  { name: 'University of Sunshine Coast', image: '/universities/0013.jpg', href: '/universities/university-of-sunshine-coast', campuses: 'Sunshine Coast · Moreton Bay' },
+  { name: 'University of Bedfordshire', image: '/universities/0014.jpg', href: '/universities/university-of-bedfordshire', campuses: 'Luton · Bedford' },
+  { name: 'University of Western Australia', image: '/universities/0015.jpg', href: '/universities/university-of-western-australia', campuses: 'Perth' },
+  { name: 'Kaplan Business School', image: '/universities/0016.jpg', href: '/kaplan-assignment-help', campuses: 'Adelaide · Brisbane · Melbourne · ...' },
+  { name: 'Victoria University', image: '/universities/0017.jpg', href: '/universities/victoria-university', campuses: 'Melbourne · Sydney' },
+  { name: 'Torrens University Australia', image: '/universities/0018.jpg', href: '/universities/torrens-university', campuses: 'Adelaide · Brisbane · Melbourne · ...' },
+  { name: 'Holmes Institute', image: '/universities/0019.jpg', href: '/holmes-institute-assignment-help', campuses: 'Melbourne · Sydney · Brisbane · ...' },
+  { name: 'Victorian Institute of Technology', image: '/universities/0020.jpg', href: '/universities/victorian-institute-of-technology', campuses: 'Melbourne · Sydney' },
+  { name: 'Academies Australasia Polytechnic', image: '/universities/0021.jpg', href: '/universities/academies-australasia-polytechnic', campuses: 'Sydney' },
+  { name: 'Melbourne Institute of Technology', image: '/universities/0022.jpg', href: '/melbourne-institute-of-technology-assignment-help', campuses: 'Melbourne · Sydney' },
+  { name: 'Southern Cross Institute', image: '/universities/0023.jpg', href: '/universities/southern-cross-institute', campuses: 'Sydney' },
+  { name: 'Solent University', image: '/universities/0024.jpg', href: '/universities/solent-university', campuses: 'Southampton' },
+  { name: 'UniSC (University of the Sunshine Coast)', image: '/universities/0025.jpg', href: '/universities/university-of-sunshine-coast', campuses: 'Sunshine Coast · Moreton Bay' },
 ];
 
 export default function UniversitiesSection() {
@@ -81,11 +83,11 @@ export default function UniversitiesSection() {
           Trusted by Students From
         </p>
         <p className="text-center text-white/50 text-sm mb-8">
-          Hover to pause • Scroll automatically
+          Drag the slider below to browse
         </p>
 
-        {/* Marquee */}
-        <Marquee universities={universities} />
+        {/* Card carousel with manual slider (no auto-scroll) */}
+        <CardCarousel universities={universities} />
       </div>
     </section>
   );
@@ -128,62 +130,109 @@ function StatPill({ icon, value, label }: { icon: string; value: string; label: 
   );
 }
 
-function Marquee({ universities }: { universities: { name: string; image: string; href?: string }[] }) {
-  return (
-    <div className="relative overflow-hidden">
-      {/* Gradient overlays */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-blue-700 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-blue-500 to-transparent z-10 pointer-events-none" />
+interface UniCardData {
+  name: string;
+  image: string;
+  href: string;
+  campuses: string;
+}
 
+function CardCarousel({ universities }: { universities: UniCardData[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [sliderValue, setSliderValue] = useState(0);
+  const isSyncingFromScroll = useRef(false);
+
+  // Keep the slider in sync when the user scrolls/drags the row directly.
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 0) return;
+    isSyncingFromScroll.current = true;
+    setSliderValue(Math.round((el.scrollLeft / maxScroll) * 100));
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  // Move the row when the slider is dragged.
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    setSliderValue(value);
+    const el = scrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    isSyncingFromScroll.current = false;
+    el.scrollTo({ left: (value / 100) * maxScroll, behavior: 'auto' });
+  };
+
+  return (
+    <div>
+      {/* Scrollable card row — no auto-scroll, user-controlled only */}
       <div
-        className="flex gap-6"
+        ref={scrollRef}
+        className="flex gap-4 overflow-x-auto pb-2 scroll-smooth"
         style={{
-          animation: 'marquee 40s linear infinite',
-          width: 'max-content'
+          scrollSnapType: 'x proximity',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
         }}
       >
-        {/* Double the logos for seamless loop */}
-        {[...universities, ...universities].map((uni, index) => {
-          const cardClasses =
-            'bg-white/95 border border-white/40 rounded-2xl px-5 py-3 flex flex-col items-center justify-center min-w-[200px] h-[65px] flex-shrink-0 transition-all hover:bg-white hover:scale-105 shadow-lg relative';
-
-          const content = (
-            <>
-              <img
-                src={uni.image}
-                alt={uni.name}
-                className="max-h-[45px] max-w-[180px] object-contain"
-              />
-              {uni.href && (
-                <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow whitespace-nowrap">
-                  Assignment Help →
-                </span>
-              )}
-            </>
-          );
-
-          if (uni.href) {
-            return (
-              <Link key={index} href={uni.href} className={cardClasses} title={`${uni.name} assignment help`}>
-                {content}
-              </Link>
-            );
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none;
           }
-
-          return (
-            <div key={index} className={cardClasses}>
-              {content}
+        `}</style>
+        {universities.map((uni) => (
+          <Link
+            key={uni.href + uni.name}
+            href={uni.href}
+            className="group bg-white/95 border border-white/40 rounded-2xl p-4 flex items-center gap-4 flex-shrink-0 w-[280px] transition-all hover:bg-white hover:shadow-xl hover:-translate-y-0.5"
+            style={{ scrollSnapAlign: 'start' }}
+          >
+            <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center flex-shrink-0 p-1.5 shadow-sm">
+              <img src={uni.image} alt={uni.name} className="max-w-full max-h-full object-contain" />
             </div>
-          );
-        })}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-sm text-gray-900 leading-tight truncate group-hover:text-indigo-600 transition-colors">
+                {uni.name}
+              </h3>
+              <div className="flex items-center gap-1 text-xs text-gray-500 mt-1.5">
+                <MapPin className="w-3 h-3 flex-shrink-0" />
+                <span className="truncate">{uni.campuses}</span>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
+          </Link>
+        ))}
       </div>
 
-      <style jsx>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-      `}</style>
+      {/* Manual slider bar */}
+      <div className="mt-6 max-w-md mx-auto flex items-center gap-3">
+        <span className="text-white/50 text-xs flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" className="w-3 h-3">
+            <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 224 288c12.5 0 22.6-10.1 22.6-22.6l0-15.5c0-12.5-10.1-22.6-22.6-22.6l-114.7 0L214.6 96.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+          </svg>
+        </span>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={sliderValue}
+          onChange={handleSliderChange}
+          className="flex-1 h-2 rounded-full appearance-none cursor-pointer bg-white/25 accent-white"
+          aria-label="Scroll through universities"
+        />
+        <span className="text-white/50 text-xs flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" className="w-3 h-3">
+            <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 288 96 288c-12.5 0-22.6-10.1-22.6-22.6l0-15.5c0-12.5 10.1-22.6 22.6-22.6l114.7 0L105.4 96.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+          </svg>
+        </span>
+      </div>
     </div>
   );
 }
