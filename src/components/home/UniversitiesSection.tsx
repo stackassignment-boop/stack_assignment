@@ -1,21 +1,38 @@
 'use client';
 
-// University logos with local images
+import Link from 'next/link';
+
+// University logos with local images.
+// NOTE: this list was previously scrambled (every name pointed at the wrong
+// institution's logo) — verified and corrected against the actual image
+// files on 2026-08-08. Also added several logos that existed as unused
+// files but were never wired into this array.
 const universities = [
-  { name: 'De Montfort University', image: '/universities/001.jpg' },
-  { name: 'Federation University', image: '/universities/002.jpg' },
-  { name: 'University of Newcastle', image: '/universities/003.jpg' },
-  { name: 'University of New England', image: '/universities/004.jpg' },
-  { name: 'UNSW Sydney', image: '/universities/005.jpg' },
-  { name: 'University of Canberra', image: '/universities/006.jpg' },
-  { name: 'University of Sunshine Coast', image: '/universities/007.jpg' },
-  { name: 'University of Western Australia', image: '/universities/008.jpg' },
-  { name: 'Kaplan University', image: '/universities/009.jpg' },
-  { name: 'Victoria University', image: '/universities/0010.jpg' },
-  { name: 'Torrens University', image: '/universities/0011.jpg' },
-  { name: 'Holmes Institute', image: '/universities/0012.jpg' },
-  { name: 'Melbourne Institute of Technology', image: '/universities/0013.jpg' },
-  { name: 'Southampton Solent University', image: '/universities/0014.jpg' },
+  { name: 'CQUniversity Australia', image: '/universities/001.jpg', href: '/universities/cquniversity' },
+  { name: 'Deakin University', image: '/universities/002.jpg', href: '/universities/deakin-university' },
+  { name: 'De Montfort University', image: '/universities/003.jpg', href: '/universities/de-montfort-university' },
+  { name: 'Federation University', image: '/universities/004.jpg', href: '/universities/federation-university' },
+  { name: 'La Trobe University', image: '/universities/005.jpg', href: '/universities/la-trobe-university' },
+  { name: 'Liverpool Hope University', image: '/universities/006.jpg', href: '/universities/liverpool-hope-university' },
+  { name: 'Queensland University of Technology', image: '/universities/007.jpg', href: '/universities/qut' },
+  { name: 'Thompson Rivers University', image: '/universities/008.jpg', href: '/universities/thompson-rivers-university' },
+  { name: 'University of Newcastle', image: '/universities/009.jpg', href: '/universities/university-of-newcastle' },
+  { name: 'University of New England', image: '/universities/0010.jpg', href: '/universities/university-of-new-england' },
+  { name: 'UNSW Sydney', image: '/universities/0011.jpg', href: '/universities/unsw-sydney' },
+  { name: 'University of Canberra', image: '/universities/0012.jpg', href: '/universities/university-of-canberra' },
+  { name: 'University of Sunshine Coast', image: '/universities/0013.jpg', href: '/universities/university-of-sunshine-coast' },
+  { name: 'University of Bedfordshire', image: '/universities/0014.jpg', href: '/universities/university-of-bedfordshire' },
+  { name: 'University of Western Australia', image: '/universities/0015.jpg', href: '/universities/university-of-western-australia' },
+  { name: 'Kaplan Business School', image: '/universities/0016.jpg', href: '/kaplan-assignment-help' },
+  { name: 'Victoria University', image: '/universities/0017.jpg', href: '/universities/victoria-university' },
+  { name: 'Torrens University Australia', image: '/universities/0018.jpg', href: '/universities/torrens-university' },
+  { name: 'Holmes Institute', image: '/universities/0019.jpg', href: '/holmes-institute-assignment-help' },
+  { name: 'Victorian Institute of Technology', image: '/universities/0020.jpg', href: '/universities/victorian-institute-of-technology' },
+  { name: 'Academies Australasia Polytechnic', image: '/universities/0021.jpg', href: '/universities/academies-australasia-polytechnic' },
+  { name: 'Melbourne Institute of Technology', image: '/universities/0022.jpg', href: '/melbourne-institute-of-technology-assignment-help' },
+  { name: 'Southern Cross Institute', image: '/universities/0023.jpg', href: '/universities/southern-cross-institute' },
+  { name: 'Solent University', image: '/universities/0024.jpg', href: '/universities/solent-university' },
+  { name: 'UniSC (University of the Sunshine Coast)', image: '/universities/0025.jpg', href: '/universities/university-of-sunshine-coast' },
 ];
 
 export default function UniversitiesSection() {
@@ -111,7 +128,7 @@ function StatPill({ icon, value, label }: { icon: string; value: string; label: 
   );
 }
 
-function Marquee({ universities }: { universities: { name: string; image: string }[] }) {
+function Marquee({ universities }: { universities: { name: string; image: string; href?: string }[] }) {
   return (
     <div className="relative overflow-hidden">
       {/* Gradient overlays */}
@@ -126,18 +143,39 @@ function Marquee({ universities }: { universities: { name: string; image: string
         }}
       >
         {/* Double the logos for seamless loop */}
-        {[...universities, ...universities].map((uni, index) => (
-          <div
-            key={index}
-            className="bg-white/95 border border-white/40 rounded-2xl px-5 py-3 flex items-center justify-center min-w-[200px] h-[65px] flex-shrink-0 transition-all hover:bg-white hover:scale-105 shadow-lg"
-          >
-            <img
-              src={uni.image}
-              alt={uni.name}
-              className="max-h-[45px] max-w-[180px] object-contain"
-            />
-          </div>
-        ))}
+        {[...universities, ...universities].map((uni, index) => {
+          const cardClasses =
+            'bg-white/95 border border-white/40 rounded-2xl px-5 py-3 flex flex-col items-center justify-center min-w-[200px] h-[65px] flex-shrink-0 transition-all hover:bg-white hover:scale-105 shadow-lg relative';
+
+          const content = (
+            <>
+              <img
+                src={uni.image}
+                alt={uni.name}
+                className="max-h-[45px] max-w-[180px] object-contain"
+              />
+              {uni.href && (
+                <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow whitespace-nowrap">
+                  Assignment Help →
+                </span>
+              )}
+            </>
+          );
+
+          if (uni.href) {
+            return (
+              <Link key={index} href={uni.href} className={cardClasses} title={`${uni.name} assignment help`}>
+                {content}
+              </Link>
+            );
+          }
+
+          return (
+            <div key={index} className={cardClasses}>
+              {content}
+            </div>
+          );
+        })}
       </div>
 
       <style jsx>{`

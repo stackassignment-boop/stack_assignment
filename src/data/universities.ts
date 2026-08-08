@@ -1,0 +1,194 @@
+export interface UniversityData {
+  slug: string
+  name: string
+  country: string
+  campuses: string[]
+  courseAreas: string[]
+  heroImageId: number // picsum.photos id, for visual variety between pages
+}
+
+// Universities with a dedicated hand-built page (excluded from the dynamic
+// route so we don't create duplicate/competing URLs):
+//   Kaplan Business School      -> /kaplan-assignment-help
+//   Melbourne Institute of Tech -> /melbourne-institute-of-technology-assignment-help
+//   Holmes Institute            -> /holmes-institute-assignment-help
+//
+// Course areas below are kept general (business/IT/health/etc.) rather than
+// claiming institution-specific referencing guides or unit codes we haven't
+// verified — unlike the three hand-built pages above, which cite confirmed
+// facts. The FAQ template reflects that by not asserting a specific
+// referencing style.
+export const universities: UniversityData[] = [
+  {
+    slug: 'cquniversity',
+    name: 'CQUniversity Australia',
+    country: 'Australia',
+    campuses: ['Rockhampton', 'Bundaberg', 'Cairns', 'Melbourne', 'Sydney', 'Brisbane'],
+    courseAreas: ['Business & Management', 'Health & Nursing', 'Engineering', 'Education', 'IT'],
+    heroImageId: 1011,
+  },
+  {
+    slug: 'deakin-university',
+    name: 'Deakin University',
+    country: 'Australia',
+    campuses: ['Melbourne (Burwood)', 'Geelong', 'Warrnambool'],
+    courseAreas: ['Business & Commerce', 'IT & Computer Science', 'Health Sciences', 'Engineering', 'Arts & Education'],
+    heroImageId: 1016,
+  },
+  {
+    slug: 'de-montfort-university',
+    name: 'De Montfort University',
+    country: 'United Kingdom',
+    campuses: ['Leicester'],
+    courseAreas: ['Business & Law', 'Computing & Engineering', 'Health & Life Sciences', 'Art, Design & Humanities'],
+    heroImageId: 1022,
+  },
+  {
+    slug: 'federation-university',
+    name: 'Federation University',
+    country: 'Australia',
+    campuses: ['Ballarat', 'Berwick', 'Gippsland', 'Brisbane'],
+    courseAreas: ['Business', 'Health', 'Education', 'Engineering & Technology'],
+    heroImageId: 1033,
+  },
+  {
+    slug: 'la-trobe-university',
+    name: 'La Trobe University',
+    country: 'Australia',
+    campuses: ['Melbourne (Bundoora)', 'Bendigo', 'Albury-Wodonga', 'Shepparton'],
+    courseAreas: ['Business', 'Health Sciences', 'IT & Engineering', 'Law', 'Education'],
+    heroImageId: 1043,
+  },
+  {
+    slug: 'liverpool-hope-university',
+    name: 'Liverpool Hope University',
+    country: 'United Kingdom',
+    campuses: ['Liverpool'],
+    courseAreas: ['Business', 'Education', 'Humanities', 'Health Sciences'],
+    heroImageId: 1047,
+  },
+  {
+    slug: 'qut',
+    name: 'Queensland University of Technology',
+    country: 'Australia',
+    campuses: ['Brisbane (Gardens Point)', 'Brisbane (Kelvin Grove)'],
+    courseAreas: ['Business', 'IT', 'Engineering', 'Creative Industries', 'Health'],
+    heroImageId: 1051,
+  },
+  {
+    slug: 'thompson-rivers-university',
+    name: 'Thompson Rivers University',
+    country: 'Canada',
+    campuses: ['Kamloops, BC'],
+    courseAreas: ['Business & Economics', 'Science', 'Arts', 'Nursing & Health'],
+    heroImageId: 1058,
+  },
+  {
+    slug: 'university-of-newcastle',
+    name: 'University of Newcastle',
+    country: 'Australia',
+    campuses: ['Newcastle (Callaghan)', 'Central Coast', 'Sydney'],
+    courseAreas: ['Business', 'Health & Medicine', 'Engineering', 'Education', 'Science'],
+    heroImageId: 1060,
+  },
+  {
+    slug: 'university-of-new-england',
+    name: 'University of New England',
+    country: 'Australia',
+    campuses: ['Armidale, NSW'],
+    courseAreas: ['Business', 'Education', 'Health', 'Science & Agriculture'],
+    heroImageId: 1067,
+  },
+  {
+    slug: 'unsw-sydney',
+    name: 'UNSW Sydney',
+    country: 'Australia',
+    campuses: ['Sydney (Kensington)'],
+    courseAreas: ['Business', 'Engineering', 'Law', 'Medicine & Health', 'Science'],
+    heroImageId: 1071,
+  },
+  {
+    slug: 'university-of-canberra',
+    name: 'University of Canberra',
+    country: 'Australia',
+    campuses: ['Canberra, ACT'],
+    courseAreas: ['Business & Government', 'IT', 'Health', 'Education', 'Communication'],
+    heroImageId: 1076,
+  },
+  {
+    slug: 'university-of-sunshine-coast',
+    name: 'University of the Sunshine Coast (UniSC)',
+    country: 'Australia',
+    campuses: ['Sunshine Coast, QLD', 'Moreton Bay', 'South Bank (Brisbane)'],
+    courseAreas: ['Business', 'Health Sciences', 'Education', 'Science & Engineering'],
+    heroImageId: 1080,
+  },
+  {
+    slug: 'university-of-bedfordshire',
+    name: 'University of Bedfordshire',
+    country: 'United Kingdom',
+    campuses: ['Luton', 'Bedford'],
+    courseAreas: ['Business', 'Computing', 'Health & Social Sciences', 'Education'],
+    heroImageId: 1084,
+  },
+  {
+    slug: 'university-of-western-australia',
+    name: 'University of Western Australia',
+    country: 'Australia',
+    campuses: ['Perth (Crawley)'],
+    courseAreas: ['Business', 'Engineering', 'Law', 'Health & Medical Sciences', 'Science'],
+    heroImageId: 1088,
+  },
+  {
+    slug: 'victoria-university',
+    name: 'Victoria University',
+    country: 'Australia',
+    campuses: ['Melbourne (Footscray)', 'Sydney'],
+    courseAreas: ['Business', 'IT', 'Health', 'Sport Science', 'Education'],
+    heroImageId: 1015,
+  },
+  {
+    slug: 'torrens-university',
+    name: 'Torrens University Australia',
+    country: 'Australia',
+    campuses: ['Adelaide', 'Brisbane', 'Melbourne', 'Sydney', 'Online'],
+    courseAreas: ['Business', 'Design', 'Health', 'Hospitality & Tourism', 'IT'],
+    heroImageId: 1025,
+  },
+  {
+    slug: 'victorian-institute-of-technology',
+    name: 'Victorian Institute of Technology',
+    country: 'Australia',
+    campuses: ['Melbourne', 'Sydney'],
+    courseAreas: ['Business', 'IT', 'Engineering', 'Community Services'],
+    heroImageId: 1035,
+  },
+  {
+    slug: 'academies-australasia-polytechnic',
+    name: 'Academies Australasia Polytechnic',
+    country: 'Australia',
+    campuses: ['Sydney'],
+    courseAreas: ['Business', 'Early Childhood Education', 'IT', 'Community Services'],
+    heroImageId: 1045,
+  },
+  {
+    slug: 'southern-cross-institute',
+    name: 'Southern Cross Institute',
+    country: 'Australia',
+    campuses: ['Sydney'],
+    courseAreas: ['Business', 'Hospitality Management', 'IT'],
+    heroImageId: 1055,
+  },
+  {
+    slug: 'solent-university',
+    name: 'Solent University',
+    country: 'United Kingdom',
+    campuses: ['Southampton'],
+    courseAreas: ['Business', 'Maritime & Engineering', 'Media & Design', 'Sport Science'],
+    heroImageId: 1065,
+  },
+]
+
+export function getUniversityBySlug(slug: string): UniversityData | undefined {
+  return universities.find((u) => u.slug === slug)
+}
