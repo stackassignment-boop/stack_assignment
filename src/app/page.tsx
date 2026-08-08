@@ -10,7 +10,6 @@ import TestimonialsSection from '@/components/home/TestimonialsSection';
 import PortfolioSection from '@/components/home/PortfolioSection';
 import FAQSection from '@/components/home/FAQSection';
 import UniversitiesSection from '@/components/home/UniversitiesSection';
-import UniversityPagesSection from '@/components/home/UniversityPagesSection';
 import PricingPage from '@/components/pricing/PricingPage';
 import SamplesPage from '@/components/samples/SamplesPage';
 import BlogPage from '@/components/blog/BlogPage';
@@ -203,7 +202,6 @@ function HomeContent() {
             
             <FAQSection />
             <UniversitiesSection />
-            <UniversityPagesSection />
             
             {/* Trust Badges Full */}
             <section className="py-8 bg-white dark:bg-slate-950">
