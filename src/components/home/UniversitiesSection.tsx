@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 // University logos with local images
 const universities = [
   { name: 'De Montfort University', image: '/universities/001.jpg' },
@@ -10,7 +12,7 @@ const universities = [
   { name: 'University of Canberra', image: '/universities/006.jpg' },
   { name: 'University of Sunshine Coast', image: '/universities/007.jpg' },
   { name: 'University of Western Australia', image: '/universities/008.jpg' },
-  { name: 'Kaplan University', image: '/universities/009.jpg' },
+  { name: 'Kaplan University', image: '/universities/009.jpg', href: '/kaplan-assignment-help' },
   { name: 'Victoria University', image: '/universities/0010.jpg' },
   { name: 'Torrens University', image: '/universities/0011.jpg' },
   { name: 'Holmes Institute', image: '/universities/0012.jpg' },
@@ -111,7 +113,7 @@ function StatPill({ icon, value, label }: { icon: string; value: string; label: 
   );
 }
 
-function Marquee({ universities }: { universities: { name: string; image: string }[] }) {
+function Marquee({ universities }: { universities: { name: string; image: string; href?: string }[] }) {
   return (
     <div className="relative overflow-hidden">
       {/* Gradient overlays */}
@@ -126,18 +128,39 @@ function Marquee({ universities }: { universities: { name: string; image: string
         }}
       >
         {/* Double the logos for seamless loop */}
-        {[...universities, ...universities].map((uni, index) => (
-          <div
-            key={index}
-            className="bg-white/95 border border-white/40 rounded-2xl px-5 py-3 flex items-center justify-center min-w-[200px] h-[65px] flex-shrink-0 transition-all hover:bg-white hover:scale-105 shadow-lg"
-          >
-            <img
-              src={uni.image}
-              alt={uni.name}
-              className="max-h-[45px] max-w-[180px] object-contain"
-            />
-          </div>
-        ))}
+        {[...universities, ...universities].map((uni, index) => {
+          const cardClasses =
+            'bg-white/95 border border-white/40 rounded-2xl px-5 py-3 flex flex-col items-center justify-center min-w-[200px] h-[65px] flex-shrink-0 transition-all hover:bg-white hover:scale-105 shadow-lg relative';
+
+          const content = (
+            <>
+              <img
+                src={uni.image}
+                alt={uni.name}
+                className="max-h-[45px] max-w-[180px] object-contain"
+              />
+              {uni.href && (
+                <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow whitespace-nowrap">
+                  Assignment Help →
+                </span>
+              )}
+            </>
+          );
+
+          if (uni.href) {
+            return (
+              <Link key={index} href={uni.href} className={cardClasses} title={`${uni.name} assignment help`}>
+                {content}
+              </Link>
+            );
+          }
+
+          return (
+            <div key={index} className={cardClasses}>
+              {content}
+            </div>
+          );
+        })}
       </div>
 
       <style jsx>{`
