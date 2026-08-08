@@ -80,12 +80,22 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
       const urlParams = new URLSearchParams(window.location.search);
       const subject = urlParams.get('subject');
       const description = urlParams.get('description');
-      
+      const email = urlParams.get('email');
+      const phone = urlParams.get('phone');
+
       if (subject) {
         setFormData(prev => ({ ...prev, subject }));
       }
       if (description) {
         setFormData(prev => ({ ...prev, description }));
+      }
+      // Only pre-fill from the URL if we don't already have a signed-in
+      // user's email/phone (that fetch runs above and should take priority).
+      if (email) {
+        setFormData(prev => ({ ...prev, email: prev.email || email }));
+      }
+      if (phone) {
+        setFormData(prev => ({ ...prev, phone: prev.phone || phone }));
       }
     }
   }, []);

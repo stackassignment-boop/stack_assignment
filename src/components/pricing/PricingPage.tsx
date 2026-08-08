@@ -3,13 +3,35 @@
 import { useState, useMemo } from 'react';
 
 interface PricingPageProps {
-  onNavigate?: (page: string) => void;
+  onNavigate?: (page: string, params?: Record<string, string>) => void;
 }
+
+const LEVEL_LABELS: Record<string, string> = {
+  '3': 'High School / Undergraduate',
+  '5.5': 'Bachelor / Masters',
+  '9': 'PhD / Professional',
+};
+
+const DEADLINE_LABELS: Record<string, string> = {
+  '1': '14+ days',
+  '1.3': '7–13 days',
+  '1.6': '3–6 days',
+  '2.2': '24–48 hours',
+  '3.0': 'Under 24 hours',
+};
 
 export default function PricingPage({ onNavigate }: PricingPageProps) {
   const [level, setLevel] = useState('3');
   const [deadline, setDeadline] = useState('1');
   const [pages, setPages] = useState(5);
+
+  // Lead-capture modal state
+  const [showCapture, setShowCapture] = useState(false);
+  const [leadName, setLeadName] = useState('');
+  const [leadEmail, setLeadEmail] = useState('');
+  const [leadPhone, setLeadPhone] = useState('');
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadError, setLeadError] = useState('');
 
   // Use useMemo for derived state instead of useEffect
   const price = useMemo(() => {
@@ -20,10 +42,72 @@ export default function PricingPage({ onNavigate }: PricingPageProps) {
 
   const wordCount = pages * 250;
 
-  const handleNav = (page: string) => {
+  const handleNav = (page: string, params?: Record<string, string>) => {
     if (onNavigate) {
-      onNavigate(page);
+      onNavigate(page, params);
     }
+  };
+
+  const buildQuoteSummary = () => {
+    const levelLabel = LEVEL_LABELS[level] || level;
+    const deadlineLabel = DEADLINE_LABELS[deadline] || deadline;
+    return `Academic Level: ${levelLabel} | Deadline: ${deadlineLabel} | Pages: ${pages} (~${wordCount.toLocaleString()} words) | Estimated Price: $${price.toLocaleString()}`;
+  };
+
+  const handleProceedClick = () => {
+    setLeadError('');
+    setShowCapture(true);
+  };
+
+  const handleLeadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLeadError('');
+
+    if (!leadName.trim() || leadName.trim().length < 2) {
+      setLeadError('Please enter your name.');
+      return;
+    }
+    if (!leadEmail.trim() || !/^\S+@\S+\.\S+$/.test(leadEmail)) {
+      setLeadError('Please enter a valid email address.');
+      return;
+    }
+
+    setLeadSubmitting(true);
+    const summary = buildQuoteSummary();
+
+    try {
+      // Save the lead even if they never finish the order —
+      // this is what lets us follow up on abandoned quotes.
+      await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: leadName.trim(),
+          email: leadEmail.trim(),
+          phone: leadPhone.trim() || undefined,
+          subject: 'Quote Calculator Lead',
+          message: summary,
+          source: 'website',
+        }),
+      });
+    } catch (err) {
+      // Don't block the user from ordering just because the lead-save failed —
+      // log it and continue to the order page regardless.
+      console.error('Failed to save quote lead:', err);
+    } finally {
+      setLeadSubmitting(false);
+    }
+
+    setShowCapture(false);
+
+    // Carry the quote + contact details into the order form so the student
+    // doesn't have to re-enter anything.
+    handleNav('order', {
+      subject: `${LEVEL_LABELS[level] || level} — ${pages} pages`,
+      description: summary,
+      email: leadEmail.trim(),
+      phone: leadPhone.trim(),
+    });
   };
 
   return (
@@ -144,7 +228,7 @@ export default function PricingPage({ onNavigate }: PricingPageProps) {
                 <p className="text-xs opacity-75 mb-6">Includes free revisions & plagiarism report</p>
 
                 <button
-                  onClick={() => handleNav('order')}
+                  onClick={handleProceedClick}
                   className="w-full bg-white text-indigo-600 hover:bg-gray-50 px-8 py-4 rounded-xl text-lg font-bold transition-all shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
                 >
                   Proceed to Order
@@ -217,6 +301,89 @@ export default function PricingPage({ onNavigate }: PricingPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Lead-capture modal — shown before proceeding to the full order form */}
+      {showCapture && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
+          onClick={() => setShowCapture(false)}
+        >
+          <div
+            className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-8 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowCapture(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              aria-label="Close"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <h3 className="text-2xl font-bold mb-1 text-gray-900 dark:text-white">Almost there!</h3>
+            <p className="text-gray-600 dark:text-slate-400 text-sm mb-6">
+              Enter your details so we can save your ${price.toLocaleString()} quote and take you to checkout.
+            </p>
+
+            <form onSubmit={handleLeadSubmit} className="space-y-4">
+              <div>
+                <label className="block mb-1.5 text-sm font-semibold text-gray-800 dark:text-gray-100">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  value={leadName}
+                  onChange={(e) => setLeadName(e.target.value)}
+                  placeholder="Jane Doe"
+                  className="w-full p-3 rounded-lg border-2 border-gray-200 dark:bg-slate-700/50 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block mb-1.5 text-sm font-semibold text-gray-800 dark:text-gray-100">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={leadEmail}
+                  onChange={(e) => setLeadEmail(e.target.value)}
+                  placeholder="jane@university.edu"
+                  className="w-full p-3 rounded-lg border-2 border-gray-200 dark:bg-slate-700/50 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block mb-1.5 text-sm font-semibold text-gray-800 dark:text-gray-100">
+                  WhatsApp / Phone <span className="font-normal text-gray-400">(optional, for faster updates)</span>
+                </label>
+                <input
+                  type="tel"
+                  value={leadPhone}
+                  onChange={(e) => setLeadPhone(e.target.value)}
+                  placeholder="+91 98765 43210"
+                  className="w-full p-3 rounded-lg border-2 border-gray-200 dark:bg-slate-700/50 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+
+              {leadError && (
+                <p className="text-red-600 text-sm font-medium">{leadError}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={leadSubmitting}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3.5 rounded-xl font-bold hover:opacity-90 transition disabled:opacity-60 flex items-center justify-center gap-2"
+              >
+                {leadSubmitting ? 'Saving...' : 'Continue to Order'}
+              </button>
+
+              <p className="text-xs text-center text-gray-400">
+                We'll only use this to save your quote and follow up — no spam.
+              </p>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
