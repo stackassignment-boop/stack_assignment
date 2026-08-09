@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -24,9 +26,16 @@ interface Requirement {
   createdAt: string;
 }
 
-export default function RequirementsPage() {
-  const [requirements, setRequirements] = useState<Requirement[]>([]);
-  const [loading, setLoading] = useState(true);
+interface RequirementsPageProps {
+  initialRequirements?: Requirement[];
+}
+
+export default function RequirementsPage({ initialRequirements = [] }: RequirementsPageProps) {
+  const router = useRouter();
+  const [requirements, setRequirements] = useState<Requirement[]>(initialRequirements);
+  // Only show a loading state if we didn't already get server-rendered data.
+  const [loading, setLoading] = useState(initialRequirements.length === 0);
+  const hasFetchedOnce = useRef(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [previewRequirement, setPreviewRequirement] = useState<Requirement | null>(null);
@@ -35,7 +44,8 @@ export default function RequirementsPage() {
   // Categories
   const categories = ['all', 'Programming', 'Essay', 'Research Paper', 'Case Study', 'Coursework', 'Lab Report'];
 
-  // Handle navigation
+  // Handle navigation for in-page SPA sections (kept for the "Back to
+  // Services" button, which points at the homepage's view-based routing).
   const handleNavigate = useCallback((page: string, params?: Record<string, string>) => {
     const urlParams = new URLSearchParams();
     urlParams.set('view', page);
@@ -51,12 +61,19 @@ export default function RequirementsPage() {
     window.location.href = `/?${urlParams.toString()}`;
   }, []);
 
-  // Fetch requirements
+  // Fetch requirements — skipped on first render when we already have
+  // server-rendered data, so we don't show a redundant loading flash or
+  // double-fetch on initial page load. Runs on every subsequent search or
+  // category change.
   useEffect(() => {
+    if (!hasFetchedOnce.current && initialRequirements.length > 0) {
+      hasFetchedOnce.current = true;
+      return;
+    }
+
     const fetchRequirements = async () => {
       try {
         setLoading(true);
-        console.log('Fetching requirements...');
         const params = new URLSearchParams();
         if (searchQuery) {
           params.set('search', searchQuery);
@@ -64,13 +81,11 @@ export default function RequirementsPage() {
         if (selectedCategory !== 'all') {
           params.set('category', selectedCategory);
         }
-        
+
         const res = await fetch(`/api/requirements?${params.toString()}`);
-        console.log('Requirements API status:', res.status);
-        
+
         if (res.ok) {
           const data = await res.json();
-          console.log('Requirements data:', data);
           setRequirements(data.requirements || []);
         } else {
           const errorData = await res.json();
@@ -88,12 +103,19 @@ export default function RequirementsPage() {
   }, [searchQuery, selectedCategory]);
 
   const handleGetAnswer = (requirement: Requirement) => {
-    // Pre-fill order form with requirement data
-    handleNavigate('order', {
-      subject: requirement.title,
-      description: requirement.description || `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`,
-      ...(requirement.category && { category: requirement.category }),
-    });
+    // Pre-fill order form with requirement data — routes to the real
+    // /order page (not the homepage's SPA view routing) for consistency
+    // with the rest of the site.
+    const params = new URLSearchParams();
+    params.set('subject', requirement.title);
+    params.set(
+      'description',
+      requirement.description || `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`
+    );
+    if (requirement.category) {
+      params.set('category', requirement.category);
+    }
+    router.push(`/order?${params.toString()}`);
   };
 
   const handlePreview = (requirement: Requirement) => {
@@ -233,7 +255,9 @@ export default function RequirementsPage() {
                       <Badge className="mb-2" variant="secondary">{requirement.category}</Badge>
                     )}
                     <CardTitle className="text-base font-semibold text-gray-900 dark:text-white leading-tight">
-                      {requirement.title}
+                      <Link href={`/requirements/${requirement.id}`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        {requirement.title}
+                      </Link>
                     </CardTitle>
                     <CardDescription className="line-clamp-2">
                       {requirement.description || 'No description provided'}

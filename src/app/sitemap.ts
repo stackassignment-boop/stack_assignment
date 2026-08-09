@@ -91,6 +91,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/requirements`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
   ]
 
   // Dedicated university landing pages (dynamic route driven by
@@ -159,5 +165,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...universityPages, ...blogPages, ...samples, ...services]
+  // Fetch uploaded assignment requirements — each gets its own indexable
+  // page (previously all requirements shared a single /requirements URL
+  // with no individual page, so specific uploaded assignments had no way
+  // to be found directly via search).
+  let requirementItems: { id: string; updatedAt: Date }[] = []
+  try {
+    requirementItems = await db.requirementFile.findMany({
+      select: { id: true, updatedAt: true },
+    })
+  } catch (error) {
+    console.error('Failed to fetch requirements for sitemap:', error)
+  }
+
+  const requirementPages = requirementItems.map((req) => ({
+    url: `${baseUrl}/requirements/${req.id}`,
+    lastModified: req.updatedAt,
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }))
+
+  return [...staticPages, ...universityPages, ...blogPages, ...samples, ...services, ...requirementPages]
 }

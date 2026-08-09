@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { PenTool, BookOpen, FlaskConical, ClipboardList, Edit3, Laptop, Check, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -157,23 +158,11 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
             {services.map((service, index) => {
               const isAssignmentService = service.title === 'Assignment & Coursework Help';
 
-              return (
-                <div
-                  key={index}
-                  className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-7 md:p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100 dark:border-slate-700 cursor-pointer"
-                  onClick={() => {
-                    if (isAssignmentService) {
-                      // Navigate to requirements page for Assignment & Coursework Help
-                      window.location.href = '/requirements';
-                    } else {
-                      // Navigate to order page for other services
-                      const params = new URLSearchParams();
-                      params.set('view', 'order');
-                      params.set('subject', service.title);
-                      window.location.href = `/?${params.toString()}`;
-                    }
-                  }}
-                >
+              const cardClassName =
+                'bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-7 md:p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100 dark:border-slate-700 cursor-pointer block';
+
+              const cardContent = (
+                <>
                   <div className="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center mb-6">
                     <service.icon className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
                   </div>
@@ -191,6 +180,31 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                       </li>
                     ))}
                   </ul>
+                </>
+              );
+
+              // Use a real <Link> for the requirements page so it's a
+              // crawlable, discoverable URL — not just a JS onClick handler.
+              if (isAssignmentService) {
+                return (
+                  <Link key={index} href="/requirements" className={cardClassName}>
+                    {cardContent}
+                  </Link>
+                );
+              }
+
+              return (
+                <div
+                  key={index}
+                  className={cardClassName}
+                  onClick={() => {
+                    const params = new URLSearchParams();
+                    params.set('view', 'order');
+                    params.set('subject', service.title);
+                    window.location.href = `/?${params.toString()}`;
+                  }}
+                >
+                  {cardContent}
                 </div>
               );
             })}
