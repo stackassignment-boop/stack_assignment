@@ -4,22 +4,22 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Use DATABASE_URL from environment, or fallback to hardcoded Neon URL
-const databaseUrl = process.env.DATABASE_URL || "postgresql://neondb_owner:npg_A8kgUBsheXJ3@ep-floral-sun-aikg04vz-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-
-console.log('Database URL configured:', process.env.DATABASE_URL ? 'Using env DATABASE_URL' : 'Using fallback URL');
+// DATABASE_URL must come from the environment. There is intentionally no
+// hardcoded fallback here — a previous version of this file had the
+// production database credential committed directly in source, which
+// meant anyone with repository access (or anyone who ever saw this repo,
+// including if it were made public) had the live database password.
+if (!process.env.DATABASE_URL) {
+  throw new Error(
+    'DATABASE_URL environment variable is not set. Copy .env.example to .env ' +
+      'and fill in a real connection string before running the app.'
+  )
+}
 
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    datasources: {
-      db: {
-        url: databaseUrl,
-      },
-    },
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error', 'warn'],
+    log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error', 'warn'],
   })
-
-console.log('Prisma client initialized, models available:', Object.keys(db));
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
