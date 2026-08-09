@@ -2,6 +2,12 @@ import { MetadataRoute } from 'next'
 import { db } from '@/lib/db'
 import { universities } from '@/data/universities'
 
+// Force fresh data on every request. Without this, Next.js can statically
+// cache the sitemap at build time — meaning newly uploaded requirements
+// (and any other DB-driven content) wouldn't appear in sitemap.xml until
+// the next deployment, slowing down how quickly Google discovers them.
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.stackassignment.com'
 

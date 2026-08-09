@@ -13,7 +13,7 @@ const updateRequirementSchema = z.object({
 // PUT /api/admin/requirements/[id] - Update a requirement file (admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authResult = await requireAdmin();
@@ -22,7 +22,7 @@ export async function PUT(
       return apiError(authResult.error || 'Unauthorized', authResult.status || 401);
     }
 
-    const id = params.id;
+    const { id } = await params;
 
     // Check if requirement exists
     const requirement = await db.requirementFile.findUnique({
@@ -198,7 +198,7 @@ export async function PUT(
 // DELETE /api/admin/requirements/[id] - Delete a requirement file (admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authResult = await requireAdmin();
@@ -207,7 +207,7 @@ export async function DELETE(
       return apiError(authResult.error || 'Unauthorized', authResult.status || 401);
     }
 
-    const id = params.id;
+    const { id } = await params;
     console.log('DELETE - Authenticated, requirement ID:', id);
 
     // Use the same Prisma model that works in GET endpoint

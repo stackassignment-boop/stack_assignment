@@ -9,6 +9,11 @@ interface PageProps {
   params: Promise<{ id: string }>
 }
 
+// Same reasoning as the list page — force fresh data per request so a
+// newly uploaded requirement's detail page is reachable immediately,
+// not only after the next deployment.
+export const dynamic = 'force-dynamic'
+
 async function getRequirement(id: string) {
   return db.requirementFile.findUnique({
     where: { id },
