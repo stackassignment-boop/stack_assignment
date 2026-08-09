@@ -9,6 +9,9 @@ import {
   ShieldCheck,
   GraduationCap,
   MessageCircle,
+  Code2,
+  ArrowRight,
+  AlertCircle,
 } from 'lucide-react'
 import TrustBadges from '@/components/marketing/TrustBadges'
 
@@ -41,6 +44,67 @@ const courseAreas = [
   'Business Analytics',
   'Hospitality & Tourism Management',
   'MBA & Postgraduate Business',
+]
+
+// Sourced directly from Kaplan Business School's own Subject Offerings
+// document (kbs.edu.au/documents/subject-offerings, published June 2026).
+// Prerequisites shown as they appear in that document. "Nil" means no
+// prerequisite. Verified against the source rather than assumed — one
+// correction worth flagging: TEC205 is "Bitcoin", not "Introduction to
+// Information Networks" (that's TEC105).
+interface Subject {
+  code: string
+  name: string
+  prereq: string | null
+}
+
+const undergradSubjects: Subject[] = [
+  { code: 'TEC100', name: 'Introduction to Information Technology', prereq: null },
+  { code: 'TEC101', name: 'Professional Practice and Communication in IT', prereq: null },
+  { code: 'TEC102', name: 'Fundamentals of Programming', prereq: null },
+  { code: 'TEC103', name: 'Information Systems in Business', prereq: null },
+  { code: 'TEC104', name: 'Database Design and Management', prereq: null },
+  { code: 'TEC105', name: 'Introduction to Information Networks', prereq: null },
+  { code: 'TEC106', name: 'IT Project Management', prereq: 'TEC103' },
+  { code: 'TEC108', name: 'Cyber Security', prereq: 'TEC103 & TEC105' },
+  { code: 'TEC201', name: 'Data Visualisation in R', prereq: 'TEC102' },
+  { code: 'TEC202', name: 'Artificial Intelligence and Machine Learning in IT', prereq: 'TEC102' },
+  { code: 'TEC203', name: 'UX and Design Thinking', prereq: 'TEC101' },
+  { code: 'TEC204', name: 'Digital Forensics', prereq: 'TEC108' },
+  { code: 'TEC205', name: 'Bitcoin', prereq: 'TEC102' },
+  { code: 'TEC206', name: 'Intermediate Programming', prereq: 'TEC102' },
+  { code: 'TEC207', name: 'Service and Operations Management in IT', prereq: 'TEC101' },
+  { code: 'TEC301', name: 'Machine Learning Applications', prereq: 'TEC102 & TEC104' },
+  { code: 'TEC302', name: 'Website Development', prereq: 'TEC102' },
+  { code: 'TEC303', name: 'Mobile Development', prereq: 'TEC102' },
+  { code: 'TEC304', name: 'Advanced Programming', prereq: 'TEC206' },
+  { code: 'TEC305', name: 'Algorithms and Data Structures', prereq: 'TEC102' },
+  { code: 'TEC307', name: 'IT Capstone', prereq: 'Final or penultimate trimester only' },
+  { code: 'TEC308', name: 'Penetration Testing', prereq: 'TEC102 & TEC108' },
+]
+
+const postgradSubjects: Subject[] = [
+  { code: 'TECH1100', name: 'Professional Practice and Communication in IT', prereq: null },
+  { code: 'TECH1200', name: 'Programming in Python', prereq: null },
+  { code: 'TECH1300', name: 'Information Systems in Business', prereq: null },
+  { code: 'TECH1400', name: 'Database Design and Management', prereq: null },
+  { code: 'TECH2100', name: 'Information Networks', prereq: null },
+  { code: 'TECH2200', name: 'IT Project Management', prereq: 'TECH1300' },
+  { code: 'TECH2300', name: 'Service and Operations Management in IT', prereq: 'TECH1100' },
+  { code: 'TECH2400', name: 'Cyber Security', prereq: 'TECH1300 & TECH2100' },
+  { code: 'TECH3100', name: 'Data Visualisation in R', prereq: 'TECH1200' },
+  { code: 'TECH3200', name: 'Artificial Intelligence and Machine Learning in IT', prereq: 'TECH1200' },
+  { code: 'TECH3300', name: 'Machine Learning Applications', prereq: 'TECH1200 & TECH1400' },
+  { code: 'TECH4100', name: 'UX and Design Thinking', prereq: 'TECH1100' },
+  { code: 'TECH4200', name: 'Website Development', prereq: 'TECH1200' },
+  { code: 'TECH4300', name: 'Mobile Development', prereq: 'TECH1200' },
+  { code: 'TECH5100', name: 'Penetration Testing', prereq: 'TECH1200 & TECH2400' },
+  { code: 'TECH5200', name: 'Digital Forensics', prereq: 'TECH2400' },
+  { code: 'TECH5300', name: 'Bitcoin', prereq: 'TECH1200' },
+  { code: 'TECH6100', name: 'Intermediate Programming', prereq: 'TECH1200' },
+  { code: 'TECH6200', name: 'Advanced Programming', prereq: 'TECH6100' },
+  { code: 'TECH6300', name: 'Algorithms and Data Structures', prereq: 'TECH1200' },
+  { code: 'TECH8000', name: 'IT Capstone', prereq: 'Final or penultimate trimester only' },
 ]
 
 const faqs = [
@@ -218,6 +282,115 @@ export default function KaplanAssignmentHelpPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* IT Subjects & Prerequisites */}
+      <section className="py-16 bg-white dark:bg-slate-950">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-4">
+            <div className="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-full px-5 py-2 text-sm font-semibold text-indigo-700 dark:text-indigo-300 mb-5">
+              <Code2 className="w-4 h-4" />
+              Bachelor & Master of IT
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
+              IT Subjects We Cover
+            </h2>
+            <p className="text-gray-600 dark:text-slate-400 max-w-2xl mx-auto mb-2">
+              Every subject code below is taken directly from Kaplan's own subject offerings
+              guide, including prerequisites — so you know exactly what needs to come first.
+            </p>
+          </div>
+
+          {/* Prerequisite chain callout, using the example you asked about */}
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-800/50 border border-indigo-100 dark:border-slate-700 rounded-2xl p-6 mb-10">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-bold text-base mb-2">Subjects Build on Each Other</h3>
+                <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+                  Several programming subjects have prerequisites, so check you've completed
+                  the earlier subject before enrolling. For example:
+                </p>
+                <div className="flex flex-wrap items-center gap-2 text-sm font-semibold">
+                  <span className="bg-white dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-indigo-200 dark:border-slate-600">TEC102 — Fundamentals of Programming</span>
+                  <ArrowRight className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                  <span className="bg-white dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-indigo-200 dark:border-slate-600">TEC206 — Intermediate Programming</span>
+                  <ArrowRight className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                  <span className="bg-white dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-indigo-200 dark:border-slate-600">TEC304 — Advanced Programming</span>
+                </div>
+                <p className="text-gray-500 dark:text-slate-500 text-xs mt-3">
+                  The postgraduate Master of IT follows the same pattern: TECH1200 (Programming
+                  in Python) → TECH6100 (Intermediate Programming) → TECH6200 (Advanced
+                  Programming).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Undergraduate table */}
+          <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+            <GraduationCap className="w-5 h-5 text-indigo-600" />
+            Bachelor of Information Technology
+          </h3>
+          <div className="overflow-x-auto mb-12 rounded-xl border border-gray-100 dark:border-slate-700">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gray-50 dark:bg-slate-800 text-left">
+                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Code</th>
+                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Subject Name</th>
+                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Prerequisite</th>
+                </tr>
+              </thead>
+              <tbody>
+                {undergradSubjects.map((s, i) => (
+                  <tr
+                    key={s.code}
+                    className={i % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-gray-50/60 dark:bg-slate-900'}
+                  >
+                    <td className="px-4 py-3 font-mono font-semibold text-indigo-700 dark:text-indigo-400 whitespace-nowrap">{s.code}</td>
+                    <td className="px-4 py-3 text-gray-800 dark:text-gray-200">{s.name}</td>
+                    <td className="px-4 py-3 text-gray-500 dark:text-slate-400">{s.prereq ?? 'None'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Postgraduate table */}
+          <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+            <GraduationCap className="w-5 h-5 text-indigo-600" />
+            Graduate Certificate / Diploma / Master of IT
+          </h3>
+          <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-slate-700">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gray-50 dark:bg-slate-800 text-left">
+                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Code</th>
+                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Subject Name</th>
+                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Prerequisite</th>
+                </tr>
+              </thead>
+              <tbody>
+                {postgradSubjects.map((s, i) => (
+                  <tr
+                    key={s.code}
+                    className={i % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-gray-50/60 dark:bg-slate-900'}
+                  >
+                    <td className="px-4 py-3 font-mono font-semibold text-indigo-700 dark:text-indigo-400 whitespace-nowrap">{s.code}</td>
+                    <td className="px-4 py-3 text-gray-800 dark:text-gray-200">{s.name}</td>
+                    <td className="px-4 py-3 text-gray-500 dark:text-slate-400">{s.prereq ?? 'None'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="text-xs text-gray-400 dark:text-slate-500 mt-6 text-center">
+            Subject codes and prerequisites sourced from Kaplan Business School's official
+            subject offerings guide (kbs.edu.au). Subjects and prerequisites can change between
+            trimesters — always confirm against your current unit outline.
+          </p>
         </div>
       </section>
 
