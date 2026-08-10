@@ -35,8 +35,8 @@ const universities = [
   { name: 'Southern Cross Institute', image: '/universities/0023.jpg', href: '/universities/southern-cross-institute', campuses: 'Sydney' },
   { name: 'Solent University', image: '/universities/0024.jpg', href: '/universities/solent-university', campuses: 'Southampton' },
   { name: 'UniSC (University of the Sunshine Coast)', image: '/universities/0025.jpg', href: '/universities/university-of-sunshine-coast', campuses: 'Sunshine Coast · Moreton Bay' },
-  { name: 'University of East London', image: null, href: '/universities/university-of-east-london', campuses: 'Docklands · Stratford (London)' },
-  { name: 'PIA — Polytechnic Institute Australia', image: null, href: '/universities/pia-polytechnic-institute-australia', campuses: 'Sydney · Geelong' },
+  { name: 'University of East London', image: '/universities/0026.png', href: '/universities/university-of-east-london', campuses: 'Docklands · Stratford (London)' },
+  { name: 'PIA — Polytechnic Institute Australia', image: '/universities/0027.jpg', href: '/universities/pia-polytechnic-institute-australia', campuses: 'Sydney · Geelong' },
 ];
 
 export default function UniversitiesSection() {
