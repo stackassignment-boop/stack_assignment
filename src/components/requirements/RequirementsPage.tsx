@@ -30,6 +30,14 @@ interface RequirementsPageProps {
   initialRequirements?: Requirement[];
 }
 
+function isPreviewable(fileType: string): boolean {
+  return (
+    fileType === 'application/pdf' ||
+    fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+    fileType === 'application/msword'
+  );
+}
+
 export default function RequirementsPage({ initialRequirements = [] }: RequirementsPageProps) {
   const router = useRouter();
   const [requirements, setRequirements] = useState<Requirement[]>(initialRequirements);
@@ -119,13 +127,16 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
   };
 
   const handlePreview = (requirement: Requirement) => {
-    // Only PDF files can be previewed
-    if (requirement.fileType === 'application/pdf') {
+    const previewable =
+      requirement.fileType === 'application/pdf' ||
+      requirement.fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      requirement.fileType === 'application/msword';
+
+    if (previewable) {
       setPreviewRequirement(requirement);
       setShowPreviewModal(true);
     } else {
-      // Show toast error for non-PDF files
-      toast.error('Only PDF files can be previewed. Please upload a PDF version of this file.');
+      toast.error('Only PDF and Word (.docx) files can be previewed.');
     }
   };
 
@@ -293,7 +304,7 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
                       onClick={() => handlePreview(requirement)}
                       variant="outline"
                       className="flex-1"
-                      disabled={requirement.fileType !== 'application/pdf'}
+                      disabled={!isPreviewable(requirement.fileType)}
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       Preview

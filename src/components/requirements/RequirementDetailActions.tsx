@@ -23,10 +23,15 @@ export default function RequirementDetailActions({ requirement }: RequirementDet
   const [showPreview, setShowPreview] = useState(false);
 
   const handlePreview = () => {
-    if (requirement.fileType === 'application/pdf') {
+    const previewable =
+      requirement.fileType === 'application/pdf' ||
+      requirement.fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      requirement.fileType === 'application/msword';
+
+    if (previewable) {
       setShowPreview(true);
     } else {
-      toast.error('Only PDF files can be previewed. Please upload a PDF version of this file.');
+      toast.error('Only PDF and Word (.docx) files can be previewed.');
     }
   };
 
@@ -48,7 +53,11 @@ export default function RequirementDetailActions({ requirement }: RequirementDet
       <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={handlePreview}
-          disabled={requirement.fileType !== 'application/pdf'}
+          disabled={
+            requirement.fileType !== 'application/pdf' &&
+            requirement.fileType !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' &&
+            requirement.fileType !== 'application/msword'
+          }
           className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 rounded-xl px-6 py-3 font-semibold text-gray-700 dark:text-gray-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Eye className="w-4 h-4" />
