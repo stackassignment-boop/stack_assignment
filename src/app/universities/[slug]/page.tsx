@@ -127,7 +127,7 @@ export default async function UniversityPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <Link
               href="/order"
-              className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-4 rounded-xl text-lg font-bold transition shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 min-w-[240px]"
+              className="bg-yellow-400 text-indigo-900 hover:bg-yellow-300 px-10 py-4 rounded-xl text-lg font-bold transition shadow-xl shadow-yellow-400/30 hover:shadow-2xl hover:scale-105 active:scale-95 min-w-[240px]"
             >
               Get Quote in 60 Seconds →
             </Link>
@@ -283,7 +283,7 @@ export default async function UniversityPage({ params }: PageProps) {
           </p>
           <Link
             href="/order"
-            className="inline-block bg-white text-indigo-700 hover:bg-gray-100 px-10 py-4 rounded-xl text-lg font-bold transition shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95"
+            className="inline-block bg-yellow-400 text-indigo-900 hover:bg-yellow-300 px-10 py-4 rounded-xl text-lg font-bold transition shadow-xl shadow-yellow-400/30 hover:shadow-2xl hover:scale-105 active:scale-95"
           >
             Get Your Quote →
           </Link>
