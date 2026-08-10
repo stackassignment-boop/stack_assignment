@@ -35,6 +35,8 @@ const universities = [
   { name: 'Southern Cross Institute', image: '/universities/0023.jpg', href: '/universities/southern-cross-institute', campuses: 'Sydney' },
   { name: 'Solent University', image: '/universities/0024.jpg', href: '/universities/solent-university', campuses: 'Southampton' },
   { name: 'UniSC (University of the Sunshine Coast)', image: '/universities/0025.jpg', href: '/universities/university-of-sunshine-coast', campuses: 'Sunshine Coast · Moreton Bay' },
+  { name: 'University of East London', image: null, href: '/universities/university-of-east-london', campuses: 'Docklands · Stratford (London)' },
+  { name: 'PIA — Polytechnic Institute Australia', image: null, href: '/universities/pia-polytechnic-institute-australia', campuses: 'Sydney · Geelong' },
 ];
 
 export default function UniversitiesSection() {
@@ -132,9 +134,24 @@ function StatPill({ icon, value, label }: { icon: string; value: string; label: 
 
 interface UniCardData {
   name: string;
-  image: string;
+  image: string | null;
   href: string;
   campuses: string;
+}
+
+function InitialsBadge({ name }: { name: string }) {
+  const initials = name
+    .split(' ')
+    .filter((w) => /^[A-Z]/.test(w))
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('');
+
+  return (
+    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">
+      {initials || name[0]}
+    </div>
+  );
 }
 
 function CardCarousel({ universities }: { universities: UniCardData[] }) {
@@ -194,9 +211,13 @@ function CardCarousel({ universities }: { universities: UniCardData[] }) {
             className="group bg-white/95 border border-white/40 rounded-2xl p-4 flex items-center gap-4 flex-shrink-0 w-[280px] transition-all hover:bg-white hover:shadow-xl hover:-translate-y-0.5"
             style={{ scrollSnapAlign: 'start' }}
           >
-            <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center flex-shrink-0 p-1.5 shadow-sm">
-              <img src={uni.image} alt={uni.name} className="max-w-full max-h-full object-contain" />
-            </div>
+            {uni.image ? (
+              <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center flex-shrink-0 p-1.5 shadow-sm">
+                <img src={uni.image} alt={uni.name} className="max-w-full max-h-full object-contain" />
+              </div>
+            ) : (
+              <InitialsBadge name={uni.name} />
+            )}
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-sm text-gray-900 leading-tight truncate group-hover:text-indigo-600 transition-colors">
                 {uni.name}

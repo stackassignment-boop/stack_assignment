@@ -187,6 +187,22 @@ export const universities: UniversityData[] = [
     courseAreas: ['Business', 'Maritime & Engineering', 'Media & Design', 'Sport Science'],
     heroImageId: 1065,
   },
+  {
+    slug: 'university-of-east-london',
+    name: 'University of East London',
+    country: 'United Kingdom',
+    campuses: ['Docklands (London)', 'Stratford (London)'],
+    courseAreas: ['Business', 'Law', 'Computing & Engineering', 'Health & Bioscience', 'Psychology'],
+    heroImageId: 1069,
+  },
+  {
+    slug: 'pia-polytechnic-institute-australia',
+    name: 'PIA — Polytechnic Institute Australia',
+    country: 'Australia',
+    campuses: ['Sydney', 'Geelong'],
+    courseAreas: ['Business (Accounting)', 'Business (Marketing)', 'Networking & Telecommunications', 'Diploma of Business', 'Diploma of Networking Technology'],
+    heroImageId: 1074,
+  },
 ]
 
 export function getUniversityBySlug(slug: string): UniversityData | undefined {
