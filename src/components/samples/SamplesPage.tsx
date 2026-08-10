@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { FileText, BookOpen, GraduationCap, FileCheck, Eye } from 'lucide-react';
 import SamplePreviewModal from './SamplePreviewModal';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -91,6 +92,7 @@ interface SamplesPageProps {
 }
 
 export default function SamplesPage({ previewSlug }: SamplesPageProps) {
+  const router = useRouter();
   const [samples, setSamples] = useState<Sample[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
@@ -131,8 +133,15 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
   };
 
   const handlePreview = (sample: Sample) => {
-    setSelectedSample(sample);
-    setShowPreview(true);
+    // Samples with an actual uploaded file get the PDF preview modal;
+    // content-only samples (no file attached) go to their dedicated
+    // article page instead, since the modal has nothing to render for them.
+    if (sample.fileName) {
+      setSelectedSample(sample);
+      setShowPreview(true);
+    } else {
+      router.push(`/samples/${sample.slug}`);
+    }
   };
 
   const handleClosePreview = () => {

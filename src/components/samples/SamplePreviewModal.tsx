@@ -10,6 +10,8 @@ interface SamplePreviewModalProps {
     slug: string;
     pages?: number;
     fileName?: string;
+    content?: string | null;
+    description?: string | null;
   };
   isOpen: boolean;
   onClose: () => void;
@@ -22,8 +24,15 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
   const [pageImages, setPageImages] = useState<string[]>([]);
   const [containerWidth, setContainerWidth] = useState(600);
   const [visiblePages, setVisiblePages] = useState<Set<number>>(new Set());
+  const [pdfError, setPdfError] = useState<string | null>(null);
   const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Only attempt PDF loading if an actual file was uploaded for this sample.
+  // Many samples only have text `content` and no attached PDF — trying to
+  // load a PDF for those always fails, which previously left the modal
+  // silently blank with no explanation.
+  const hasFile = Boolean(sample.fileName);
 
   // Calculate preview pages (1/3 of total, rounded up, minimum 1)
   const previewPages = Math.max(1, Math.ceil((sample.pages || totalPages || 3) / 3));
@@ -32,11 +41,17 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
   useEffect(() => {
     if (!isOpen || typeof window === 'undefined') return;
 
+    if (!hasFile) {
+      setLoading(false);
+      return;
+    }
+
     const loadPdf = async () => {
       try {
         setLoading(true);
         setPageImages([]);
         setVisiblePages(new Set());
+        setPdfError(null);
 
         // Dynamically import pdfjs-dist to avoid SSR issues
         const pdfjsLib = await import('pdfjs-dist');
@@ -51,12 +66,13 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
         setLoading(false);
       } catch (error) {
         console.error('Error loading PDF:', error);
+        setPdfError('Failed to load the preview file. Please try again or contact us for help.');
         setLoading(false);
       }
     };
 
     loadPdf();
-  }, [isOpen, sample.slug]);
+  }, [isOpen, sample.slug, hasFile]);
 
   // Render all pages
   useEffect(() => {
@@ -167,7 +183,11 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
               {sample.title}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {totalPages} pages total • {previewPages} preview pages available
+              {hasFile ? (
+                <>{totalPages} pages total • {previewPages} preview pages available</>
+              ) : (
+                <>Sample content preview</>
+              )}
             </p>
           </div>
           <button
@@ -183,13 +203,52 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
           ref={containerRef}
           className="flex-1 overflow-y-auto p-4 bg-gray-100 dark:bg-slate-800"
         >
-          {loading && (
+          {loading && hasFile && (
             <div className="flex items-center justify-center h-64">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
             </div>
           )}
+
+          {hasFile && pdfError && (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center max-w-md">
+                <div className="w-14 h-14 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <X className="h-7 w-7 text-red-600 dark:text-red-400" />
+                </div>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+                  Preview Failed to Load
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {pdfError}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {!hasFile && (
+            <div className="max-w-2xl mx-auto">
+              {sample.content ? (
+                <div
+                  className="bg-white dark:bg-slate-900 rounded-xl shadow p-6 prose prose-sm dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: sample.content }}
+                />
+              ) : (
+                <div className="bg-white dark:bg-slate-900 rounded-xl shadow p-8 text-center">
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                    {sample.description || 'A full preview file for this sample hasn\'t been uploaded yet.'}
+                  </p>
+                  <a
+                    href={`/order?subject=${encodeURIComponent(sample.title)}`}
+                    className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition"
+                  >
+                    Order a Similar Sample
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
           
-          {!loading && pageImages.length > 0 && (
+          {hasFile && !loading && !pdfError && pageImages.length > 0 && (
             <div className="flex flex-col items-center gap-4">
               {pageImages.map((imageSrc, index) => {
                 const pageNum = index + 1;
@@ -285,16 +344,18 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-6 py-3 px-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-xs text-gray-600 dark:text-gray-400 shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 rounded bg-teal-600"></span>
-            <span>Preview Pages ({previewPages})</span>
+        {hasFile && !pdfError && (
+          <div className="flex items-center justify-center gap-6 py-3 px-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-xs text-gray-600 dark:text-gray-400 shrink-0">
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded bg-teal-600"></span>
+              <span>Preview Pages ({previewPages})</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded bg-amber-500"></span>
+              <span>Locked Pages ({(totalPages || 0) - previewPages})</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 rounded bg-amber-500"></span>
-            <span>Locked Pages ({(totalPages || 0) - previewPages})</span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

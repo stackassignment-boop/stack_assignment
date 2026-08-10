@@ -87,11 +87,14 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
               <button
                 key={item.id}
                 onClick={() => handleNav(item.id)}
-                className={`hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
+                className={`relative pb-1 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
                   currentPage === item.id ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : ''
                 }`}
               >
                 {item.label}
+                {currentPage === item.id && (
+                  <span className="absolute left-0 right-0 -bottom-0.5 h-0.5 rounded-full bg-yellow-400" />
+                )}
               </button>
             ))}
           </nav>
@@ -113,12 +116,15 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
               <Phone className="w-4 h-4" /> +91-99073-00710
             </a>
 
-            <Button
-              onClick={() => handleNav('order')}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white hidden sm:flex"
-            >
+            <div className="relative hidden sm:inline-flex">
+              <span className="absolute -inset-0.5 rounded-md bg-yellow-400 opacity-60 blur-sm" />
+              <Button
+                onClick={() => handleNav('order')}
+                className="relative bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
               Order Now
             </Button>
+            </div>
 
             {/* Login Dropdown or User Menu */}
             {studentUser ? (

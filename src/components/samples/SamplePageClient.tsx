@@ -18,8 +18,12 @@ export default function SamplePageClient({ slug }: SamplePageClientProps) {
       .then(data => {
         setSample(data.sample)
         setLoading(false)
-        // Auto-open preview on page load
-        setShowPreview(true)
+        // Only auto-open the PDF preview modal when a real file is
+        // attached — for content-only samples, the article text below
+        // is the actual content, so there's nothing for the modal to show.
+        if (data.sample?.fileName) {
+          setShowPreview(true)
+        }
       })
       .catch(() => setLoading(false))
   }, [slug])
@@ -51,6 +55,8 @@ export default function SamplePageClient({ slug }: SamplePageClientProps) {
     )
   }
 
+  const hasFile = Boolean(sample.fileName)
+
   return (
     <>
       <main className="flex-grow py-12">
@@ -62,15 +68,35 @@ export default function SamplePageClient({ slug }: SamplePageClientProps) {
           {sample.description && (
             <p className="text-gray-600 mb-6">{sample.description}</p>
           )}
-          <button
-            onClick={() => setShowPreview(true)}
-            className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium"
-          >
-            Preview Sample
-          </button>
+
+          {hasFile ? (
+            <button
+              onClick={() => setShowPreview(true)}
+              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium"
+            >
+              Preview Sample
+            </button>
+          ) : sample.content ? (
+            <div
+              className="prose prose-slate max-w-none mt-8 bg-white rounded-xl shadow p-6"
+              dangerouslySetInnerHTML={{ __html: sample.content }}
+            />
+          ) : (
+            <div className="bg-white rounded-xl shadow p-8 text-center mt-8">
+              <p className="text-gray-600 mb-4">
+                A full preview for this sample hasn't been uploaded yet.
+              </p>
+              <a
+                href={`/order?subject=${encodeURIComponent(sample.title)}`}
+                className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition"
+              >
+                Order a Similar Sample
+              </a>
+            </div>
+          )}
         </div>
       </main>
-      {sample && (
+      {sample && hasFile && (
         <SamplePreviewModal
           sample={sample}
           isOpen={showPreview}
