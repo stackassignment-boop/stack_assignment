@@ -19,14 +19,11 @@ export interface UniversityData {
 // facts. The FAQ template reflects that by not asserting a specific
 // referencing style.
 export const universities: UniversityData[] = [
-  {
-    slug: 'cquniversity',
-    name: 'CQUniversity Australia',
-    country: 'Australia',
-    campuses: ['Rockhampton', 'Bundaberg', 'Cairns', 'Melbourne', 'Sydney', 'Brisbane'],
-    courseAreas: ['Business & Management', 'Health & Nursing', 'Engineering', 'Education', 'IT'],
-    heroImageId: 1011,
-  },
+  // NOTE: CQUniversity is intentionally NOT listed here. It moved to a
+  // dedicated hand-built page at src/app/universities/cquniversity/page.tsx
+  // (same URL — Next.js resolves the static route ahead of this [slug]
+  // catch-all automatically) because it needed course/unit-level content
+  // this generic template doesn't support.
   {
     slug: 'deakin-university',
     name: 'Deakin University',
