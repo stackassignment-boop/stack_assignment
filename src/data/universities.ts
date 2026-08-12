@@ -136,30 +136,11 @@ export const universities: UniversityData[] = [
     courseAreas: ['Business', 'Engineering', 'Law', 'Health & Medical Sciences', 'Science'],
     heroImageId: 1088,
   },
-  {
-    slug: 'victoria-university',
-    name: 'Victoria University',
-    country: 'Australia',
-    campuses: ['Melbourne (Footscray)', 'Sydney'],
-    courseAreas: ['Business', 'IT', 'Health', 'Sport Science', 'Education'],
-    heroImageId: 1015,
-  },
-  {
-    slug: 'torrens-university',
-    name: 'Torrens University Australia',
-    country: 'Australia',
-    campuses: ['Adelaide', 'Brisbane', 'Melbourne', 'Sydney', 'Online'],
-    courseAreas: ['Business', 'Design', 'Health', 'Hospitality & Tourism', 'IT'],
-    heroImageId: 1025,
-  },
-  {
-    slug: 'victorian-institute-of-technology',
-    name: 'Victorian Institute of Technology',
-    country: 'Australia',
-    campuses: ['Melbourne', 'Sydney'],
-    courseAreas: ['Business', 'IT', 'Engineering', 'Community Services'],
-    heroImageId: 1035,
-  },
+  // NOTE: Victoria University, Torrens University, and Victorian Institute
+  // of Technology moved to dedicated hand-built pages at
+  // src/app/universities/victoria-university/, torrens-university/, and
+  // victorian-institute-of-technology/ (same URLs — Next.js resolves the
+  // static routes ahead of this [slug] catch-all automatically).
   {
     slug: 'academies-australasia-polytechnic',
     name: 'Academies Australasia Polytechnic',
