@@ -33,7 +33,7 @@ import { StructuredData } from '@/components/seo/StructuredData'
 export const metadata: Metadata = {
   title: 'Kaplan Business School Assignment Help Australia | Stack Assignment',
   description:
-    'Academic support, assessment guidance, proofreading, referencing and research assistance for Kaplan Business School (KBS) students across Australia — business, accounting, marketing, IT, and MBA.',
+    'Looking for Kaplan assignment help or KBS assignment help? Get academic support, assessment guidance, proofreading, referencing and research assistance for Kaplan Business School students across Australia — business, accounting, marketing, IT, and MBA.',
   keywords: [
     'Kaplan Business School assignment help',
     'KBS assignment help',
@@ -469,18 +469,19 @@ export default function KaplanAssignmentHelpPage() {
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
             Studying at Kaplan Business School (KBS) means working through a fast-paced trimester
             structure across business, accounting, marketing, management, analytics, IT and MBA
-            coursework — often with tight turnarounds between assessments. Many KBS students look
-            for support at some point during their studies, whether that's help understanding an
-            assessment brief, structuring a business report, interpreting a marking rubric,
-            working through a data analysis task, or getting a case study proofread before
-            submission.
+            coursework — often with tight turnarounds between assessments. Many KBS students search
+            for <strong>Kaplan assignment help</strong> or <strong>KBS assignment help</strong> at
+            some point during their studies, whether that's help understanding an assessment brief,
+            structuring a business report, interpreting a marking rubric, working through a data
+            analysis task, or getting a case study proofread before submission.
           </p>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-            Stack Assignment provides academic support for KBS students across Australia — covering
-            academic writing guidance, research assistance, referencing help (including KBS's own
-            Harvard referencing guide), proofreading, and subject-specific support across every
-            core course area KBS offers, from undergraduate business subjects through to
-            postgraduate MBA and IT coursework.
+            Stack Assignment provides <strong>Kaplan assignment help</strong> and{' '}
+            <strong>KBS assignment help</strong> for students across Australia — covering academic
+            writing guidance, research assistance, referencing help (including KBS's own Harvard
+            referencing guide), proofreading, and subject-specific support across every core course
+            area KBS offers, from undergraduate business subjects through to postgraduate MBA and
+            IT coursework.
           </p>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
             Whether you're studying at KBS's Adelaide, Brisbane, Melbourne, Perth or Sydney campus,
