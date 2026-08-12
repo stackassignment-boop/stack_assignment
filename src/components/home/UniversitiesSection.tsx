@@ -37,6 +37,7 @@ const universities = [
   { name: 'UniSC (University of the Sunshine Coast)', image: '/universities/0025.jpg', href: '/universities/university-of-sunshine-coast', campuses: 'Sunshine Coast · Moreton Bay' },
   { name: 'University of East London', image: '/universities/0026.png', href: '/universities/university-of-east-london', campuses: 'Docklands · Stratford (London)' },
   { name: 'PIA — Polytechnic Institute Australia', image: '/universities/0027.jpg', href: '/universities/pia-polytechnic-institute-australia', campuses: 'Sydney · Geelong' },
+  { name: 'Asia Pacific International College (APIC)', image: '/universities/0028.png', href: '/universities/apic', campuses: 'Sydney · Melbourne · Brisbane' },
 ];
 
 export default function UniversitiesSection() {
