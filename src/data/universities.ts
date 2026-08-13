@@ -24,14 +24,9 @@ export const universities: UniversityData[] = [
   // (same URL — Next.js resolves the static route ahead of this [slug]
   // catch-all automatically) because it needed course/unit-level content
   // this generic template doesn't support.
-  {
-    slug: 'deakin-university',
-    name: 'Deakin University',
-    country: 'Australia',
-    campuses: ['Melbourne (Burwood)', 'Geelong', 'Warrnambool'],
-    courseAreas: ['Business & Commerce', 'IT & Computer Science', 'Health Sciences', 'Engineering', 'Arts & Education'],
-    heroImageId: 1016,
-  },
+  // NOTE: Deakin University moved to a dedicated hand-built page at
+  // src/app/universities/deakin-university/ (same URL — Next.js resolves
+  // the static route ahead of this [slug] catch-all automatically).
   {
     slug: 'de-montfort-university',
     name: 'De Montfort University',
@@ -48,14 +43,9 @@ export const universities: UniversityData[] = [
     courseAreas: ['Business', 'Health', 'Education', 'Engineering & Technology'],
     heroImageId: 1033,
   },
-  {
-    slug: 'la-trobe-university',
-    name: 'La Trobe University',
-    country: 'Australia',
-    campuses: ['Melbourne (Bundoora)', 'Bendigo', 'Albury-Wodonga', 'Shepparton'],
-    courseAreas: ['Business', 'Health Sciences', 'IT & Engineering', 'Law', 'Education'],
-    heroImageId: 1043,
-  },
+  // NOTE: La Trobe University moved to a dedicated hand-built page at
+  // src/app/universities/la-trobe-university/ (same URL, same reasoning
+  // as Deakin above).
   {
     slug: 'liverpool-hope-university',
     name: 'Liverpool Hope University',
