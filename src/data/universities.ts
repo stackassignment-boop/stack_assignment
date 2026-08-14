@@ -131,22 +131,12 @@ export const universities: UniversityData[] = [
   // src/app/universities/victoria-university/, torrens-university/, and
   // victorian-institute-of-technology/ (same URLs — Next.js resolves the
   // static routes ahead of this [slug] catch-all automatically).
-  {
-    slug: 'academies-australasia-polytechnic',
-    name: 'Academies Australasia Polytechnic',
-    country: 'Australia',
-    campuses: ['Sydney'],
-    courseAreas: ['Business', 'Early Childhood Education', 'IT', 'Community Services'],
-    heroImageId: 1045,
-  },
-  {
-    slug: 'southern-cross-institute',
-    name: 'Southern Cross Institute',
-    country: 'Australia',
-    campuses: ['Sydney'],
-    courseAreas: ['Business', 'Hospitality Management', 'IT'],
-    heroImageId: 1055,
-  },
+  // NOTE: Academies Australasia Polytechnic moved to a dedicated
+  // hand-built page at src/app/universities/academies-australasia-polytechnic/
+  // (same URL, same reasoning as other dedicated pages above).
+  // NOTE: Southern Cross Institute moved to a dedicated hand-built page at
+  // src/app/universities/southern-cross-institute/ (same URL, same
+  // reasoning as other dedicated pages above).
   {
     slug: 'solent-university',
     name: 'Solent University',
