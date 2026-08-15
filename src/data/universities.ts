@@ -86,14 +86,9 @@ export const universities: UniversityData[] = [
     courseAreas: ['Business', 'Education', 'Health', 'Science & Agriculture'],
     heroImageId: 1067,
   },
-  {
-    slug: 'unsw-sydney',
-    name: 'UNSW Sydney',
-    country: 'Australia',
-    campuses: ['Sydney (Kensington)'],
-    courseAreas: ['Business', 'Engineering', 'Law', 'Medicine & Health', 'Science'],
-    heroImageId: 1071,
-  },
+  // NOTE: UNSW Sydney moved to a dedicated hand-built page at
+  // src/app/universities/unsw-sydney/ (same URL, same reasoning as
+  // other dedicated pages above).
   {
     slug: 'university-of-canberra',
     name: 'University of Canberra',
@@ -118,14 +113,9 @@ export const universities: UniversityData[] = [
     courseAreas: ['Business', 'Computing', 'Health & Social Sciences', 'Education'],
     heroImageId: 1084,
   },
-  {
-    slug: 'university-of-western-australia',
-    name: 'University of Western Australia',
-    country: 'Australia',
-    campuses: ['Perth (Crawley)'],
-    courseAreas: ['Business', 'Engineering', 'Law', 'Health & Medical Sciences', 'Science'],
-    heroImageId: 1088,
-  },
+  // NOTE: University of Western Australia moved to a dedicated hand-built
+  // page at src/app/universities/university-of-western-australia/ (same
+  // URL, same reasoning as other dedicated pages above).
   // NOTE: Victoria University, Torrens University, and Victorian Institute
   // of Technology moved to dedicated hand-built pages at
   // src/app/universities/victoria-university/, torrens-university/, and
