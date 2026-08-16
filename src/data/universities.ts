@@ -70,14 +70,9 @@ export const universities: UniversityData[] = [
     courseAreas: ['Business & Economics', 'Science', 'Arts', 'Nursing & Health'],
     heroImageId: 1058,
   },
-  {
-    slug: 'university-of-newcastle',
-    name: 'University of Newcastle',
-    country: 'Australia',
-    campuses: ['Newcastle (Callaghan)', 'Central Coast', 'Sydney'],
-    courseAreas: ['Business', 'Health & Medicine', 'Engineering', 'Education', 'Science'],
-    heroImageId: 1060,
-  },
+  // NOTE: University of Newcastle moved to a dedicated hand-built page at
+  // src/app/universities/university-of-newcastle/ (same URL, same
+  // reasoning as other dedicated pages above).
   {
     slug: 'university-of-new-england',
     name: 'University of New England',
@@ -89,14 +84,9 @@ export const universities: UniversityData[] = [
   // NOTE: UNSW Sydney moved to a dedicated hand-built page at
   // src/app/universities/unsw-sydney/ (same URL, same reasoning as
   // other dedicated pages above).
-  {
-    slug: 'university-of-canberra',
-    name: 'University of Canberra',
-    country: 'Australia',
-    campuses: ['Canberra, ACT'],
-    courseAreas: ['Business & Government', 'IT', 'Health', 'Education', 'Communication'],
-    heroImageId: 1076,
-  },
+  // NOTE: University of Canberra moved to a dedicated hand-built page at
+  // src/app/universities/university-of-canberra/ (same URL, same
+  // reasoning as other dedicated pages above).
   {
     slug: 'university-of-sunshine-coast',
     name: 'University of the Sunshine Coast (UniSC)',
