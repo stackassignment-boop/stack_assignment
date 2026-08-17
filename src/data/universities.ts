@@ -35,14 +35,9 @@ export const universities: UniversityData[] = [
     courseAreas: ['Business & Law', 'Computing & Engineering', 'Health & Life Sciences', 'Art, Design & Humanities'],
     heroImageId: 1022,
   },
-  {
-    slug: 'federation-university',
-    name: 'Federation University',
-    country: 'Australia',
-    campuses: ['Ballarat', 'Berwick', 'Gippsland', 'Brisbane'],
-    courseAreas: ['Business', 'Health', 'Education', 'Engineering & Technology'],
-    heroImageId: 1033,
-  },
+  // NOTE: Federation University moved to a dedicated hand-built page at
+  // src/app/universities/federation-university/ (same URL, same reasoning
+  // as other dedicated pages above).
   // NOTE: La Trobe University moved to a dedicated hand-built page at
   // src/app/universities/la-trobe-university/ (same URL, same reasoning
   // as Deakin above).
@@ -87,14 +82,9 @@ export const universities: UniversityData[] = [
   // NOTE: University of Canberra moved to a dedicated hand-built page at
   // src/app/universities/university-of-canberra/ (same URL, same
   // reasoning as other dedicated pages above).
-  {
-    slug: 'university-of-sunshine-coast',
-    name: 'University of the Sunshine Coast (UniSC)',
-    country: 'Australia',
-    campuses: ['Sunshine Coast, QLD', 'Moreton Bay', 'South Bank (Brisbane)'],
-    courseAreas: ['Business', 'Health Sciences', 'Education', 'Science & Engineering'],
-    heroImageId: 1080,
-  },
+  // NOTE: University of the Sunshine Coast (UniSC) moved to a dedicated
+  // hand-built page at src/app/universities/university-of-sunshine-coast/
+  // (same URL, same reasoning as other dedicated pages above).
   {
     slug: 'university-of-bedfordshire',
     name: 'University of Bedfordshire',
