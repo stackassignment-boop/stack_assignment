@@ -68,14 +68,9 @@ export const universities: UniversityData[] = [
   // NOTE: University of Newcastle moved to a dedicated hand-built page at
   // src/app/universities/university-of-newcastle/ (same URL, same
   // reasoning as other dedicated pages above).
-  {
-    slug: 'university-of-new-england',
-    name: 'University of New England',
-    country: 'Australia',
-    campuses: ['Armidale, NSW'],
-    courseAreas: ['Business', 'Education', 'Health', 'Science & Agriculture'],
-    heroImageId: 1067,
-  },
+  // NOTE: University of New England moved to a dedicated hand-built page
+  // at src/app/universities/university-of-new-england/ (same URL, same
+  // reasoning as other dedicated pages above).
   // NOTE: UNSW Sydney moved to a dedicated hand-built page at
   // src/app/universities/unsw-sydney/ (same URL, same reasoning as
   // other dedicated pages above).
