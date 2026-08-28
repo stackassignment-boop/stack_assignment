@@ -27,28 +27,18 @@ export const universities: UniversityData[] = [
   // NOTE: Deakin University moved to a dedicated hand-built page at
   // src/app/universities/deakin-university/ (same URL — Next.js resolves
   // the static route ahead of this [slug] catch-all automatically).
-  {
-    slug: 'de-montfort-university',
-    name: 'De Montfort University',
-    country: 'United Kingdom',
-    campuses: ['Leicester'],
-    courseAreas: ['Business & Law', 'Computing & Engineering', 'Health & Life Sciences', 'Art, Design & Humanities'],
-    heroImageId: 1022,
-  },
+  // NOTE: De Montfort University moved to a dedicated hand-built page at
+  // src/app/universities/de-montfort-university/ (same URL, same
+  // reasoning as other dedicated pages above).
   // NOTE: Federation University moved to a dedicated hand-built page at
   // src/app/universities/federation-university/ (same URL, same reasoning
   // as other dedicated pages above).
   // NOTE: La Trobe University moved to a dedicated hand-built page at
   // src/app/universities/la-trobe-university/ (same URL, same reasoning
   // as Deakin above).
-  {
-    slug: 'liverpool-hope-university',
-    name: 'Liverpool Hope University',
-    country: 'United Kingdom',
-    campuses: ['Liverpool'],
-    courseAreas: ['Business', 'Education', 'Humanities', 'Health Sciences'],
-    heroImageId: 1047,
-  },
+  // NOTE: Liverpool Hope University moved to a dedicated hand-built page
+  // at src/app/universities/liverpool-hope-university/ (same URL, same
+  // reasoning as other dedicated pages above).
   {
     slug: 'qut',
     name: 'Queensland University of Technology',
