@@ -70,14 +70,9 @@ export const universities: UniversityData[] = [
   // NOTE: University of the Sunshine Coast (UniSC) moved to a dedicated
   // hand-built page at src/app/universities/university-of-sunshine-coast/
   // (same URL, same reasoning as other dedicated pages above).
-  {
-    slug: 'university-of-bedfordshire',
-    name: 'University of Bedfordshire',
-    country: 'United Kingdom',
-    campuses: ['Luton', 'Bedford'],
-    courseAreas: ['Business', 'Computing', 'Health & Social Sciences', 'Education'],
-    heroImageId: 1084,
-  },
+  // NOTE: University of Bedfordshire moved to a dedicated hand-built page
+  // at src/app/universities/university-of-bedfordshire/ (same URL, same
+  // reasoning as other dedicated pages above).
   // NOTE: University of Western Australia moved to a dedicated hand-built
   // page at src/app/universities/university-of-western-australia/ (same
   // URL, same reasoning as other dedicated pages above).
@@ -92,14 +87,9 @@ export const universities: UniversityData[] = [
   // NOTE: Southern Cross Institute moved to a dedicated hand-built page at
   // src/app/universities/southern-cross-institute/ (same URL, same
   // reasoning as other dedicated pages above).
-  {
-    slug: 'solent-university',
-    name: 'Solent University',
-    country: 'United Kingdom',
-    campuses: ['Southampton'],
-    courseAreas: ['Business', 'Maritime & Engineering', 'Media & Design', 'Sport Science'],
-    heroImageId: 1065,
-  },
+  // NOTE: Solent University moved to a dedicated hand-built page at
+  // src/app/universities/solent-university/ (same URL, same reasoning as
+  // other dedicated pages above).
   {
     slug: 'university-of-east-london',
     name: 'University of East London',
