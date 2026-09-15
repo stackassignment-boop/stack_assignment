@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'Torrens University Assignment Help Australia | Academic Support',
+  title: 'Torrens University Assignment Support | Tutoring & Editing',
   description:
     'Academic support and assessment guidance for Torrens University students across technology, business, health, hospitality, education, design and research.',
   keywords: [
-    'Torrens University assignment help', 'Torrens assignment help', 'Torrens University assessment help',
-    'Torrens academic support', 'Torrens IT assignment help', 'Torrens cybersecurity assignment help',
-    'Torrens business assignment help', 'Torrens MBA assignment help', 'Torrens hospitality assignment help',
-    'Torrens nursing assignment help', 'Torrens education assignment help', 'Torrens design assignment help',
+    'Torrens University assignment support', 'Torrens assignment support', 'Torrens University assessment help',
+    'Torrens academic support', 'Torrens IT assignment support', 'Torrens cybersecurity assignment support',
+    'Torrens business assignment support', 'Torrens MBA assignment support', 'Torrens hospitality assignment support',
+    'Torrens nursing assignment support', 'Torrens education assignment support', 'Torrens design assignment support',
   ],
   openGraph: {
-    title: 'Torrens University Assignment Help Australia',
+    title: 'Torrens University Assignment Support Australia',
     description: 'Academic support for Torrens University students across technology, business, health, hospitality, education and design.',
     url: 'https://www.stackassignment.com/universities/torrens-university',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/torrens-university' },
 }
@@ -68,7 +70,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is Torrens University assignment help?', a: 'Academic support built around Torrens\' course structure — covering technology, business, health, hospitality, education, design and research study areas.' },
+  { q: 'What is Torrens University assignment support?', a: 'Academic support built around Torrens\' course structure — covering technology, business, health, hospitality, education, design and research study areas.' },
   { q: 'Can you help with Torrens IT assessments?', a: 'Yes, including Software Engineering, Cybersecurity, and Information Technology assessments across Bachelor, Graduate Certificate and Master level courses.' },
   { q: 'Do you support Torrens nursing assignments?', a: 'Yes — nursing academic writing, case studies and health research support. This is academic writing support, not clinical advice.' },
   { q: 'Can you help with Torrens MBA assessments?', a: 'Yes, including business strategy, leadership, marketing, finance and case study assessments.' },
@@ -76,7 +78,7 @@ const faqs = [
   { q: 'Can you help with Torrens design assessments?', a: 'Yes, including portfolio development guidance and academic writing support for design theory and research components.' },
   { q: 'Do you provide Torrens hospitality academic support?', a: 'Yes, including hospitality and hotel management reports, case studies and academic writing support.' },
   { q: 'Can you help with Torrens education assignments?', a: 'Yes, including education reports, teaching-related assignments and literature reviews.' },
-  { q: 'Do you provide Torrens cybersecurity assignment help?', a: 'Yes, across Diploma, Bachelor, Graduate Certificate and Master of Cybersecurity assessments.' },
+  { q: 'Do you provide Torrens cybersecurity assignment support?', a: 'Yes, across Diploma, Bachelor, Graduate Certificate and Master of Cybersecurity assessments.' },
   { q: 'Can you help with Torrens research degree work?', a: 'Yes — research methodology, literature review, academic writing and referencing guidance for HDR candidates.' },
   { q: 'Do you provide Torrens proofreading and referencing support?', a: 'Yes — proofreading, editing and referencing across APA, Harvard and other styles, matched to your specific unit.' },
   { q: 'Can you help me understand my Torrens assessment brief?', a: 'Yes — upload your assessment brief and get guidance on what\'s being asked and how to structure your response.' },
@@ -91,7 +93,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'Torrens University Assignment Help', item: 'https://www.stackassignment.com/universities/torrens-university' },
+    { '@type': 'ListItem', position: 3, name: 'Torrens University Assignment Support', item: 'https://www.stackassignment.com/universities/torrens-university' },
   ],
 }
 
@@ -103,7 +105,7 @@ export default function TorrensUniversityPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">Torrens University Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">Torrens University Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -115,7 +117,7 @@ export default function TorrensUniversityPage() {
             <GraduationCap className="w-4 h-4" />For Torrens University Students
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
-            Torrens University Assignment Help Australia
+            Torrens University Assignment Support Australia
           </h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support for Torrens University students across business, technology, health,
@@ -198,7 +200,7 @@ export default function TorrensUniversityPage() {
 
       <section id="torrens-technology" className="py-16 bg-white dark:bg-slate-950 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Torrens University IT & Technology Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Torrens University IT & Technology Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-4">
             Verified current Torrens technology programs include Bachelor, Graduate Certificate and
             Master of Software Engineering (including AI, Cloud Computing, Blockchain and
@@ -216,7 +218,7 @@ export default function TorrensUniversityPage() {
 
       <section id="torrens-business" className="py-14 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Briefcase className="w-6 h-6 text-indigo-600" />Torrens University Business Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Briefcase className="w-6 h-6 text-indigo-600" />Torrens University Business Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
             Support for MBA, general business, marketing, event management, sports management and
             business analytics assessments — including business strategy, leadership, case studies
@@ -348,7 +350,7 @@ export default function TorrensUniversityPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

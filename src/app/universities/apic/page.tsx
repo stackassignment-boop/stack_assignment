@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2,
@@ -22,30 +23,31 @@ import { StructuredData } from '@/components/seo/StructuredData'
 // SEO metadata
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'APIC Assignment Help Australia | Asia Pacific International College',
+  title: 'APIC Assignment Support | Asia Pacific International College',
   description:
-    'APIC assignment help and academic support for Asia Pacific International College students in IT, business, business information systems, project management and MBA.',
+    'APIC assignment support, tutoring and editing for Asia Pacific International College students in IT, business, business information systems, project management and MBA.',
   keywords: [
-    'APIC assignment help',
-    'Asia Pacific International College assignment help',
+    'APIC assignment support',
+    'Asia Pacific International College assignment support',
     'APIC assessment help',
     'APIC academic support',
-    'APIC IT assignment help',
-    'APIC business assignment help',
-    'APIC project management assignment help',
-    'APIC business information systems assignment help',
-    'APIC MBA assignment help',
-    'APIC postgraduate assignment help',
-    'APIC programming assignment help',
-    'APIC database assignment help',
-    'APIC cybersecurity assignment help',
+    'APIC IT assignment support',
+    'APIC business assignment support',
+    'APIC project management assignment support',
+    'APIC business information systems assignment support',
+    'APIC MBA assignment support',
+    'APIC postgraduate assignment support',
+    'APIC programming assignment support',
+    'APIC database assignment support',
+    'APIC cybersecurity assignment support',
   ],
   openGraph: {
-    title: 'APIC Assignment Help Australia | Asia Pacific International College',
+    title: 'APIC Assignment Support | Asia Pacific International College',
     description:
       'Academic support, assessment guidance and referencing help for Asia Pacific International College (APIC) students across Australia.',
     url: 'https://www.stackassignment.com/universities/apic',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: {
     canonical: 'https://www.stackassignment.com/universities/apic',
@@ -141,14 +143,14 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is APIC assignment help?', a: 'Academic support built around Asia Pacific International College\'s (APIC) courses — covering IT, business, business information systems, project management and MBA subjects, matched to real APIC unit codes where relevant.' },
+  { q: 'What is APIC assignment support?', a: 'Academic support built around Asia Pacific International College\'s (APIC) courses — covering IT, business, business information systems, project management and MBA subjects, matched to real APIC unit codes where relevant.' },
   { q: 'What is Asia Pacific International College?', a: 'Asia Pacific International College (APIC) is an Australian Institute of Higher Education offering undergraduate and postgraduate degrees in IT, business, business information systems, project management and business administration, with campuses in Sydney, Melbourne and Brisbane.' },
   { q: 'Do you provide APIC assessment support?', a: 'Yes — support for written assessments, reports, projects, presentations and case studies, matched to your unit outline and assessment brief.' },
   { q: 'Can you help with APIC IT assignments?', a: 'Yes, including programming, networking, systems analysis, cybersecurity and database subjects across the Bachelor and Master of Information Technology.' },
   { q: 'Can you help with APIC programming assessments?', a: 'Yes — including units like BIS1003 Introduction to Programming and BIS2004 Object Oriented Programming.' },
   { q: 'Do you provide APIC database assignment support?', a: 'Yes, including units like BIS1002 Data and Information Management and related database design and data analytics work.' },
   { q: 'Can you help with APIC cybersecurity assessments?', a: 'Yes — including units like ICT3053 Cyber Defence, ICT3052 Digital Forensics and BIS3004 IS Security and Risk Management.' },
-  { q: 'Do you provide APIC business assignment help?', a: 'Yes, across the Bachelor of Business and its Accounting, Analytics & AI, and Project Management specialisations.' },
+  { q: 'Do you provide APIC business assignment support?', a: 'Yes, across the Bachelor of Business and its Accounting, Analytics & AI, and Project Management specialisations.' },
   { q: 'Can you help with APIC project management assessments?', a: 'Yes, across the Graduate Certificate, Graduate Diploma, and Master of Project Management and Business (MPMB).' },
   { q: 'Do you provide APIC MBA academic support?', a: 'Yes, including the MBA and its Health Management, Project Management, and Information Technology specialisations.' },
   { q: 'Do you provide APIC proofreading and referencing support?', a: "Yes — proofreading, editing, and referencing guidance across APA, Harvard and other styles. APIC doesn't use one universal referencing style, so we match whatever your specific unit requires." },
@@ -171,7 +173,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'APIC Assignment Help', item: 'https://www.stackassignment.com/universities/apic' },
+    { '@type': 'ListItem', position: 3, name: 'APIC Assignment Support', item: 'https://www.stackassignment.com/universities/apic' },
   ],
 }
 
@@ -189,7 +191,7 @@ export default function APICPage() {
         <span className="mx-2">›</span>
         <span>Universities</span>
         <span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">APIC Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">APIC Assignment Support</span>
       </div>
 
       {/* HERO */}
@@ -204,7 +206,7 @@ export default function APICPage() {
             For Asia Pacific International College (APIC) Students
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
-            APIC Assignment Help Australia
+            APIC Assignment Support Australia
           </h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, research assistance, proofreading and study
@@ -603,7 +605,7 @@ export default function APICPage() {
           <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">
             Read our full{' '}
             <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link>{' '}
-            before ordering.
+            before you book.
           </p>
         </div>
       </section>

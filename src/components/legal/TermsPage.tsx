@@ -46,7 +46,7 @@ export default function TermsPage() {
               <li>Essay writing and editing</li>
               <li>Research paper assistance</li>
               <li>Dissertation and thesis support</li>
-              <li>Assignment help</li>
+              <li>Assignment support and assessment feedback</li>
               <li>Proofreading and formatting services</li>
             </ul>
           </section>

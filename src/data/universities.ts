@@ -28,17 +28,17 @@ export const universities: UniversityData[] = [
   // src/app/universities/deakin-university/ (same URL — Next.js resolves
   // the static route ahead of this [slug] catch-all automatically).
   // NOTE: De Montfort University moved to a dedicated hand-built page at
-  // src/app/universities/de-montfort-university/ (same URL, same
-  // reasoning as other dedicated pages above).
+  // src/app/universities/de-montfort-university/ (same URL — Next.js resolves
+  // the static route ahead of this [slug] catch-all automatically).
   // NOTE: Federation University moved to a dedicated hand-built page at
   // src/app/universities/federation-university/ (same URL, same reasoning
   // as other dedicated pages above).
   // NOTE: La Trobe University moved to a dedicated hand-built page at
   // src/app/universities/la-trobe-university/ (same URL, same reasoning
   // as Deakin above).
-  // NOTE: Liverpool Hope University moved to a dedicated hand-built page
-  // at src/app/universities/liverpool-hope-university/ (same URL, same
-  // reasoning as other dedicated pages above).
+  // NOTE: Liverpool Hope University moved to a dedicated hand-built page at
+  // src/app/universities/liverpool-hope-university/ (same URL — Next.js resolves
+  // the static route ahead of this [slug] catch-all automatically).
   {
     slug: 'qut',
     name: 'Queensland University of Technology',
@@ -70,9 +70,9 @@ export const universities: UniversityData[] = [
   // NOTE: University of the Sunshine Coast (UniSC) moved to a dedicated
   // hand-built page at src/app/universities/university-of-sunshine-coast/
   // (same URL, same reasoning as other dedicated pages above).
-  // NOTE: University of Bedfordshire moved to a dedicated hand-built page
-  // at src/app/universities/university-of-bedfordshire/ (same URL, same
-  // reasoning as other dedicated pages above).
+  // NOTE: University of Bedfordshire moved to a dedicated hand-built page at
+  // src/app/universities/university-of-bedfordshire/ (same URL — Next.js resolves
+  // the static route ahead of this [slug] catch-all automatically).
   // NOTE: University of Western Australia moved to a dedicated hand-built
   // page at src/app/universities/university-of-western-australia/ (same
   // URL, same reasoning as other dedicated pages above).
@@ -88,8 +88,8 @@ export const universities: UniversityData[] = [
   // src/app/universities/southern-cross-institute/ (same URL, same
   // reasoning as other dedicated pages above).
   // NOTE: Solent University moved to a dedicated hand-built page at
-  // src/app/universities/solent-university/ (same URL, same reasoning as
-  // other dedicated pages above).
+  // src/app/universities/solent-university/ (same URL — Next.js resolves
+  // the static route ahead of this [slug] catch-all automatically).
   {
     slug: 'university-of-east-london',
     name: 'University of East London',

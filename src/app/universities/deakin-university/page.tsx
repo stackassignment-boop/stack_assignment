@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'Deakin University Assignment Help | Academic & Assessment Support',
+  title: 'Deakin University Assignment Support | Tutoring & Editing',
   description:
     'Academic support and assessment guidance for Deakin University students across cyber security, IT, business, health, engineering and education, in Melbourne, Geelong and online.',
   keywords: [
-    'Deakin University assignment help', 'Deakin assignment help', 'Deakin assessment help',
-    'Deakin academic support', 'Deakin IT assignment help', 'Deakin cybersecurity assignment help',
-    'Deakin business assignment help', 'Deakin nursing assignment help', 'Deakin data science assignment help',
-    'Deakin engineering assignment help', 'Deakin report writing help',
+    'Deakin University assignment support', 'Deakin assignment support', 'Deakin assessment help',
+    'Deakin academic support', 'Deakin IT assignment support', 'Deakin cybersecurity assignment support',
+    'Deakin business assignment support', 'Deakin nursing assignment support', 'Deakin data science assignment support',
+    'Deakin engineering assignment support', 'Deakin report writing help',
   ],
   openGraph: {
-    title: 'Deakin University Assignment Help | Academic & Assessment Support',
+    title: 'Deakin University Assignment Support | Tutoring & Editing',
     description: 'Academic support for Deakin University students across cyber security, IT, business, health, engineering and education.',
     url: 'https://www.stackassignment.com/universities/deakin-university',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/deakin-university' },
 }
@@ -66,7 +68,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is Deakin University assignment help?', a: "Academic support built around Deakin's course structure — covering cyber security, IT, business, health, engineering and education, matched to Deakin's trimester system." },
+  { q: 'What is Deakin University assignment support?', a: "Academic support built around Deakin's course structure — covering cyber security, IT, business, health, engineering and education, matched to Deakin's trimester system." },
   { q: 'Can you help with Deakin IT assignments?', a: 'Yes, including computer science, data science, software engineering and business analytics assessments.' },
   { q: 'Can you help with Deakin cybersecurity assessments?', a: 'Yes — including units covering computer crime, digital forensics, and cyber security risk management across the Bachelor and Master of Cyber Security.' },
   { q: 'Do you support Deakin nursing assignments?', a: 'Yes — nursing academic writing, case studies and health research support. This is academic writing support, not clinical advice.' },
@@ -89,7 +91,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'Deakin University Assignment Help', item: 'https://www.stackassignment.com/universities/deakin-university' },
+    { '@type': 'ListItem', position: 3, name: 'Deakin University Assignment Support', item: 'https://www.stackassignment.com/universities/deakin-university' },
   ],
 }
 
@@ -101,7 +103,7 @@ export default function DeakinUniversityPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">Deakin University Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">Deakin University Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -110,7 +112,7 @@ export default function DeakinUniversityPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For Deakin University Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Deakin University Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Deakin University Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             Deakin University students in Melbourne, Geelong and online.
@@ -179,7 +181,7 @@ export default function DeakinUniversityPage() {
 
       <section id="deakin-it" className="py-16 bg-gray-50 dark:bg-slate-900 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Deakin University IT & Cyber Security Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Deakin University IT & Cyber Security Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">
             Deakin's IT and Cyber Security study area covers Artificial Intelligence, Business
             Analytics, Cloud Computing and Networking, Computer Science, Cyber Security, Data
@@ -301,7 +303,7 @@ export default function DeakinUniversityPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

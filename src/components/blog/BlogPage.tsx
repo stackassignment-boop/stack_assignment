@@ -46,7 +46,7 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-AU', {
       month: 'long',
       day: 'numeric',
       year: 'numeric',

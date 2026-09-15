@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import GradeGuaranteeBadge from '@/components/marketing/GradeGuaranteeBadge';
 import TrustBadges from '@/components/marketing/TrustBadges';
 import WhatsAppOrderButton from '@/components/marketing/WhatsAppOrderButton';
 
@@ -46,42 +45,45 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
       )}
 
       <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
-        {/* Grade Guarantee Badge */}
-        <div className="mb-8">
-          <GradeGuaranteeBadge variant="hero" onNavigate={onNavigate} />
-        </div>
-        
-        {/* Mini stats in hero */}
+        {/*
+          The grade-guarantee badge that used to sit here has been removed.
+          A guaranteed grade implies work submitted for assessment, which is
+          the exact signal Australian regulators and the ad platforms treat as
+          evidence of a contract-cheating service.
+        */}
+
+        {/* Mini stats in hero — capability and scale, not outcome promises */}
         <div className="flex flex-wrap justify-center mb-8 gap-3">
-          <HeroMiniStat icon="users" text="60,000+ Students" delay={0.2} />
-          <HeroMiniStat icon="check-circle" text="98% Success Rate" delay={0.4} />
+          <HeroMiniStat icon="users" text="60,000+ Students Supported" delay={0.2} />
+          <HeroMiniStat icon="check-circle" text="Tutors from AU & UK Universities" delay={0.4} />
           <HeroMiniStat icon="clock" text="24/7 Support" delay={0.6} />
         </div>
-        
+
         <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: 'Sora, sans-serif' }}>
-          Expert Academic Writing<br />Since 2010
+          Expert Tutoring &amp; Editing to<br />Help You Write Your Best Work
         </h1>
-        
+
         <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-white/90 font-medium">
-          Guiding Students to Excellence for Over a Decade
+          One-on-one academic support from PhD-qualified tutors and editors — since 2010.
+          You do the work. We help you do it better.
         </p>
-        
+
         <p className="text-lg mb-12 max-w-2xl mx-auto text-white/75">
-          PhD-qualified writers · 100% original · On-time delivery · Money-back guarantee
+          Australian marking rubrics · AGLC4, APA 7th &amp; Vancouver referencing · 100% confidential
         </p>
-        
+
         <div className="flex flex-col sm:flex-row gap-5 justify-center mb-8">
           <Button
-            onClick={() => handleNav('order')}
+            onClick={() => handleNav('contact')}
             className="bg-yellow-400 text-indigo-900 hover:bg-yellow-300 px-10 py-6 rounded-xl text-xl font-bold transition shadow-xl shadow-yellow-400/30 min-w-[280px]"
           >
-            Get Quote in 60 Seconds →
+            Book a Free 15-Min Consult →
           </Button>
           <Button
             onClick={() => handleNav('samples')}
             className="bg-white text-indigo-700 hover:bg-gray-100 px-10 py-6 rounded-xl text-xl font-bold transition shadow-lg min-w-[280px]"
           >
-            View Samples
+            See Sample Edits &amp; Feedback
           </Button>
         </div>
 
@@ -104,7 +106,13 @@ function FloatingBrain({ delay, style }: { delay: number; style: React.CSSProper
       className="absolute opacity-[0.08] pointer-events-none"
       style={{
         ...style,
-        animation: `float 20s ease-in-out infinite`,
+        // Longhand: the `animation` shorthand resets animation-delay, so pairing
+        // it with animationDelay meant every floating brain drifted in perfect
+        // lockstep instead of being offset — and React warned on each re-render.
+        animationName: 'float',
+        animationDuration: '20s',
+        animationTimingFunction: 'ease-in-out',
+        animationIterationCount: 'infinite',
         animationDelay: `${delay}s`
       }}
       xmlns="http://www.w3.org/2000/svg" 
@@ -140,8 +148,16 @@ function HeroMiniStat({ icon, text, delay }: { icon: string; text: string; delay
     <div 
       className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl px-5 py-3 text-sm font-bold"
       style={{
-        animation: 'fadeSlideUp 0.8s ease forwards',
+        // Longhand, so the delay survives — the shorthand was overriding it and
+        // all three mini stats appeared at once instead of in sequence.
+        animationName: 'fadeSlideUp',
+        animationDuration: '0.8s',
+        animationTimingFunction: 'ease',
+        animationFillMode: 'forwards',
         animationDelay: `${delay}s`,
+        // Starts hidden and is held visible by fill-forwards once the animation
+        // completes. Safe here because this animation is unconditional; it is
+        // not gated on a scroll observer that might never fire.
         opacity: 0
       }}
     >

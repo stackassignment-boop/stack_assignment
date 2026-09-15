@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,19 +8,20 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'Academies Australasia Polytechnic Assignment Help | AAPoly Academic Support',
+  title: 'Academies Australasia Polytechnic Assignment Support | AAPoly',
   description:
     'Academic support and assessment guidance for Academies Australasia Polytechnic (AAPoly) students in Melbourne, Sydney and Perth — business, IT, cyber security, hospitality and project management.',
   keywords: [
-    'Academies Australasia Polytechnic assignment help', 'AAPoly assignment help', 'AAPoly assessment help',
-    'AAPoly academic support', 'AAPoly IT assignment help', 'AAPoly cyber security assignment help',
-    'AAPoly business assignment help', 'AAPoly hospitality assignment help', 'AAPoly project management assignment help',
+    'Academies Australasia Polytechnic assignment support', 'AAPoly assignment support', 'AAPoly assessment help',
+    'AAPoly academic support', 'AAPoly IT assignment support', 'AAPoly cyber security assignment support',
+    'AAPoly business assignment support', 'AAPoly hospitality assignment support', 'AAPoly project management assignment support',
   ],
   openGraph: {
-    title: 'Academies Australasia Polytechnic Assignment Help | AAPoly Academic Support',
+    title: 'Academies Australasia Polytechnic Assignment Support | AAPoly',
     description: 'Academic support for AAPoly students across business, IT, cyber security, hospitality and project management.',
     url: 'https://www.stackassignment.com/universities/academies-australasia-polytechnic',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/academies-australasia-polytechnic' },
 }
@@ -66,11 +68,11 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is Academies Australasia Polytechnic assignment help?', a: "Academic support built around AAPoly's course structure — covering IT, cyber security, business, hospitality, accounting and project management, at both degree and vocational level." },
+  { q: 'What is Academies Australasia Polytechnic assignment support?', a: "Academic support built around AAPoly's course structure — covering IT, cyber security, business, hospitality, accounting and project management, at both degree and vocational level." },
   { q: 'Can you help with AAPoly IT assignments?', a: 'Yes, including the Master and Bachelor of Information Technology, plus vocational IT certificates and diplomas.' },
   { q: 'Do you support AAPoly cyber security assessments?', a: 'Yes — Bachelor of Business (Cyber Security) coursework, offered at AAPoly\'s Sydney and Melbourne campuses.' },
   { q: 'Can you help with AAPoly digital marketing assignments?', a: 'Yes, including Bachelor of Business (Digital Marketing) reports and case studies.' },
-  { q: 'Do you provide AAPoly business assignment help?', a: 'Yes, across Bachelor of Business specialisations including Leadership and Management, plus vocational business qualifications.' },
+  { q: 'Do you provide AAPoly business assignment support?', a: 'Yes, across Bachelor of Business specialisations including Leadership and Management, plus vocational business qualifications.' },
   { q: 'Can you help with AAPoly hospitality assessments?', a: 'Yes, including the Bachelor of Tourism and Hospitality Management and vocational hospitality qualifications. This is academic writing support, not practical competency assistance.' },
   { q: 'Do you support AAPoly project management assignments?', a: 'Yes, including the Diploma and Advanced Diploma of Project Management.' },
   { q: 'Can you help with AAPoly accounting assignments?', a: 'Yes, including Certificate IV, Diploma and Advanced Diploma of Accounting and Bookkeeping.' },
@@ -87,7 +89,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'Academies Australasia Polytechnic Assignment Help', item: 'https://www.stackassignment.com/universities/academies-australasia-polytechnic' },
+    { '@type': 'ListItem', position: 3, name: 'Academies Australasia Polytechnic Assignment Support', item: 'https://www.stackassignment.com/universities/academies-australasia-polytechnic' },
   ],
 }
 
@@ -99,7 +101,7 @@ export default function AAPolyPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">Academies Australasia Polytechnic Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">Academies Australasia Polytechnic Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -108,7 +110,7 @@ export default function AAPolyPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For Academies Australasia Polytechnic (AAPoly) Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Academies Australasia Polytechnic Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Academies Australasia Polytechnic Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             AAPoly students in Melbourne, Sydney and Perth.
@@ -268,7 +270,7 @@ export default function AAPolyPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

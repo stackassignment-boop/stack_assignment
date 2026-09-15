@@ -70,11 +70,13 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  // Initial value only — overwritten by /api/settings on mount. Seeded with
+  // AUD so an Australian student never sees a flash of US dollars first.
   const [currencySettings, setCurrencySettings] = useState<CurrencySettings>({
-    code: 'USD',
-    symbol: '$',
-    rate: 0.012,
-    name: 'US Dollar',
+    code: 'AUD',
+    symbol: 'A$',
+    rate: 0.018,
+    name: 'Australian Dollar',
   });
 
   const formatPrice = (priceInINR: number): string => {
@@ -215,7 +217,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-AU', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -223,7 +225,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   };
 
   const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
+    return new Date(dateString).toLocaleString('en-AU', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',

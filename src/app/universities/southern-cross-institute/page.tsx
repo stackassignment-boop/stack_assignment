@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,19 +8,20 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'Southern Cross Institute Assignment Help | SCI Academic Support',
+  title: 'Southern Cross Institute Assignment Support | SCI Tutoring',
   description:
     'Academic support and assessment guidance for Southern Cross Institute (SCI) students in Parramatta — business, accounting, hospitality, information systems and ICT.',
   keywords: [
-    'Southern Cross Institute assignment help', 'SCI assignment help', 'SCI assessment help',
-    'SCI academic support', 'SCI accounting assignment help', 'SCI hospitality assignment help',
-    'SCI information systems assignment help', 'SCI ICT assignment help', 'SCI business assignment help',
+    'Southern Cross Institute assignment support', 'SCI assignment support', 'SCI assessment help',
+    'SCI academic support', 'SCI accounting assignment support', 'SCI hospitality assignment support',
+    'SCI information systems assignment support', 'SCI ICT assignment support', 'SCI business assignment support',
   ],
   openGraph: {
-    title: 'Southern Cross Institute Assignment Help | SCI Academic Support',
+    title: 'Southern Cross Institute Assignment Support | SCI Tutoring',
     description: 'Academic support for Southern Cross Institute students across business, accounting, hospitality and ICT.',
     url: 'https://www.stackassignment.com/universities/southern-cross-institute',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/southern-cross-institute' },
 }
@@ -60,7 +62,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is Southern Cross Institute assignment help?', a: 'Academic support built around SCI\'s Bachelor of Business majors (Accounting, Hospitality Management, Information Systems, Human Services Management) and its Graduate Diploma and Master of Information and Communications Technology.' },
+  { q: 'What is Southern Cross Institute assignment support?', a: 'Academic support built around SCI\'s Bachelor of Business majors (Accounting, Hospitality Management, Information Systems, Human Services Management) and its Graduate Diploma and Master of Information and Communications Technology.' },
   { q: 'Can you help with SCI accounting assignments?', a: 'Yes, including financial and management accounting reports and assessments.' },
   { q: 'Do you support SCI hospitality management assignments?', a: 'Yes, including hospitality reports and case studies. This is academic writing support only.' },
   { q: 'Can you help with SCI information systems assessments?', a: 'Yes, including business information systems coursework across the Bachelor of Business major.' },
@@ -81,7 +83,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'Southern Cross Institute Assignment Help', item: 'https://www.stackassignment.com/universities/southern-cross-institute' },
+    { '@type': 'ListItem', position: 3, name: 'Southern Cross Institute Assignment Support', item: 'https://www.stackassignment.com/universities/southern-cross-institute' },
   ],
 }
 
@@ -93,7 +95,7 @@ export default function SouthernCrossInstitutePage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">Southern Cross Institute Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">Southern Cross Institute Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -102,7 +104,7 @@ export default function SouthernCrossInstitutePage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For Southern Cross Institute (SCI) Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Southern Cross Institute Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Southern Cross Institute Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             Southern Cross Institute students in Parramatta.
@@ -258,7 +260,7 @@ export default function SouthernCrossInstitutePage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

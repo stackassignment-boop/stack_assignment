@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'Federation University Assignment Help | Academic & Assessment Support',
+  title: 'Federation University Assignment Support | Tutoring & Editing',
   description:
     'Academic support and assessment guidance for Federation University students across IT, cybersecurity, business, nursing, education and engineering in Victoria and Brisbane.',
   keywords: [
-    'Federation University assignment help', 'Fed Uni assignment help', 'Federation University assessment help',
-    'Federation University academic support', 'Federation University IT assignment help',
-    'Federation University cybersecurity assignment help', 'Federation University nursing assignment help',
-    'Federation University business assignment help', 'Federation University report writing help',
+    'Federation University assignment support', 'Fed Uni assignment support', 'Federation University assessment help',
+    'Federation University academic support', 'Federation University IT assignment support',
+    'Federation University cybersecurity assignment support', 'Federation University nursing assignment support',
+    'Federation University business assignment support', 'Federation University report writing help',
   ],
   openGraph: {
-    title: 'Federation University Assignment Help | Academic & Assessment Support',
+    title: 'Federation University Assignment Support | Tutoring & Editing',
     description: 'Academic support for Federation University students across IT, cybersecurity, business, nursing and education.',
     url: 'https://www.stackassignment.com/universities/federation-university',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/federation-university' },
 }
@@ -65,11 +67,11 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is Federation University assignment help?', a: "Academic support built around Federation University's (Fed Uni) course structure — covering IT, cybersecurity, business, nursing, education and engineering." },
+  { q: 'What is Federation University assignment support?', a: "Academic support built around Federation University's (Fed Uni) course structure — covering IT, cybersecurity, business, nursing, education and engineering." },
   { q: 'Can you help with Federation University IT assignments?', a: 'Yes, across all four Bachelor of IT streams: Business Information Systems, Big Data & Analytics, Networking & Security, and Software Development.' },
   { q: 'Do you support Federation University cybersecurity assessments?', a: 'Yes — the Bachelor of Information Technology (Cybersecurity) is accredited by the Australian Computer Society, and we support assessments across its core and specialist units.' },
   { q: 'Can you help with Federation University nursing assignments?', a: 'Yes — nursing academic writing, case studies and health research support. This is academic writing support, not clinical advice.' },
-  { q: 'Do you provide Federation University business assignment help?', a: 'Yes, including business reports and coursework via the Federation Business School.' },
+  { q: 'Do you provide Federation University business assignment support?', a: 'Yes, including business reports and coursework via the Federation Business School.' },
   { q: 'Can you help with Federation University engineering assignments?', a: 'Yes, including engineering reports and technical writing.' },
   { q: 'Do you support Federation University Gippsland or Berwick campus students?', a: 'Yes — support works the same whether you study at Mount Helen, Berwick, Gippsland, Brisbane, Melbourne City or Horsham.' },
   { q: 'Can you help with Federation University psychology assignments?', a: 'Yes — academic writing and research support for coursework within Fed Uni\'s APAC-accredited psychology program.' },
@@ -86,7 +88,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'Federation University Assignment Help', item: 'https://www.stackassignment.com/universities/federation-university' },
+    { '@type': 'ListItem', position: 3, name: 'Federation University Assignment Support', item: 'https://www.stackassignment.com/universities/federation-university' },
   ],
 }
 
@@ -98,7 +100,7 @@ export default function FederationUniversityPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">Federation University Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">Federation University Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -107,7 +109,7 @@ export default function FederationUniversityPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For Federation University Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Federation University Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Federation University Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             Federation University students across Victoria and Brisbane.
@@ -175,7 +177,7 @@ export default function FederationUniversityPage() {
 
       <section id="fed-it" className="py-14 bg-gray-50 dark:bg-slate-900 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Federation University IT & Cybersecurity Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Federation University IT & Cybersecurity Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">Support across all four Bachelor of IT streams:</p>
           <div className="grid sm:grid-cols-2 gap-2">
             {['Business Information Systems', 'Big Data & Analytics', 'Networking & Security', 'Software Development'].map((s) => (
@@ -282,7 +284,7 @@ export default function FederationUniversityPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

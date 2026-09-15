@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'Victoria University Assignment Help Australia | VU Academic Support',
+  title: 'Victoria University Assignment Support | VU Tutoring',
   description:
     'Academic support for VU university, VU Online and TAFE students across IT, cyber security, data science, business, health, education, engineering and more.',
   keywords: [
-    'Victoria University assignment help', 'VU assignment help', 'VU assessment help',
-    'Victoria University academic support', 'VU IT assignment help', 'VU cyber security assignment help',
-    'VU data science assignment help', 'VU business assignment help', 'VU nursing assignment help',
-    'VU TAFE assignment help', 'VU Online assignment help',
+    'Victoria University assignment support', 'VU assignment support', 'VU assessment help',
+    'Victoria University academic support', 'VU IT assignment support', 'VU cyber security assignment support',
+    'VU data science assignment support', 'VU business assignment support', 'VU nursing assignment support',
+    'VU TAFE assignment support', 'VU Online assignment support',
   ],
   openGraph: {
-    title: 'Victoria University Assignment Help Australia | VU Academic Support',
+    title: 'Victoria University Assignment Support | VU Tutoring',
     description: 'Academic support for VU university, VU Online and TAFE students across IT, business, health, education and more.',
     url: 'https://www.stackassignment.com/universities/victoria-university',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/victoria-university' },
 }
@@ -68,7 +70,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is Victoria University assignment help?', a: 'Academic support built around VU\'s course structure — covering university, TAFE and VU Online study, including its distinctive Block Model\u00ae, across IT, business, health, education and more.' },
+  { q: 'What is Victoria University assignment support?', a: 'Academic support built around VU\'s course structure — covering university, TAFE and VU Online study, including its distinctive Block Model\u00ae, across IT, business, health, education and more.' },
   { q: 'Can you help with VU IT assessments?', a: 'Yes, including information technology, software development, networking and database assessments.' },
   { q: 'Can you help with VU cyber security assessments?', a: 'Yes — cybersecurity assignment and assessment support across VU\'s cyber security programs.' },
   { q: 'Do you support VU data science assignments?', a: 'Yes, including data analytics, statistics and data science project support.' },
@@ -91,7 +93,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'Victoria University Assignment Help', item: 'https://www.stackassignment.com/universities/victoria-university' },
+    { '@type': 'ListItem', position: 3, name: 'Victoria University Assignment Support', item: 'https://www.stackassignment.com/universities/victoria-university' },
   ],
 }
 
@@ -103,7 +105,7 @@ export default function VictoriaUniversityPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">Victoria University Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">Victoria University Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -112,7 +114,7 @@ export default function VictoriaUniversityPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For Victoria University (VU) Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Victoria University Assignment Help Australia</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Victoria University Assignment Support Australia</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support for VU university, VU Online and TAFE students across IT, business,
             health, education, engineering, hospitality and more.
@@ -181,7 +183,7 @@ export default function VictoriaUniversityPage() {
 
       <section id="vu-it" className="py-16 bg-gray-50 dark:bg-slate-900 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Victoria University IT, Cyber Security & Data Science Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Victoria University IT, Cyber Security & Data Science Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
             Support for information technology, cybersecurity, data science, software development,
             networking, database and AI/analytics assessments across VU's "IT, cyber security &amp;
@@ -192,7 +194,7 @@ export default function VictoriaUniversityPage() {
 
       <section id="vu-business" className="py-14 bg-white dark:bg-slate-950 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Briefcase className="w-6 h-6 text-indigo-600" />Victoria University Business Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Briefcase className="w-6 h-6 text-indigo-600" />Victoria University Business Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
             Support for business, accounting, marketing, management, finance, business analytics,
             international business and entrepreneurship assessments.
@@ -324,7 +326,7 @@ export default function VictoriaUniversityPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'UNSW Sydney Assignment Help | Academic & Assessment Support',
+  title: 'UNSW Sydney Assignment Support | Tutoring & Editing',
   description:
     'Academic support and assessment guidance for UNSW Sydney students across computer science, cybersecurity, engineering, business, law and science.',
   keywords: [
-    'UNSW Sydney assignment help', 'UNSW assignment help', 'UNSW assessment help',
-    'UNSW academic support', 'UNSW computer science assignment help', 'UNSW cybersecurity assignment help',
-    'UNSW engineering assignment help', 'UNSW business assignment help', 'UNSW accounting assignment help',
+    'UNSW Sydney assignment support', 'UNSW assignment support', 'UNSW assessment help',
+    'UNSW academic support', 'UNSW computer science assignment support', 'UNSW cybersecurity assignment support',
+    'UNSW engineering assignment support', 'UNSW business assignment support', 'UNSW accounting assignment support',
     'UNSW report writing help',
   ],
   openGraph: {
-    title: 'UNSW Sydney Assignment Help | Academic & Assessment Support',
+    title: 'UNSW Sydney Assignment Support | Tutoring & Editing',
     description: 'Academic support for UNSW Sydney students across computer science, cybersecurity, engineering, business and law.',
     url: 'https://www.stackassignment.com/universities/unsw-sydney',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/unsw-sydney' },
 }
@@ -64,7 +66,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is UNSW Sydney assignment help?', a: "Academic support built around UNSW's course structure — covering computer science, cybersecurity, engineering, business, law and science." },
+  { q: 'What is UNSW Sydney assignment support?', a: "Academic support built around UNSW's course structure — covering computer science, cybersecurity, engineering, business, law and science." },
   { q: 'Can you help with UNSW computer science assignments?', a: 'Yes, including programming, data structures, algorithms, software engineering and computer networks assessments.' },
   { q: 'Can you help with UNSW cybersecurity assessments?', a: 'Yes, across the Bachelor of Cyber Security, Bachelor of Computing and Cyber Security, and Master of Cyber Security.' },
   { q: 'Do you support UNSW engineering assignments?', a: "Yes — UNSW Engineering is ranked #1 in Australia (QS World University Rankings by Subject, 2026), and we support reports, projects and technical writing across its schools." },
@@ -85,7 +87,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'UNSW Sydney Assignment Help', item: 'https://www.stackassignment.com/universities/unsw-sydney' },
+    { '@type': 'ListItem', position: 3, name: 'UNSW Sydney Assignment Support', item: 'https://www.stackassignment.com/universities/unsw-sydney' },
   ],
 }
 
@@ -97,7 +99,7 @@ export default function UNSWSydneyPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">UNSW Sydney Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">UNSW Sydney Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -106,7 +108,7 @@ export default function UNSWSydneyPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For UNSW Sydney Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>UNSW Sydney Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>UNSW Sydney Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             UNSW Sydney students.
@@ -175,7 +177,7 @@ export default function UNSWSydneyPage() {
 
       <section id="unsw-cs" className="py-14 bg-gray-50 dark:bg-slate-900 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />UNSW Computer Science & IT Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />UNSW Computer Science & IT Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
             Support for the Bachelor of Engineering (Honours)/Computer Science and related
             programs, covering core courses in Programming, Computer Systems, Software Engineering,
@@ -188,7 +190,7 @@ export default function UNSWSydneyPage() {
 
       <section id="unsw-cyber" className="py-14 bg-white dark:bg-slate-950 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><ShieldAlert className="w-6 h-6 text-indigo-600" />UNSW Cybersecurity Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><ShieldAlert className="w-6 h-6 text-indigo-600" />UNSW Cybersecurity Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">Support across UNSW's cybersecurity pathways:</p>
           <div className="grid sm:grid-cols-2 gap-2">
             {['Bachelor of Cyber Security', 'Bachelor of Computing and Cyber Security', 'Bachelor of Commerce (Cyber Security Management major)', 'Master of Cyber Security', 'Graduate Certificate in Cyber Security', 'Graduate Diploma in Cyber Security'].map((s) => (
@@ -289,7 +291,7 @@ export default function UNSWSydneyPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

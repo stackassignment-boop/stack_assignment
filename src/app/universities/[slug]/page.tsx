@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
@@ -30,19 +31,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${uni.name} Assignment Help | Stack Assignment`,
-    description: `Assignment and essay help for ${uni.name} students across ${uni.courseAreas.slice(0, 3).join(', ')} — matched to your unit outline and referencing style.`,
+    title: `${uni.name} Assignment Support | Stack Assignment`,
+    description: `Assignment support and essay feedback for ${uni.name} students across ${uni.courseAreas.slice(0, 3).join(', ')} — matched to your unit outline and referencing style.`,
     keywords: [
-      `${uni.name} assignment help`,
-      `${uni.name} essay help`,
+      `${uni.name} assignment support`,
+      `${uni.name} essay feedback`,
       `${uni.name} assessment help`,
     ],
     openGraph: {
-      title: `${uni.name} Assignment Help`,
-      description: `Assignment help for ${uni.name} students, matched to your unit outline and referencing style.`,
+      title: `${uni.name} Assignment Support`,
+      description: `Assignment support for ${uni.name} students, matched to your unit outline and referencing style.`,
       url: `https://www.stackassignment.com/universities/${uni.slug}`,
       type: 'website',
+      locale: region.ogLocale,
     },
+    // Templated from the slug. These pages are reachable with query strings
+    // (campus filters, UTM tags) which would otherwise each look like a
+    // separate URL competing with this one.
+    alternates: { canonical: `https://www.stackassignment.com/universities/${uni.slug}` },
   }
 }
 
@@ -57,11 +63,11 @@ export default async function UniversityPage({ params }: PageProps) {
   const faqs = [
     {
       q: `Do you follow ${uni.name}'s referencing style?`,
-      a: `Yes — referencing conventions can vary by unit and lecturer. Upload your unit outline or assessment brief and your writer will match whatever style it specifies, whether that's APA, Harvard, or another format.`,
+      a: `Yes — referencing conventions can vary by unit and lecturer. Upload your unit outline or assessment brief and your tutor will match whatever style it specifies, whether that's APA, Harvard, or another format.`,
     },
     {
       q: 'Can you work from a specific unit outline or marking rubric?',
-      a: "Yes — upload your unit outline or assessment brief when you place an order, and your writer works directly from the marking criteria for that unit.",
+      a: "Yes — upload your unit outline or assessment brief when you book a session, and your tutor works directly from the marking criteria for that unit.",
     },
     {
       q: `Do you support every ${uni.name} campus?`,
@@ -69,7 +75,7 @@ export default async function UniversityPage({ params }: PageProps) {
     },
     {
       q: 'What about academic integrity policies?',
-      a: `Most institutions, including ${uni.name}, publish an academic integrity or plagiarism policy that's worth reading before ordering from any service, including ours. We provide model answers and reference material meant to help you understand a topic and structure your own original submission — what you submit needs to be your own work. See our Academic Integrity page for details.`,
+      a: `Most institutions, including ${uni.name}, publish an academic integrity or plagiarism policy that's worth reading before engaging any service, including ours. To be direct about where we sit: we do not write, rewrite or supply work for submission, and we do not sell model answers or reference papers. We tutor, we edit drafts you have written, and we mark your work against the rubric so you know what to change. What you submit has to be your own. See our Academic Integrity page for details.`,
     },
   ]
 
@@ -116,11 +122,11 @@ export default async function UniversityPage({ params }: PageProps) {
             className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
             style={{ fontFamily: 'Sora, sans-serif' }}
           >
-            Assignment Help for<br />{uni.name} Students
+            Assignment Support for<br />{uni.name} Students
           </h1>
 
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
-            Model answers and study support matched to your unit outline and referencing
+            Tutoring and draft feedback matched to your unit outline and referencing
             style — across every {uni.name} campus.
           </p>
 
@@ -199,7 +205,7 @@ export default async function UniversityPage({ params }: PageProps) {
               </div>
               <h3 className="font-bold text-lg mb-2">Unit-Outline Matched</h3>
               <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
-                Upload your unit outline or marking rubric and your writer follows it and your
+                Upload your unit outline or marking rubric and your tutor follows it and your
                 specified referencing style exactly.
               </p>
             </div>
@@ -260,7 +266,7 @@ export default async function UniversityPage({ params }: PageProps) {
             <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">
               Academic Integrity policy
             </Link>{' '}
-            before ordering.
+            before you book.
           </p>
         </div>
       </section>

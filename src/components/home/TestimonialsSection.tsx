@@ -4,96 +4,97 @@ interface TestimonialsSectionProps {
   onNavigate?: (page: string) => void;
 }
 
+/**
+ * Outcome-honest testimonials.
+ *
+ * The previous set described purchased work being submitted for marks — "they
+ * delivered my marketing strategy paper ... I scored an 86%", "Got a High
+ * Distinction (88%)", "this is my third order". Testimonials of that kind are
+ * the most direct possible evidence of a contract-cheating service under
+ * s 114B of the TEQSA Act (advertising an academic cheating service), and the
+ * specific-mark claims are also unsubstantiated performance representations
+ * under the Australian Consumer Law.
+ *
+ * These are rewritten to describe what students actually gained: understanding,
+ * technique, and confidence. No marks, no grades, no "orders", no
+ * "the writer produced X".
+ *
+ * IMPORTANT: replace these with real, attributable quotes collected with
+ * student permission before launch. Keep the same shape — the section renders
+ * whatever is in this array.
+ */
 const testimonials = [
   {
     initials: 'SE',
-    name: 'Sarah Edwards',
-    program: 'Masters in Business • University of Melbourne',
+    name: 'Sarah E.',
+    program: 'Masters in Business • Melbourne',
     rating: 5.0,
-    text: 'Absolutely transparent process from start to finish! They delivered my marketing strategy paper 2 days before the deadline. The quality exceeded my expectations and I scored an 86%. Communication was excellent throughout.',
-    time: '2 days ago',
+    text: 'My editor caught structural issues I completely missed and explained why they mattered. I understood my own argument better afterwards, and I could actually fix it myself.',
+    time: 'Editing • Semester 1',
     gradient: 'from-indigo-400 to-purple-500',
   },
   {
-    initials: 'RP',
-    name: 'Rajesh Patel',
-    program: 'PhD Computer Science • UNSW Sydney',
+    initials: 'MR',
+    name: 'Mohammed R.',
+    program: 'Finance • Brisbane',
     rating: 5.0,
-    text: "The expert assigned to my thesis chapter had genuine PhD-level knowledge in machine learning. Every citation was accurate, methodology was sound, and the writing quality was exceptional. Worth every dollar!",
-    time: '5 days ago',
+    text: 'The tutor walked me through DCF modelling step by step until it finally clicked. I could do the next valuation on my own without any help.',
+    time: 'Tutoring • Semester 2',
     gradient: 'from-blue-400 to-cyan-500',
   },
   {
     initials: 'EM',
-    name: 'Emily Martinez',
+    name: 'Emily M.',
     program: 'Nursing • Torrens University',
     rating: 5.0,
-    text: 'Had a medical case study due in 48 hours and was completely overwhelmed. Stack Assignment saved me! The writer understood evidence-based practice perfectly. Got a Distinction and learned a lot from the model.',
-    time: '1 week ago',
-    gradient: 'from-pink-400 to-rose-500',
+    text: 'I was lost on how to apply evidence-based practice to a case study. Two sessions on how to read and appraise the literature changed how I approach every unit now.',
+    time: 'Tutoring • Semester 1',
+    gradient: 'from-emerald-400 to-teal-500',
   },
   {
     initials: 'LW',
-    name: 'Lucas Wong',
-    program: 'Law • Monash University',
+    name: 'Lucas W.',
+    program: 'Law • Sydney',
     rating: 5.0,
-    text: 'The legal research memo was impeccable. Every case citation followed AGLC4 perfectly, arguments were structured logically, and the statutory analysis was thorough. This is exactly what I needed to understand proper legal writing.',
-    time: '1 week ago',
-    gradient: 'from-green-400 to-emerald-500',
+    text: 'AGLC4 footnoting was destroying me. My editor marked up my own draft with tracked changes and explained each correction, so I finally understood the rules rather than guessing.',
+    time: 'Editing • Semester 2',
+    gradient: 'from-amber-400 to-orange-500',
   },
   {
     initials: 'AP',
-    name: 'Aisha Patel',
-    program: 'Literature • University of Sydney',
+    name: 'Aisha P.',
+    program: 'English Literature • Perth',
     rating: 5.0,
-    text: 'My Shakespeare analysis essay was beautifully written with deep literary insight. The writer clearly understood post-colonial theory and close reading techniques. Got a High Distinction (88%) - best mark this semester!',
-    time: '2 weeks ago',
-    gradient: 'from-orange-400 to-amber-500',
+    text: 'We spent a session on close reading and post-colonial theory. I rewrote my own introduction three times afterwards and it was so much sharper by the end.',
+    time: 'Tutoring • Semester 1',
+    gradient: 'from-rose-400 to-pink-500',
   },
   {
     initials: 'JK',
-    name: 'James Kim',
-    program: 'Engineering • MIT',
+    name: 'James K.',
+    program: 'Engineering • Adelaide',
     rating: 5.0,
-    text: 'The technical report on renewable energy systems was phenomenal. Complex engineering concepts explained clearly, calculations verified, and figures professionally formatted. Pricing was very reasonable for PhD-level work.',
-    time: '2 weeks ago',
-    gradient: 'from-purple-400 to-fuchsia-500',
+    text: 'The feedback on my technical report told me exactly where my reasoning skipped a step. Genuinely useful criticism rather than someone just tidying my sentences.',
+    time: 'Feedback • Semester 2',
+    gradient: 'from-violet-400 to-indigo-500',
   },
   {
     initials: 'OA',
-    name: 'Olivia Anderson',
-    program: 'Psychology • Macquarie University',
-    rating: 4.8,
-    text: 'Research proposal on cognitive behavioral therapy was well-structured with current peer-reviewed sources. Only minor formatting issue was fixed within hours. Customer support responded instantly via WhatsApp. Very satisfied!',
-    time: '3 weeks ago',
-    gradient: 'from-teal-400 to-cyan-500',
-  },
-  {
-    initials: 'MR',
-    name: 'Mohammed Rahman',
-    program: 'Finance • University of Queensland',
+    name: 'Olivia A.',
+    program: 'Psychology • Canberra',
     rating: 5.0,
-    text: 'Financial analysis with DCF models and ratio analysis was exactly what I needed. Excel calculations were accurate, assumptions clearly stated. This helped me understand corporate valuation much better. Highly recommend!',
-    time: '3 weeks ago',
-    gradient: 'from-red-400 to-pink-500',
-  },
-  {
-    initials: 'SL',
-    name: 'Sophie Lewis',
-    program: 'History • University of Western Australia',
-    rating: 5.0,
-    text: 'Historiographical essay on the Cold War was exceptional. Used primary sources from archives, secondary scholarship was recent and relevant. Citations were perfect Chicago style. This is my third order - consistently excellent!',
-    time: '1 month ago',
-    gradient: 'from-lime-400 to-green-500',
+    text: 'I could not work out which statistical test my research design needed. My tutor took me through the decision properly, and I understood why by the end of the session.',
+    time: 'Tutoring • Semester 1',
+    gradient: 'from-sky-400 to-blue-500',
   },
   {
     initials: 'DC',
-    name: 'Daniel Chen',
-    program: 'Data Science • Victoria University',
+    name: 'Daniel C.',
+    program: 'History • Melbourne',
     rating: 5.0,
-    text: 'The data analysis report with Python code was brilliant. Visualizations were publication-quality, statistical tests properly justified. Plagiarism report showed 100% original. Best value for money I have found online!',
-    time: '1 month ago',
-    gradient: 'from-violet-400 to-purple-500',
+    text: 'My tutor helped me tell the difference between summarising sources and building an argument from them. That distinction fixed my writing across every unit.',
+    time: 'Tutoring • Semester 2',
+    gradient: 'from-cyan-400 to-emerald-500',
   },
 ];
 

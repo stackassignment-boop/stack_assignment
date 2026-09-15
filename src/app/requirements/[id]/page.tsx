@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
 import { FileText, Calendar, Tag, ArrowLeft } from 'lucide-react'
 import RequirementDetailActions from '@/components/requirements/RequirementDetailActions'
+import { region } from '@/lib/seo-config'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -41,16 +42,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const description =
     req.description?.slice(0, 155) ||
-    `${req.title} — assignment help available. Get a quote from Stack Assignment.`
+    `${req.title} — tutoring and editing support available. Get a quote from Stack Assignment.`
 
   return {
-    title: `${req.title} | Assignment Help | Stack Assignment`,
+    title: `${req.title} | Assignment Support | Stack Assignment`,
     description,
+    alternates: { canonical: `https://www.stackassignment.com/requirements/${req.id}` },
     openGraph: {
       title: req.title,
       description,
       url: `https://www.stackassignment.com/requirements/${req.id}`,
       type: 'article',
+      locale: region.ogLocale,
       publishedTime: req.createdAt.toISOString(),
     },
   }
@@ -65,7 +68,7 @@ function formatFileSize(bytes: number) {
 }
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('en-IN', {
+  return date.toLocaleDateString('en-AU', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

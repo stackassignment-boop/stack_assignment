@@ -299,7 +299,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                               </p>
                               <div className="flex flex-col gap-2">
                                 <a
-                                  href="/?view=admin"
+                                  href="/admin"
                                   className="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-medium transition"
                                 >
                                   <LogIn className="h-3 w-3" />

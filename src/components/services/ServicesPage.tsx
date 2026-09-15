@@ -20,6 +20,18 @@ interface Requirement {
   createdAt: string;
 }
 
+/**
+ * Link to the order form with the subject pre-filled.
+ *
+ * `URLSearchParams` does the encoding, which matters more than it looks: several
+ * of the labels below contain an ampersand ("Business & Management"), and
+ * interpolating one straight into a query string would truncate the value at the
+ * `&` and silently drop the rest of the subject.
+ */
+function orderHref(subject: string): string {
+  return `/order?${new URLSearchParams({ subject }).toString()}`;
+}
+
 const services = [
   {
     icon: PenTool,
@@ -131,7 +143,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
+    return new Date(dateString).toLocaleDateString('en-AU', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -183,8 +195,23 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                 </>
               );
 
-              // Use a real <Link> for the requirements page so it's a
-              // crawlable, discoverable URL — not just a JS onClick handler.
+              // Every card is a real link now, including the ones that carry a
+              // subject through to the order form. They used to be
+              // `<div onClick>` handlers doing `window.location.href =
+              // '/?view=order&subject=...'`, which cost three things: a crawler
+              // saw no link at all and never reached /order from this page,
+              // keyboard and screen-reader users could not activate the card,
+              // and the destination URL was the legacy query-string one.
+              //
+              // The subject-carrying cards are plain `<a>` rather than `<Link>`
+              // deliberately. OrderPage reads `?subject=` from
+              // `window.location.search` in a mount effect, and Next updates the
+              // URL in an effect on AppRouter — an *ancestor* of the page. React
+              // flushes child effects before parent effects, so on a client-side
+              // navigation the page would read the URL it came from and the
+              // field would arrive empty. A full page load has the correct URL
+              // before any React code runs. `/requirements` takes no params, so
+              // it keeps the faster client-side `<Link>`.
               if (isAssignmentService) {
                 return (
                   <Link key={index} href="/requirements" className={cardClassName}>
@@ -194,18 +221,9 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
               }
 
               return (
-                <div
-                  key={index}
-                  className={cardClassName}
-                  onClick={() => {
-                    const params = new URLSearchParams();
-                    params.set('view', 'order');
-                    params.set('subject', service.title);
-                    window.location.href = `/?${params.toString()}`;
-                  }}
-                >
+                <a key={index} href={orderHref(service.title)} className={cardClassName}>
                   {cardContent}
-                </div>
+                </a>
               );
             })}
           </div>
@@ -239,18 +257,13 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
               'Grant Proposal',
               'Speech Writing',
             ].map((item, index) => (
-              <div
+              <a
                 key={index}
-                className="bg-gray-50 dark:bg-slate-800 rounded-lg p-3 text-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 transition cursor-pointer"
-                onClick={() => {
-                  const params = new URLSearchParams();
-                  params.set('view', 'order');
-                  params.set('subject', item);
-                  window.location.href = `/?${params.toString()}`;
-                }}
+                href={orderHref(item)}
+                className="block bg-gray-50 dark:bg-slate-800 rounded-lg p-3 text-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
               >
                 {item}
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -284,21 +297,16 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
               { name: 'Mathematics', icon: '🔢' },
               { name: 'Finance & Accounting', icon: '💰' },
             ].map((subject, index) => (
-              <div
+              <a
                 key={index}
-                className="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition cursor-pointer"
-                onClick={() => {
-                  const params = new URLSearchParams();
-                  params.set('view', 'order');
-                  params.set('subject', subject.name);
-                  window.location.href = `/?${params.toString()}`;
-                }}
+                href={orderHref(subject.name)}
+                className="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition"
               >
                 <span className="text-2xl">{subject.icon}</span>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {subject.name}
                 </span>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -315,9 +323,9 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { title: 'Expert Writers', desc: 'PhD-qualified experts in every field', stat: '500+' },
+              { title: 'Expert Tutors', desc: 'PhD-qualified, matched by discipline', stat: '400+' },
               { title: 'On-Time Delivery', desc: 'Never miss a deadline', stat: '99.9%' },
-              { title: 'Original Content', desc: 'Plagiarism-free guarantee', stat: '100%' },
+              { title: 'Tracked Changes', desc: 'Every edit visible and explained', stat: '100%' },
               { title: 'Support', desc: '24/7 customer assistance', stat: '24/7' },
             ].map((item, index) => (
               <div key={index} className="text-center p-6">
@@ -344,18 +352,27 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
             Not sure which service fits your requirement? Get a free consultation in minutes.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* Real anchors, not onClick handlers. These are the page's two
+                closing calls to action, so they are the links a crawler most
+                needs in order to follow /services through to /order and
+                /pricing — and as anchors they also stop depending on the
+                `onNavigate` prop being supplied at all. Neither carries a query
+                param, so a client-side <Link> is safe here; see the service
+                cards above for why the ones carrying a subject are not. */}
             <Button
-              onClick={() => onNavigate?.('order')}
+              asChild
               className="bg-white text-indigo-600 hover:bg-gray-100 px-10 py-6 text-xl font-bold rounded-xl shadow-lg min-w-[280px]"
             >
-              Get Started Now
-              <ArrowRight className="ml-2 w-5 h-5" />
+              <Link href="/order">
+                Get Started Now
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
             </Button>
             <Button
-              onClick={() => onNavigate?.('pricing')}
+              asChild
               className="bg-white text-indigo-600 hover:bg-gray-100 px-10 py-6 text-xl font-bold rounded-xl shadow-lg min-w-[280px]"
             >
-              View Pricing
+              <Link href="/pricing">View Pricing</Link>
             </Button>
           </div>
         </div>

@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,6 +12,7 @@ import { toast } from 'sonner';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import RequirementPreviewModal from '@/components/requirements/RequirementPreviewModal';
+import { useRouteNavigate } from '@/lib/useRouteNavigate';
 
 interface Requirement {
   id: string;
@@ -39,7 +39,6 @@ function isPreviewable(fileType: string): boolean {
 }
 
 export default function RequirementsPage({ initialRequirements = [] }: RequirementsPageProps) {
-  const router = useRouter();
   const [requirements, setRequirements] = useState<Requirement[]>(initialRequirements);
   // Only show a loading state if we didn't already get server-rendered data.
   const [loading, setLoading] = useState(initialRequirements.length === 0);
@@ -52,22 +51,12 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
   // Categories
   const categories = ['all', 'Programming', 'Essay', 'Research Paper', 'Case Study', 'Coursework', 'Lab Report'];
 
-  // Handle navigation for in-page SPA sections (kept for the "Back to
-  // Services" button, which points at the homepage's view-based routing).
-  const handleNavigate = useCallback((page: string, params?: Record<string, string>) => {
-    const urlParams = new URLSearchParams();
-    urlParams.set('view', page);
-
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value) {
-          urlParams.set(key, value);
-        }
-      });
-    }
-
-    window.location.href = `/?${urlParams.toString()}`;
-  }, []);
+  // Handle navigation for the Header and Footer, and for the "Back to Services"
+  // button. Every page key now has a real route, so this delegates to the shared
+  // table in useRouteNavigate instead of rebuilding `/?view=` URLs — those are
+  // permanently redirected by src/middleware.ts, so constructing one here would
+  // only add a wasted redirect hop to every header and footer click.
+  const handleNavigate = useRouteNavigate();
 
   // Fetch requirements — skipped on first render when we already have
   // server-rendered data, so we don't show a redundant loading flash or
@@ -111,19 +100,22 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
   }, [searchQuery, selectedCategory]);
 
   const handleGetAnswer = (requirement: Requirement) => {
-    // Pre-fill order form with requirement data — routes to the real
-    // /order page (not the homepage's SPA view routing) for consistency
-    // with the rest of the site.
-    const params = new URLSearchParams();
-    params.set('subject', requirement.title);
-    params.set(
-      'description',
-      requirement.description || `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`
-    );
-    if (requirement.category) {
-      params.set('category', requirement.category);
-    }
-    router.push(`/order?${params.toString()}`);
+    // Pre-fill the order form with the requirement's details.
+    //
+    // This goes through useRouteNavigate rather than `router.push`. The order
+    // form reads these values out of `window.location.search` in a mount effect,
+    // and Next commits the new URL in an effect on AppRouter — an *ancestor* of
+    // the page. React flushes child effects before parent effects, so a soft
+    // push would have the form read the URL of *this* page and arrive blank.
+    // useRouteNavigate does a full load whenever it is carrying data, which
+    // makes the search string authoritative before any component renders.
+    handleNavigate('order', {
+      subject: requirement.title,
+      description:
+        requirement.description ||
+        `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`,
+      ...(requirement.category ? { category: requirement.category } : {}),
+    });
   };
 
   const handlePreview = (requirement: Requirement) => {
@@ -154,7 +146,7 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
+    return new Date(dateString).toLocaleDateString('en-AU', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',

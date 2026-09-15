@@ -223,6 +223,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
+    // Hub page for the 27 university landing pages, which previously had no
+    // parent linking them together.
+    {
+      url: `${baseUrl}/universities`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    // Free tools. Priority is deliberately high for the WAM calculator: it is
+    // the only page here targeting a purely informational AU-specific query, so
+    // it is the most likely to attract the organic backlinks the commercial
+    // pages can't earn on their own.
+    {
+      url: `${baseUrl}/tools`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/tools/wam-calculator`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.9,
+    },
   ]
 
   // Dedicated university landing pages (dynamic route driven by

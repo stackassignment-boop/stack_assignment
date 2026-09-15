@@ -166,7 +166,7 @@ export async function PUT(
       const validation = updateRequirementSchema.safeParse(body);
 
       if (!validation.success) {
-        return apiError(validation.error.errors[0].message, 400);
+        return apiError(validation.error.issues[0]?.message ?? 'Invalid request', 400);
       }
 
       const { title, description, category } = validation.data;

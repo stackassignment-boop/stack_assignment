@@ -1,6 +1,32 @@
 import { NextRequest } from 'next/server';
 import { calculatePrice, apiResponse, apiError } from '@/lib/auth';
+import { region } from '@/lib/seo-config';
 import { z } from 'zod';
+
+/**
+ * ⚠ THIS ENDPOINT RETURNS INDIAN RUPEES AND HAS NO CONSUMERS.
+ *
+ * `calculatePrice()` in src/lib/auth.ts returns `currency: 'INR'`, and the
+ * per-page figures below (250/350/450/750) are rupee amounts. Nothing in the UI
+ * calls this route today — the prices students actually see come from the tables
+ * in src/components/pricing/PricingPage.tsx — so it is dead code that would emit
+ * rupee prices the moment anyone wired it up to an Australian-facing screen.
+ *
+ * It is left returning INR rather than silently converted, because inventing a
+ * conversion here would create a fifth place where an FX rate is hardcoded. What
+ * has been fixed is the formatting: the amount is now formatted as an explicit
+ * INR currency value for the site's locale instead of a bare `₹` glued to
+ * lakh-grouped digits, and every response states its currency so no caller can
+ * mistake it for local money. Before this route is used, price it in AUD.
+ */
+const BASE_CURRENCY = 'INR';
+
+const formatBasePrice = (amount: number) =>
+  new Intl.NumberFormat(region.htmlLang, {
+    style: 'currency',
+    currency: BASE_CURRENCY,
+    maximumFractionDigits: 0,
+  }).format(amount);
 
 const pricingSchema = z.object({
   academicLevel: z.enum(['high_school', 'bachelor', 'master', 'phd']),
@@ -38,7 +64,7 @@ export async function POST(request: NextRequest) {
     const result = pricingSchema.safeParse(data);
     
     if (!result.success) {
-      return apiError(result.error.errors[0].message, 400);
+      return apiError(result.error.issues[0]?.message ?? 'Invalid request', 400);
     }
     
     const pricing = calculatePrice(result.data);
@@ -47,7 +73,7 @@ export async function POST(request: NextRequest) {
       pricing: {
         ...pricing,
         daysUntilDeadline: days,
-        formattedPrice: `₹${pricing.totalPrice.toLocaleString('en-IN')}`,
+        formattedPrice: formatBasePrice(pricing.totalPrice),
       },
     });
   } catch (error) {
@@ -83,13 +109,14 @@ export async function GET(request: NextRequest) {
       ...tier,
       pricePerPage,
       totalPrice: Math.round(pricePerPage * tier.multiplier * pages),
-      formattedPrice: `₹${Math.round(pricePerPage * tier.multiplier * pages).toLocaleString('en-IN')}`,
+      formattedPrice: formatBasePrice(Math.round(pricePerPage * tier.multiplier * pages)),
     }));
     
     return apiResponse({
       academicLevel,
       pages,
       basePricePerPage: pricePerPage,
+      currency: BASE_CURRENCY,
       pricing,
     });
   } catch (error) {

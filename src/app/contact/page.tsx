@@ -1,15 +1,18 @@
 import { Metadata } from 'next'
 import { Mail, Phone, Clock, MapPin, MessageSquare, Send } from 'lucide-react'
+import { region } from '@/lib/seo-config'
 
 export const metadata: Metadata = {
-  title: 'Contact Us - Get in Touch | Stack Assignment',
-  description: 'Contact Stack Assignment for academic writing assistance. Reach us via email, phone, or WhatsApp. 24/7 support available for all your queries.',
-  keywords: ['contact stack assignment', 'academic writing support', 'customer service', 'get help with assignment', 'essay help contact'],
+  title: 'Contact Us | Academic Tutoring & Editing Australia',
+  description: 'Get in touch about tutoring, editing or assessment feedback. Tell us your university and unit and we will match you with the right tutor. Email, phone or WhatsApp.',
+  keywords: ['contact stack assignment', 'academic tutoring Australia', 'academic editing enquiry', 'university tutor enquiry Australia'],
+  alternates: { canonical: 'https://www.stackassignment.com/contact' },
   openGraph: {
     title: 'Contact Us - Stack Assignment',
-    description: 'Get in touch with our team for any questions or support',
+    description: 'Questions about tutoring, editing or assessment feedback? Get in touch.',
     url: 'https://www.stackassignment.com/contact',
     type: 'website',
+    locale: region.ogLocale,
   },
 }
 

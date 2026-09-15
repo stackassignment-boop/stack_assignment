@@ -114,12 +114,12 @@ export const authOptions: NextAuthOptions = {
       // If the url is already absolute and on the same domain, allow it
       if (new URL(url).origin === baseUrl) return url;
       // Default redirect to student dashboard after login
-      return `${baseUrl}/?view=student-dashboard`;
+      return `${baseUrl}/student/dashboard`;
     },
   },
   pages: {
-    signIn: '/?view=student-login',
-    error: '/?view=student-login',
+    signIn: '/student/login',
+    error: '/student/login',
   },
   session: {
     strategy: 'jwt',

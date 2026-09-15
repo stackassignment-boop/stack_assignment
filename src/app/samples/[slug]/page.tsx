@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import SamplePageClient from '@/components/samples/SamplePageClient'
 import { db } from '@/lib/db'
+import { region } from '@/lib/seo-config'
 
 interface PageProps {
   params: Promise<{
@@ -28,11 +29,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${sample.title} - Sample Preview | Stack Assignment`,
       description: sample.description || `Preview ${sample.title} academic writing sample. ${sample.pages} pages available.`,
       keywords: [sample.subject, sample.paperType, 'sample', 'academic writing'].filter(Boolean).join(', '),
+      alternates: { canonical: `https://www.stackassignment.com/samples/${sample.slug}` },
       openGraph: {
         title: `${sample.title} - Sample Preview`,
         description: sample.description || `Preview this academic writing sample`,
         url: `https://www.stackassignment.com/samples/${sample.slug}`,
         type: 'website',
+        locale: region.ogLocale,
       },
     }
   } catch (error) {

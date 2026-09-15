@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,19 +8,20 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'La Trobe University Assignment Help | Academic & Assessment Support',
+  title: 'La Trobe University Assignment Support | Tutoring & Editing',
   description:
     'Academic support and assessment guidance for La Trobe University students across cybersecurity, IT, business, health sciences, law and education, in Melbourne and beyond.',
   keywords: [
-    'La Trobe University assignment help', 'La Trobe assignment help', 'La Trobe assessment help',
-    'La Trobe academic support', 'La Trobe IT assignment help', 'La Trobe cybersecurity assignment help',
-    'La Trobe business assignment help', 'La Trobe nursing assignment help', 'La Trobe report writing help',
+    'La Trobe University assignment support', 'La Trobe assignment support', 'La Trobe assessment help',
+    'La Trobe academic support', 'La Trobe IT assignment support', 'La Trobe cybersecurity assignment support',
+    'La Trobe business assignment support', 'La Trobe nursing assignment support', 'La Trobe report writing help',
   ],
   openGraph: {
-    title: 'La Trobe University Assignment Help | Academic & Assessment Support',
+    title: 'La Trobe University Assignment Support | Tutoring & Editing',
     description: 'Academic support for La Trobe University students across cybersecurity, IT, business, health and education.',
     url: 'https://www.stackassignment.com/universities/la-trobe-university',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/la-trobe-university' },
 }
@@ -63,7 +65,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is La Trobe University assignment help?', a: "Academic support built around La Trobe's course structure — covering cybersecurity, IT, business, health sciences, law and education." },
+  { q: 'What is La Trobe University assignment support?', a: "Academic support built around La Trobe's course structure — covering cybersecurity, IT, business, health sciences, law and education." },
   { q: 'Can you help with La Trobe IT assessments?', a: 'Yes, including computer science, artificial intelligence and general IT fundamentals assessments.' },
   { q: 'Can you help with La Trobe cybersecurity assessments?', a: 'Yes — including units covering cyber risk management, cyber security principles, network engineering fundamentals and introduction to programming, across the Bachelor and Master of Cybersecurity.' },
   { q: 'Do you support La Trobe nursing assignments?', a: 'Yes — nursing academic writing, case studies and health research support. This is academic writing support, not clinical advice.' },
@@ -86,7 +88,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'La Trobe University Assignment Help', item: 'https://www.stackassignment.com/universities/la-trobe-university' },
+    { '@type': 'ListItem', position: 3, name: 'La Trobe University Assignment Support', item: 'https://www.stackassignment.com/universities/la-trobe-university' },
   ],
 }
 
@@ -98,7 +100,7 @@ export default function LaTrobeUniversityPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">La Trobe University Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">La Trobe University Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -107,7 +109,7 @@ export default function LaTrobeUniversityPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For La Trobe University Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>La Trobe University Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>La Trobe University Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             La Trobe University students across Victoria, Sydney and online.
@@ -175,7 +177,7 @@ export default function LaTrobeUniversityPage() {
 
       <section id="latrobe-it" className="py-16 bg-gray-50 dark:bg-slate-900 scroll-mt-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />La Trobe University IT & Cybersecurity Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />La Trobe University IT & Cybersecurity Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-4">
             Verified units from La Trobe's Master of Cybersecurity core:
           </p>
@@ -308,7 +310,7 @@ export default function LaTrobeUniversityPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

@@ -1,16 +1,50 @@
 'use client';
 
-import { Shield, CreditCard, Award, GraduationCap, Star, Lock, FileCheck, Ban } from 'lucide-react';
+import {
+  Shield,
+  CreditCard,
+  Award,
+  GraduationCap,
+  MessageSquare,
+  Lock,
+  FileCheck,
+  Ban,
+} from 'lucide-react';
 
+/**
+ * Order is load-bearing: the `footer` variant renders the first six of these
+ * and `compact` renders the first four, so the badges that carry the
+ * positioning sit at the top and the payment-trust badges follow.
+ *
+ * Previously this list read: 256-bit SSL, Secure Payment, Money-Back,
+ * PhD Writers, 4.9/5 Rating, 100% Confidential, 0% Plagiarism, AI-Free
+ * Content. Because it renders inside the sitewide footer, those eight labels
+ * were the single most widely published claim on the site, and four of them
+ * were unsafe:
+ *
+ *   - "PhD Writers" advertises someone else writing the assessment, which is
+ *     the conduct s 114B of the TEQSA Act 2011 prohibits advertising.
+ *   - "0% Plagiarism" and "AI-Free Content" are promises about what a marker
+ *     or Turnitin will conclude about the student's own submission — outcomes
+ *     nobody can actually guarantee.
+ *   - "Money-Back" and "4.9/5 Rating" are representations under the
+ *     Australian Consumer Law (Competition and Consumer Act 2010 Sch 2
+ *     ss 18, 29) that need a real refund policy and real verifiable reviews
+ *     behind them. There is no review integration on this site, so the
+ *     rating was simply asserted.
+ *
+ * The replacements are all statements about how the service works, which are
+ * defensible on their face and don't depend on data the site doesn't hold.
+ */
 const trustItems = [
+  { icon: Ban, label: 'No Ghostwriting', color: 'text-red-500' },
+  { icon: GraduationCap, label: 'Subject-Expert Tutors', color: 'text-amber-500' },
+  { icon: FileCheck, label: 'Tracked-Changes Editing', color: 'text-indigo-500' },
+  { icon: Shield, label: 'You Keep Authorship', color: 'text-purple-500' },
   { icon: Lock, label: '256-bit SSL', color: 'text-blue-500' },
   { icon: CreditCard, label: 'Secure Payment', color: 'text-green-500' },
-  { icon: Shield, label: 'Money-Back', color: 'text-purple-500' },
-  { icon: GraduationCap, label: 'PhD Writers', color: 'text-amber-500' },
-  { icon: Star, label: '4.9/5 Rating', color: 'text-yellow-500' },
-  { icon: Lock, label: '100% Confidential', color: 'text-teal-500' },
-  { icon: Ban, label: '0% Plagiarism', color: 'text-red-500' },
-  { icon: FileCheck, label: 'AI-Free Content', color: 'text-indigo-500' },
+  { icon: Award, label: 'AU Marking Rubrics', color: 'text-amber-600' },
+  { icon: MessageSquare, label: '1-on-1 Sessions', color: 'text-teal-500' },
 ];
 
 interface TrustBadgesProps {
@@ -47,8 +81,14 @@ export default function TrustBadges({ variant = 'full' }: TrustBadgesProps) {
   // Full variant
   return (
     <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-6">
+      {/*
+        Was "Trusted by 10,000+ Students Worldwide". The number is not backed by
+        anything in the codebase, and "Worldwide" works against the Australian
+        targeting — a heading is a strong on-page signal, so it should say where
+        the service is aimed.
+      */}
       <h3 className="text-center text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wide">
-        Trusted by 10,000+ Students Worldwide
+        How We Work With Australian Students
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {trustItems.map((item, i) => (

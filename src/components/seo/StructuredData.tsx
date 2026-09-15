@@ -3,6 +3,8 @@
 // Structured Data Component for injecting JSON-LD schemas
 // This improves SEO by providing rich snippets to search engines
 
+import { region } from '@/lib/seo-config';
+
 interface StructuredDataProps {
   data: object | object[];
 }
@@ -67,6 +69,7 @@ export function SampleStructuredData({
     name: title,
     description: description || `Academic ${paperTypeLabels[paperType || ''] || 'paper'} sample in ${subject || 'various subjects'}`,
     url: `${siteUrl}/samples/${slug}`,
+    inLanguage: region.htmlLang,
     educationalLevel: academicLevel ? academicLevelLabels[academicLevel] : undefined,
     learningResourceType: paperType ? paperTypeLabels[paperType] : 'Academic Paper',
     about: subject ? {
@@ -135,6 +138,7 @@ export function ArticleStructuredData({
     headline: title,
     description: description,
     url: `${siteUrl}/blog/${slug}`,
+    inLanguage: region.htmlLang,
     datePublished: publishedAt,
     author: {
       '@type': 'Person',
@@ -195,12 +199,18 @@ interface ServiceStructuredDataProps {
 
 export function ServicesStructuredData({ services }: ServiceStructuredDataProps) {
   const siteUrl = 'https://www.stackassignment.com';
-  
+
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Academic Writing Services',
-    description: 'Professional academic writing and assignment help services',
+    // Was name: 'Academic Writing Services' / description: 'Professional
+    // academic writing and assignment help services'. This component renders on
+    // 20 pages, so that wording was the machine-readable description of the
+    // business handed straight to Google — it needs to match the positioning in
+    // the visible copy, or the two contradict each other.
+    name: 'Academic Tutoring and Editing Services',
+    description:
+      'One-on-one tutoring, academic editing and assessment support for university students in Australia.',
     itemListElement: services.map((service, index) => ({
       '@type': 'ListItem',
       position: index + 1,
@@ -209,11 +219,13 @@ export function ServicesStructuredData({ services }: ServiceStructuredDataProps)
         name: service.name,
         description: service.description,
         url: service.url || `${siteUrl}/services`,
-        provider: {
-          '@type': 'Organization',
-          name: 'Stack Assignment',
-          url: siteUrl,
-        },
+        // Geographic and language scoping. Without these, nothing in the
+        // markup tells Google which market the service is offered in.
+        areaServed: region.areaServed.map((name) => ({ '@type': 'Country', name })),
+        // Reference the Organization node published by the root layout instead
+        // of restating it, so the whole site resolves to one entity rather than
+        // 20 unconnected copies with slightly different properties.
+        provider: { '@id': `${siteUrl}/#organization` },
       },
     })),
   };

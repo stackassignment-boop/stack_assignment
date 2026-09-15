@@ -86,8 +86,8 @@ export async function POST(request: NextRequest) {
     const result = createBlogSchema.safeParse(body);
 
     if (!result.success) {
-      console.error('Validation error:', result.error.errors);
-      return apiError(result.error.errors[0].message, 400);
+      console.error('Validation error:', result.error.issues);
+      return apiError(result.error.issues[0]?.message ?? 'Invalid request', 400);
     }
 
     const data = result.data;

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'University of Newcastle Assignment Help | Academic & Assessment Support',
+  title: 'University of Newcastle Assignment Support | Tutoring',
   description:
     'Academic support and assessment guidance for University of Newcastle (UoN) students in Australia — engineering, IT, nursing, business, education and science.',
   keywords: [
-    'University of Newcastle assignment help', 'UoN assignment help', 'Newcastle University assessment help',
-    'University of Newcastle academic support', 'University of Newcastle engineering assignment help',
-    'University of Newcastle nursing assignment help', 'University of Newcastle IT assignment help',
-    'University of Newcastle business assignment help', 'University of Newcastle report writing help',
+    'University of Newcastle assignment support', 'UoN assignment support', 'Newcastle University assessment help',
+    'University of Newcastle academic support', 'University of Newcastle engineering assignment support',
+    'University of Newcastle nursing assignment support', 'University of Newcastle IT assignment support',
+    'University of Newcastle business assignment support', 'University of Newcastle report writing help',
   ],
   openGraph: {
-    title: 'University of Newcastle Assignment Help | Academic & Assessment Support',
+    title: 'University of Newcastle Assignment Support | Tutoring',
     description: 'Academic support for University of Newcastle students across engineering, IT, nursing, business and education.',
     url: 'https://www.stackassignment.com/universities/university-of-newcastle',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/university-of-newcastle' },
 }
@@ -65,11 +67,11 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is University of Newcastle assignment help?', a: "Academic support built around the University of Newcastle's (UoN) college structure — covering engineering, IT, nursing, business and education." },
+  { q: 'What is University of Newcastle assignment support?', a: "Academic support built around the University of Newcastle's (UoN) college structure — covering engineering, IT, nursing, business and education." },
   { q: 'Can you help with University of Newcastle engineering assignments?', a: 'Yes, including reports and technical writing across civil, structural and mining engineering — areas where UoN ranks in the world\'s top 200 (QS World University Rankings by Subject, 2026).' },
   { q: 'Do you support University of Newcastle nursing assignments?', a: 'Yes — nursing academic writing, case studies and health research support via the School of Nursing and Midwifery. This is academic writing support, not clinical advice.' },
   { q: 'Can you help with University of Newcastle IT assignments?', a: 'Yes, including computer science and information sciences coursework via the School of Computer and Information Sciences.' },
-  { q: 'Do you provide University of Newcastle business assignment help?', a: 'Yes, including postgraduate IT, Business and Accounting programs at the Sydney campus.' },
+  { q: 'Do you provide University of Newcastle business assignment support?', a: 'Yes, including postgraduate IT, Business and Accounting programs at the Sydney campus.' },
   { q: 'Can you help with University of Newcastle architecture assignments?', a: 'Yes, including academic writing and research support for the School of Architecture and Built Environment.' },
   { q: 'Do you support University of Newcastle Central Coast (Ourimbah) students?', a: 'Yes — support works the same whether you study at Callaghan, Newcastle City, Ourimbah, or Sydney.' },
   { q: 'Can you help with University of Newcastle education assignments?', a: 'Yes, including education reports and teaching-related coursework.' },
@@ -86,7 +88,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'University of Newcastle Assignment Help', item: 'https://www.stackassignment.com/universities/university-of-newcastle' },
+    { '@type': 'ListItem', position: 3, name: 'University of Newcastle Assignment Support', item: 'https://www.stackassignment.com/universities/university-of-newcastle' },
   ],
 }
 
@@ -98,7 +100,7 @@ export default function UniversityOfNewcastlePage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">University of Newcastle Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">University of Newcastle Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -107,7 +109,7 @@ export default function UniversityOfNewcastlePage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For University of Newcastle Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>University of Newcastle Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>University of Newcastle Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             University of Newcastle (UoN) students in Australia.
@@ -265,7 +267,7 @@ export default function UniversityOfNewcastlePage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

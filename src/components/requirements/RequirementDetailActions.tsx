@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Eye, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import RequirementPreviewModal from '@/components/requirements/RequirementPreviewModal';
+import { useRouteNavigate } from '@/lib/useRouteNavigate';
 
 interface RequirementDetailActionsProps {
   requirement: {
@@ -19,7 +19,7 @@ interface RequirementDetailActionsProps {
 }
 
 export default function RequirementDetailActions({ requirement }: RequirementDetailActionsProps) {
-  const router = useRouter();
+  const navigate = useRouteNavigate();
   const [showPreview, setShowPreview] = useState(false);
 
   const handlePreview = () => {
@@ -35,17 +35,21 @@ export default function RequirementDetailActions({ requirement }: RequirementDet
     }
   };
 
+  // Goes through useRouteNavigate rather than router.push. The order form reads
+  // these values out of `window.location.search` in a mount effect, and Next
+  // commits the new URL in an effect on AppRouter, which is an ancestor of the
+  // page — React runs child effects first, so a soft push would have the form
+  // read the URL of *this* page and arrive blank. useRouteNavigate does a full
+  // load whenever it is carrying data, which makes the search string
+  // authoritative before any component renders.
   const handleGetHelp = () => {
-    const params = new URLSearchParams();
-    params.set('subject', requirement.title);
-    params.set(
-      'description',
-      requirement.description || `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`
-    );
-    if (requirement.category) {
-      params.set('category', requirement.category);
-    }
-    router.push(`/order?${params.toString()}`);
+    navigate('order', {
+      subject: requirement.title,
+      description:
+        requirement.description ||
+        `Help with: ${requirement.title}\n\nRequirement file: ${requirement.fileName}`,
+      ...(requirement.category ? { category: requirement.category } : {}),
+    });
   };
 
   return (

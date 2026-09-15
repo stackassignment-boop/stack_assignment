@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
+import { region } from '@/lib/seo-config'
 
 interface PageProps {
   params: Promise<{
@@ -26,12 +27,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: `${service.title} - Service | Stack Assignment`,
       description: service.shortDescription || service.description || `Learn more about our ${service.title} service`,
-      keywords: [service.title, 'academic writing service', 'assignment help'].join(', '),
+      keywords: [service.title, 'academic tutoring Australia', 'academic editing Australia', 'assignment support'].join(', '),
+      alternates: { canonical: `https://www.stackassignment.com/services/${service.slug}` },
       openGraph: {
         title: service.title,
         description: service.shortDescription || service.description,
         url: `https://www.stackassignment.com/services/${service.slug}`,
         type: 'website',
+        locale: region.ogLocale,
         images: service.image ? [service.image] : [],
       },
     }

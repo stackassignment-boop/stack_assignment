@@ -113,6 +113,9 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
               href="tel:+919907300710"
               className="hidden sm:flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
             >
+              {/* TODO: same placeholder +91 (India) number flagged elsewhere
+                  (PricingPage phone placeholder, WhatsAppOrderButton) — swap
+                  for the real AU support line/number before launch. */}
               <Phone className="w-4 h-4" /> +91-99073-00710
             </a>
 
@@ -122,7 +125,10 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                 onClick={() => handleNav('order')}
                 className="relative bg-indigo-600 hover:bg-indigo-700 text-white"
               >
-              Order Now
+              {/* Route stays 'order' internally to avoid touching URLs/analytics,
+                  but the visible label now matches a booking flow, not a
+                  commission-a-document flow. */}
+              Book Now
             </Button>
             </div>
 
@@ -194,7 +200,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                       </div>
                       <div>
                         <p className="text-sm font-medium">Student</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">View samples & orders</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">View samples & bookings</p>
                       </div>
                     </button>
                     <button

@@ -41,7 +41,7 @@ export default function StudentLoginPage({ onNavigate, onLogin }: StudentLoginPa
     try {
       // Redirect to student dashboard after Google login
       await signIn('google', {
-        callbackUrl: '/?view=student-dashboard',
+        callbackUrl: '/student/dashboard',
       });
     } catch (err) {
       setError('An error occurred with Google login.');
@@ -71,7 +71,7 @@ export default function StudentLoginPage({ onNavigate, onLogin }: StudentLoginPa
             onLogin({ name: formData.email, email: formData.email });
           }
           // Redirect to dashboard
-          window.location.href = '/?view=student-dashboard';
+          window.location.href = '/student/dashboard';
         }
       } else {
         // Register

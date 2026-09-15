@@ -97,21 +97,41 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
   const [loading, setLoading] = useState(true);
   const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [urlPreviewSlug, setUrlPreviewSlug] = useState<string>('');
 
   useEffect(() => {
     fetchSamples();
   }, []);
 
-  // Auto-open preview when previewSlug is provided
+  // Read `?preview=` from the URL so a deep link opens the right sample.
+  //
+  // This is read in an effect rather than during render on purpose. `/samples`
+  // is statically prerendered, so anything read from the URL during render
+  // differs between the server HTML and the browser and produces a hydration
+  // mismatch — the exact bug that the old `/?view=` router had. Reading it after
+  // mount means both renders start identical and the modal opens a tick later.
+  //
+  // The prop still wins if a caller passes one; only the fallback is new. It is
+  // needed because these links used to arrive as `/?view=samples&preview=slug`
+  // and are now redirected to `/samples?preview=slug`, where nothing was
+  // supplying the prop.
   useEffect(() => {
-    if (previewSlug && samples.length > 0) {
-      const sampleToPreview = samples.find(s => s.slug === previewSlug);
+    const fromUrl = new URLSearchParams(window.location.search).get('preview');
+    if (fromUrl) setUrlPreviewSlug(fromUrl);
+  }, []);
+
+  const effectivePreviewSlug = previewSlug || urlPreviewSlug;
+
+  // Auto-open preview when a preview slug is provided
+  useEffect(() => {
+    if (effectivePreviewSlug && samples.length > 0) {
+      const sampleToPreview = samples.find(s => s.slug === effectivePreviewSlug);
       if (sampleToPreview) {
         setSelectedSample(sampleToPreview);
         setShowPreview(true);
       }
     }
-  }, [previewSlug, samples]);
+  }, [effectivePreviewSlug, samples]);
 
   const fetchSamples = async () => {
     try {

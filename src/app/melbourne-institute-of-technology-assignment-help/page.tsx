@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2,
@@ -13,22 +14,24 @@ import {
 import TrustBadges from '@/components/marketing/TrustBadges'
 
 export const metadata: Metadata = {
-  title: 'Melbourne Institute of Technology Assignment Help | Stack Assignment',
+  title: 'Melbourne Institute of Technology Assignment Support',
   description:
-    'Assignment and essay help for Melbourne Institute of Technology (MIT) students across business, IT, data analytics, and engineering — Melbourne and Sydney campuses.',
+    'Assignment support and essay feedback for Melbourne Institute of Technology (MIT) students across business, IT, data analytics, and engineering — Melbourne and Sydney campuses.',
   keywords: [
-    'Melbourne Institute of Technology assignment help',
-    'MIT Melbourne assignment help',
-    'MIT Sydney assignment help',
-    'Melbourne Institute of Technology essay help',
+    'Melbourne Institute of Technology assignment support',
+    'MIT Melbourne assignment support',
+    'MIT Sydney assignment support',
+    'Melbourne Institute of Technology essay feedback',
   ],
   openGraph: {
-    title: 'Melbourne Institute of Technology Assignment Help',
+    title: 'Melbourne Institute of Technology Assignment Support',
     description:
-      'Assignment help for Melbourne Institute of Technology students across business, IT, data analytics, and engineering.',
+      'Assignment support for Melbourne Institute of Technology students across business, IT, data analytics, and engineering.',
     url: 'https://www.stackassignment.com/melbourne-institute-of-technology-assignment-help',
     type: 'website',
+    locale: region.ogLocale,
   },
+  alternates: { canonical: 'https://www.stackassignment.com/melbourne-institute-of-technology-assignment-help' },
 }
 
 const campuses = ['Melbourne (Argus Building)', 'Sydney']
@@ -51,7 +54,7 @@ const faqs = [
   },
   {
     q: 'Can you follow the referencing style my unit outline specifies?',
-    a: "Yes. Referencing conventions can vary by unit and lecturer at MIT — upload your unit outline or assessment brief and your writer will match whatever style (APA, Harvard, or otherwise) it specifies.",
+    a: "Yes. Referencing conventions can vary by unit and lecturer at MIT — upload your unit outline or assessment brief and your tutor will match whatever style (APA, Harvard, or otherwise) it specifies.",
   },
   {
     q: 'Do you support both the Melbourne and Sydney campuses?',
@@ -59,7 +62,7 @@ const faqs = [
   },
   {
     q: "What about MIT's academic integrity policy?",
-    a: "Like most institutions, MIT has an academic integrity and plagiarism policy that's worth reading before ordering from any service, including ours. We provide model answers and reference material meant to help you understand a topic and structure your own original submission — what you submit needs to be your own work. See our Academic Integrity page for details.",
+    a: "Like most institutions, MIT has an academic integrity and plagiarism policy that's worth reading before engaging any service, including ours. To be direct about where we sit: we do not write, rewrite or supply work for submission, and we do not sell model answers or reference papers. We tutor, we edit drafts you have written, and we mark your work against the rubric so you know what to change. What you submit has to be your own. See our Academic Integrity page for details.",
   },
 ]
 
@@ -108,7 +111,7 @@ export default function MITAssignmentHelpPage() {
             className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
             style={{ fontFamily: 'Sora, sans-serif' }}
           >
-            Assignment Help for<br />MIT Melbourne &amp; Sydney Students
+            Assignment Support for<br />MIT Melbourne &amp; Sydney Students
           </h1>
 
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
@@ -211,7 +214,7 @@ export default function MITAssignmentHelpPage() {
               </div>
               <h3 className="font-bold text-lg mb-2">Unit-Outline Matched</h3>
               <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
-                Upload your unit outline or marking rubric and your writer follows it
+                Upload your unit outline or marking rubric and your tutor follows it
                 exactly, including whatever referencing style it specifies.
               </p>
             </div>
@@ -253,7 +256,7 @@ export default function MITAssignmentHelpPage() {
             <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">
               Academic Integrity policy
             </Link>{' '}
-            before ordering.
+            before you book.
           </p>
         </div>
       </section>

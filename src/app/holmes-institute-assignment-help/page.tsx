@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2,
@@ -13,22 +14,24 @@ import {
 import TrustBadges from '@/components/marketing/TrustBadges'
 
 export const metadata: Metadata = {
-  title: 'Holmes Institute Assignment Help | Stack Assignment',
+  title: 'Holmes Institute Assignment Support | Stack Assignment',
   description:
-    'Assignment and essay help for Holmes Institute students across Melbourne, Sydney, Brisbane, Gold Coast and Cairns — business, accounting, information systems and MBA.',
+    'Assignment support and essay feedback for Holmes Institute students across Melbourne, Sydney, Brisbane, Gold Coast and Cairns — business, accounting, information systems and MBA.',
   keywords: [
-    'Holmes Institute assignment help',
-    'Holmes Institute essay help',
-    'Holmes Institute MBA assignment help',
+    'Holmes Institute assignment support',
+    'Holmes Institute essay feedback',
+    'Holmes Institute MBA assignment support',
     'Holmes Institute Harvard referencing',
   ],
   openGraph: {
-    title: 'Holmes Institute Assignment Help',
+    title: 'Holmes Institute Assignment Support',
     description:
-      'Assignment help for Holmes Institute students across business, accounting, information systems and MBA programs.',
+      'Assignment support for Holmes Institute students across business, accounting, information systems and MBA programs.',
     url: 'https://www.stackassignment.com/holmes-institute-assignment-help',
     type: 'website',
+    locale: region.ogLocale,
   },
+  alternates: { canonical: 'https://www.stackassignment.com/holmes-institute-assignment-help' },
 }
 
 const campuses = ['Melbourne', 'Sydney', 'Brisbane', 'Gold Coast', 'Cairns']
@@ -45,11 +48,11 @@ const courseAreas = [
 const faqs = [
   {
     q: 'Do you follow Harvard referencing for Holmes assignments?',
-    a: "Yes — Holmes Institute coursework typically uses Harvard-style referencing, and it's a key part of your assessment criteria alongside SafeAssign originality checks. Our writers reference accordingly.",
+    a: "Yes — Holmes Institute coursework typically uses Harvard-style referencing, and it's a key part of your assessment criteria alongside SafeAssign originality checks. Our tutors and editors work to it and explain the rules as they go.",
   },
   {
     q: "Can you handle a specific unit like Holmes' HI-coded subjects?",
-    a: 'Yes — upload your unit outline or assessment brief (including group case study or individual report requirements) and your writer works directly from the marking rubric provided.',
+    a: 'Yes — upload your unit outline or assessment brief (including group case study or individual report requirements) and your tutor works directly from the marking rubric provided.',
   },
   {
     q: "Do you cover Holmes' MBA program specifically?",
@@ -57,7 +60,7 @@ const faqs = [
   },
   {
     q: "What about Holmes' Academic Integrity Module (AIM) and plagiarism policy?",
-    a: "Holmes requires students to complete an Academic Integrity Module in their first trimester, and academic misconduct is treated seriously in any form. It's worth completing that module and reading Holmes' policy before ordering from any service, including ours. We provide model answers and reference material meant to help you understand a topic and structure your own original submission — what you submit needs to be your own work. See our Academic Integrity page for details.",
+    a: "Holmes requires students to complete an Academic Integrity Module in their first trimester, and academic misconduct is treated seriously in any form. It's worth completing that module and reading Holmes' policy before engaging any service, including ours. To be direct about where we sit: we do not write, rewrite or supply work for submission, and we do not sell model answers or reference papers. We tutor, we edit drafts you have written, and we mark your work against the rubric so you know what to change. What you submit has to be your own. See our Academic Integrity page for details.",
   },
 ]
 
@@ -106,7 +109,7 @@ export default function HolmesAssignmentHelpPage() {
             className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
             style={{ fontFamily: 'Sora, sans-serif' }}
           >
-            Assignment Help for<br />Holmes Institute Students
+            Assignment Support for<br />Holmes Institute Students
           </h1>
 
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
@@ -210,7 +213,7 @@ export default function HolmesAssignmentHelpPage() {
               </div>
               <h3 className="font-bold text-lg mb-2">Rubric-Matched Work</h3>
               <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
-                Upload your unit outline or marking rubric and your writer follows it and
+                Upload your unit outline or marking rubric and your tutor follows it and
                 Holmes' Harvard referencing conventions exactly.
               </p>
             </div>
@@ -252,7 +255,7 @@ export default function HolmesAssignmentHelpPage() {
             <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">
               Academic Integrity policy
             </Link>{' '}
-            before ordering.
+            before you book.
           </p>
         </div>
       </section>

@@ -24,17 +24,21 @@ interface OrderDetails {
   createdAt: string;
 }
 
-// Currency options with conversion rates (base: INR)
+// Currency options with conversion rates (base: INR).
+//
+// ⚠ Rates are hardcoded and will drift — see the note in
+// src/app/api/admin/settings/route.ts. Ordered with AUD first so the dropdown
+// leads with the primary market.
 const CURRENCIES = {
-  INR: { symbol: '₹', name: 'Indian Rupee', rate: 1 },
-  USD: { symbol: '$', name: 'US Dollar', rate: 0.012 },
-  EUR: { symbol: '€', name: 'Euro', rate: 0.011 },
-  GBP: { symbol: '£', name: 'British Pound', rate: 0.0095 },
   AUD: { symbol: 'A$', name: 'Australian Dollar', rate: 0.018 },
+  NZD: { symbol: 'NZ$', name: 'New Zealand Dollar', rate: 0.020 },
+  GBP: { symbol: '£', name: 'British Pound', rate: 0.0095 },
+  USD: { symbol: '$', name: 'US Dollar', rate: 0.012 },
+  INR: { symbol: '₹', name: 'Indian Rupee', rate: 1 },
+  EUR: { symbol: '€', name: 'Euro', rate: 0.011 },
   CAD: { symbol: 'C$', name: 'Canadian Dollar', rate: 0.016 },
   AED: { symbol: 'د.إ', name: 'UAE Dirham', rate: 0.044 },
   SGD: { symbol: 'S$', name: 'Singapore Dollar', rate: 0.016 },
-  NZD: { symbol: 'NZ$', name: 'New Zealand Dollar', rate: 0.020 },
   ZAR: { symbol: 'R', name: 'South African Rand', rate: 0.22 },
 };
 
@@ -46,7 +50,10 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'bank' | 'upi'>('razorpay');
   const [copied, setCopied] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode>('USD');
+  // Was 'USD'. The checkout of an Australia-targeted site defaulted to US
+  // dollars, which contradicts the AUD prices quoted on /pricing and the AUD
+  // priceCurrency in the Offer structured data.
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode>('AUD');
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
 
   const formatPrice = (priceInINR: number, currency: CurrencyCode): string => {

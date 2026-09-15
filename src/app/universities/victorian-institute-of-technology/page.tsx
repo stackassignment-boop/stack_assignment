@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'Victorian Institute of Technology Assignment Help | VIT Academic Support',
+  title: 'Victorian Institute of Technology Assignment Support | VIT',
   description:
     'Academic support for VIT students in IT, business, MBA, cybersecurity, networking, software engineering, analytics, hospitality and more.',
   keywords: [
-    'Victorian Institute of Technology assignment help', 'VIT assignment help Australia', 'VIT assessment help',
-    'VIT academic support', 'VIT BITS assignment help', 'VIT MITS assignment help', 'VIT MBA assignment help',
-    'VIT business assignment help', 'VIT cybersecurity assignment help', 'VIT networking assignment help',
-    'VIT software engineering assignment help', 'VIT business analytics assignment help',
+    'Victorian Institute of Technology assignment support', 'VIT assignment support Australia', 'VIT assessment help',
+    'VIT academic support', 'VIT BITS assignment support', 'VIT MITS assignment support', 'VIT MBA assignment support',
+    'VIT business assignment support', 'VIT cybersecurity assignment support', 'VIT networking assignment support',
+    'VIT software engineering assignment support', 'VIT business analytics assignment support',
   ],
   openGraph: {
-    title: 'Victorian Institute of Technology Assignment Help | VIT Academic Support',
+    title: 'Victorian Institute of Technology Assignment Support | VIT',
     description: 'Academic support for VIT students in IT, business, MBA, cybersecurity, networking and more.',
     url: 'https://www.stackassignment.com/universities/victorian-institute-of-technology',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/victorian-institute-of-technology' },
 }
@@ -65,12 +67,12 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is Victorian Institute of Technology assignment help?', a: 'Academic support built around VIT\'s actual course structure — BITS, MITS, MBA, BBus and vocational qualifications, matched to their real specialisations.' },
+  { q: 'What is Victorian Institute of Technology assignment support?', a: 'Academic support built around VIT\'s actual course structure — BITS, MITS, MBA, BBus and vocational qualifications, matched to their real specialisations.' },
   { q: 'Can you help with VIT BITS assessments?', a: 'Yes, across all four BITS specialisations: AI & Analytics, Application Development, Cyber Security and Networking.' },
   { q: 'Can you help with VIT MITS?', a: 'Yes, across all four MITS specialisations: Software Engineering, Business Analytics, Information Systems and Cyber Security, plus the Graduate Diploma and Graduate Certificate pathways.' },
   { q: 'Do you provide VIT MBA assignment support?', a: 'Yes, across all five MBA specialisations: Finance, Information Systems, Leadership & Management, Tourism and Hospitality Management, and Project Management.' },
   { q: 'Can you help with VIT cybersecurity assessments?', a: 'Yes — both the BITS Cyber Security specialisation and MITS Cyber Security specialisation.' },
-  { q: 'Do you provide VIT networking assignment help?', a: 'Yes, including the BITS Networking specialisation.' },
+  { q: 'Do you provide VIT networking assignment support?', a: 'Yes, including the BITS Networking specialisation.' },
   { q: 'Can you help with VIT software engineering assessments?', a: 'Yes — the MITS Software Engineering specialisation, including programming and systems design assessments.' },
   { q: 'Do you support VIT business analytics assignments?', a: 'Yes, across both the MITS Business Analytics specialisation and general data analysis assessments.' },
   { q: 'Can you help with VIT Bachelor of Business assignments?', a: 'Yes, across BBus specialisations: International Business Management, Tourism and Hospitality Management, Accounting, HR Management, Marketing and Business Technology.' },
@@ -88,7 +90,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'Victorian Institute of Technology Assignment Help', item: 'https://www.stackassignment.com/universities/victorian-institute-of-technology' },
+    { '@type': 'ListItem', position: 3, name: 'Victorian Institute of Technology Assignment Support', item: 'https://www.stackassignment.com/universities/victorian-institute-of-technology' },
   ],
 }
 
@@ -100,7 +102,7 @@ export default function VITPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">Victorian Institute of Technology Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">Victorian Institute of Technology Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -109,7 +111,7 @@ export default function VITPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For Victorian Institute of Technology (VIT) Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Victorian Institute of Technology Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>Victorian Institute of Technology Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support for VIT students in IT, business, MBA, cybersecurity, networking,
             software engineering, analytics, hospitality and more.
@@ -201,7 +203,7 @@ export default function VITPage() {
 
       <section id="vit-mba" className="py-14 bg-gray-50 dark:bg-slate-900 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Award className="w-6 h-6 text-indigo-600" />VIT MBA Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Award className="w-6 h-6 text-indigo-600" />VIT MBA Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">Support across all five verified MBA specialisations, plus the Graduate Diploma (GDBA) and Graduate Certificate (GCBA) of Business Administration:</p>
           <div className="grid sm:grid-cols-2 gap-2">
             {['Finance', 'Information Systems', 'Leadership and Management', 'Tourism and Hospitality Management', 'Project Management'].map((s) => (
@@ -213,7 +215,7 @@ export default function VITPage() {
 
       <section id="vit-bbus" className="py-14 bg-white dark:bg-slate-950 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Briefcase className="w-6 h-6 text-indigo-600" />VIT Bachelor of Business (BBus) Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Briefcase className="w-6 h-6 text-indigo-600" />VIT Bachelor of Business (BBus) Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">Support across all six verified BBus specialisations, plus the Diploma of Business (DipBus):</p>
           <div className="grid sm:grid-cols-2 gap-2">
             {['International Business Management', 'Tourism and Hospitality Management', 'Accounting', 'Human Resource Management', 'Marketing', 'Business Technology'].map((s) => (
@@ -331,7 +333,7 @@ export default function VITPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

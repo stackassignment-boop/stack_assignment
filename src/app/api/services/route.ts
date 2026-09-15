@@ -11,7 +11,9 @@ const createServiceSchema = z.object({
   icon: z.string().optional(),
   image: z.string().url().optional().or(z.literal('')),
   features: z.array(z.string()).optional(),
-  pricing: z.record(z.unknown()).optional(),
+  // zod v4 removed the single-argument form of z.record(); the key schema is
+  // now required.
+  pricing: z.record(z.string(), z.unknown()).optional(),
   isActive: z.boolean().optional(),
   order: z.number().int().optional(),
 });
@@ -62,7 +64,7 @@ export async function POST(request: NextRequest) {
     const result = createServiceSchema.safeParse(body);
     
     if (!result.success) {
-      return apiError(result.error.errors[0].message, 400);
+      return apiError(result.error.issues[0]?.message ?? 'Invalid request', 400);
     }
     
     const data = result.data;

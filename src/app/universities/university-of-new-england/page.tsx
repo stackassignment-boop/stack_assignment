@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'University of New England Assignment Help | UNE Academic Support',
+  title: 'University of New England Assignment Support | UNE Tutoring',
   description:
     'Academic support and assessment guidance for University of New England (UNE) students — business, education, nursing, agriculture, science and law, mostly studying online.',
   keywords: [
-    'University of New England assignment help', 'UNE assignment help', 'UNE assessment help',
-    'University of New England academic support', 'UNE business assignment help',
-    'UNE education assignment help', 'UNE nursing assignment help', 'UNE agriculture assignment help',
-    'UNE online assignment help', 'UNE report writing help',
+    'University of New England assignment support', 'UNE assignment support', 'UNE assessment help',
+    'University of New England academic support', 'UNE business assignment support',
+    'UNE education assignment support', 'UNE nursing assignment support', 'UNE agriculture assignment support',
+    'UNE online assignment support', 'UNE report writing help',
   ],
   openGraph: {
-    title: 'University of New England Assignment Help | UNE Academic Support',
+    title: 'University of New England Assignment Support | UNE Tutoring',
     description: 'Academic support for UNE students across business, education, nursing, agriculture and science.',
     url: 'https://www.stackassignment.com/universities/university-of-new-england',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/university-of-new-england' },
 }
@@ -65,11 +67,11 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is University of New England assignment help?', a: "Academic support built around UNE's course structure — covering business, education, nursing, agriculture, science and law. UNE teaches over 85% of its students fully online." },
+  { q: 'What is University of New England assignment support?', a: "Academic support built around UNE's course structure — covering business, education, nursing, agriculture, science and law. UNE teaches over 85% of its students fully online." },
   { q: 'Can you help with UNE education assignments?', a: "Yes — UNE is one of Australia's largest providers of online teacher education, and we support education reports, lesson-plan related coursework and teaching case studies." },
   { q: 'Do you support UNE nursing assignments?', a: 'Yes — nursing academic writing, case studies and health research support. This is academic writing support, not clinical advice.' },
   { q: 'Can you help with UNE agriculture and science assignments?', a: "Yes, including agricultural science reports and research writing, relevant to coursework connected with UNE's SMART Farm research facility." },
-  { q: 'Do you provide UNE business assignment help?', a: 'Yes, including business reports and coursework, largely delivered through UNE\'s online study model.' },
+  { q: 'Do you provide UNE business assignment support?', a: 'Yes, including business reports and coursework, largely delivered through UNE\'s online study model.' },
   { q: 'Can you help with UNE online students specifically?', a: 'Yes — since the large majority of UNE students study fully online, our support is built around that experience by default.' },
   { q: 'Do you support UNE law and justice assignments?', a: 'Yes — academic writing, research and referencing support for law and justice coursework. This is not legal advice.' },
   { q: 'Can you help with UNE rural medicine and health coursework?', a: 'Yes — academic writing and research support for coursework via the School of Rural Medicine. This is not clinical or medical advice.' },
@@ -86,7 +88,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'University of New England Assignment Help', item: 'https://www.stackassignment.com/universities/university-of-new-england' },
+    { '@type': 'ListItem', position: 3, name: 'University of New England Assignment Support', item: 'https://www.stackassignment.com/universities/university-of-new-england' },
   ],
 }
 
@@ -98,7 +100,7 @@ export default function UniversityOfNewEnglandPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">University of New England Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">University of New England Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -107,7 +109,7 @@ export default function UniversityOfNewEnglandPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For University of New England (UNE) Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>University of New England Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>University of New England Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             UNE students, wherever you're studying from.
@@ -263,7 +265,7 @@ export default function UniversityOfNewEnglandPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

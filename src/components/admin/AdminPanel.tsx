@@ -227,23 +227,26 @@ export default function AdminPanel() {
 
   // Settings state
   const [currencySettings, setCurrencySettings] = useState({
-    defaultCurrency: 'USD',
+    defaultCurrency: 'AUD',
     currencySymbol: '$',
     currencyRate: 0.012,
   });
   const [savingCurrency, setSavingCurrency] = useState(false);
 
-  // Available currencies
+  // Available currencies. AUD first — this is a fourth hand-maintained copy of
+  // the same table (the others are in the two settings API routes and
+  // PaymentPage), so they can and do drift apart. Worth consolidating into a
+  // single exported constant.
   const AVAILABLE_CURRENCIES = [
+    { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 0.018 },
+    { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', rate: 0.020 },
+    { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.0095 },
     { code: 'USD', symbol: '$', name: 'US Dollar', rate: 0.012 },
     { code: 'INR', symbol: '₹', name: 'Indian Rupee', rate: 1 },
     { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.011 },
-    { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.0095 },
-    { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 0.018 },
     { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', rate: 0.016 },
     { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', rate: 0.044 },
     { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', rate: 0.016 },
-    { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', rate: 0.020 },
     { code: 'ZAR', symbol: 'R', name: 'South African Rand', rate: 0.22 },
   ];
 
@@ -828,7 +831,7 @@ export default function AdminPanel() {
   const formatPrice = (price: number) => {
     // Convert INR to selected currency using stored rate
     const convertedPrice = price * currencySettings.currencyRate;
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-AU', {
       style: 'currency',
       currency: currencySettings.defaultCurrency,
     }).format(convertedPrice);
@@ -863,7 +866,7 @@ export default function AdminPanel() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
+    return new Date(dateString).toLocaleDateString('en-AU', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -1540,7 +1543,7 @@ export default function AdminPanel() {
                     { id: 'sitemap', title: 'Sitemap.xml', status: 'completed', description: 'Auto-generated sitemap for search engines', link: '/sitemap.xml' },
                     { id: 'robots', title: 'Robots.txt', status: 'completed', description: 'Configured for search engine crawlers', link: '/robots.txt' },
                     { id: 'meta-tags', title: 'Meta Tags', status: 'completed', description: 'Title, description, keywords configured', link: null },
-                    { id: 'open-graph', title: 'Open Graph Image', status: 'completed', description: 'Social media sharing optimized', link: '/opengraph-image' },
+                    { id: 'open-graph', title: 'Open Graph Image', status: 'completed', description: 'Social media sharing optimised', link: '/opengraph-image' },
                     { id: 'structured-data', title: 'Structured Data (JSON-LD)', status: 'completed', description: 'Schema.org markup for rich snippets', link: null },
                     { id: 'google-verification', title: 'Google Search Console', status: 'completed', description: 'Verified via Domain Provider', link: 'https://search.google.com/search-console' },
                     { id: 'bing-verification', title: 'Bing Webmaster Tools', status: 'completed', description: 'Verified - Sitemap submitted', link: 'https://www.bing.com/webmasters' },
@@ -1860,7 +1863,7 @@ export default function AdminPanel() {
                   Google Analytics 4
                 </CardTitle>
                 <CardDescription>
-                  Track website traffic and user behavior
+                  Track website traffic and user behaviour
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">

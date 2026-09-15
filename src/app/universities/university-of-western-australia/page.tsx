@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,19 +8,20 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'University of Western Australia Assignment Help | UWA Academic Support',
+  title: 'University of Western Australia Assignment Support | UWA',
   description:
     'Academic support and assessment guidance for University of Western Australia (UWA) students in Perth — computer science, engineering, business, law and science.',
   keywords: [
-    'University of Western Australia assignment help', 'UWA assignment help', 'UWA assessment help',
-    'UWA academic support', 'UWA computer science assignment help', 'UWA business assignment help',
-    'UWA engineering assignment help', 'UWA accounting assignment help', 'UWA report writing help',
+    'University of Western Australia assignment support', 'UWA assignment support', 'UWA assessment help',
+    'UWA academic support', 'UWA computer science assignment support', 'UWA business assignment support',
+    'UWA engineering assignment support', 'UWA accounting assignment support', 'UWA report writing help',
   ],
   openGraph: {
-    title: 'University of Western Australia Assignment Help | UWA Academic Support',
+    title: 'University of Western Australia Assignment Support | UWA',
     description: 'Academic support for UWA students across computer science, engineering, business, law and science.',
     url: 'https://www.stackassignment.com/universities/university-of-western-australia',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/university-of-western-australia' },
 }
@@ -62,7 +64,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is University of Western Australia assignment help?', a: "Academic support built around UWA's course structure — covering computer science, engineering, business, law and science." },
+  { q: 'What is University of Western Australia assignment support?', a: "Academic support built around UWA's course structure — covering computer science, engineering, business, law and science." },
   { q: 'Can you help with UWA computer science assignments?', a: 'Yes, including the Bachelor of Advanced Computer Science (Honours) and its Artificial Intelligence, Cybersecurity, and Quantum Computing specialisations.' },
   { q: 'Do you support UWA engineering assignments?', a: 'Yes, including reports and technical writing for the Bachelor and Master of Professional Engineering, including Software Engineering.' },
   { q: 'Can you help with UWA business assignments?', a: 'Yes, across UWA Business School disciplines: Accounting and Finance, Economics, Management and Organisations, and Marketing.' },
@@ -83,7 +85,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'University of Western Australia Assignment Help', item: 'https://www.stackassignment.com/universities/university-of-western-australia' },
+    { '@type': 'ListItem', position: 3, name: 'University of Western Australia Assignment Support', item: 'https://www.stackassignment.com/universities/university-of-western-australia' },
   ],
 }
 
@@ -95,7 +97,7 @@ export default function UWAPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">University of Western Australia Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">University of Western Australia Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -104,7 +106,7 @@ export default function UWAPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For University of Western Australia (UWA) Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>University of Western Australia Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>University of Western Australia Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             UWA students in Perth.
@@ -172,7 +174,7 @@ export default function UWAPage() {
 
       <section id="uwa-cs" className="py-14 bg-gray-50 dark:bg-slate-900 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />UWA Computer Science Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />UWA Computer Science Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">Support across the Bachelor of Advanced Computer Science (Honours) [BH008] specialisations:</p>
           <div className="grid sm:grid-cols-3 gap-2">
             {['Artificial Intelligence', 'International Cybersecurity Computing and Data Science', 'Quantum Computing'].map((s) => (
@@ -184,7 +186,7 @@ export default function UWAPage() {
 
       <section id="uwa-business" className="py-14 bg-white dark:bg-slate-950 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><DollarSign className="w-6 h-6 text-indigo-600" />UWA Business Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><DollarSign className="w-6 h-6 text-indigo-600" />UWA Business Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">
             UWA Business School (established 1911) covers four disciplines — support available across all four:
           </p>
@@ -287,7 +289,7 @@ export default function UWAPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

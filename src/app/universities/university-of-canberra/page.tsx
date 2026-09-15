@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,20 +8,21 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'University of Canberra Assignment Help | UC Academic Support',
+  title: 'University of Canberra Assignment Support | UC Tutoring',
   description:
     'Academic support and assessment guidance for University of Canberra (UC) students — IT, cybersecurity, business, health, education and communication.',
   keywords: [
-    'University of Canberra assignment help', 'UC assignment help', 'UC assessment help',
-    'University of Canberra academic support', 'UC IT assignment help', 'UC cybersecurity assignment help',
-    'University of Canberra business assignment help', 'UC data science assignment help',
+    'University of Canberra assignment support', 'UC assignment support', 'UC assessment help',
+    'University of Canberra academic support', 'UC IT assignment support', 'UC cybersecurity assignment support',
+    'University of Canberra business assignment support', 'UC data science assignment support',
     'University of Canberra report writing help',
   ],
   openGraph: {
-    title: 'University of Canberra Assignment Help | UC Academic Support',
+    title: 'University of Canberra Assignment Support | UC Tutoring',
     description: 'Academic support for University of Canberra students across IT, cybersecurity, business, health and education.',
     url: 'https://www.stackassignment.com/universities/university-of-canberra',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/university-of-canberra' },
 }
@@ -62,12 +64,12 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is University of Canberra assignment help?', a: "Academic support built around UC's course structure — covering IT, cybersecurity, business, health, education and communication." },
+  { q: 'What is University of Canberra assignment support?', a: "Academic support built around UC's course structure — covering IT, cybersecurity, business, health, education and communication." },
   { q: 'Can you help with UC IT assignments?', a: 'Yes, across all four Bachelor of IT majors: Artificial Intelligence and Robotics, Cloud Computing and the Internet of Things, Cybersecurity, and Data Science.' },
   { q: 'Can you help with UC cybersecurity assessments?', a: 'Yes, including units covering information security and network engineering, plus the postgraduate Graduate Certificate in Cyber Security Management.' },
   { q: 'Do you support UC data science assignments?', a: 'Yes, including data analytics and the Data Science major within the Bachelor of IT.' },
   { q: 'Can you help with UC business assignments?', a: 'Yes, including business reports and coursework via the Faculty of Business, Government & Law.' },
-  { q: 'Do you provide UC networking assignment help?', a: 'Yes, including units like Introduction to Network Engineering and Enterprise and Cloud Computing.' },
+  { q: 'Do you provide UC networking assignment support?', a: 'Yes, including units like Introduction to Network Engineering and Enterprise and Cloud Computing.' },
   { q: 'Can you help with UC AI and robotics assessments?', a: 'Yes, including coursework within the Artificial Intelligence and Robotics major.' },
   { q: 'Do you support UC health-related coursework?', a: 'Yes — academic writing and research support. This is not clinical or medical advice.' },
   { q: 'Do you provide UC proofreading and referencing support?', a: 'Yes — proofreading, editing and referencing across APA, Harvard and other styles, matched to your specific unit.' },
@@ -83,7 +85,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'University of Canberra Assignment Help', item: 'https://www.stackassignment.com/universities/university-of-canberra' },
+    { '@type': 'ListItem', position: 3, name: 'University of Canberra Assignment Support', item: 'https://www.stackassignment.com/universities/university-of-canberra' },
   ],
 }
 
@@ -95,7 +97,7 @@ export default function UniversityOfCanberraPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">University of Canberra Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">University of Canberra Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -104,7 +106,7 @@ export default function UniversityOfCanberraPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For University of Canberra (UC) Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>University of Canberra Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>University of Canberra Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             University of Canberra students.
@@ -171,7 +173,7 @@ export default function UniversityOfCanberraPage() {
 
       <section id="uc-it" className="py-16 bg-gray-50 dark:bg-slate-900 scroll-mt-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><ShieldAlert className="w-6 h-6 text-indigo-600" />UC IT & Cybersecurity Assignment Help</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><ShieldAlert className="w-6 h-6 text-indigo-600" />UC IT & Cybersecurity Assignment Support</h2>
           <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-4">
             Verified units from UC's School of Information Technology & Systems:
           </p>
@@ -298,7 +300,7 @@ export default function UniversityOfCanberraPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2, MapPin, FileText, ShieldCheck, GraduationCap, MessageCircle, Code2,
@@ -7,19 +8,20 @@ import {
 import { StructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'UniSC Assignment Help | University of the Sunshine Coast Academic Support',
+  title: 'UniSC Assignment Support | University of the Sunshine Coast',
   description:
     'Academic support and assessment guidance for University of the Sunshine Coast (UniSC) students — business, IT, health, nursing, education and engineering.',
   keywords: [
-    'UniSC assignment help', 'University of the Sunshine Coast assignment help', 'UniSC assessment help',
-    'UniSC academic support', 'UniSC IT assignment help', 'UniSC nursing assignment help',
-    'UniSC business assignment help', 'UniSC health assignment help', 'UniSC report writing help',
+    'UniSC assignment support', 'University of the Sunshine Coast assignment support', 'UniSC assessment help',
+    'UniSC academic support', 'UniSC IT assignment support', 'UniSC nursing assignment support',
+    'UniSC business assignment support', 'UniSC health assignment support', 'UniSC report writing help',
   ],
   openGraph: {
-    title: 'UniSC Assignment Help | University of the Sunshine Coast Academic Support',
+    title: 'UniSC Assignment Support | University of the Sunshine Coast',
     description: 'Academic support for UniSC students across business, IT, health, nursing and education.',
     url: 'https://www.stackassignment.com/universities/university-of-sunshine-coast',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: { canonical: 'https://www.stackassignment.com/universities/university-of-sunshine-coast' },
 }
@@ -65,7 +67,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is UniSC assignment help?', a: "Academic support built around the University of the Sunshine Coast's (UniSC) course structure — covering business, IT, health, nursing, education and engineering." },
+  { q: 'What is UniSC assignment support?', a: "Academic support built around the University of the Sunshine Coast's (UniSC) course structure — covering business, IT, health, nursing, education and engineering." },
   { q: 'Can you help with UniSC IT assignments?', a: 'Yes, including information technology coursework via the Business, IT & Tourism discipline.' },
   { q: 'Do you support UniSC nursing assignments?', a: 'Yes — nursing academic writing, case studies and health research support. This is academic writing support, not clinical advice.' },
   { q: 'Can you help with UniSC business assignments?', a: 'Yes, including business reports and coursework across UniSC\'s business programs.' },
@@ -86,7 +88,7 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stackassignment.com' },
     { '@type': 'ListItem', position: 2, name: 'Universities', item: 'https://www.stackassignment.com/universities' },
-    { '@type': 'ListItem', position: 3, name: 'UniSC Assignment Help', item: 'https://www.stackassignment.com/universities/university-of-sunshine-coast' },
+    { '@type': 'ListItem', position: 3, name: 'UniSC Assignment Support', item: 'https://www.stackassignment.com/universities/university-of-sunshine-coast' },
   ],
 }
 
@@ -98,7 +100,7 @@ export default function UniSCPage() {
       <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">UniSC Assignment Help</span>
+        <span className="text-gray-700 dark:text-gray-300">UniSC Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
@@ -107,7 +109,7 @@ export default function UniSCPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm"><GraduationCap className="w-4 h-4" />For University of the Sunshine Coast (UniSC) Students</div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>UniSC Assignment Help</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>UniSC Assignment Support</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading and research assistance for
             University of the Sunshine Coast students.
@@ -264,7 +266,7 @@ export default function UniSCPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before ordering.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { region } from '@/lib/seo-config'
 import Link from 'next/link'
 import {
   CheckCircle2,
@@ -26,29 +27,30 @@ import { StructuredData } from '@/components/seo/StructuredData'
 // SEO metadata
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'CQUniversity Assignment Help Australia | Stack Assignment',
+  title: 'CQUniversity Assignment Support Australia | Stack Assignment',
   description:
     'Academic support, assessment guidance, proofreading and research assistance for CQUniversity (CQU) students across Australia — business, nursing, engineering, education and IT.',
   keywords: [
-    'CQUniversity assignment help',
-    'CQU assignment help',
-    'CQUniversity assignment help Australia',
+    'CQUniversity assignment support',
+    'CQU assignment support',
+    'CQUniversity assignment support Australia',
     'CQU assessment help',
     'CQUniversity assessment help',
     'CQU academic support',
     'CQU academic writing help',
     'CQU report writing help',
-    'CQU essay help',
+    'CQU essay feedback',
     'CQU case study help',
     'CQU proofreading',
     'CQU referencing help',
   ],
   openGraph: {
-    title: 'CQUniversity Assignment Help Australia | Stack Assignment',
+    title: 'CQUniversity Assignment Support Australia | Stack Assignment',
     description:
       'Academic support, assessment guidance and referencing help for CQUniversity students across Australia.',
     url: 'https://www.stackassignment.com/universities/cquniversity',
     type: 'website',
+    locale: region.ogLocale,
   },
   alternates: {
     canonical: 'https://www.stackassignment.com/universities/cquniversity',
@@ -142,7 +144,7 @@ const studentResources = [
 ]
 
 const faqs = [
-  { q: 'What is CQU assignment help?', a: "Academic support built around CQUniversity's courses and assessment style — covering business, nursing, engineering, education and IT subjects, plus referencing and proofreading support." },
+  { q: 'What is CQU assignment support?', a: "Academic support built around CQUniversity's courses and assessment style — covering business, nursing, engineering, education and IT subjects, plus referencing and proofreading support." },
   { q: 'Do you provide CQUniversity assessment support?', a: 'Yes — support for essays, reports, case studies, research papers, presentations and data analysis assessments, matched to your unit outline and marking rubric.' },
   { q: 'Can you help with CQU business assignments?', a: 'Yes, including business reports, business analysis, management, strategy and operations assessments.' },
   { q: 'Do you provide CQU nursing academic support?', a: 'Yes — nursing academic writing, case studies, health research and literature reviews. This is academic writing support only, not clinical advice or real-world patient care guidance.' },
@@ -189,7 +191,7 @@ export default function CQUniversityPage() {
             For CQUniversity (CQU) Students
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
-            CQUniversity Assignment Help Australia
+            CQUniversity Assignment Support Australia
           </h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
             Academic support, assessment guidance, proofreading, research assistance and study
@@ -616,7 +618,7 @@ export default function CQUniversityPage() {
           <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">
             Read our full{' '}
             <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link>{' '}
-            before ordering.
+            before you book.
           </p>
         </div>
       </section>

@@ -1,17 +1,22 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { region } from '@/lib/seo-config';
 
-// Available currencies with conversion rates (base: INR)
+// Available currencies, with conversion rates expressed against a base of INR.
+//
+// ⚠ These rates are hardcoded and will drift — see the note in
+// src/app/api/admin/settings/route.ts. AUD is listed first so that any `[0]`
+// fallback resolves to the primary market rather than to the US dollar.
 const AVAILABLE_CURRENCIES = [
+  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 0.018 },
+  { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', rate: 0.020 },
+  { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.0095 },
   { code: 'USD', symbol: '$', name: 'US Dollar', rate: 0.012 },
   { code: 'INR', symbol: '₹', name: 'Indian Rupee', rate: 1 },
   { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.011 },
-  { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.0095 },
-  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 0.018 },
   { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', rate: 0.016 },
   { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', rate: 0.044 },
   { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', rate: 0.016 },
-  { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', rate: 0.020 },
   { code: 'ZAR', symbol: 'R', name: 'South African Rand', rate: 0.22 },
 ];
 
@@ -22,9 +27,14 @@ export async function GET() {
       where: { key: 'defaultCurrency' },
     });
     
-    // Default to USD
-    const defaultCurrency = 'USD';
-    const defaultCurrencyInfo = AVAILABLE_CURRENCIES[0];
+    // Default to AUD: Australia is the primary market, so an AU visitor
+    // should see Australian dollars without having to switch currency.
+    // Looked up by code rather than by array index — the previous
+    // `AVAILABLE_CURRENCIES[0]` only happened to be USD, so reordering the
+    // list would have silently paired the wrong symbol with the code.
+    const defaultCurrency = region.currency;
+    const defaultCurrencyInfo =
+      AVAILABLE_CURRENCIES.find((c) => c.code === defaultCurrency) ?? AVAILABLE_CURRENCIES[0];
 
     if (!setting) {
       return NextResponse.json({ 
@@ -52,10 +62,10 @@ export async function GET() {
     console.error('Error fetching public settings:', error);
     return NextResponse.json({ 
       currency: {
-        code: 'USD',
-        symbol: '$',
-        rate: 0.012,
-        name: 'US Dollar',
+        code: 'AUD',
+        symbol: 'A$',
+        rate: 0.018,
+        name: 'Australian Dollar',
       }
     });
   }

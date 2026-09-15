@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     const result = registerSchema.safeParse(body);
     if (!result.success) {
-      return apiError(result.error.errors[0].message, 400);
+      return apiError(result.error.issues[0]?.message ?? 'Invalid request', 400);
     }
     
     const { name, email, password, phone } = result.data;

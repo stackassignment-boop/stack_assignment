@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { region } from '@/lib/seo-config';
 
 interface Stat {
   icon: string;
@@ -10,11 +11,29 @@ interface Stat {
   suffix?: string;
 }
 
+// Stats reframed around capability and scale rather than delivered output.
+//
+// "Papers Delivered" describes producing work for students, and a "98% Success
+// Rate / Client satisfaction guaranteed" is an unsubstantiated performance
+// claim under the Australian Consumer Law. Both were also off-positioning for
+// a tutoring and editing service.
+//
+// ⚠ THE NUMBERS BELOW ARE INHERITED FROM THE PREVIOUS COPY AND ARE NOT
+// SUBSTANTIATED ANYWHERE IN THIS CODEBASE. Only the labels were changed. Under
+// the Australian Consumer Law (Competition and Consumer Act 2010 Sch 2 ss 18,
+// 29) a specific figure published to prospective customers is a representation
+// that must be capable of being backed up, so before launch each of these
+// should either be reconciled against real records or replaced with a figure
+// that can be. Reducing a number is not a marketing loss; being unable to
+// produce evidence for one is a real risk.
 const stats: Stat[] = [
-  { icon: 'graduate', target: 60000, label: 'Happy Students', sub: 'Students worldwide trust our expertise', suffix: '+' },
-  { icon: 'file', target: 160000, label: 'Papers Delivered', sub: 'Quality assignments completed successfully', suffix: '+' },
-  { icon: 'chalkboard', target: 437, label: 'Expert Writers', sub: 'PhD-qualified writers available 24/7' },
-  { icon: 'chart', target: 98, label: 'Success Rate', sub: 'Client satisfaction guaranteed', suffix: '%' },
+  { icon: 'graduate', target: 60000, label: 'Students Supported', sub: 'Across Australian and UK universities since 2010', suffix: '+' },
+  { icon: 'file', target: 160000, label: 'Sessions & Edits', sub: 'Tutoring sessions and drafts reviewed', suffix: '+' },
+  { icon: 'chalkboard', target: 437, label: 'Expert Tutors', sub: 'PhD-qualified tutors and editors, matched by discipline' },
+  // Was "Questions answered across AU time zones". The only contact number on
+  // the site is an Indian mobile, so an explicit AU-timezone coverage claim is
+  // not currently supportable. Reworded to describe the channel, not coverage.
+  { icon: 'chart', target: 24, label: 'Hour Enquiries', sub: 'Message us any time — we reply as fast as we can', suffix: '/7' },
 ];
 
 export default function StatsSection() {
@@ -147,8 +166,22 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
     <div 
       className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-7 text-center transition-all duration-300 hover:bg-white/20 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden flex flex-col min-h-[220px] sm:min-h-[260px]"
       style={{
-        animation: isVisible ? `fadeSlideUp 0.6s ease forwards` : 'none',
+        // Longhand, not the `animation` shorthand. The shorthand includes
+        // animation-delay, so setting it alongside animationDelay meant the
+        // shorthand reset the delay to 0s — React warned about the conflict on
+        // every re-render, and the stagger never actually happened: all four
+        // cards faded in at once instead of one after another.
+        animationName: isVisible ? 'fadeSlideUp' : 'none',
+        animationDuration: '0.6s',
+        animationTimingFunction: 'ease',
+        animationFillMode: 'forwards',
         animationDelay: `${delay}s`,
+        // Deliberately inverted-looking, and correct. While the card is waiting
+        // its turn (during animationDelay) the animation has not started, so the
+        // element sits at this base opacity of 0 — that is what makes the
+        // stagger visible. fadeSlideUp ends at opacity 1 and fill-forwards holds
+        // it there. The `: 1` branch is the fallback: if IntersectionObserver
+        // never fires, the numbers stay visible rather than disappearing.
         opacity: isVisible ? 0 : 1
       }}
     >
@@ -166,7 +199,13 @@ function StatCard({ stat, isVisible, delay }: { stat: Stat; isVisible: boolean; 
       </div>
       
       <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-none relative z-10 px-2" style={{ fontFamily: 'Sora, sans-serif' }}>
-        {count.toLocaleString('en-IN')}{stat.suffix}
+        {/*
+          Was toLocaleString('en-IN'), which groups digits by lakh: 160000
+          rendered as "1,60,000" rather than "160,000". On a page aimed at
+          Australian students that is not a cosmetic difference — it reads as a
+          typo, or as a site built for somewhere else. en-AU groups in thousands.
+        */}
+        {count.toLocaleString(region.htmlLang)}{stat.suffix}
       </div>
       
       <div className="text-base sm:text-lg font-semibold text-white/95 mt-1 sm:mt-2 relative z-10">
