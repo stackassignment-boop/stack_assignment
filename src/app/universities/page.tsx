@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { GraduationCap, MapPin } from 'lucide-react'
-import MainLayout from '@/components/layout/MainLayout'
 import { universities } from '@/data/universities'
 import { region, generateBreadcrumbSchema } from '@/lib/seo-config'
 
@@ -86,91 +85,89 @@ export default function UniversitiesIndexPage() {
   })).filter((g) => g.items.length > 0)
 
   return (
-    <MainLayout>
-      <main className="flex-grow">
-        {/*
-          This page exists partly to consolidate: 27 university pages previously
-          had no hub linking them together, so each depended entirely on its own
-          backlinks. A hub gives Google a single crawlable entry point and lets
-          link equity flow between siblings.
-        */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              generateBreadcrumbSchema([
-                { name: 'Home', url: 'https://www.stackassignment.com' },
-                { name: 'Universities', url },
-              ])
-            ),
-          }}
-        />
+    <main className="flex-grow">
+      {/*
+        This page exists partly to consolidate: 27 university pages previously
+        had no hub linking them together, so each depended entirely on its own
+        backlinks. A hub gives Google a single crawlable entry point and lets
+        link equity flow between siblings.
+      */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            generateBreadcrumbSchema([
+              { name: 'Home', url: 'https://www.stackassignment.com' },
+              { name: 'Universities', url },
+            ])
+          ),
+        }}
+      />
 
-        <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-16 md:py-20">
-          <div className="max-w-5xl mx-auto px-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/30 px-4 py-1.5 text-sm font-semibold mb-5">
-              <GraduationCap className="h-4 w-4" />
-              {all.length} institutions
-            </div>
-            <h1
-              className="text-4xl md:text-5xl font-bold mb-4"
-              style={{ fontFamily: 'Sora, sans-serif' }}
-            >
-              Assignment support, by university
-            </h1>
-            <p className="text-lg md:text-xl text-white/90 max-w-2xl">
-              Marking rubrics, referencing styles and unit structures differ between institutions.
-              Pick yours to see how our tutoring and editing maps to the way your work is actually
-              assessed.
-            </p>
+      <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-16 md:py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/30 px-4 py-1.5 text-sm font-semibold mb-5">
+            <GraduationCap className="h-4 w-4" />
+            {all.length} institutions
           </div>
-        </section>
-
-        <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
-          {grouped.map((group) => (
-            <section key={group.country} className="mb-12 last:mb-0">
-              <h2
-                className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-slate-100 mb-5"
-                style={{ fontFamily: 'Sora, sans-serif' }}
-              >
-                <MapPin className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                {group.country}
-                <span className="text-base font-normal text-gray-500 dark:text-slate-400">
-                  ({group.items.length})
-                </span>
-              </h2>
-              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {group.items.map((u) => (
-                  <li key={u.href}>
-                    <Link
-                      href={u.href}
-                      className="block h-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3.5 font-medium text-gray-900 dark:text-slate-100 hover:border-indigo-400 hover:shadow-md dark:hover:border-indigo-500 transition-all"
-                    >
-                      {u.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
-
-          <p className="mt-4 text-sm text-gray-600 dark:text-slate-400">
-            Not listed? Our tutors and editors work across Australian and UK institutions
-            generally &mdash;{' '}
-            <Link href="/contact" className="text-indigo-600 dark:text-indigo-400 hover:underline">
-              tell us your university and unit
-            </Link>{' '}
-            and we will match you. You can also try the{' '}
-            <Link
-              href="/tools/wam-calculator"
-              className="text-indigo-600 dark:text-indigo-400 hover:underline"
-            >
-              free WAM calculator
-            </Link>
-            .
+          <h1
+            className="text-4xl md:text-5xl font-bold mb-4"
+            style={{ fontFamily: 'Sora, sans-serif' }}
+          >
+            Assignment support, by university
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 max-w-2xl">
+            Marking rubrics, referencing styles and unit structures differ between institutions.
+            Pick yours to see how our tutoring and editing maps to the way your work is actually
+            assessed.
           </p>
         </div>
-      </main>
-    </MainLayout>
+      </section>
+
+      <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
+        {grouped.map((group) => (
+          <section key={group.country} className="mb-12 last:mb-0">
+            <h2
+              className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-slate-100 mb-5"
+              style={{ fontFamily: 'Sora, sans-serif' }}
+            >
+              <MapPin className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+              {group.country}
+              <span className="text-base font-normal text-gray-500 dark:text-slate-400">
+                ({group.items.length})
+              </span>
+            </h2>
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {group.items.map((u) => (
+                <li key={u.href}>
+                  <Link
+                    href={u.href}
+                    className="block h-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3.5 font-medium text-gray-900 dark:text-slate-100 hover:border-indigo-400 hover:shadow-md dark:hover:border-indigo-500 transition-all"
+                  >
+                    {u.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+
+        <p className="mt-4 text-sm text-gray-600 dark:text-slate-400">
+          Not listed? Our tutors and editors work across Australian and UK institutions
+          generally &mdash;{' '}
+          <Link href="/contact" className="text-indigo-600 dark:text-indigo-400 hover:underline">
+            tell us your university and unit
+          </Link>{' '}
+          and we will match you. You can also try the{' '}
+          <Link
+            href="/tools/wam-calculator"
+            className="text-indigo-600 dark:text-indigo-400 hover:underline"
+          >
+            free WAM calculator
+          </Link>
+          .
+        </p>
+      </div>
+    </main>
   )
 }

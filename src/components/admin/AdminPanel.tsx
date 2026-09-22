@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import SimilarityCheckAdmin from '@/components/admin/SimilarityCheckAdmin';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Table, 
@@ -53,6 +54,7 @@ import {
   Share2,
   Code,
   FileCheck,
+  FileSearch,
   Upload,
   Download,
   Edit2,
@@ -957,7 +959,7 @@ export default function AdminPanel() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid grid-cols-4 sm:grid-cols-7 w-full max-w-3xl gap-1">
+          <TabsList className="grid grid-cols-4 sm:grid-cols-5 w-full max-w-3xl gap-1">
             <TabsTrigger value="dashboard" className="flex items-center gap-1 sm:gap-2">
               <LayoutDashboard className="h-4 w-4" />
               <span className="hidden sm:inline">Dashboard</span>
@@ -985,6 +987,10 @@ export default function AdminPanel() {
             <TabsTrigger value="requirements" className="flex items-center gap-1 sm:gap-2">
               <FileCheck className="h-4 w-4" />
               <span className="hidden sm:inline">Requirements</span>
+            </TabsTrigger>
+            <TabsTrigger value="similarity" className="flex items-center gap-1 sm:gap-2">
+              <FileSearch className="h-4 w-4" />
+              <span className="hidden sm:inline">Similarity</span>
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-1 sm:gap-2">
               <Settings className="h-4 w-4" />
@@ -2018,6 +2024,11 @@ export default function AdminPanel() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Similarity Checks Tab */}
+          <TabsContent value="similarity" className="space-y-6">
+            <SimilarityCheckAdmin />
           </TabsContent>
 
           {/* Settings Tab */}

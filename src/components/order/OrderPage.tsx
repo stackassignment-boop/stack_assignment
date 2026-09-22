@@ -61,12 +61,29 @@ function splitPhone(raw: string): { dialCode: string | null; nationalNumber: str
   return { dialCode: null, nationalNumber: trimmed };
 }
 
+// The four services offered, in tab order. Single source of truth: the tab
+// strip renders from this, and the `?service=` URL parameter is validated
+// against it, so the two can never drift apart.
+const ORDER_SERVICES = [
+  { key: 'editing', label: 'Editing' },
+  { key: 'tutoring', label: 'Tutoring' },
+  { key: 'samples', label: 'Model Answers' },
+  { key: 'examprep', label: 'Exam Prep' },
+] as const;
+
+const ORDER_SERVICE_KEYS: readonly string[] = ORDER_SERVICES.map((s) => s.key);
+
 export default function OrderPage({ onNavigate }: OrderPageProps) {
   // Default was 'writing' — commissioning a finished document from scratch,
   // which is the ghostwriting model this site no longer offers. 'editing'
   // matches what the homepage, FAQ, and pricing calculator now describe as
   // the primary service: work on the student's own draft.
   const [service, setService] = useState('editing');
+  // Whether the visitor actually picked this service, as opposed to landing
+  // on the default. Editing requires a draft upload, so enforcing that on
+  // someone who never chose editing turns every inbound quote link into a
+  // dead end — see the guard in handleSubmit.
+  const [serviceExplicit, setServiceExplicit] = useState(false);
   const [pages, setPages] = useState(1);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -146,6 +163,15 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
       const description = urlParams.get('description');
       const email = urlParams.get('email');
       const phone = urlParams.get('phone');
+      const incomingService = urlParams.get('service');
+
+      // A CTA can name the service it means, e.g. /order?service=samples.
+      // Validated against the tab list so a stale or hand-edited link can
+      // never select a service the form cannot render.
+      if (incomingService && ORDER_SERVICE_KEYS.includes(incomingService)) {
+        setService(incomingService);
+        setServiceExplicit(true);
+      }
 
       if (subject) {
         setFormData(prev => ({ ...prev, subject }));
@@ -276,7 +302,17 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     // of the service, not an optional attachment — the file input's
     // `required` attribute doesn't reliably block submission while hidden,
     // so this is the real guard.
-    if (service === 'editing' && uploadedFiles.filter(f => f.url && !f.error).length === 0) {
+    // Only when the visitor actually chose Editing, via the tab strip or an
+    // explicit `?service=editing` link. Editing is also the default, and
+    // inbound CTAs (services, samples, the Kaplan page) carry only `subject`,
+    // so enforcing this on the default turned every one of those links into a
+    // dead end: the student was asked for a draft they had not written yet,
+    // and left. Capture the lead, ask for the draft in the follow-up.
+    if (
+      service === 'editing' &&
+      serviceExplicit &&
+      uploadedFiles.filter(f => f.url && !f.error).length === 0
+    ) {
       setError('Please upload the draft you\u2019d like us to edit.');
       return;
     }
@@ -405,16 +441,11 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
             four services in PricingPage.tsx.
           */}
           <div className="flex flex-wrap justify-center gap-0 mt-6 max-w-2xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-1.5 shadow-lg border border-gray-200 dark:border-slate-700">
-            {[
-              { key: 'editing', label: 'Editing' },
-              { key: 'tutoring', label: 'Tutoring' },
-              { key: 'samples', label: 'Model Answers' },
-              { key: 'examprep', label: 'Exam Prep' },
-            ].map(({ key, label }) => (
+            {ORDER_SERVICES.map(({ key, label }) => (
               <button
                 key={key}
                 type="button"
-                onClick={() => setService(key)}
+                onClick={() => { setService(key); setServiceExplicit(true); }}
                 className={`flex-1 min-w-[7rem] py-3 px-4 rounded-lg font-bold text-sm transition-all ${
                   service === key
                     ? 'bg-indigo-600 text-white shadow-lg -translate-y-0.5'
@@ -598,7 +629,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                     <input 
                       type="file" 
                       multiple 
-                      required={service === 'editing'}
+                      required={service === 'editing' && serviceExplicit}
                       className="hidden" 
                       onChange={handleFileChange} 
                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt,.zip" 

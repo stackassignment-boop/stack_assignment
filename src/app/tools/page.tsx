@@ -1,6 +1,9 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Calculator, Quote, ShieldCheck, ArrowRight } from 'lucide-react'
+import {
+  Calculator, Quote, ShieldCheck, ArrowRight, ClipboardCheck,
+  ScanText, FileType2, Sparkles,
+} from 'lucide-react'
 import { region, generateBreadcrumbSchema } from '@/lib/seo-config'
 
 const url = 'https://www.stackassignment.com/tools'
@@ -8,7 +11,7 @@ const url = 'https://www.stackassignment.com/tools'
 export const metadata: Metadata = {
   title: 'Free Study Tools for Australian Uni Students | Stack Assignment',
   description:
-    'Free calculators and study tools for Australian university students — including a WAM calculator that handles credit-point and year-level weighting. No sign-up, no cost.',
+    'Free tools for university students — WAM calculator, referencing generator, draft checker, PDF to Word, image to text (OCR) and a quiz generator. No sign-up, nothing uploaded.',
   keywords: [
     'free study tools Australian university students',
     'WAM calculator',
@@ -18,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Free Study Tools for Australian Uni Students',
     description:
-      'Free calculators and study tools for Australian university students. No sign-up required.',
+      'Calculators, converters and revision tools for university students. Free, no sign-up, nothing uploaded.',
     url,
     type: 'website',
     locale: region.ogLocale,
@@ -37,24 +40,63 @@ const tools = [
     href: '/tools/wam-calculator',
     icon: Calculator,
     live: true,
+    cta: 'Open the calculator',
     blurb:
       'Work out your Weighted Average Mark from unit marks and credit points, with the year-level weighting some Australian universities apply. Converts to a 7-point GPA and shows what you need to average to hit a target.',
   },
   {
-    name: 'Referencing Formatter',
+    name: 'Referencing Generator',
     href: '/tools/referencing-formatter',
     icon: Quote,
-    live: false,
+    live: true,
+    cta: 'Build a reference',
     blurb:
-      'AGLC4, APA 7th, Vancouver and Harvard (AU) citation formatting, built around the styles Australian faculties actually set.',
+      'APA 7th, Harvard (AU), AGLC4 and Vancouver citations for journal articles, books, chapters and web pages. Builds your in-text citation alongside the reference, and keeps a running list you can copy in one go.',
+  },
+  {
+    name: 'Assignment Draft Checker',
+    href: '/tools/draft-review',
+    icon: ClipboardCheck,
+    live: true,
+    cta: 'Check a draft',
+    blurb:
+      'Paste a draft and see what a marker notices structurally — word count against target, readability, citation density, overlong sentences, filler phrasing, contractions and passive voice.',
+  },
+  {
+    name: 'PDF to Word Converter',
+    href: '/tools/pdf-to-word',
+    icon: FileType2,
+    live: true,
+    cta: 'Convert a PDF',
+    blurb:
+      'Turn a PDF reading, unit guide or set of lecture notes into an editable .docx you can annotate and quote from. Converts in your browser, so the file is never uploaded anywhere.',
+  },
+  {
+    name: 'Image to Text (OCR)',
+    href: '/tools/image-to-text',
+    icon: ScanText,
+    live: true,
+    cta: 'Extract text',
+    blurb:
+      'Photographed a slide, a whiteboard or a textbook page? Pull the text out so you can search, quote and revise from it. Handles printed text well; handwriting is hit and miss.',
+  },
+  {
+    name: 'Quiz Generator',
+    href: '/tools/quiz-generator',
+    icon: Sparkles,
+    live: true,
+    cta: 'Make practice questions',
+    blurb:
+      'Paste your notes and get fill-the-gap, definition and short-answer questions back. Active recall beats re-reading, and this turns material you already have into revision you can measure.',
   },
   {
     name: 'Similarity Report Explainer',
     href: '/tools/similarity-report',
     icon: ShieldCheck,
-    live: false,
+    live: true,
+    cta: 'Read the guide',
     blurb:
-      'A plain-English guide to reading a Turnitin similarity report — what a high percentage does and does not mean, and which matches are worth acting on.',
+      'A plain-English guide to reading a Turnitin similarity report — what a high percentage does and does not mean, which matches are worth acting on, and how AI-detection flags are actually treated.',
   },
 ]
 
@@ -112,7 +154,7 @@ export default function ToolsPage() {
                     </p>
                     {tool.live && (
                       <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-                        Open the calculator <ArrowRight className="h-4 w-4" />
+                        {tool.cta} <ArrowRight className="h-4 w-4" />
                       </span>
                     )}
                   </div>

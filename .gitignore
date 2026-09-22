@@ -51,3 +51,9 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# Copied out of node_modules by scripts/copy-pdf-worker.mjs on install, dev and
+# build. Deliberately not committed: pdf.js refuses to run if the worker and the
+# API are different versions, so a checked-in copy would go stale the first time
+# pdfjs-dist was upgraded.
+/public/pdf-worker/

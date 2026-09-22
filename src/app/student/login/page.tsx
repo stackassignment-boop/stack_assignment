@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import StudentLoginRoute from '@/components/student/StudentLoginRoute'
 
 /**
@@ -11,5 +12,18 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <StudentLoginRoute />
+  // StudentLoginRoute reads ?next= with useSearchParams(), which opts the route
+  // into client rendering; the Suspense boundary is what Next requires to keep
+  // the rest of the page statically renderable.
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      }
+    >
+      <StudentLoginRoute />
+    </Suspense>
+  )
 }
