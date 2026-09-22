@@ -40,7 +40,7 @@ export async function PUT(request: NextRequest) {
     const result = updateProfileSchema.safeParse(body);
     
     if (!result.success) {
-      return apiError(result.error.errors[0].message, 400);
+      return apiError(result.error.issues[0]?.message ?? 'Invalid request', 400);
     }
     
     const { name, phone, avatar, currentPassword, newPassword } = result.data;

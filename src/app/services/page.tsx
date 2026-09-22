@@ -1,18 +1,30 @@
 import { Metadata } from 'next'
-import ServicesPageComponent from '@/components/services/ServicesPage'
+import ServicesRoute from '@/components/services/ServicesRoute'
+import { region } from '@/lib/seo-config'
 
 export const metadata: Metadata = {
-  title: 'Our Services - Academic Writing Assistance | Stack Assignment',
-  description: 'Comprehensive academic writing services including essay writing, dissertation help, research papers, coursework assistance, editing, and more. Expert help for all subjects and academic levels.',
-  keywords: ['academic writing services', 'essay writing', 'dissertation help', 'assignment help', 'research paper writing', 'editing services'],
+  title: 'Tutoring, Editing & Study Support for AU Students | Stack Assignment',
+  description:
+    'One-on-one tutoring, tracked-changes editing on your own draft, study and reference materials, and exam preparation — matched to Australian university marking rubrics and referencing styles.',
+  keywords: [
+    'academic tutoring services Australia',
+    'essay editing service Australia',
+    'proofreading service Australia',
+    'thesis editing Australia',
+    'exam preparation tutoring Australia',
+    'academic study support Australia',
+  ],
   openGraph: {
-    title: 'Our Services - Stack Assignment',
-    description: 'From high school assignments to PhD dissertations - we cover every level and subject',
+    title: 'Tutoring, Editing & Study Support for AU Students | Stack Assignment',
+    description:
+      'Tutoring, editing on your own work, study materials and exam prep — built around Australian university standards.',
     url: 'https://www.stackassignment.com/services',
     type: 'website',
+    locale: region.ogLocale,
   },
+  alternates: { canonical: 'https://www.stackassignment.com/services' },
 }
 
 export default function ServicesPage() {
-  return <ServicesPageComponent />
+  return <ServicesRoute />
 }

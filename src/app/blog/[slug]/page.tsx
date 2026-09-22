@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import BlogDetailPage from '@/components/blog/BlogDetailPage'
 import { db } from '@/lib/db'
+import { region } from '@/lib/seo-config'
 
 interface PageProps {
   params: Promise<{
@@ -28,11 +29,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${blog.title} - Stack Assignment Blog`,
       description: blog.excerpt || 'Read this article from Stack Assignment blog',
       keywords: blog.tags ? JSON.parse(blog.tags).join(', ') : 'academic writing, blog',
+      alternates: { canonical: `https://www.stackassignment.com/blog/${blog.slug}` },
       openGraph: {
         title: blog.title,
         description: blog.excerpt || 'Read this article from Stack Assignment blog',
         url: `https://www.stackassignment.com/blog/${blog.slug}`,
         type: 'article',
+        locale: region.ogLocale,
         publishedTime: blog.createdAt.toISOString(),
         images: blog.featuredImage ? [blog.featuredImage] : [],
       },

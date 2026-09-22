@@ -166,3 +166,26 @@
 .animate-marquee {
   animation: marquee 40s linear infinite;
 }
+
+/* 2026 AU/UK visual system */
+html { scroll-behavior: smooth; }
+::selection { background: rgba(45, 212, 191, 0.28); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.stack-glass {
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.dark .stack-glass {
+  background: rgba(15,23,42,.72);
+}

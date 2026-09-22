@@ -31,11 +31,35 @@ const getInitialDismissed = (): boolean => {
   return false;
 };
 
+/**
+ * Prefilled WhatsApp enquiry. Built with encodeURIComponent rather than
+ * hand-encoded, because the previous literal string contained an unencoded
+ * space that broke the tail of the message.
+ *
+ * The fields changed as well. It used to ask for Subject / Word Count /
+ * Deadline / Academic Level, which is an intake form for a piece of writing to
+ * be produced. It now asks what the student is working on and what kind of help
+ * they want, and uses the Australian term "unit" rather than "subject" or
+ * "module" — the same vocabulary as their unit guide.
+ */
+const WHATSAPP_MESSAGE = [
+  'Hi Stack Assignment! I would like help with:',
+  'University: _____',
+  'Unit code: _____',
+  'Assessment: _____',
+  'Due date: _____',
+  'What I need (tutoring / editing / feedback): _____',
+].join('\n');
+
+// Number is currently an Indian mobile. For an Australian audience this is a
+// weak trust signal and it breaks NAP consistency with any local listing, so it
+// is worth replacing with an AU number once one exists.
+const WHATSAPP_HREF = `https://wa.me/919907300710?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+
 export default function DraggableFloatingWidget() {
   const [position, setPosition] = useState<Position>(getInitialPosition);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<Position>({ x: 0, y: 0 });
-  const [viewerCount, setViewerCount] = useState(38);
   const [showTooltip, setShowTooltip] = useState(false);
   const [isDismissed, setIsDismissed] = useState(getInitialDismissed);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,16 +75,13 @@ export default function DraggableFloatingWidget() {
     localStorage.setItem('floatingWidgetDismissed', 'true');
   }, []);
 
-  // Update viewer count periodically
-  useEffect(() => {
-    const viewerInterval = setInterval(() => {
-      setViewerCount(prev => {
-        const change = Math.floor(Math.random() * 5) - 2;
-        return Math.max(20, Math.min(50, prev + change));
-      });
-    }, 10000);
-    return () => clearInterval(viewerInterval);
-  }, []);
+  // A "N viewing" badge used to live here, seeded at 38 and moved by a random
+  // walk between 20 and 50 every ten seconds. There was no fetch behind it — the
+  // pulsing green dot presented an invented number as live site traffic. That is
+  // a false representation under the Australian Consumer Law (Competition and
+  // Consumer Act 2010 Sch 2 ss 18, 29), and because this widget is mounted in
+  // MainLayout it appeared on every page of the site. Removed along with its
+  // state and interval.
 
   // Handle mouse move
   useEffect(() => {
@@ -187,17 +208,6 @@ export default function DraggableFloatingWidget() {
           <X className="w-3 h-3 text-gray-600 dark:text-gray-300" />
         </button>
 
-        {/* Viewer Count Badge */}
-        <div className="bg-white dark:bg-slate-800 rounded-full shadow-lg border border-gray-200 dark:border-slate-700 px-3 py-1.5 flex items-center gap-2">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-          </span>
-          <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-            <span className="text-green-600 dark:text-green-400 font-bold">{viewerCount}</span> viewing
-          </span>
-        </div>
-
         {/* WhatsApp Widget */}
         <div className="relative flex items-center gap-2">
           {/* Drag Handle Indicator */}
@@ -211,7 +221,7 @@ export default function DraggableFloatingWidget() {
           
           {/* WhatsApp Button */}
           <a
-            href="https://wa.me/919907300710?text=Hi%20Stack%20Assignment%21%20I%20need%20help%20with%3A%0ASubject%3A%20_____ %0AWord%20Count%3A%20_____%0ADeadline%3A%20_____%0AAcademic%20Level%3A%20_____"
+            href={WHATSAPP_HREF}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => {

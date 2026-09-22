@@ -1,15 +1,18 @@
 import { Metadata } from 'next'
 import SamplesPageComponent from '@/components/samples/SamplesPage'
+import { region } from '@/lib/seo-config'
 
 export const metadata: Metadata = {
-  title: 'Assignment & Essay Samples - Free Preview | Stack Assignment',
-  description: 'Browse free previews of academic writing samples including essays, research papers, dissertations, and more. Preview 1/3rd of each sample for free.',
-  keywords: ['essay samples', 'assignment samples', 'research paper samples', 'dissertation samples', 'academic writing examples'],
+  title: 'Worked Examples & Sample Essays | Stack Assignment',
+  description: 'Extracts from academic work annotated to show what markers reward — how an argument is structured, how sources are integrated, how referencing is applied. For studying structure, not for submission.',
+  keywords: ['essay structure examples', 'academic writing examples Australia', 'how to structure an essay university', 'referencing examples AGLC4 APA'],
+  alternates: { canonical: 'https://www.stackassignment.com/samples' },
   openGraph: {
-    title: 'Assignment & Essay Samples - Stack Assignment',
-    description: 'Preview 1/3rd of each sample free • Contact admin for full access',
+    title: 'Worked Examples & Sample Essays - Stack Assignment',
+    description: 'Annotated extracts showing how strong academic work is structured. For study, not submission.',
     url: 'https://www.stackassignment.com/samples',
     type: 'website',
+    locale: region.ogLocale,
   },
 }
 

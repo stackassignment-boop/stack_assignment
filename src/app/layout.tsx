@@ -4,7 +4,12 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import SessionProvider from "@/components/providers/SessionProvider";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
-import { seoConfig } from "@/lib/seo-config";
+import {
+  seoConfig,
+  region,
+  generateOrganizationSchema,
+  generateWebSiteSchema,
+} from "@/lib/seo-config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,7 +53,11 @@ export const metadata: Metadata = {
   // Open Graph
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    // Primary market is Australia. This was previously en_US, which told
+    // Facebook/LinkedIn (and contributed a weak signal to Google) that the
+    // site was aimed at a US audience.
+    locale: region.ogLocale,
+    alternateLocale: [...region.ogLocaleAlternate],
     url: seoConfig.siteUrl,
     siteName: seoConfig.siteName,
     title: seoConfig.title,
@@ -98,7 +107,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={region.htmlLang} suppressHydrationWarning>
       <head>
         {/* Preconnect to important origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -107,6 +116,26 @@ export default function RootLayout({
         {seoConfig.social.facebookAppId && (
           <meta property="fb:app_id" content={seoConfig.social.facebookAppId} />
         )}
+        {/*
+          Sitewide Organization + WebSite graph. These helpers existed in
+          seo-config.ts but were never rendered anywhere, so the site was
+          publishing no entity or publisher markup at all. Emitting them once
+          in the root layout covers every route, and both carry the AU-first
+          `areaServed` geo signal.
+
+          Inlined as a plain script rather than via <StructuredData>, which is
+          a 'use client' component — this keeps the markup server-rendered and
+          ships no extra JavaScript.
+        */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              generateOrganizationSchema(),
+              generateWebSiteSchema(),
+            ]),
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}

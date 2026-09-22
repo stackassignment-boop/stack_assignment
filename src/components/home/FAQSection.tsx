@@ -1,36 +1,56 @@
 'use client';
 
 import { useState } from 'react';
+import { generateFAQSchema } from '@/lib/seo-config';
 
 interface FAQ {
   question: string;
   answer: string;
 }
 
-const faqs: FAQ[] = [
+/**
+ * FAQ content, repositioned and AU-first.
+ *
+ * The previous answers offered ghostwriting outright ("Every assignment is
+ * written from scratch by human experts") and promised detection assurance
+ * ("AI-Detection Verification to guarantee the work is ... human-made"), plus
+ * 6-hour turnarounds. Under s 114A of the TEQSA Act that is a description of an
+ * academic cheating service, and the detection promise is not something anyone
+ * can honestly guarantee.
+ *
+ * Exported so the page can emit matching FAQPage structured data from the same
+ * source of truth — the schema and the visible text can never drift apart.
+ */
+export const faqs: FAQ[] = [
   {
-    question: 'Is using StackAssignment legal for students in the UK and Australia?',
-    answer: 'Absolutely. We provide model answers and study guides intended to be used as a reference to help you structure your own work. Using our service is a legitimate way to understand complex topics, provided you use the final product as a learning tool to craft your own unique submission.',
+    question: 'Is this legal for students in Australia and the UK?',
+    answer:
+      'Yes. We provide tutoring, editing on your own work, and study and reference materials \u2014 the same category of support offered by university learning centres and services like Scribbr. What we do not do is write assignments for you to submit as your own. Australia specifically prohibits academic cheating services under the TEQSA Act, and we operate on the tutoring and editing side of that line. Submitting work you did not write would breach your university\u2019s academic integrity policy, and following your institution\u2019s rules remains your responsibility.',
   },
   {
-    question: 'How do you handle Turnitin and AI-detection reports?',
-    answer: 'Every assignment is written from scratch by human experts to ensure it reflects a natural academic voice. Along with your solution, we provide a free Turnitin Similarity Report and a comprehensive AI-Detection Verification to guarantee the work is 100% original and "human-made."',
+    question: 'Will editing my document flag on Turnitin or similarity checkers?',
+    answer:
+      'Our editing works inside your own document using tracked changes, so the underlying work and ideas remain yours. We do not offer any service designed to defeat plagiarism or AI-detection tools, because that is not something we could honestly or safely promise.',
   },
   {
-    question: 'Do your writers understand UK/Australian university marking rubrics?',
-    answer: 'Yes. We match your project with writers who have attained degrees from reputable institutions in your specific region. They are well-versed in local marking criteria, British/Australian English spellings, and specific institutional requirements.',
+    question: 'Do your tutors and editors understand Australian marking rubrics?',
+    answer:
+      'Yes. We match you with tutors and editors experienced in Australian university standards \u2014 your unit\u2019s marking criteria, the referencing style your faculty requires, and Australian English conventions. We also support UK institutions as a secondary market.',
   },
   {
-    question: 'Can I request specific referencing styles like Harvard (UK) or AGLC?',
-    answer: "Definitely. Our experts are proficient in all major styles, including Harvard (UK/AU), APA 7th, Oxford, and AGLC. Just specify your university's preferred style when placing your order, and we will ensure every citation is perfect.",
+    question: 'Can I request a specific referencing style?',
+    answer:
+      'Yes \u2014 AGLC4, APA 7th, Vancouver, Harvard (AU/UK), Chicago and Oxford among others. Tell us the style your unit guide specifies when you book and your tutor or editor will work to it, and explain the corrections so you can apply the rules yourself next time.',
   },
   {
-    question: 'What if my deadline is extremely tight (6-12 hours)?',
-    answer: 'We specialize in urgent turnarounds. Our team is available 24/7, and we have a dedicated "Rapid Response" unit for deadlines as short as 6 hours, ensuring quality is never sacrificed for speed.',
+    question: 'What if my deadline is tight?',
+    answer:
+      'We offer expedited tutoring and editing sessions. We are also honest that some things \u2014 deep structural feedback on a long draft, for instance \u2014 need reasonable time to do well. We will tell you upfront what is realistic rather than promise something we cannot deliver properly.',
   },
   {
-    question: 'What is your revision policy if I need changes based on professor feedback?',
-    answer: 'Your satisfaction is our priority. We offer unlimited free revisions within 14 days of delivery. Simply upload your tutor\'s feedback, and your expert will adjust the work until it aligns perfectly with your requirements.',
+    question: 'What is your revision and follow-up policy?',
+    answer:
+      'Follow-up questions and one round of revision review are included within 14 days of your session or edit, so you can act on the feedback with support while you revise your own work.',
   },
 ];
 
@@ -42,12 +62,25 @@ export default function FAQSection() {
   };
 
   return (
-    <section 
+    <section
       className="py-24 relative overflow-hidden"
       style={{
         background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%)'
       }}
     >
+      {/*
+        FAQPage structured data, generated from the same `faqs` array rendered
+        below so the two can never disagree. Client components are still
+        server-rendered on first load, so this lands in the initial HTML where
+        Google can read it. FAQ rich results are worth chasing here: several of
+        these questions ("is this legal in Australia", "will editing flag on
+        Turnitin") are exactly what AU students search.
+      */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(generateFAQSchema(faqs)) }}
+      />
+
       {/* Background effect */}
       <div 
         className="absolute inset-0"

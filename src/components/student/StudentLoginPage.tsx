@@ -9,9 +9,14 @@ import DraggableFloatingWidget from '@/components/marketing/DraggableFloatingWid
 interface StudentLoginPageProps {
   onNavigate?: (page: string) => void;
   onLogin?: (user: { name: string; email: string }) => void;
+  /**
+   * Where to send the student once they are signed in. Already validated by
+   * StudentLoginRoute as a same-origin /student/ path.
+   */
+  next?: string;
 }
 
-export default function StudentLoginPage({ onNavigate, onLogin }: StudentLoginPageProps) {
+export default function StudentLoginPage({ onNavigate, onLogin, next = '/student/dashboard' }: StudentLoginPageProps) {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -39,9 +44,9 @@ export default function StudentLoginPage({ onNavigate, onLogin }: StudentLoginPa
     setError('');
     
     try {
-      // Redirect to student dashboard after Google login
+      // Return the student to wherever they were headed (defaults to dashboard)
       await signIn('google', {
-        callbackUrl: '/?view=student-dashboard',
+        callbackUrl: next,
       });
     } catch (err) {
       setError('An error occurred with Google login.');
@@ -70,8 +75,10 @@ export default function StudentLoginPage({ onNavigate, onLogin }: StudentLoginPa
           if (onLogin) {
             onLogin({ name: formData.email, email: formData.email });
           }
-          // Redirect to dashboard
-          window.location.href = '/?view=student-dashboard';
+          // Full reload, not a soft push: NextAuth's session cookie is set by
+          // the sign-in response, and a hard navigation is what guarantees the
+          // next page reads it.
+          window.location.href = next;
         }
       } else {
         // Register

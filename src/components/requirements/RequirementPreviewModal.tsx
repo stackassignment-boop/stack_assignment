@@ -22,6 +22,7 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
   const [pageImages, setPageImages] = useState<string[]>([]);
   const [containerWidth, setContainerWidth] = useState(600);
   const [error, setError] = useState<string | null>(null);
+  const [docxHtml, setDocxHtml] = useState<string | null>(null);
 
   const containerRef = useCallback((node: HTMLDivElement | null) => {
     if (node) {
@@ -30,17 +31,46 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
     }
   }, []);
 
-  // Check if file is a PDF
   const isPdf = requirement.fileType === 'application/pdf';
+  const isDocx =
+    requirement.fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+    requirement.fileType === 'application/msword';
 
   // Load PDF document
   useEffect(() => {
     if (!isOpen || typeof window === 'undefined') return;
 
-    // Check if it's a PDF file
-    if (!isPdf) {
+    if (!isPdf && !isDocx) {
       setLoading(false);
-      setError(`This file type (${requirement.fileType}) cannot be previewed. Only PDF files are supported for preview.`);
+      setError(`This file type (${requirement.fileType}) cannot be previewed. Only PDF and Word documents are supported for preview.`);
+      return;
+    }
+
+    if (isDocx) {
+      const loadDocx = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          const [mammoth, fileRes] = await Promise.all([
+            import('mammoth'),
+            fetch(requirement.filePath),
+          ]);
+
+          if (!fileRes.ok) throw new Error('Failed to fetch document');
+          const arrayBuffer = await fileRes.arrayBuffer();
+
+          const result = await mammoth.convertToHtml({ arrayBuffer });
+          setDocxHtml(result.value);
+          setLoading(false);
+        } catch (err) {
+          console.error('Error loading DOCX:', err);
+          setError('Failed to load the Word document. Please try again.');
+          setLoading(false);
+        }
+      };
+
+      loadDocx();
       return;
     }
 
@@ -69,7 +99,7 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
     };
 
     loadPdf();
-  }, [isOpen, requirement.filePath, isPdf]);
+  }, [isOpen, requirement.filePath, isPdf, isDocx]);
 
   // Render all pages
   useEffect(() => {
@@ -159,6 +189,8 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {isPdf ? (
                 <>{totalPages} pages • {requirement.fileName}</>
+              ) : isDocx ? (
+                <>{requirement.fileName}</>
               ) : (
                 <>{requirement.fileName} • {requirement.fileType}</>
               )}
@@ -201,15 +233,24 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
                   </p>
                   <ol className="text-sm text-amber-700 dark:text-amber-300 list-decimal list-inside space-y-1">
                     <li>Delete this file from the admin panel</li>
-                    <li>Upload a PDF version of the same content</li>
-                    <li>The PDF will be fully previewable</li>
+                    <li>Upload a PDF or Word (.docx) version of the same content</li>
+                    <li>It will then be fully previewable</li>
                   </ol>
                 </div>
               </div>
             </div>
           )}
-          
-          {!loading && !error && pageImages.length > 0 && (
+
+          {!loading && !error && isDocx && docxHtml && (
+            <div
+              className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-8 max-w-[700px] mx-auto select-none prose prose-sm dark:prose-invert max-w-none"
+              onContextMenu={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
+              dangerouslySetInnerHTML={{ __html: docxHtml }}
+            />
+          )}
+
+          {!loading && !error && isPdf && pageImages.length > 0 && (
             <div className="flex flex-col items-center gap-4">
               {pageImages.map((imageSrc, index) => {
                 const pageNum = index + 1;
@@ -250,6 +291,8 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
         <div className="flex items-center justify-center py-3 px-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-xs text-gray-600 dark:text-gray-400 shrink-0">
           {error ? (
             <span>Preview not available for this file type</span>
+          ) : isDocx ? (
+            <span>Full document preview</span>
           ) : (
             <span>Full preview • All {totalPages} pages visible</span>
           )}

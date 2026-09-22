@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
         totalPrice: 0,
         deadline: deadlineDate,
         requirements: JSON.stringify({
-          service: service || 'writing',
+          service: service || 'editing',
           coupon: coupon || null,
         }),
         status: 'pending',

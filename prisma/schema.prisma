@@ -23,6 +23,8 @@ model User {
   blogPosts   Blog[]
   inquiries   Inquiry[]
   orders      Order[]
+
+  similarityChecks SimilarityCheck[]
 }
 
 model Order {
@@ -171,4 +173,44 @@ model Setting {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// A student-submitted document awaiting a similarity report.
+// The student uploads the document; an admin runs it through the institutional
+// Turnitin account off-platform and uploads the resulting report back here.
+model SimilarityCheck {
+  id              String  @id @default(cuid())
+  referenceNumber String  @unique
+  customerId      String
+  title           String
+  subject         String?
+  wordCount       Int?
+  notes           String? // student's note to the reviewer
+
+  // The document the student uploaded (Vercel Blob URL in filePath)
+  fileName String
+  fileSize Int
+  fileType String
+  filePath String
+
+  // pending | in_review | complete | rejected
+  status String @default("pending")
+
+  // The report an admin uploads back (Vercel Blob URL in reportFilePath)
+  reportFileName  String?
+  reportFileSize  Int?
+  reportFileType  String?
+  reportFilePath  String?
+  similarityScore Float? // percentage, 0-100
+
+  adminNotes String?
+  reviewedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customer User @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+  @@index([status])
 }

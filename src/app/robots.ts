@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/admin/', '/student-login/', '/student-dashboard/'],
+      disallow: ['/api/', '/admin/', '/student/login/', '/student/dashboard/', '/student/similarity-check/', '/requirements/'],
     },
     sitemap: 'https://www.stackassignment.com/sitemap.xml',
   }

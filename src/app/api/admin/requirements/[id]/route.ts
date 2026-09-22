@@ -13,7 +13,7 @@ const updateRequirementSchema = z.object({
 // PUT /api/admin/requirements/[id] - Update a requirement file (admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authResult = await requireAdmin();
@@ -22,7 +22,7 @@ export async function PUT(
       return apiError(authResult.error || 'Unauthorized', authResult.status || 401);
     }
 
-    const id = params.id;
+    const { id } = await params;
 
     // Check if requirement exists
     const requirement = await db.requirementFile.findUnique({
@@ -166,7 +166,7 @@ export async function PUT(
       const validation = updateRequirementSchema.safeParse(body);
 
       if (!validation.success) {
-        return apiError(validation.error.errors[0].message, 400);
+        return apiError(validation.error.issues[0]?.message ?? 'Invalid request', 400);
       }
 
       const { title, description, category } = validation.data;
@@ -198,7 +198,7 @@ export async function PUT(
 // DELETE /api/admin/requirements/[id] - Delete a requirement file (admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authResult = await requireAdmin();
@@ -207,21 +207,39 @@ export async function DELETE(
       return apiError(authResult.error || 'Unauthorized', authResult.status || 401);
     }
 
-    const id = params.id;
+    const { id } = await params;
+    console.log('DELETE - Authenticated, requirement ID:', id);
 
-    // Get the requirement first to verify it exists
+    // Use the same Prisma model that works in GET endpoint
+    console.log('Prisma models available:', Object.keys(db));
+    console.log('Is db.requirementFile defined?', !!db.requirementFile);
+
+    // First, find the requirement
     const requirement = await db.requirementFile.findUnique({
       where: { id },
     });
 
+    console.log('Find result:', requirement);
+
     if (!requirement) {
+      // List all requirements to help debug
+      const allRequirements = await db.requirementFile.findMany({
+        select: { id: true, title: true },
+        take: 5,
+      });
+      console.log('First 5 requirements in DB:', allRequirements);
+      
       return apiError('Requirement file not found', 404);
     }
 
-    // Delete from database only (file remains in Blob storage but that's okay)
+    console.log('Found requirement, deleting:', requirement.title);
+
+    // Delete using Prisma
     await db.requirementFile.delete({
       where: { id },
     });
+
+    console.log('Delete successful');
 
     return apiResponse({
       success: true,
@@ -229,6 +247,14 @@ export async function DELETE(
     });
   } catch (error) {
     console.error('Delete requirement error:', error);
-    return apiError('Internal server error', 500);
+    
+    // Try to get more details about the error
+    if (error instanceof Error) {
+      console.error('Error name:', error.name);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
+    
+    return apiError(`Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`, 500);
   }
 }

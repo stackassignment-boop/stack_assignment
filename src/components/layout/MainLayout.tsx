@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import DraggableFloatingWidget from '@/components/marketing/DraggableFloatingWidget';
 import { useRouter, usePathname } from 'next/navigation';
+import { useRouteNavigate } from '@/lib/useRouteNavigate';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -22,36 +24,20 @@ export default function MainLayout({ children }: MainLayoutProps) {
     if (pathname.startsWith('/pricing')) return 'pricing';
     if (pathname.startsWith('/samples')) return 'samples';
     if (pathname.startsWith('/blog')) return 'blog';
+    if (pathname.startsWith('/tools')) return 'tools';
     if (pathname.startsWith('/about')) return 'home';
     if (pathname.startsWith('/contact')) return 'home';
+    if (pathname.startsWith('/universities')) return 'universities';
     if (pathname.startsWith('/order')) return 'order';
     return 'home';
   };
 
   const currentPage = getCurrentPage();
 
-  // Navigate to main page with query params for compatibility
-  const handleNavigate = useCallback((page: string) => {
-    if (page === 'home') {
-      router.push('/');
-    } else if (page === 'blog') {
-      router.push('/blog');
-    } else if (page === 'services') {
-      router.push('/services');
-    } else if (page === 'samples') {
-      router.push('/samples');
-    } else if (page === 'pricing') {
-      router.push('/pricing');
-    } else if (page === 'order') {
-      router.push('/order');
-    } else if (page === 'admin') {
-      router.push('/?view=admin');
-    } else if (page === 'student-login') {
-      router.push('/?view=student-login');
-    } else if (page === 'student-dashboard') {
-      router.push('/?view=student-dashboard');
-    }
-  }, [router]);
+  // Shared with the page-level routes so header/footer navigation and
+  // in-page calls to action resolve pages the same way — and so that any
+  // params (e.g. a carried-over pricing quote) are preserved rather than dropped.
+  const handleNavigate = useRouteNavigate();
 
   // Handle student logout
   const handleStudentLogout = useCallback(async () => {
@@ -77,6 +63,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         {children}
       </main>
       <Footer onNavigate={handleNavigate} />
+      <DraggableFloatingWidget />
     </div>
   );
 }

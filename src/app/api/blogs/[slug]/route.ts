@@ -88,7 +88,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const result = updateBlogSchema.safeParse(body);
     
     if (!result.success) {
-      return apiError(result.error.errors[0].message, 400);
+      return apiError(result.error.issues[0]?.message ?? 'Invalid request', 400);
     }
     
     const data = result.data;

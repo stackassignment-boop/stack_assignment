@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { GraduationCap, Moon, Sun, Phone, Menu, X, ChevronDown, User, Shield, LogOut } from 'lucide-react';
+import Link from 'next/link';
+import { GraduationCap, Moon, Sun, Phone, Menu, X, ChevronDown, User, Shield, LogOut, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { NAV_TOOLS } from '@/lib/tools';
 
 interface HeaderProps {
   currentPage?: string;
@@ -43,6 +45,56 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // --- Free Tools menu ------------------------------------------------
+  // Opens on pointer hover, as asked. Hover on its own would strand keyboard
+  // and touch users, so the trigger is a real link to /tools (a tap goes to the
+  // full index) and focus opens the panel so it can be tabbed through.
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const toolsRef = useRef<HTMLDivElement>(null);
+  const toolsCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openTools = () => {
+    if (toolsCloseTimer.current) {
+      clearTimeout(toolsCloseTimer.current);
+      toolsCloseTimer.current = null;
+    }
+    setToolsOpen(true);
+  };
+
+  // Closing on a short delay rather than at once: the pointer has to cross a
+  // few pixels of dead space travelling from the trigger down to the panel, and
+  // an instant close makes the menu impossible to reach on a diagonal.
+  const closeTools = () => {
+    if (toolsCloseTimer.current) clearTimeout(toolsCloseTimer.current);
+    toolsCloseTimer.current = setTimeout(() => setToolsOpen(false), 180);
+  };
+
+  // Tabbing out of the whole group closes it; moving between the trigger and
+  // the links inside it does not, hence the relatedTarget check.
+  const handleToolsBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      setToolsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      if (toolsRef.current && !toolsRef.current.contains(event.target as Node)) {
+        setToolsOpen(false);
+      }
+    };
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setToolsOpen(false);
+    };
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+      if (toolsCloseTimer.current) clearTimeout(toolsCloseTimer.current);
+    };
+  }, []);
+
   const toggleTheme = () => {
     const newDark = !isDark;
     setIsDark(newDark);
@@ -56,6 +108,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
     { id: 'pricing', label: 'Pricing' },
     { id: 'samples', label: 'Samples' },
     { id: 'blog', label: 'Blog' },
+    { id: 'universities', label: 'Universities' },
   ];
 
   const handleNav = (page: string) => {
@@ -87,13 +140,86 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
               <button
                 key={item.id}
                 onClick={() => handleNav(item.id)}
-                className={`hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
+                className={`relative pb-1 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
                   currentPage === item.id ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : ''
                 }`}
               >
                 {item.label}
+                {currentPage === item.id && (
+                  <span className="absolute left-0 right-0 -bottom-0.5 h-0.5 rounded-full bg-yellow-400" />
+                )}
               </button>
             ))}
+
+            <div className="hidden lg:flex items-center gap-2 border-l border-slate-200 pl-5 dark:border-slate-700">
+              <Link href="/australia/academic-support" className="text-xs font-bold text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">AU</Link>
+              <span className="text-slate-300">|</span>
+              <Link href="/uk/academic-support" className="text-xs font-bold text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">UK</Link>
+            </div>
+
+            {/* Free Tools */}
+            <div
+              className="relative"
+              ref={toolsRef}
+              onMouseEnter={openTools}
+              onMouseLeave={closeTools}
+              onFocus={openTools}
+              onBlur={handleToolsBlur}
+            >
+              <Link
+                href="/tools"
+                aria-haspopup="true"
+                aria-expanded={toolsOpen}
+                onClick={() => setToolsOpen(false)}
+                className={`relative flex items-center gap-1 pb-1 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
+                  currentPage === 'tools' ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : ''
+                }`}
+              >
+                Free Tools
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform ${toolsOpen ? 'rotate-180' : ''}`}
+                />
+                {currentPage === 'tools' && (
+                  <span className="absolute left-0 right-0 -bottom-0.5 h-0.5 rounded-full bg-yellow-400" />
+                )}
+              </Link>
+
+              {toolsOpen && (
+                /* Sits at `top-full` and carries its own top padding instead of
+                   a margin, so the gap under the trigger stays inside the
+                   hoverable area. With a margin the menu closes the moment the
+                   pointer enters the gap. */
+                <div className="absolute left-0 top-full z-50 pt-3">
+                  <div className="w-72 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 py-2 shadow-lg">
+                    {NAV_TOOLS.map((tool) => {
+                      const Icon = tool.icon;
+                      return (
+                        <Link
+                          key={tool.href}
+                          href={tool.href}
+                          onClick={() => setToolsOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                        >
+                          <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
+                            <Icon className="h-4 w-4" />
+                          </span>
+                          <span className="font-medium">{tool.label}</span>
+                        </Link>
+                      );
+                    })}
+                    <div className="mt-1 border-t border-gray-200 dark:border-slate-700 pt-1">
+                      <Link
+                        href="/tools"
+                        onClick={() => setToolsOpen(false)}
+                        className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                      >
+                        All free tools <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Right Side */}
@@ -106,19 +232,25 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            <a
-              href="tel:+919907300710"
-              className="hidden sm:flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            <Link
+              href="/contact"
+              className="hidden lg:flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
             >
-              <Phone className="w-4 h-4" /> +91-99073-00710
-            </a>
+              <Phone className="w-4 h-4" /> AU & UK Support
+            </Link>
 
-            <Button
-              onClick={() => handleNav('order')}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white hidden sm:flex"
-            >
-              Order Now
+            <div className="relative hidden sm:inline-flex">
+              <span className="absolute -inset-0.5 rounded-md bg-yellow-400 opacity-60 blur-sm" />
+              <Button
+                onClick={() => handleNav('order')}
+                className="relative bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
+              {/* Route stays 'order' internally to avoid touching URLs/analytics,
+                  but the visible label now matches a booking flow, not a
+                  commission-a-document flow. */}
+              Book Now
             </Button>
+            </div>
 
             {/* Login Dropdown or User Menu */}
             {studentUser ? (
@@ -188,7 +320,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                       </div>
                       <div>
                         <p className="text-sm font-medium">Student</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">View samples & orders</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">View samples & bookings</p>
                       </div>
                     </button>
                     <button
@@ -237,6 +369,39 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                 {item.label}
               </button>
             ))}
+            {/* The desktop nav is hidden below md and hover does not exist on
+                touch, so the same tools are listed outright here. */}
+            <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Student support by region:</p>
+              <div className="grid grid-cols-2 gap-2 px-2 pb-2">
+                <Link href="/australia/academic-support" onClick={() => setMobileMenuOpen(false)} className="rounded-lg border px-3 py-2 text-sm font-semibold hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700">🇦🇺 Australia</Link>
+                <Link href="/uk/academic-support" onClick={() => setMobileMenuOpen(false)} className="rounded-lg border px-3 py-2 text-sm font-semibold hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700">🇬🇧 UK</Link>
+              </div>
+            </div>
+            <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Free tools:</p>
+              {NAV_TOOLS.map((tool) => {
+                const Icon = tool.icon;
+                return (
+                  <Link
+                    key={tool.href}
+                    href={tool.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 w-full text-left py-2.5 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
+                  >
+                    <Icon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    <span>{tool.label}</span>
+                  </Link>
+                );
+              })}
+              <Link
+                href="/tools"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-1.5 py-2.5 px-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400"
+              >
+                All free tools <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
             <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Login as:</p>
               <button

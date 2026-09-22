@@ -1,12 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 
-const db = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL || "postgresql://neondb_owner:npg_A8kgUBsheXJ3@ep-floral-sun-aikg04vz-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
-    },
-  },
-})
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL environment variable is not set.')
+}
+
+const db = new PrismaClient()
 
 async function checkNeonDatabase() {
   try {

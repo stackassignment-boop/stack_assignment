@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { GraduationCap, Phone, Mail, Instagram } from 'lucide-react';
 import TrustBadges from '@/components/marketing/TrustBadges';
 
@@ -7,13 +9,46 @@ interface FooterProps {
   onNavigate?: (page: string) => void;
 }
 
-export default function Footer({ onNavigate }: FooterProps) {
-  const handleNav = (page: string) => {
-    if (onNavigate) {
-      onNavigate(page);
-    }
-  };
+/**
+ * A footer link that is a real anchor for crawlers and still honours the legacy
+ * in-app navigation callback.
+ *
+ * Every link in this footer used to be `<button onClick={() => onNavigate(page)}>`.
+ * That works for a person but is invisible to a crawler: with no href there is no
+ * link, so none of these pages received any internal link equity from the one
+ * component that renders on every page of the site — including /integrity, the
+ * page that most needs to be findable. Rendering a real `<Link href>` fixes that.
+ * When the host page supplies `onNavigate` we still call it and suppress the
+ * default navigation, so client-side routing behaves exactly as it did before.
+ */
+function FooterLink({
+  href,
+  page,
+  onNavigate,
+  children,
+}: {
+  href: string;
+  page: string;
+  onNavigate?: (page: string) => void;
+  children: ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="hover:text-white transition-colors"
+      onClick={(event) => {
+        if (onNavigate) {
+          event.preventDefault();
+          onNavigate(page);
+        }
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
 
+export default function Footer({ onNavigate }: FooterProps) {
   return (
     <>
       <footer className="bg-slate-900 text-slate-300 py-12 mt-auto relative">
@@ -31,9 +66,17 @@ export default function Footer({ onNavigate }: FooterProps) {
                 Stack Assignment
               </div>
               <p className="text-sm opacity-90 leading-relaxed">
-                Professional academic writing &amp; assignment assistance.
+                {/*
+                  Was "Professional academic writing & assignment assistance ...
+                  Providing model / reference papers only — for learning
+                  purposes." The "model answer" and "reference paper" framing is
+                  the specific euphemism TEQSA guidance identifies as marketing
+                  for a cheating service, and it appeared on every page of the
+                  site via the footer.
+                */}
+                One-on-one tutoring and expert editing for university students.
                 <br />
-                Providing model / reference papers only — for learning purposes.
+                You do the work. We help you do it better.
               </p>
             </div>
 
@@ -42,36 +85,57 @@ export default function Footer({ onNavigate }: FooterProps) {
               <h4 className="text-white font-semibold mb-4 text-lg">Quick Links</h4>
               <ul className="space-y-2.5 text-sm">
                 <li>
-                  <button
-                    onClick={() => handleNav('services')}
-                    className="hover:text-white transition-colors"
-                  >
+                  <FooterLink href="/services" page="services" onNavigate={onNavigate}>
                     Services
-                  </button>
+                  </FooterLink>
                 </li>
                 <li>
-                  <button
-                    onClick={() => handleNav('pricing')}
-                    className="hover:text-white transition-colors"
-                  >
+                  <FooterLink href="/pricing" page="pricing" onNavigate={onNavigate}>
                     Pricing
-                  </button>
+                  </FooterLink>
                 </li>
                 <li>
-                  <button
-                    onClick={() => handleNav('samples')}
-                    className="hover:text-white transition-colors"
-                  >
+                  <FooterLink href="/samples" page="samples" onNavigate={onNavigate}>
                     Samples
-                  </button>
+                  </FooterLink>
                 </li>
                 <li>
-                  <button
-                    onClick={() => handleNav('blog')}
+                  <FooterLink href="/blog" page="blog" onNavigate={onNavigate}>
+                    Blog
+                  </FooterLink>
+                </li>
+                <li>
+                  <Link href="/universities" className="hover:text-white transition-colors">
+                    Universities
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/tools" className="hover:text-white transition-colors">
+                    Free Tools
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/australia/academic-support" className="hover:text-white transition-colors">
+                    Australia Student Support
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/uk/academic-support" className="hover:text-white transition-colors">
+                    UK Student Support
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/guides" className="hover:text-white transition-colors">
+                    Study Guides
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/tools/wam-calculator"
                     className="hover:text-white transition-colors"
                   >
-                    Blog
-                  </button>
+                    WAM Calculator
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -79,7 +143,21 @@ export default function Footer({ onNavigate }: FooterProps) {
             {/* Support */}
             <div>
               <h4 className="text-white font-semibold mb-4 text-lg">Support</h4>
-              <p className="text-sm mb-2 opacity-90">24/7 Assistance</p>
+              {/*
+                Was "24/7 Assistance". The only contact number on the site is an
+                Indian mobile, so round-the-clock coverage in Australian hours is
+                not something this footer can stand behind — and a support claim
+                published to prospective customers is a representation under the
+                Australian Consumer Law (Competition and Consumer Act 2010 Sch 2
+                ss 18, 29). Describing the channel instead of the coverage is both
+                honest and, for an Australian audience, more useful.
+
+                ⚠ FOR THE OWNER: an Australian landline or mobile would do more
+                for local trust and NAP consistency than any on-page change in
+                this pass. Right now the only phone number tells a Sydney student
+                they are calling overseas.
+              */}
+              <p className="text-sm mb-2 opacity-90">Message us any time</p>
               <a
                 href="tel:+919907300710"
                 className="block text-sm hover:text-white transition-colors mb-1.5 flex items-center gap-2"
@@ -99,28 +177,19 @@ export default function Footer({ onNavigate }: FooterProps) {
               <h4 className="text-white font-semibold mb-4 text-lg">Legal</h4>
               <ul className="space-y-2.5 text-sm">
                 <li>
-                  <button
-                    onClick={() => handleNav('terms')}
-                    className="hover:text-white transition-colors"
-                  >
+                  <FooterLink href="/terms" page="terms" onNavigate={onNavigate}>
                     Terms of Service
-                  </button>
+                  </FooterLink>
                 </li>
                 <li>
-                  <button
-                    onClick={() => handleNav('privacy')}
-                    className="hover:text-white transition-colors"
-                  >
+                  <FooterLink href="/privacy" page="privacy" onNavigate={onNavigate}>
                     Privacy Policy
-                  </button>
+                  </FooterLink>
                 </li>
                 <li>
-                  <button
-                    onClick={() => handleNav('integrity')}
-                    className="hover:text-white transition-colors"
-                  >
+                  <FooterLink href="/integrity" page="integrity" onNavigate={onNavigate}>
                     Academic Integrity
-                  </button>
+                  </FooterLink>
                 </li>
               </ul>
             </div>

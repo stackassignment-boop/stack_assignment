@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { User, FileText, Package, LogOut, Clock, CheckCircle, AlertCircle, Eye, Download, Plus, ChevronRight, Mail, Phone, Calendar, Settings, Edit2, Save, X, CreditCard, Wallet, XCircle, Paperclip, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PaymentPage from './PaymentPage';
+import SimilarityCheckPanel from './SimilarityCheckPanel';
 import DraggableFloatingWidget from '@/components/marketing/DraggableFloatingWidget';
 
 interface StudentDashboardProps {
@@ -70,11 +71,13 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  // Initial value only — overwritten by /api/settings on mount. Seeded with
+  // AUD so an Australian student never sees a flash of US dollars first.
   const [currencySettings, setCurrencySettings] = useState<CurrencySettings>({
-    code: 'USD',
-    symbol: '$',
-    rate: 0.012,
-    name: 'US Dollar',
+    code: 'AUD',
+    symbol: 'A$',
+    rate: 0.018,
+    name: 'Australian Dollar',
   });
 
   const formatPrice = (priceInINR: number): string => {
@@ -215,7 +218,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-AU', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -223,7 +226,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   };
 
   const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
+    return new Date(dateString).toLocaleString('en-AU', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -430,7 +433,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 border-b border-gray-200 dark:border-slate-800">
+        <div className="flex gap-2 mb-6 border-b border-gray-200 dark:border-slate-800 overflow-x-auto">
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
@@ -460,6 +463,16 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             }`}
           >
             Samples
+          </button>
+          <button
+            onClick={() => setActiveTab('similarity')}
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap ${
+              activeTab === 'similarity'
+                ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
+                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
+            }`}
+          >
+            Similarity Check
           </button>
           <button
             onClick={() => setActiveTab('settings')}
@@ -715,6 +728,9 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                 </div>
               </div>
             )}
+
+            {/* Similarity Check Tab */}
+            {activeTab === 'similarity' && <SimilarityCheckPanel />}
 
             {/* Settings Tab */}
             {activeTab === 'settings' && (
