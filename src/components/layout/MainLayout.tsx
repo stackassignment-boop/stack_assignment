@@ -24,6 +24,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     if (pathname.startsWith('/pricing')) return 'pricing';
     if (pathname.startsWith('/samples')) return 'samples';
     if (pathname.startsWith('/blog')) return 'blog';
+    if (pathname.startsWith('/tools')) return 'tools';
     if (pathname.startsWith('/about')) return 'home';
     if (pathname.startsWith('/contact')) return 'home';
     if (pathname.startsWith('/order')) return 'order';
