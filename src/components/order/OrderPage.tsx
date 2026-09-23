@@ -67,7 +67,7 @@ function splitPhone(raw: string): { dialCode: string | null; nationalNumber: str
 const ORDER_SERVICES = [
   { key: 'editing', label: 'Editing' },
   { key: 'tutoring', label: 'Tutoring' },
-  { key: 'samples', label: 'Model Answers' },
+  { key: 'samples', label: 'Worked Examples' },
   { key: 'examprep', label: 'Exam Prep' },
 ] as const;
 

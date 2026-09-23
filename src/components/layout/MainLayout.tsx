@@ -27,6 +27,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     if (pathname.startsWith('/tools')) return 'tools';
     if (pathname.startsWith('/about')) return 'home';
     if (pathname.startsWith('/contact')) return 'home';
+    if (pathname.startsWith('/universities')) return 'universities';
     if (pathname.startsWith('/order')) return 'order';
     return 'home';
   };
@@ -51,7 +52,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   } : null;
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Header
         currentPage={currentPage}
         onNavigate={handleNavigate}

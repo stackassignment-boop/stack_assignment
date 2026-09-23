@@ -6,11 +6,12 @@ import {
   Briefcase, Palette, HeartPulse, UtensilsCrossed, School, Microscope, Bot, PenTool,
 } from 'lucide-react'
 import { StructuredData } from '@/components/seo/StructuredData'
+import RegionalSeoLinks from '@/components/seo/RegionalSeoLinks'
 
 export const metadata: Metadata = {
-  title: 'Torrens University Assignment Support | Tutoring & Editing',
+  title: "Torrens University Assignment Support | Australia",
   description:
-    'Academic support and assessment guidance for Torrens University students across technology, business, health, hospitality, education, design and research.',
+    "Torrens University academic support in Australia \u2014 assessment guidance, draft feedback, proofreading and referencing for IT, business, cybersecurity, nursing, hospitality, education and design students.",
   keywords: [
     'Torrens University assignment support', 'Torrens assignment support', 'Torrens University assessment help',
     'Torrens academic support', 'Torrens IT assignment support', 'Torrens cybersecurity assignment support',
@@ -18,8 +19,8 @@ export const metadata: Metadata = {
     'Torrens nursing assignment support', 'Torrens education assignment support', 'Torrens design assignment support',
   ],
   openGraph: {
-    title: 'Torrens University Assignment Support Australia',
-    description: 'Academic support for Torrens University students across technology, business, health, hospitality, education and design.',
+    title: "Torrens University Assignment Support | Australia",
+    description: "Torrens University academic support in Australia \u2014 assessment guidance, draft feedback, proofreading and referencing for IT, business, cybersecurity, nursing, hospitality, education and design students.",
     url: 'https://www.stackassignment.com/universities/torrens-university',
     type: 'website',
     locale: region.ogLocale,
@@ -339,7 +340,9 @@ export default function TorrensUniversityPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      
+      <RegionalSeoLinks heading="Related student resources" items={[{"title": "Torrens assessment and marking guide", "description": "Learn how to use your brief and rubric to plan your response.", "href": "/guides/torrens-marking-guide"}, {"title": "APA 7 referencing guide", "description": "A practical referencing checklist for Australian university assessments.", "href": "/guides/apa-7-referencing-australia"}, {"title": "Free study tools", "description": "Use free tools to check and improve your own work.", "href": "/tools"}]} />
+<section className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Frequently Asked Questions</h2>
           <div className="space-y-4">

@@ -1,0 +1,17 @@
+# Normalise line endings. The working copy lives on a Windows mount, which was
+# rewriting whole files to CRLF and making 53 untouched files show as modified.
+# Git now stores LF and converts on checkout, so the churn stops at the commit
+# boundary instead of hiding real changes in a wall of whitespace.
+* text=auto eol=lf
+
+# Binary assets must never be touched by eol conversion.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+*.pdf  binary
+*.woff binary
+*.woff2 binary
+*.db   binary

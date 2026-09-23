@@ -254,6 +254,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/subjects`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    },
+    ...['nursing-health','business-management','it-computing-cyber-security','accounting-finance','education-social-sciences','engineering'].map((slug) => ({
+      url: `${baseUrl}/subjects/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+    {
       url: `${baseUrl}/requirements`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
@@ -283,6 +295,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/australia/academic-support`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/uk/academic-support`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/guides`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+
+    { url: `${baseUrl}/guides/harvard-referencing-australia`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/kbs-assessment-checklist`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/kaplan-harvard-referencing`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/cqu-apa-referencing`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/deakin-vancouver-referencing`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/torrens-marking-guide`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/uwa-assignment-cover-sheet`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/vun-turnitin`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+
+    // These six guide pages exist under src/app/guides and are linked from the
+    // /guides index, but were absent from the sitemap. A page missing here is
+    // still crawlable, just slower to be discovered.
+    { url: `${baseUrl}/guides/aglc4-referencing-australia`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/apa-7-referencing-australia`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/dissertation-proofreading-checklist`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/harvard-referencing-uk`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/plan-uk-university-assignment`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/read-assessment-brief-australia`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
   ]
 
   // Dedicated university landing pages (dynamic route driven by
@@ -351,25 +400,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Fetch uploaded assignment requirements — each gets its own indexable
-  // page (previously all requirements shared a single /requirements URL
-  // with no individual page, so specific uploaded assignments had no way
-  // to be found directly via search).
-  let requirementItems: { id: string; updatedAt: Date }[] = []
-  try {
-    requirementItems = await db.requirementFile.findMany({
-      select: { id: true, updatedAt: true },
-    })
-  } catch (error) {
-    console.error('Failed to fetch requirements for sitemap:', error)
-  }
+  // User-uploaded requirement files are not included in the public sitemap.
+  // They can contain private assessment details and are not intended as SEO pages.
 
-  const requirementPages = requirementItems.map((req) => ({
-    url: `${baseUrl}/requirements/${req.id}`,
-    lastModified: req.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
-  }))
-
-  return [...staticPages, ...universityPages, ...blogPages, ...samples, ...services, ...requirementPages]
+  return [...staticPages, ...universityPages, ...blogPages, ...samples, ...services]
 }

@@ -6,19 +6,20 @@ import {
   Briefcase, HeartPulse, School, Palette, Scale, Users, Bot, PenTool,
 } from 'lucide-react'
 import { StructuredData } from '@/components/seo/StructuredData'
+import RegionalSeoLinks from '@/components/seo/RegionalSeoLinks'
 
 export const metadata: Metadata = {
-  title: 'UniSC Assignment Support | University of the Sunshine Coast',
+  title: "UniSC Assignment Support | Sunshine Coast",
   description:
-    'Academic support and assessment guidance for University of the Sunshine Coast (UniSC) students — business, IT, health, nursing, education and engineering.',
+    "University of the Sunshine Coast (UniSC) academic support \u2014 assessment guidance, draft feedback, proofreading and referencing for business, nursing, psychology, engineering, IT and education students.",
   keywords: [
     'UniSC assignment support', 'University of the Sunshine Coast assignment support', 'UniSC assessment help',
     'UniSC academic support', 'UniSC IT assignment support', 'UniSC nursing assignment support',
     'UniSC business assignment support', 'UniSC health assignment support', 'UniSC report writing help',
   ],
   openGraph: {
-    title: 'UniSC Assignment Support | University of the Sunshine Coast',
-    description: 'Academic support for UniSC students across business, IT, health, nursing and education.',
+    title: "UniSC Assignment Support | Sunshine Coast",
+    description: "University of the Sunshine Coast (UniSC) academic support \u2014 assessment guidance, draft feedback, proofreading and referencing for business, nursing, psychology, engineering, IT and education students.",
     url: 'https://www.stackassignment.com/universities/university-of-sunshine-coast',
     type: 'website',
     locale: region.ogLocale,
@@ -255,7 +256,9 @@ export default function UniSCPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      
+      <RegionalSeoLinks heading="Related student resources" items={[{"title": "UniSC assessment planning guide", "description": "Break down your brief, rubric and evidence requirements before you start writing.", "href": "/guides/read-assessment-brief-australia"}, {"title": "APA 7 referencing guide", "description": "A practical APA 7 checklist for Australian university assessments.", "href": "/guides/apa-7-referencing-australia"}, {"title": "Free student study tools", "description": "Use free tools for drafting, referencing and study planning.", "href": "/tools"}]} />
+<section className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Frequently Asked Questions</h2>
           <div className="space-y-4">

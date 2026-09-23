@@ -27,14 +27,15 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import { StructuredData } from '@/components/seo/StructuredData'
+import RegionalSeoLinks from '@/components/seo/RegionalSeoLinks'
 
 // ---------------------------------------------------------------------------
 // SEO metadata
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'Kaplan Business School Assignment Support Australia',
+  title: "Kaplan Business School Assignment Support | KBS Australia",
   description:
-    'Looking for Kaplan assignment support or KBS assignment support? Get academic support, assessment guidance, proofreading, referencing and research assistance for Kaplan Business School students across Australia — business, accounting, marketing, IT, and MBA.',
+    "Kaplan Business School academic support in Australia \u2014 assessment guidance, draft feedback, proofreading, referencing and study resources for KBS business, accounting, marketing, IT and MBA students.",
   keywords: [
     'Kaplan Business School assignment support',
     'KBS assignment support',
@@ -53,9 +54,8 @@ export const metadata: Metadata = {
     'KBS MBA assignment support',
   ],
   openGraph: {
-    title: 'Kaplan Business School Assignment Support Australia',
-    description:
-      'Academic support, assessment guidance, proofreading and referencing help for Kaplan Business School students across Australia.',
+    title: "Kaplan Business School Assignment Support | KBS Australia",
+    description: "Kaplan Business School academic support in Australia \u2014 assessment guidance, draft feedback, proofreading, referencing and study resources for KBS business, accounting, marketing, IT and MBA students.",
     url: 'https://www.stackassignment.com/kaplan-assignment-help',
     type: 'website',
     locale: region.ogLocale,
@@ -853,6 +853,8 @@ export default function KaplanAssignmentHelpPage() {
         </div>
       </section>
 
+
+      <RegionalSeoLinks heading="Related student resources" items={[{"title": "KBS Harvard referencing guide", "description": "Check citations and reference-list details against your current unit instructions.", "href": "/guides/kaplan-harvard-referencing"}, {"title": "How to structure a business report", "description": "Plan a clear report around the assessment question, evidence and rubric.", "href": "/guides/read-assessment-brief-australia"}, {"title": "KBS assessment checklist", "description": "A final pre-submission checklist for structure, evidence and presentation.", "href": "/guides/kbs-assessment-checklist"}]} />
       {/* 15. FAQ */}
       <section className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">

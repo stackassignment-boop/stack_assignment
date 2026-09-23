@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { GraduationCap, Moon, Sun, Phone, Menu, X, ChevronDown, User, Shield, LogOut, ArrowRight } from 'lucide-react';
+import { GraduationCap, Moon, Sun, Phone, Menu, X, ChevronDown, User, LogOut, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NAV_TOOLS } from '@/lib/tools';
 
@@ -108,6 +108,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
     { id: 'pricing', label: 'Pricing' },
     { id: 'samples', label: 'Samples' },
     { id: 'blog', label: 'Blog' },
+    { id: 'universities', label: 'Universities' },
   ];
 
   const handleNav = (page: string) => {
@@ -119,22 +120,22 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
   };
 
   return (
-    <header className="bg-white dark:bg-slate-900 shadow-lg sticky top-0 z-50 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/95 transition-colors">
+      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-10">
+        <div className="flex min-h-[72px] items-center justify-between gap-5">
           {/* Logo */}
           <button 
             onClick={() => handleNav('home')}
-            className="flex items-center gap-3 hover:opacity-90 transition cursor-pointer"
+            className="flex min-w-[190px] shrink-0 items-center gap-2.5 hover:opacity-90 transition cursor-pointer"
           >
-            <GraduationCap className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-            <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+            <GraduationCap className="h-8 w-8 shrink-0 text-indigo-600 dark:text-indigo-400" />
+            <span className="max-w-[150px] text-[21px] font-extrabold leading-[1.02] tracking-tight text-indigo-600 dark:text-indigo-400">
               Stack Assignment
             </span>
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden flex-1 items-center justify-center gap-5 lg:gap-6 md:flex">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -149,6 +150,12 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                 )}
               </button>
             ))}
+
+            <div className="hidden xl:flex items-center gap-2 border-l border-slate-200 pl-4 dark:border-slate-700">
+              <Link href="/australia/academic-support" className="text-xs font-bold text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">AU</Link>
+              <span className="text-slate-300">|</span>
+              <Link href="/uk/academic-support" className="text-xs font-bold text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">UK</Link>
+            </div>
 
             {/* Free Tools */}
             <div
@@ -216,7 +223,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
           </nav>
 
           {/* Right Side */}
-          <div className="flex items-center gap-4">
+          <div className="flex shrink-0 items-center gap-2 lg:gap-3">
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors"
@@ -225,15 +232,12 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            <a
-              href="tel:+919907300710"
-              className="hidden sm:flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            <Link
+              href="/contact"
+              className="hidden xl:flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
             >
-              {/* TODO: same placeholder +91 (India) number flagged elsewhere
-                  (PricingPage phone placeholder, WhatsAppOrderButton) — swap
-                  for the real AU support line/number before launch. */}
-              <Phone className="w-4 h-4" /> +91-99073-00710
-            </a>
+              <Phone className="w-4 h-4" /> AU & UK Support
+            </Link>
 
             <div className="relative hidden sm:inline-flex">
               <span className="absolute -inset-0.5 rounded-md bg-yellow-400 opacity-60 blur-sm" />
@@ -294,7 +298,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                 <button
                   onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
                   className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
-                    loginDropdownOpen || currentPage === 'admin' || currentPage === 'student-login'
+                    loginDropdownOpen || currentPage === 'student-login'
                       ? 'text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-900/20'
                       : 'hover:bg-gray-100 dark:hover:bg-slate-800'
                   }`}
@@ -317,20 +321,6 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                       <div>
                         <p className="text-sm font-medium">Student</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">View samples & bookings</p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleNav('admin');
-                      }}
-                      className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-3"
-                    >
-                      <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
-                        <Shield className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">Admin</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Manage website</p>
                       </div>
                     </button>
                   </div>
@@ -368,6 +358,13 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
             {/* The desktop nav is hidden below md and hover does not exist on
                 touch, so the same tools are listed outright here. */}
             <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Student support by region:</p>
+              <div className="grid grid-cols-2 gap-2 px-2 pb-2">
+                <Link href="/australia/academic-support" onClick={() => setMobileMenuOpen(false)} className="rounded-lg border px-3 py-2 text-sm font-semibold hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700">🇦🇺 Australia</Link>
+                <Link href="/uk/academic-support" onClick={() => setMobileMenuOpen(false)} className="rounded-lg border px-3 py-2 text-sm font-semibold hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700">🇬🇧 UK</Link>
+              </div>
+            </div>
+            <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Free tools:</p>
               {NAV_TOOLS.map((tool) => {
                 const Icon = tool.icon;
@@ -392,20 +389,13 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
               </Link>
             </div>
             <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Login as:</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Student account</p>
               <button
                 onClick={() => handleNav('student-login')}
                 className="flex items-center gap-3 w-full text-left py-3 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
               >
                 <User className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-                <span>Student</span>
-              </button>
-              <button
-                onClick={() => handleNav('admin')}
-                className="flex items-center gap-3 w-full text-left py-3 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
-              >
-                <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                <span>Admin</span>
+                <span>Student Login</span>
               </button>
             </div>
           </div>

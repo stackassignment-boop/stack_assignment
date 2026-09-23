@@ -6,19 +6,20 @@ import {
   Briefcase, HardHat, Scale, HeartPulse, Microscope, Bot, PenTool, DollarSign,
 } from 'lucide-react'
 import { StructuredData } from '@/components/seo/StructuredData'
+import RegionalSeoLinks from '@/components/seo/RegionalSeoLinks'
 
 export const metadata: Metadata = {
-  title: 'University of Western Australia Assignment Support | UWA',
+  title: "UWA Assignment Support | University of Western Australia",
   description:
-    'Academic support and assessment guidance for University of Western Australia (UWA) students in Perth — computer science, engineering, business, law and science.',
+    "University of Western Australia (UWA) academic support in Perth \u2014 assessment guidance, draft feedback, proofreading and referencing for computer science, engineering, business, law and science students.",
   keywords: [
     'University of Western Australia assignment support', 'UWA assignment support', 'UWA assessment help',
     'UWA academic support', 'UWA computer science assignment support', 'UWA business assignment support',
     'UWA engineering assignment support', 'UWA accounting assignment support', 'UWA report writing help',
   ],
   openGraph: {
-    title: 'University of Western Australia Assignment Support | UWA',
-    description: 'Academic support for UWA students across computer science, engineering, business, law and science.',
+    title: "UWA Assignment Support | University of Western Australia",
+    description: "University of Western Australia (UWA) academic support in Perth \u2014 assessment guidance, draft feedback, proofreading and referencing for computer science, engineering, business, law and science students.",
     url: 'https://www.stackassignment.com/universities/university-of-western-australia',
     type: 'website',
     locale: region.ogLocale,
@@ -278,7 +279,9 @@ export default function UWAPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      
+      <RegionalSeoLinks heading="Related student resources" items={[{"title": "UWA assessment planning guide", "description": "A practical way to read an assessment brief and build your response.", "href": "/guides/read-assessment-brief-australia"}, {"title": "APA 7 referencing guide", "description": "Check academic citations and reference-list details.", "href": "/guides/apa-7-referencing-australia"}, {"title": "Free university study tools", "description": "Draft, referencing and study tools for university students.", "href": "/tools"}]} />
+<section className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Frequently Asked Questions</h2>
           <div className="space-y-4">

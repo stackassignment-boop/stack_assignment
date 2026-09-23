@@ -34,29 +34,26 @@ export const seoConfig = {
   siteUrl: 'https://www.stackassignment.com',
 
   // Default Meta Tags — AU-first, tutoring/editing positioning
-  title: 'Academic Tutoring & Editing for Australian Uni Students | Stack Assignment',
+  title: 'Academic Tutoring & Editing in Australia & UK | Stack Assignment',
   description:
-    'One-on-one tutoring and expert editing for Australian university students. PhD-qualified tutors who know AGLC4, APA 7th and Vancouver referencing, and AU marking rubrics. Since 2010.',
+    'One-on-one tutoring, draft feedback, proofreading and academic support for university students in Australia and the UK. Support for AGLC4, APA 7th, Harvard, Vancouver and university-specific requirements.',
   keywords: [
-    // AU tutoring intent
     'academic tutoring Australia',
     'university tutor Australia',
     'assignment feedback Australia',
     'academic support Australian universities',
-    // AU editing / proofreading intent
     'essay editing service Australia',
-    'thesis editing Australia',
-    'dissertation editing Australia',
-    'proofreading service Australia',
-    // AU referencing (Cluster 1 of the content calendar)
+    'proofreading university assignments Australia',
+    'academic support UK university students',
+    'university tutor UK',
+    'essay editing UK',
+    'dissertation proofreading UK',
     'AGLC4 referencing guide',
     'APA 7th referencing Australia',
     'Vancouver referencing nursing Australia',
-    'Harvard referencing Australia',
-    // AU-specific study terms — no UK equivalent, so low competition
+    'Harvard referencing UK',
     'WAM calculator',
     'weighted average mark calculator',
-    // Brand
     'Stack Assignment',
   ],
 

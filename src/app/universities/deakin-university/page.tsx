@@ -6,11 +6,12 @@ import {
   Briefcase, HeartPulse, HardHat, School, Scale, Bot, PenTool,
 } from 'lucide-react'
 import { StructuredData } from '@/components/seo/StructuredData'
+import RegionalSeoLinks from '@/components/seo/RegionalSeoLinks'
 
 export const metadata: Metadata = {
-  title: 'Deakin University Assignment Support | Tutoring & Editing',
+  title: "Deakin University Assignment Support | Australia",
   description:
-    'Academic support and assessment guidance for Deakin University students across cyber security, IT, business, health, engineering and education, in Melbourne, Geelong and online.',
+    "Deakin University academic support in Australia \u2014 assessment guidance, draft feedback, proofreading and referencing for cyber security, IT, business, health, engineering and education.",
   keywords: [
     'Deakin University assignment support', 'Deakin assignment support', 'Deakin assessment help',
     'Deakin academic support', 'Deakin IT assignment support', 'Deakin cybersecurity assignment support',
@@ -18,8 +19,8 @@ export const metadata: Metadata = {
     'Deakin engineering assignment support', 'Deakin report writing help',
   ],
   openGraph: {
-    title: 'Deakin University Assignment Support | Tutoring & Editing',
-    description: 'Academic support for Deakin University students across cyber security, IT, business, health, engineering and education.',
+    title: "Deakin University Assignment Support | Australia",
+    description: "Deakin University academic support in Australia \u2014 assessment guidance, draft feedback, proofreading and referencing for cyber security, IT, business, health, engineering and education.",
     url: 'https://www.stackassignment.com/universities/deakin-university',
     type: 'website',
     locale: region.ogLocale,
@@ -292,7 +293,9 @@ export default function DeakinUniversityPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-white dark:bg-slate-950">
+      
+      <RegionalSeoLinks heading="Related student resources" items={[{"title": "Deakin Vancouver referencing guide", "description": "A practical referencing checklist for health and related coursework.", "href": "/guides/deakin-vancouver-referencing"}, {"title": "Read an assessment brief", "description": "Use the rubric to plan structure, evidence and revision.", "href": "/guides/read-assessment-brief-australia"}, {"title": "Free student study tools", "description": "Draft-review, referencing and study tools for university students.", "href": "/tools"}]} />
+<section className="py-16 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Frequently Asked Questions</h2>
           <div className="space-y-4">

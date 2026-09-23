@@ -115,6 +115,21 @@ export default function Footer({ onNavigate }: FooterProps) {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/australia/academic-support" className="hover:text-white transition-colors">
+                    Australia Student Support
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/uk/academic-support" className="hover:text-white transition-colors">
+                    UK Student Support
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/guides" className="hover:text-white transition-colors">
+                    Study Guides
+                  </Link>
+                </li>
+                <li>
                   <Link
                     href="/tools/wam-calculator"
                     className="hover:text-white transition-colors"

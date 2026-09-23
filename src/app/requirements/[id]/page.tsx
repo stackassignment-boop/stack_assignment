@@ -48,6 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${req.title} | Assignment Support | Stack Assignment`,
     description,
     alternates: { canonical: `https://www.stackassignment.com/requirements/${req.id}` },
+    robots: { index: false, follow: false },
     openGraph: {
       title: req.title,
       description,

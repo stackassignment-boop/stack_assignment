@@ -10,7 +10,6 @@ import FAQSection from '@/components/home/FAQSection';
 import UniversitiesSection from '@/components/home/UniversitiesSection';
 import PricingPage from '@/components/pricing/PricingPage';
 import TrustBadges from '@/components/marketing/TrustBadges';
-import ReferralBanner from '@/components/marketing/ReferralBanner';
 import { useRouteNavigate } from '@/lib/useRouteNavigate';
 
 /**
@@ -53,15 +52,8 @@ export default function HomeRoute() {
       <StatsSection />
       <HowItWorksSection onNavigate={navigate} />
       <PricingPage onNavigate={navigate} />
-      <TestimonialsSection onNavigate={navigate} />
+      <TestimonialsSection />
       <PortfolioSection onNavigate={navigate} />
-
-      {/* Referral Program */}
-      <section className="py-8 bg-gray-50 dark:bg-slate-900">
-        <div className="max-w-6xl mx-auto px-6">
-          <ReferralBanner variant="full" />
-        </div>
-      </section>
 
       <FAQSection />
       <UniversitiesSection />

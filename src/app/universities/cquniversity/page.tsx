@@ -22,14 +22,15 @@ import {
   PenTool,
 } from 'lucide-react'
 import { StructuredData } from '@/components/seo/StructuredData'
+import RegionalSeoLinks from '@/components/seo/RegionalSeoLinks'
 
 // ---------------------------------------------------------------------------
 // SEO metadata
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'CQUniversity Assignment Support Australia | Stack Assignment',
+  title: "CQUniversity Assignment Support | CQU Australia",
   description:
-    'Academic support, assessment guidance, proofreading and research assistance for CQUniversity (CQU) students across Australia — business, nursing, engineering, education and IT.',
+    "CQUniversity academic support in Australia \u2014 assessment guidance, draft feedback, proofreading, referencing and research support for business, nursing, engineering, education and IT students.",
   keywords: [
     'CQUniversity assignment support',
     'CQU assignment support',
@@ -45,9 +46,8 @@ export const metadata: Metadata = {
     'CQU referencing help',
   ],
   openGraph: {
-    title: 'CQUniversity Assignment Support Australia | Stack Assignment',
-    description:
-      'Academic support, assessment guidance and referencing help for CQUniversity students across Australia.',
+    title: "CQUniversity Assignment Support | CQU Australia",
+    description: "CQUniversity academic support in Australia \u2014 assessment guidance, draft feedback, proofreading, referencing and research support for business, nursing, engineering, education and IT students.",
     url: 'https://www.stackassignment.com/universities/cquniversity',
     type: 'website',
     locale: region.ogLocale,
@@ -598,6 +598,8 @@ export default function CQUniversityPage() {
         </div>
       </section>
 
+
+      <RegionalSeoLinks heading="Related student resources" items={[{"title": "CQU APA referencing guide", "description": "Use a practical APA 7 workflow and check your unit instructions.", "href": "/guides/cqu-apa-referencing"}, {"title": "Read an assessment brief", "description": "Plan your CQU response around the question, rubric and evidence.", "href": "/guides/read-assessment-brief-australia"}, {"title": "Free student study tools", "description": "Access referencing, draft-review and other study tools.", "href": "/tools"}]} />
       {/* FAQ */}
       <section className="py-16 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-6">
