@@ -15,6 +15,14 @@ const guides = [
   ['Harvard Referencing Guide for UK Students', '/guides/harvard-referencing-uk', 'UK'],
   ['How to Plan a UK University Assignment', '/guides/plan-uk-university-assignment', 'UK'],
   ['Dissertation Proofreading Checklist', '/guides/dissertation-proofreading-checklist', 'UK'],
+  ['Harvard Referencing Guide for Australian Students', '/guides/harvard-referencing-australia', 'Australia'],
+  ['Kaplan Harvard Referencing Guide', '/guides/kaplan-harvard-referencing', 'Kaplan'],
+  ['Kaplan Business School Assessment Checklist', '/guides/kbs-assessment-checklist', 'Kaplan'],
+  ['CQU APA Referencing Guide', '/guides/cqu-apa-referencing', 'CQU'],
+  ['Deakin Vancouver Referencing Guide', '/guides/deakin-vancouver-referencing', 'Deakin'],
+  ['Torrens Assessment & Marking Guide', '/guides/torrens-marking-guide', 'Torrens'],
+  ['UWA Assignment Cover Sheet Checklist', '/guides/uwa-assignment-cover-sheet', 'UWA'],
+  ['Victoria University Turnitin Checklist', '/guides/vun-turnitin', 'Victoria University'],
 ];
 
 export default function GuidesPage() {

@@ -189,3 +189,43 @@ html { scroll-behavior: smooth; }
 .dark .stack-glass {
   background: rgba(15,23,42,.72);
 }
+
+
+/* Shared Stack Assignment page system — keeps route-level pages visually consistent. */
+.stack-page {
+  min-height: 100%;
+  background: #f8fafc;
+}
+.dark .stack-page { background: #020617; }
+.stack-page-section {
+  border-color: rgb(226 232 240 / 0.85);
+}
+.dark .stack-page-section {
+  border-color: rgb(51 65 85 / 0.75);
+}
+.stack-container {
+  width: min(100% - 2rem, 80rem);
+  margin-inline: auto;
+}
+@media (min-width: 640px) {
+  .stack-container { width: min(100% - 3rem, 80rem); }
+}
+@media (min-width: 1280px) {
+  .stack-container { width: min(100% - 5rem, 90rem); }
+}
+.stack-card {
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background: rgb(255 255 255 / 0.94);
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgb(15 23 42 / 0.05);
+}
+.dark .stack-card {
+  border-color: rgb(51 65 85 / 0.8);
+  background: rgb(15 23 42 / 0.88);
+}
+.stack-gradient-heading {
+  background: linear-gradient(90deg, #4f46e5, #0891b2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

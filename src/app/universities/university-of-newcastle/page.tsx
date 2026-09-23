@@ -6,11 +6,12 @@ import {
   Briefcase, HardHat, HeartPulse, School, Microscope, Bot, PenTool,
 } from 'lucide-react'
 import { StructuredData } from '@/components/seo/StructuredData'
+import RegionalSeoLinks from '@/components/seo/RegionalSeoLinks'
 
 export const metadata: Metadata = {
-  title: 'University of Newcastle Assignment Support | Tutoring',
+  title: "University of Newcastle Assignment Support | UoN",
   description:
-    'Academic support and assessment guidance for University of Newcastle (UoN) students in Australia — engineering, IT, nursing, business, education and science.',
+    "University of Newcastle academic support in Australia \u2014 assessment guidance, draft feedback, proofreading and referencing for engineering, IT, nursing, business, education and science students.",
   keywords: [
     'University of Newcastle assignment support', 'UoN assignment support', 'Newcastle University assessment help',
     'University of Newcastle academic support', 'University of Newcastle engineering assignment support',
@@ -18,8 +19,8 @@ export const metadata: Metadata = {
     'University of Newcastle business assignment support', 'University of Newcastle report writing help',
   ],
   openGraph: {
-    title: 'University of Newcastle Assignment Support | Tutoring',
-    description: 'Academic support for University of Newcastle students across engineering, IT, nursing, business and education.',
+    title: "University of Newcastle Assignment Support | UoN",
+    description: "University of Newcastle academic support in Australia \u2014 assessment guidance, draft feedback, proofreading and referencing for engineering, IT, nursing, business, education and science students.",
     url: 'https://www.stackassignment.com/universities/university-of-newcastle',
     type: 'website',
     locale: region.ogLocale,
@@ -256,7 +257,9 @@ export default function UniversityOfNewcastlePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      
+      <RegionalSeoLinks heading="Related student resources" items={[{"title": "Newcastle assessment planning guide", "description": "Turn an assessment brief and marking rubric into a practical writing plan.", "href": "/guides/read-assessment-brief-australia"}, {"title": "APA 7 referencing guide", "description": "Check citations, references and source details before submission.", "href": "/guides/apa-7-referencing-australia"}, {"title": "University study tools", "description": "Free calculators, draft-review and referencing tools for students.", "href": "/tools"}]} />
+<section className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Frequently Asked Questions</h2>
           <div className="space-y-4">

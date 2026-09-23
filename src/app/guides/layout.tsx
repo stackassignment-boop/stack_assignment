@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import MainLayout from '@/components/layout/MainLayout';
 
 export const metadata: Metadata = {
   title: 'University Study Guides',
@@ -6,4 +7,6 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://www.stackassignment.com/guides' },
 };
 
-export default function GuidesLayout({ children }: { children: React.ReactNode }) { return children; }
+export default function GuidesLayout({ children }: { children: React.ReactNode }) {
+  return <MainLayout>{children}</MainLayout>;
+}

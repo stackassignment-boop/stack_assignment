@@ -12,11 +12,12 @@ import {
   Award,
 } from 'lucide-react'
 import TrustBadges from '@/components/marketing/TrustBadges'
+import RegionalSeoLinks from '@/components/seo/RegionalSeoLinks'
 
 export const metadata: Metadata = {
-  title: 'Holmes Institute Assignment Support | Stack Assignment',
+  title: "Holmes Institute Assignment Support | Academic Help",
   description:
-    'Assignment support and essay feedback for Holmes Institute students across Melbourne, Sydney, Brisbane, Gold Coast and Cairns — business, accounting, information systems and MBA.',
+    "Holmes Institute academic support in Australia \u2014 assessment guidance, draft feedback, proofreading and referencing for business, accounting, information systems and MBA students.",
   keywords: [
     'Holmes Institute assignment support',
     'Holmes Institute essay feedback',
@@ -24,9 +25,8 @@ export const metadata: Metadata = {
     'Holmes Institute Harvard referencing',
   ],
   openGraph: {
-    title: 'Holmes Institute Assignment Support',
-    description:
-      'Assignment support for Holmes Institute students across business, accounting, information systems and MBA programs.',
+    title: "Holmes Institute Assignment Support | Academic Help",
+    description: "Holmes Institute academic support in Australia \u2014 assessment guidance, draft feedback, proofreading and referencing for business, accounting, information systems and MBA students.",
     url: 'https://www.stackassignment.com/holmes-institute-assignment-help',
     type: 'website',
     locale: region.ogLocale,
@@ -228,6 +228,8 @@ export default function HolmesAssignmentHelpPage() {
         </div>
       </section>
 
+
+      <RegionalSeoLinks heading="Related student resources" items={[{"title": "Holmes Institute academic support", "description": "Assessment guidance, draft feedback and study support for Holmes students.", "href": "/holmes-institute-assignment-help"}, {"title": "Harvard referencing guide", "description": "A practical referencing workflow for university essays and reports.", "href": "/guides/harvard-referencing-australia"}, {"title": "How to read an assessment brief", "description": "Turn a rubric into a clear assessment plan before you write.", "href": "/guides/read-assessment-brief-australia"}]} />
       {/* FAQ */}
       <section className="py-16 bg-gray-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">

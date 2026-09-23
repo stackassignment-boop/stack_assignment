@@ -254,6 +254,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/subjects`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    },
+    ...['nursing-health','business-management','it-computing-cyber-security','accounting-finance','education-social-sciences','engineering'].map((slug) => ({
+      url: `${baseUrl}/subjects/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+    {
       url: `${baseUrl}/requirements`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
@@ -301,7 +313,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
-  ]
+
+    { url: `${baseUrl}/guides/harvard-referencing-australia`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/kbs-assessment-checklist`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/kaplan-harvard-referencing`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/cqu-apa-referencing`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/deakin-vancouver-referencing`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/torrens-marking-guide`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/uwa-assignment-cover-sheet`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${baseUrl}/guides/vun-turnitin`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },  ]
 
   // Dedicated university landing pages (dynamic route driven by
   // src/data/universities.ts)
