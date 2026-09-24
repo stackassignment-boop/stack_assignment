@@ -27,23 +27,28 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // The fetcher lives inside the effect because that is its only caller.
+  // Previously it was a `const` declared *below* this effect, which the effect
+  // then called — a temporal-dead-zone reference that only happened to work
+  // because effects run after the whole component body has evaluated. Moving it
+  // in makes the dependency list honest and the ordering unconditional.
   useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await fetch('/api/blogs?limit=20');
+        if (res.ok) {
+          const data = await res.json();
+          setBlogs(data.blogs || []);
+        }
+      } catch (error) {
+        console.error('Failed to fetch blogs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchBlogs();
   }, []);
-
-  const fetchBlogs = async () => {
-    try {
-      const res = await fetch('/api/blogs?limit=20');
-      if (res.ok) {
-        const data = await res.json();
-        setBlogs(data.blogs || []);
-      }
-    } catch (error) {
-      console.error('Failed to fetch blogs:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-AU', {

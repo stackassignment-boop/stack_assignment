@@ -42,7 +42,11 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
     if (!isOpen || typeof window === 'undefined') return;
 
     if (!hasFile) {
-      setLoading(false);
+      // No `setLoading(false)` here. Every part of the render that reads
+      // `loading` is already guarded by `hasFile` (`{loading && hasFile && …}`),
+      // so for a content-only sample the value is never observed — the write
+      // was redundant, and being a synchronous setState inside an effect it
+      // cost an extra render pass on every open.
       return;
     }
 

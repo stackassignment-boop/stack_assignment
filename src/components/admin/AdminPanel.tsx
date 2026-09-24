@@ -257,7 +257,14 @@ export default function AdminPanel() {
     checkAuth();
   }, []);
 
-  const checkAuth = async () => {
+  // `checkAuth` and `loadDashboardData` are function declarations, not `const`
+  // arrow functions, so that they are hoisted. The effect above calls checkAuth
+  // before its textual position, and checkAuth calls loadDashboardData before
+  // its own — with `const` bindings both were temporal-dead-zone references
+  // that only worked by accident of when effects run. `loadDashboardData` is
+  // called from a dozen mutation handlers further down, so moving it into the
+  // effect was not an option; hoisting is the change that costs nothing.
+  async function checkAuth() {
     try {
       const res = await fetch('/api/auth/me');
       if (res.ok) {
@@ -272,9 +279,9 @@ export default function AdminPanel() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const loadDashboardData = async () => {
+  async function loadDashboardData() {
     try {
       const [statsRes, ordersRes, inquiriesRes, blogsRes, samplesRes, requirementsRes, settingsRes] = await Promise.all([
         fetch('/api/dashboard/stats'),
@@ -317,7 +324,7 @@ export default function AdminPanel() {
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
     }
-  };
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

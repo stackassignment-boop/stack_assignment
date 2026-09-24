@@ -17,8 +17,14 @@ import { useRouteNavigate } from '@/lib/useRouteNavigate';
 interface Requirement {
   id: string;
   title: string;
-  description?: string;
-  category?: string;
+  // `null`, not just missing: both sources of this data hand back null for an
+  // empty column — the server component in app/requirements/page.tsx selects it
+  // straight from Prisma, and /api/requirements serialises the same row to JSON.
+  // Declaring it `string | undefined` made the server-rendered path a type error
+  // and quietly misdescribed the fetched path. Every read below is already
+  // null-safe (`??`/`||`/`?.`), so widening the type changes no behaviour.
+  description?: string | null;
+  category?: string | null;
   fileName: string;
   fileSize: number;
   fileType: string;

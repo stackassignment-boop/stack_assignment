@@ -17,11 +17,11 @@ interface RequirementPreviewModalProps {
 
 export default function RequirementPreviewModal({ requirement, isOpen, onClose }: RequirementPreviewModalProps) {
   const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loadingFile, setLoadingFile] = useState(true);
   const [pdfDoc, setPdfDoc] = useState<any>(null);
   const [pageImages, setPageImages] = useState<string[]>([]);
   const [containerWidth, setContainerWidth] = useState(600);
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [docxHtml, setDocxHtml] = useState<string | null>(null);
 
   const containerRef = useCallback((node: HTMLDivElement | null) => {
@@ -36,21 +36,35 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
     requirement.fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
     requirement.fileType === 'application/msword';
 
+  // Whether a file can be previewed at all depends only on the `requirement`
+  // prop, so the "unsupported type" message is computed here rather than
+  // written into state by the effect below. Two things fall out of that: the
+  // effect no longer performs a synchronous setState (which React now warns
+  // about, since it forces a second render pass before paint), and the spinner
+  // no longer flashes for a file that was never going to load.
+  const unsupportedError =
+    !isPdf && !isDocx
+      ? `This file type (${requirement.fileType}) cannot be previewed. Only PDF and Word documents are supported for preview.`
+      : null;
+
+  // What the render below consumes: the derived message wins, because in that
+  // case no load is attempted and `loadError`/`loadingFile` never move.
+  const error = unsupportedError ?? loadError;
+  const loading = unsupportedError ? false : loadingFile;
+
   // Load PDF document
   useEffect(() => {
     if (!isOpen || typeof window === 'undefined') return;
 
-    if (!isPdf && !isDocx) {
-      setLoading(false);
-      setError(`This file type (${requirement.fileType}) cannot be previewed. Only PDF and Word documents are supported for preview.`);
-      return;
-    }
+    // Nothing to fetch for an unpreviewable type — `unsupportedError` above
+    // already describes it to the visitor.
+    if (!isPdf && !isDocx) return;
 
     if (isDocx) {
       const loadDocx = async () => {
         try {
-          setLoading(true);
-          setError(null);
+          setLoadingFile(true);
+          setLoadError(null);
 
           const [mammoth, fileRes] = await Promise.all([
             import('mammoth'),
@@ -62,11 +76,11 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
 
           const result = await mammoth.convertToHtml({ arrayBuffer });
           setDocxHtml(result.value);
-          setLoading(false);
+          setLoadingFile(false);
         } catch (err) {
           console.error('Error loading DOCX:', err);
-          setError('Failed to load the Word document. Please try again.');
-          setLoading(false);
+          setLoadError('Failed to load the Word document. Please try again.');
+          setLoadingFile(false);
         }
       };
 
@@ -76,8 +90,8 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
 
     const loadPdf = async () => {
       try {
-        setLoading(true);
-        setError(null);
+        setLoadingFile(true);
+        setLoadError(null);
         setPageImages([]);
 
         // Dynamically import pdfjs-dist to avoid SSR issues
@@ -85,16 +99,16 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
 
         // Set worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
-        
+
         const loadingTask = pdfjsLib.getDocument(requirement.filePath);
         const pdf = await loadingTask.promise;
         setPdfDoc(pdf);
         setTotalPages(pdf.numPages);
-        setLoading(false);
+        setLoadingFile(false);
       } catch (err) {
         console.error('Error loading PDF:', err);
-        setError('Failed to load the PDF file. Please try again.');
-        setLoading(false);
+        setLoadError('Failed to load the PDF file. Please try again.');
+        setLoadingFile(false);
       }
     };
 

@@ -62,7 +62,9 @@ const updateOrderSchema = z.object({
   // Admin only fields
   status: z.enum(['pending', 'confirmed', 'in_progress', 'review', 'completed', 'cancelled', 'refunded']).optional(),
   paymentStatus: z.enum(['pending', 'pending_quote', 'pending_payment', 'paid', 'refunded']).optional(),
-  assignedWriter: z.string().optional(),
+  // `assignedWriter` used to be accepted here. There is no such column on
+  // Order and no screen that sends it, so it only ever served to make the
+  // update below fail. Left out so the field is stripped rather than written.
   totalPrice: z.number().positive().optional(),
 });
 
@@ -96,9 +98,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     
     if (body.status) {
       updateData.status = body.status;
-      if (body.status === 'completed') {
-        updateData.completedAt = new Date();
-      }
+      // No `completedAt` write here. Order has no such column, and because
+      // `updateData` is a Record<string, unknown> the compiler could not see
+      // that: Prisma rejected the whole update at runtime with "Unknown
+      // argument `completedAt`", so an admin marking an order completed got a
+      // 500 and the status change was never saved. Dropping the write is what
+      // restores the feature. `updatedAt` already records when a status last
+      // changed; a real completion timestamp needs a schema column first.
     }
     if (body.paymentStatus) {
       updateData.paymentStatus = body.paymentStatus;
@@ -110,10 +116,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         updateData.paymentStatus = 'pending_payment';
       }
     }
-    if (body.assignedWriter) {
-      updateData.assignedWriter = body.assignedWriter;
-    }
-    
+    // An `assignedWriter` write lived here too, with the same problem and no
+    // column to land in. Nothing in the app ever sent the field, so removing
+    // it loses no functionality — writer assignment was never implemented.
+
     const updatedOrder = await db.order.update({
       where: { id },
       data: updateData,
@@ -172,7 +178,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const data = result.data;
     
     // Separate admin-only fields
-    const adminFields = ['status', 'paymentStatus', 'assignedWriter'];
+    const adminFields = ['status', 'paymentStatus'];
     const hasAdminFields = adminFields.some(field => field in data);
     
     if (hasAdminFields && user.role !== 'admin') {
@@ -201,15 +207,22 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     if (user.role === 'admin') {
       if (data.status) {
         updateData.status = data.status;
-        if (data.status === 'completed') {
-          updateData.completedAt = new Date();
-        }
-        if (data.status === 'delivered') {
-          updateData.deliveredAt = new Date();
-        }
+        // Two writes were removed from this block, both naming columns that do
+        // not exist on Order:
+        //
+        //   completedAt  when status === 'completed'  — reachable, and it made
+        //                Prisma throw "Unknown argument", so the update failed
+        //                entirely and the status was never saved.
+        //   deliveredAt  when status === 'delivered'  — doubly dead: the schema
+        //                above never accepts 'delivered', so the branch was
+        //                rejected with a 400 long before this line.
+        //
+        // `updateData` is a Record<string, unknown>, which is why the compiler
+        // stayed quiet about both. Adding real completion/delivery timestamps
+        // is a schema change, not a one-line edit, so the writes are gone
+        // rather than wired up; `updatedAt` still records the last change.
       }
       if (data.paymentStatus) updateData.paymentStatus = data.paymentStatus;
-      if (data.assignedWriter) updateData.assignedWriter = data.assignedWriter;
     }
     
     // Recalculate price if pages changed

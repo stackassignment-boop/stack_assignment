@@ -1,5 +1,3 @@
-import MainLayout from '@/components/layout/MainLayout'
-
-export default function RegionLayout({ children }: { children: React.ReactNode }) {
-  return <MainLayout>{children}</MainLayout>
-}
+// Shared site chrome — header, footer, floating widget. Re-exported rather
+// than re-wrapped; see the note in MainLayout.tsx.
+export { default } from '@/components/layout/MainLayout'

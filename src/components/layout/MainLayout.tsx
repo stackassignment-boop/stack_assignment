@@ -12,6 +12,26 @@ interface MainLayoutProps {
   children: React.ReactNode;
 }
 
+/**
+ * The site chrome: header, footer and the floating contact widget.
+ *
+ * Sixteen route folders use this *as* their `layout.tsx`, via
+ * `export { default } from '@/components/layout/MainLayout'`. Each of them
+ * previously declared its own wrapper component — same import, same
+ * `return <MainLayout>{children}</MainLayout>`, only the function name differed.
+ * That is duplication with nowhere for a change to go: adding a notice bar or
+ * changing the page shell meant editing sixteen files, or editing one and
+ * quietly leaving fifteen behind.
+ *
+ * Re-exporting keeps every URL exactly where it was — no directories moved, no
+ * route group introduced. This file is a client component, so those layout
+ * modules stay server modules that simply hand Next a reference to it; children
+ * are still server-rendered and passed straight through.
+ *
+ * Sections that need more than the shared chrome (guides, subjects,
+ * universities, and the root layout) keep their own layout files, because they
+ * add metadata or structured data of their own.
+ */
 export default function MainLayout({ children }: MainLayoutProps) {
   const { data: session } = useSession();
   const router = useRouter();

@@ -31,37 +31,45 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
   const [error, setError] = useState<string | null>(null);
   const [apiResponse, setApiResponse] = useState<any>(null);
 
+  // Declared inside the effect that calls it — see the note in BlogPage.tsx.
+  // The `slug` dependency is what re-runs it, so nothing else needs a handle on
+  // it. `stale` guards against a slug change landing out of order: without it a
+  // slow response for the previous slug could overwrite the newer post.
   useEffect(() => {
-    fetchBlog();
-  }, [slug]);
+    let stale = false;
 
-  const fetchBlog = async () => {
-    console.log('Fetching blog with slug:', slug);
-    try {
-      const res = await fetch(`/api/blogs/${slug}`);
-      console.log('API Response status:', res.status);
-      
-      const data = await res.json();
-      console.log('API Response data:', data);
-      setApiResponse(data);
-      
-      if (res.ok) {
-        if (data.blog) {
-          setBlog(data.blog);
+    const fetchBlog = async () => {
+      try {
+        const res = await fetch(`/api/blogs/${slug}`);
+        const data = await res.json();
+        if (stale) return;
+        setApiResponse(data);
+
+        if (res.ok) {
+          if (data.blog) {
+            setBlog(data.blog);
+          } else {
+            setError('No blog data received from API');
+          }
         } else {
-          setError('No blog data received from API');
+          setError(data.error || `HTTP ${res.status}: Blog post not found`);
         }
-      } else {
-        setError(data.error || `HTTP ${res.status}: Blog post not found`);
+      } catch (err) {
+        if (stale) return;
+        const errorMsg = err instanceof Error ? err.message : 'Failed to load blog post';
+        setError(errorMsg);
+        console.error('Failed to fetch blog:', err);
+      } finally {
+        if (!stale) setLoading(false);
       }
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Failed to load blog post';
-      setError(errorMsg);
-      console.error('Failed to fetch blog:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchBlog();
+
+    return () => {
+      stale = true;
+    };
+  }, [slug]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-AU', {

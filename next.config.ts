@@ -9,15 +9,12 @@ const nextConfig: NextConfig = {
   // Production optimizations
   poweredByHeader: false,
 
-  // Image optimization domains
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
-  },
+  // No `images.remotePatterns` here on purpose. Nothing in the app imports
+  // next/image — the four <img> tags are plain HTML — so the optimizer was
+  // never used, but `hostname: '**'` left /_next/image willing to fetch and
+  // re-serve any URL on the internet. That is an open image proxy billed to
+  // this project's image-optimization quota. If next/image is adopted later,
+  // add only the specific hostnames needed (e.g. the Vercel Blob domain).
 
   // Empty turbopack config to use Turbopack defaults
   turbopack: {},

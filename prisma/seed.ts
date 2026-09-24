@@ -1,5 +1,8 @@
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+// bcryptjs, not bcrypt: the app's own auth paths all use bcryptjs, and the two
+// produce interchangeable hashes. Using one library removes a native module
+// (and its node-gyp build) from the dependency tree for no behaviour change.
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 

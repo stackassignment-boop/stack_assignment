@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { FileText, BookOpen, GraduationCap, FileCheck, Eye } from 'lucide-react';
 import SamplePreviewModal from './SamplePreviewModal';
@@ -91,59 +91,75 @@ interface SamplesPageProps {
   previewSlug?: string;
 }
 
+// Helpers for the useSyncExternalStore read below. They live at module scope so
+// their identities are stable across renders — a fresh function on every render
+// would make React re-subscribe and re-check the snapshot every time.
+const subscribeToNothing = () => () => {};
+const readPreviewParam = () =>
+  new URLSearchParams(window.location.search).get('preview') ?? '';
+// Snapshot used for the server render and for hydration, so both passes agree.
+const readNoPreviewParam = () => '';
+
 export default function SamplesPage({ previewSlug }: SamplesPageProps) {
   const router = useRouter();
   const [samples, setSamples] = useState<Sample[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSample, setSelectedSample] = useState<Sample | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
-  const [urlPreviewSlug, setUrlPreviewSlug] = useState<string>('');
+  // Only the *manually* opened sample is stored. The deep-linked one is derived
+  // below, because storing it meant copying a value that already exists in the
+  // URL and the sample list into state via an effect.
+  const [manualSample, setManualSample] = useState<Sample | null>(null);
+  const [previewDismissed, setPreviewDismissed] = useState(false);
 
   useEffect(() => {
+    const fetchSamples = async () => {
+      try {
+        const res = await fetch('/api/samples');
+        const data = await res.json();
+        setSamples(data.samples || []);
+      } catch (error) {
+        console.error('Failed to fetch samples:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchSamples();
   }, []);
 
   // Read `?preview=` from the URL so a deep link opens the right sample.
   //
-  // This is read in an effect rather than during render on purpose. `/samples`
-  // is statically prerendered, so anything read from the URL during render
-  // differs between the server HTML and the browser and produces a hydration
-  // mismatch — the exact bug that the old `/?view=` router had. Reading it after
-  // mount means both renders start identical and the modal opens a tick later.
+  // It cannot simply be read during render: `/samples` is statically
+  // prerendered, so a value taken from the URL differs between the server HTML
+  // and the browser and produces a hydration mismatch — the exact bug the old
+  // `/?view=` router had. useSyncExternalStore is the API built for that split:
+  // it renders `getServerSnapshot` (an empty string) during SSR and hydration,
+  // then re-reads the real value once mounted. There is nothing to subscribe to
+  // because a full page load is the only thing that changes the query string
+  // here, hence the no-op subscribe.
   //
   // The prop still wins if a caller passes one; only the fallback is new. It is
   // needed because these links used to arrive as `/?view=samples&preview=slug`
   // and are now redirected to `/samples?preview=slug`, where nothing was
   // supplying the prop.
-  useEffect(() => {
-    const fromUrl = new URLSearchParams(window.location.search).get('preview');
-    if (fromUrl) setUrlPreviewSlug(fromUrl);
-  }, []);
+  const urlPreviewSlug = useSyncExternalStore(
+    subscribeToNothing,
+    readPreviewParam,
+    readNoPreviewParam
+  );
 
   const effectivePreviewSlug = previewSlug || urlPreviewSlug;
 
-  // Auto-open preview when a preview slug is provided
-  useEffect(() => {
-    if (effectivePreviewSlug && samples.length > 0) {
-      const sampleToPreview = samples.find(s => s.slug === effectivePreviewSlug);
-      if (sampleToPreview) {
-        setSelectedSample(sampleToPreview);
-        setShowPreview(true);
-      }
-    }
-  }, [effectivePreviewSlug, samples]);
+  // The deep-linked sample, derived rather than pushed into state by an effect.
+  // `previewDismissed` is what stops it reopening after the visitor closes it —
+  // the old effect relied on its dependencies not changing again, which worked
+  // but meant the modal's open state had two independent owners.
+  const deepLinkedSample =
+    !previewDismissed && effectivePreviewSlug
+      ? samples.find(s => s.slug === effectivePreviewSlug) ?? null
+      : null;
 
-  const fetchSamples = async () => {
-    try {
-      const res = await fetch('/api/samples');
-      const data = await res.json();
-      setSamples(data.samples || []);
-    } catch (error) {
-      console.error('Failed to fetch samples:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const selectedSample = manualSample ?? deepLinkedSample;
+  const showPreview = selectedSample !== null;
 
   const formatFileSize = (bytes?: number) => {
     if (!bytes) return '';
@@ -157,16 +173,18 @@ export default function SamplesPage({ previewSlug }: SamplesPageProps) {
     // content-only samples (no file attached) go to their dedicated
     // article page instead, since the modal has nothing to render for them.
     if (sample.fileName) {
-      setSelectedSample(sample);
-      setShowPreview(true);
+      setManualSample(sample);
     } else {
       router.push(`/samples/${sample.slug}`);
     }
   };
 
   const handleClosePreview = () => {
-    setShowPreview(false);
-    setSelectedSample(null);
+    setManualSample(null);
+    // Also retires the `?preview=` deep link. Without this the derived
+    // `deepLinkedSample` would still match and the modal would reopen on the
+    // very next render.
+    setPreviewDismissed(true);
   };
 
   // Calculate preview pages

@@ -95,19 +95,38 @@ export async function isAdmin(): Promise<boolean> {
   return user?.role === 'admin';
 }
 
+// The authenticated user as the route handlers see it — whatever getCurrentUser
+// selects, minus the null it returns when there is no session.
+export type AuthenticatedUser = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>;
+
+/**
+ * Discriminated union, deliberately. Every caller writes
+ *
+ *   if (!authResult.success) return apiError(...);
+ *   const id = authResult.user.id;
+ *
+ * and that only type-checks if `success` is the literal `false`/`true` rather
+ * than `boolean`. Before this type existed the compiler inferred `boolean`,
+ * could not narrow, and `authResult.user` stayed possibly-undefined — so the
+ * guard was invisible to it and `.user.id` was an error in every admin route.
+ */
+export type AuthResult =
+  | { success: false; error: string; status: number }
+  | { success: true; user: AuthenticatedUser };
+
 // Middleware-like function to check authentication
-export async function requireAuth(request?: NextRequest) {
+export async function requireAuth(request?: NextRequest): Promise<AuthResult> {
   const user = await getCurrentUser();
-  
+
   if (!user) {
     return { success: false, error: 'Unauthorized', status: 401 };
   }
-  
+
   return { success: true, user };
 }
 
 // Middleware-like function to check admin role
-export async function requireAdmin() {
+export async function requireAdmin(): Promise<AuthResult> {
   const user = await getCurrentUser();
   
   if (!user) {

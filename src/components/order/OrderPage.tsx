@@ -157,6 +157,25 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
     fetchUserSession();
 
     // Check for pre-filled data from URL parameters
+    //
+    // react-hooks/set-state-in-effect is switched off for this block, and it is
+    // the only place in the codebase where that is done. The rule is right in
+    // general — a synchronous setState in an effect forces a second render pass
+    // — but the alternatives are all worse here:
+    //
+    //   * Reading the query string in a useState initialiser makes the first
+    //     client render differ from the prerendered HTML, i.e. a hydration
+    //     mismatch on the page that every paid enquiry passes through.
+    //   * Deriving the values during render is not possible: these seed fields
+    //     the visitor then edits, so they have to become state.
+    //   * Taking them from the server component's searchParams instead would
+    //     opt /order out of static rendering entirely.
+    //
+    // The cost is bounded: it runs once on mount with [] deps, and React
+    // batches every write below into a single additional render. Inbound quote
+    // links (/order?service=…&subject=…&phone=…) depend on it, so it is
+    // deliberately left as is rather than restructured.
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const subject = urlParams.get('subject');
@@ -198,6 +217,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
         }));
       }
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -137,7 +137,11 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
     return result.slice(0, 6);
   })();
 
-  const subjects = [...new Set(samples.map(s => s.subject).filter(Boolean))];
+  // `.filter(Boolean)` drops the empty subjects at runtime but does not tell
+  // the compiler it did, so this list stayed (string | undefined)[] and the
+  // `handleSubjectClick(sub)` call below — which needs a string — was a type
+  // error. The predicate form narrows it properly.
+  const subjects = [...new Set(samples.map(s => s.subject).filter((s): s is string => Boolean(s)))];
 
   const getImage = (subject?: string) => subjectImages[subject || ''] || subjectImages.default;
   const getColor = (subject?: string) => subjectColors[subject || ''] || subjectColors.default;
