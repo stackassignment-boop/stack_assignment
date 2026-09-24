@@ -187,7 +187,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
     if (s === 'cancelled' || s === 'failed') {
       return 'text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400';
     }
-    return 'text-gray-600 bg-gray-100 dark:bg-gray-900/30 dark:text-gray-400';
+    return 'text-slate-600 bg-slate-100 dark:bg-slate-900/30 dark:text-slate-400';
   };
 
   const getStatusIcon = (status: string) => {
@@ -254,9 +254,9 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Header */}
-      <header className="bg-white dark:bg-slate-900 shadow-sm border-b border-gray-200 dark:border-slate-800">
+      <header className="bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center gap-3">
@@ -264,8 +264,8 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                 <User className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900 dark:text-white">Student Dashboard</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Welcome back, {user.name}</p>
+                <h1 className="text-lg font-bold text-slate-900 dark:text-white">Student Dashboard</h1>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Welcome back, {user.name}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -282,7 +282,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                   onNavigate?.('home');
                 }}
                 variant="outline"
-                className="border-gray-300 dark:border-slate-700"
+                className="border-slate-300 dark:border-slate-700"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -296,7 +296,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
         {/* Profile Card & Stats */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Profile Card */}
-          <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
+          <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
             <div className="bg-gradient-to-r from-teal-500 to-teal-600 h-20"></div>
             <div className="px-6 pb-6 -mt-10">
               <div className="flex justify-center">
@@ -322,14 +322,14 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                       type="text"
                       value={editedName}
                       onChange={(e) => setEditedName(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-center font-semibold"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-center font-semibold"
                       placeholder="Your name"
                     />
                     <input
                       type="tel"
                       value={editedPhone}
                       onChange={(e) => setEditedPhone(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-center"
+                      className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-center"
                       placeholder="Phone number"
                     />
                     <div className="flex gap-2 justify-center">
@@ -343,12 +343,12 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">
                       {profile?.name || user.name}
                     </h2>
-                    <p className="text-gray-500 dark:text-gray-400">{profile?.email || user.email}</p>
+                    <p className="text-slate-500 dark:text-slate-400">{profile?.email || user.email}</p>
                     {profile?.phone && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{profile.phone}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{profile.phone}</p>
                     )}
                     <button 
                       onClick={() => setEditingProfile(true)}
@@ -361,18 +361,18 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
               </div>
 
               <div className="mt-6 space-y-3">
-                <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                  <Mail className="w-4 h-4 text-gray-400" />
+                <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+                  <Mail className="w-4 h-4 text-slate-400" />
                   <span>{profile?.email || user.email}</span>
                 </div>
                 {profile?.phone && (
-                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                    <Phone className="w-4 h-4 text-gray-400" />
+                  <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+                    <Phone className="w-4 h-4 text-slate-400" />
                     <span>{profile.phone}</span>
                   </div>
                 )}
-                <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                  <Calendar className="w-4 h-4 text-gray-400" />
+                <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+                  <Calendar className="w-4 h-4 text-slate-400" />
                   <span>Member since {profile?.createdAt ? formatDate(profile.createdAt) : 'N/A'}</span>
                 </div>
               </div>
@@ -381,51 +381,51 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
 
           {/* Stats Cards */}
           <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-xl flex items-center justify-center">
                   <FileText className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{samples.length}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Available Samples</p>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white">{samples.length}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Available Samples</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
                   <Package className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{orders.length}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Total Orders</p>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white">{orders.length}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Total Orders</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
                   <Wallet className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white">
                     {orders.filter(o => o.totalPrice > 0 && (o.paymentStatus === 'pending' || o.paymentStatus === 'pending_payment')).length}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Payment Due</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Payment Due</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-sm border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
                   <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white">
                     {orders.filter(o => o.status === 'completed' || o.status === 'delivered').length}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Completed Orders</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Completed Orders</p>
                 </div>
               </div>
             </div>
@@ -433,13 +433,13 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 border-b border-gray-200 dark:border-slate-800 overflow-x-auto">
+        <div className="flex gap-2 mb-6 border-b border-slate-200 dark:border-slate-800 overflow-x-auto">
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
               activeTab === 'overview'
                 ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
-                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
+                : 'text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             Overview
@@ -449,7 +449,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
               activeTab === 'orders'
                 ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
-                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
+                : 'text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             My Orders
@@ -459,7 +459,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
               activeTab === 'samples'
                 ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
-                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
+                : 'text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             Samples
@@ -469,7 +469,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             className={`px-4 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap ${
               activeTab === 'similarity'
                 ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
-                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
+                : 'text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             Similarity Check
@@ -479,7 +479,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             className={`px-4 py-3 text-sm font-medium border-b-2 transition ${
               activeTab === 'settings'
                 ? 'text-teal-600 dark:text-teal-400 border-teal-600 dark:border-teal-400'
-                : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'
+                : 'text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
             <Settings className="w-4 h-4 inline mr-1" />
@@ -498,9 +498,9 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             {activeTab === 'overview' && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Recent Orders */}
-                <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
-                  <div className="p-4 border-b border-gray-200 dark:border-slate-800 flex justify-between items-center">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">Recent Orders</h3>
+                <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+                  <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                    <h3 className="font-semibold text-slate-900 dark:text-white">Recent Orders</h3>
                     <button 
                       onClick={() => setActiveTab('orders')}
                       className="text-sm text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1"
@@ -508,13 +508,13 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
-                  <div className="divide-y divide-gray-200 dark:divide-slate-800">
+                  <div className="divide-y divide-slate-200 dark:divide-slate-800">
                     {orders.slice(0, 3).map((order) => (
-                      <div key={order.id} className="p-4 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition cursor-pointer" onClick={() => viewOrderDetails(order)}>
+                      <div key={order.id} className="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition cursor-pointer" onClick={() => viewOrderDetails(order)}>
                         <div className="flex justify-between items-start">
                           <div>
-                            <p className="font-medium text-gray-900 dark:text-white">{order.title}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="font-medium text-slate-900 dark:text-white">{order.title}</p>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">
                               {order.orderNumber} • {order.pages} pages
                             </p>
                           </div>
@@ -525,7 +525,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                       </div>
                     ))}
                     {orders.length === 0 && (
-                      <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                      <div className="p-8 text-center text-slate-500 dark:text-slate-400">
                         <Package className="w-12 h-12 mx-auto mb-3 opacity-50" />
                         <p>No orders yet</p>
                         <Button
@@ -540,9 +540,9 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                 </div>
 
                 {/* Available Samples */}
-                <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
-                  <div className="p-4 border-b border-gray-200 dark:border-slate-800 flex justify-between items-center">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">Sample Library</h3>
+                <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+                  <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                    <h3 className="font-semibold text-slate-900 dark:text-white">Sample Library</h3>
                     <button 
                       onClick={() => setActiveTab('samples')}
                       className="text-sm text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1"
@@ -550,13 +550,13 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
-                  <div className="divide-y divide-gray-200 dark:divide-slate-800">
+                  <div className="divide-y divide-slate-200 dark:divide-slate-800">
                     {samples.slice(0, 3).map((sample) => (
-                      <div key={sample.id} className="p-4 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition">
+                      <div key={sample.id} className="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
                         <div className="flex justify-between items-start">
                           <div>
-                            <p className="font-medium text-gray-900 dark:text-white">{sample.title}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="font-medium text-slate-900 dark:text-white">{sample.title}</p>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">
                               {sample.subject} • {sample.pages} pages
                             </p>
                           </div>
@@ -573,7 +573,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                       </div>
                     ))}
                     {samples.length === 0 && (
-                      <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                      <div className="p-8 text-center text-slate-500 dark:text-slate-400">
                         <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
                         <p>No samples available</p>
                       </div>
@@ -585,11 +585,11 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
 
             {/* Orders Tab */}
             {activeTab === 'orders' && (
-              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
-                <div className="p-4 border-b border-gray-200 dark:border-slate-800 flex justify-between items-center">
+              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">My Orders</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <h3 className="font-semibold text-slate-900 dark:text-white">My Orders</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       Track your order status and make payments
                     </p>
                   </div>
@@ -604,34 +604,34 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                 {orders.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-gray-50 dark:bg-slate-800">
+                      <thead className="bg-slate-50 dark:bg-slate-800">
                         <tr>
-                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Order</th>
-                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Subject</th>
-                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Pages</th>
-                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Deadline</th>
-                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Amount</th>
-                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Status</th>
-                          <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Action</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400">Order</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400">Subject</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400">Pages</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400">Deadline</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400">Amount</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400">Status</th>
+                          <th className="text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400">Action</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-200 dark:divide-slate-800">
+                      <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
                         {orders.map((order) => (
-                          <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition">
+                          <tr key={order.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
                             <td className="px-4 py-4">
                               <div>
-                                <p className="font-medium text-gray-900 dark:text-white">{order.title}</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">{order.orderNumber}</p>
+                                <p className="font-medium text-slate-900 dark:text-white">{order.title}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">{order.orderNumber}</p>
                               </div>
                             </td>
-                            <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">{order.subject}</td>
-                            <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">{order.pages}</td>
-                            <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
+                            <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-400">{order.subject}</td>
+                            <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-400">{order.pages}</td>
+                            <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-400">
                               {formatDate(order.deadline)}
                             </td>
                             <td className="px-4 py-4">
                               {order.totalPrice > 0 ? (
-                                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                <span className="text-sm font-medium text-slate-900 dark:text-white">
                                   {formatPrice(order.totalPrice)}
                                 </span>
                               ) : (
@@ -649,7 +649,7 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                                   onClick={() => viewOrderDetails(order)}
                                   size="sm"
                                   variant="outline"
-                                  className="border-gray-300 dark:border-slate-700"
+                                  className="border-slate-300 dark:border-slate-700"
                                 >
                                   <Eye className="w-4 h-4 mr-1" />
                                   Details
@@ -673,9 +673,9 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
                   </div>
                 ) : (
                   <div className="p-12 text-center">
-                    <Package className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No orders yet</h3>
-                    <p className="text-gray-500 dark:text-gray-400 mb-4">
+                    <Package className="w-16 h-16 mx-auto mb-4 text-slate-300 dark:text-slate-600" />
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No orders yet</h3>
+                    <p className="text-slate-500 dark:text-slate-400 mb-4">
                       Start by placing your first order
                     </p>
                     <Button
@@ -692,25 +692,25 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
 
             {/* Samples Tab */}
             {activeTab === 'samples' && (
-              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
-                <div className="p-4 border-b border-gray-200 dark:border-slate-800">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
+              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div className="p-4 border-b border-slate-200 dark:border-slate-800">
+                  <h3 className="font-semibold text-slate-900 dark:text-white">
                     All Samples ({samples.length})
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
                     As a registered student, you have full access to all samples
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
                   {samples.map((sample) => (
-                    <div key={sample.id} className="border border-gray-200 dark:border-slate-800 rounded-lg p-4 hover:border-teal-500 transition">
+                    <div key={sample.id} className="border border-slate-200 dark:border-slate-800 rounded-lg p-4 hover:border-teal-500 transition">
                       <div className="flex items-start gap-3">
                         <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center shrink-0">
                           <FileText className="w-5 h-5 text-teal-600 dark:text-teal-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-medium text-gray-900 dark:text-white truncate">{sample.title}</h4>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">{sample.subject}</p>
+                          <h4 className="font-medium text-slate-900 dark:text-white truncate">{sample.title}</h4>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">{sample.subject}</p>
                         </div>
                       </div>
                       <div className="mt-3">
@@ -734,53 +734,53 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
 
             {/* Settings Tab */}
             {activeTab === 'settings' && (
-              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 overflow-hidden">
-                <div className="p-4 border-b border-gray-200 dark:border-slate-800">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Account Settings</h3>
+              <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div className="p-4 border-b border-slate-200 dark:border-slate-800">
+                  <h3 className="font-semibold text-slate-900 dark:text-white">Account Settings</h3>
                 </div>
                 <div className="p-6 space-y-6">
                   <div>
-                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Profile Information</h4>
+                    <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-4">Profile Information</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Full Name</label>
+                        <label className="block text-sm text-slate-600 dark:text-slate-400 mb-1">Full Name</label>
                         <input
                           type="text"
                           value={profile?.name || user.name}
                           readOnly
-                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Email</label>
+                        <label className="block text-sm text-slate-600 dark:text-slate-400 mb-1">Email</label>
                         <input
                           type="email"
                           value={profile?.email || user.email}
                           readOnly
-                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Phone</label>
+                        <label className="block text-sm text-slate-600 dark:text-slate-400 mb-1">Phone</label>
                         <input
                           type="tel"
                           value={profile?.phone || 'Not set'}
                           readOnly
-                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Member Since</label>
+                        <label className="block text-sm text-slate-600 dark:text-slate-400 mb-1">Member Since</label>
                         <input
                           type="text"
                           value={profile?.createdAt ? formatDate(profile.createdAt) : 'N/A'}
                           readOnly
-                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="pt-4 border-t border-gray-200 dark:border-slate-800">
+                  <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
                     <Button
                       variant="outline"
                       className="text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
@@ -805,19 +805,19 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="sticky top-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 p-4 flex justify-between items-center">
+            <div className="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 flex justify-between items-center">
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Order Details</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedOrder.orderNumber}</p>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white">Order Details</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{selectedOrder.orderNumber}</p>
               </div>
               <button
                 onClick={() => {
                   setShowOrderModal(false);
                   setSelectedOrder(null);
                 }}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
+                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full"
               >
-                <XCircle className="w-6 h-6 text-gray-500" />
+                <XCircle className="w-6 h-6 text-slate-500" />
               </button>
             </div>
 
@@ -825,15 +825,15 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
             <div className="p-6 space-y-6">
               {/* Status Cards */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Order Status</p>
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">Order Status</p>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 w-fit ${getStatusColor(selectedOrder.status)}`}>
                     {getStatusIcon(selectedOrder.status)}
                     {selectedOrder.status.replace('_', ' ').toUpperCase()}
                   </span>
                 </div>
-                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Payment Status</p>
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">Payment Status</p>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 w-fit ${getStatusColor(selectedOrder.paymentStatus)}`}>
                     {getPaymentStatusLabel(selectedOrder.paymentStatus, selectedOrder.totalPrice)}
                   </span>
@@ -842,51 +842,51 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
 
               {/* Order Info */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                   <FileText className="w-5 h-5 text-teal-600" />
                   Order Information
                 </h3>
                 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-gray-500 dark:text-gray-400">Title</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{selectedOrder.title}</p>
+                    <p className="text-slate-500 dark:text-slate-400">Title</p>
+                    <p className="font-medium text-slate-900 dark:text-white">{selectedOrder.title}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 dark:text-gray-400">Subject</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{selectedOrder.subject}</p>
+                    <p className="text-slate-500 dark:text-slate-400">Subject</p>
+                    <p className="font-medium text-slate-900 dark:text-white">{selectedOrder.subject}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 dark:text-gray-400">Academic Level</p>
-                    <p className="font-medium text-gray-900 dark:text-white capitalize">{selectedOrder.academicLevel.replace('_', ' ')}</p>
+                    <p className="text-slate-500 dark:text-slate-400">Academic Level</p>
+                    <p className="font-medium text-slate-900 dark:text-white capitalize">{selectedOrder.academicLevel.replace('_', ' ')}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 dark:text-gray-400">Paper Type</p>
-                    <p className="font-medium text-gray-900 dark:text-white capitalize">{selectedOrder.paperType.replace('_', ' ')}</p>
+                    <p className="text-slate-500 dark:text-slate-400">Paper Type</p>
+                    <p className="font-medium text-slate-900 dark:text-white capitalize">{selectedOrder.paperType.replace('_', ' ')}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 dark:text-gray-400">Pages</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{selectedOrder.pages} pages</p>
+                    <p className="text-slate-500 dark:text-slate-400">Pages</p>
+                    <p className="font-medium text-slate-900 dark:text-white">{selectedOrder.pages} pages</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 dark:text-gray-400">Words</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{selectedOrder.words || 'Not specified'}</p>
+                    <p className="text-slate-500 dark:text-slate-400">Words</p>
+                    <p className="font-medium text-slate-900 dark:text-white">{selectedOrder.words || 'Not specified'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 dark:text-gray-400">Deadline</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{formatDateTime(selectedOrder.deadline)}</p>
+                    <p className="text-slate-500 dark:text-slate-400">Deadline</p>
+                    <p className="font-medium text-slate-900 dark:text-white">{formatDateTime(selectedOrder.deadline)}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500 dark:text-gray-400">Order Date</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{formatDateTime(selectedOrder.createdAt)}</p>
+                    <p className="text-slate-500 dark:text-slate-400">Order Date</p>
+                    <p className="font-medium text-slate-900 dark:text-white">{formatDateTime(selectedOrder.createdAt)}</p>
                   </div>
                 </div>
               </div>
 
               {/* Description */}
               <div className="space-y-2">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Description</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                <h3 className="font-semibold text-slate-900 dark:text-white">Description</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                   {selectedOrder.description}
                 </p>
               </div>
@@ -894,11 +894,11 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
               {/* Requirements */}
               {selectedOrder.requirements && (
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                  <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                     <Package className="w-5 h-5 text-indigo-600" />
                     Requirements
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-slate-800 rounded-lg p-4 whitespace-pre-wrap">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 rounded-lg p-4 whitespace-pre-wrap">
                     {selectedOrder.requirements}
                   </p>
                 </div>
@@ -907,16 +907,16 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
               {/* Attachments */}
               {selectedOrder.attachments && parseAttachments(selectedOrder.attachments).length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                  <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                     <Paperclip className="w-5 h-5 text-orange-600" />
                     Attached Files
                   </h3>
                   <div className="space-y-2">
                     {parseAttachments(selectedOrder.attachments).map((file, index) => (
-                      <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                      <div key={index} className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 rounded-lg p-3">
                         <div className="flex items-center gap-3">
-                          <FileDown className="w-5 h-5 text-gray-500" />
-                          <span className="text-sm text-gray-700 dark:text-gray-300">{file}</span>
+                          <FileDown className="w-5 h-5 text-slate-500" />
+                          <span className="text-sm text-slate-700 dark:text-slate-300">{file}</span>
                         </div>
                         <a
                           href={file}
@@ -936,8 +936,8 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
               {/* Notes */}
               {selectedOrder.notes && (
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Additional Notes</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-slate-800 rounded-lg p-4 whitespace-pre-wrap">
+                  <h3 className="font-semibold text-slate-900 dark:text-white">Additional Notes</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 rounded-lg p-4 whitespace-pre-wrap">
                     {selectedOrder.notes}
                   </p>
                 </div>
@@ -947,8 +947,8 @@ export default function StudentDashboard({ user, onNavigate, onLogout }: Student
               <div className="bg-gradient-to-r from-teal-50 to-indigo-50 dark:from-teal-900/20 dark:to-indigo-900/20 rounded-lg p-4">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Amount</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Total Amount</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       {selectedOrder.totalPrice > 0 ? formatPrice(selectedOrder.totalPrice) : 'Pending Quote'}
                     </p>
                   </div>

@@ -159,11 +159,11 @@ export default function DraftReview() {
     <div className="space-y-8">
       <div>
         <div className="flex flex-wrap items-end justify-between gap-4 mb-3">
-          <label htmlFor="draft" className="block font-semibold text-gray-900 dark:text-slate-100">
+          <label htmlFor="draft" className="block font-semibold text-slate-900 dark:text-slate-100">
             Paste your draft
           </label>
           <div className="flex items-center gap-2">
-            <label htmlFor="target" className="text-sm text-gray-600 dark:text-slate-400">
+            <label htmlFor="target" className="text-sm text-slate-600 dark:text-slate-400">
               Target word count
             </label>
             <input
@@ -173,7 +173,7 @@ export default function DraftReview() {
               value={target}
               onChange={(e) => setTarget(e.target.value)}
               placeholder="2000"
-              className="w-28 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1.5 text-sm text-gray-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-28 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1.5 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
           </div>
         </div>
@@ -183,7 +183,7 @@ export default function DraftReview() {
           onChange={(e) => setText(e.target.value)}
           rows={14}
           placeholder="Paste your essay, report or draft here. Nothing is uploaded — the analysis runs entirely in your browser."
-          className="w-full rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-4 text-gray-900 dark:text-slate-100 leading-relaxed focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-4 text-slate-900 dark:text-slate-100 leading-relaxed focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
         />
       </div>
 
@@ -196,24 +196,24 @@ export default function DraftReview() {
               { label: 'Paragraphs', value: stats.paragraphs.toLocaleString() },
               { label: 'Characters', value: stats.chars.toLocaleString() },
             ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 text-center">
+              <div key={s.label} className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 text-center">
                 <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{s.value}</div>
-                <div className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{s.label}</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{s.label}</div>
               </div>
             ))}
           </div>
 
           <div>
-            <h2 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4">
+            <h2 className="font-bold text-lg text-slate-900 dark:text-slate-100 mb-4">
               What this draft looks like structurally
             </h2>
             <ul className="space-y-3">
               {checks.map((c) => (
-                <li key={c.id} className="flex gap-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+                <li key={c.id} className="flex gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
                   {icon(c.status)}
                   <div>
-                    <div className="font-semibold text-gray-900 dark:text-slate-100">{c.label}</div>
-                    <p className="text-sm text-gray-700 dark:text-slate-300 leading-relaxed mt-0.5">{c.detail}</p>
+                    <div className="font-semibold text-slate-900 dark:text-slate-100">{c.label}</div>
+                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mt-0.5">{c.detail}</p>
                   </div>
                 </li>
               ))}
@@ -222,7 +222,7 @@ export default function DraftReview() {
         </>
       )}
 
-      <p className="text-xs text-gray-500 dark:text-slate-400 leading-relaxed border-t border-gray-200 dark:border-slate-700 pt-5">
+      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-200 dark:border-slate-700 pt-5">
         This tool measures structural and stylistic patterns only — it cannot judge whether your
         argument is sound, whether your sources are appropriate, or whether you have answered the
         question set. It is a proofreading aid, not a mark predictor, and it does not check

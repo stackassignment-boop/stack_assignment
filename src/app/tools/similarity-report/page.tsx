@@ -135,7 +135,7 @@ export default function SimilarityReportPage() {
         {sections.map((s, i) => (
           <div key={s.title}>
             <h2
-              className="flex gap-3 text-xl md:text-2xl font-bold text-gray-900 dark:text-slate-100 mb-3"
+              className="flex gap-3 text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3"
               style={{ fontFamily: 'Sora, sans-serif' }}
             >
               <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-sm font-bold text-indigo-700 dark:text-indigo-300">
@@ -143,7 +143,7 @@ export default function SimilarityReportPage() {
               </span>
               {s.title}
             </h2>
-            <p className="text-gray-700 dark:text-slate-300 leading-relaxed pl-11">{s.body}</p>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed pl-11">{s.body}</p>
           </div>
         ))}
       </div>

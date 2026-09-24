@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { StructuredData } from '@/components/seo/StructuredData';
 import Link from 'next/link';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface Blog {
   id: string;
@@ -19,178 +19,37 @@ interface Blog {
   };
 }
 
-interface BlogPageProps {
-  onNavigate?: (page: string, params?: Record<string, string>) => void;
-}
-
-export default function BlogPage({ onNavigate }: BlogPageProps) {
+export default function BlogPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState('All');
 
-  // The fetcher lives inside the effect because that is its only caller.
-  // Previously it was a `const` declared *below* this effect, which the effect
-  // then called — a temporal-dead-zone reference that only happened to work
-  // because effects run after the whole component body has evaluated. Moving it
-  // in makes the dependency list honest and the ordering unconditional.
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const res = await fetch('/api/blogs?limit=20');
-        if (res.ok) {
-          const data = await res.json();
-          setBlogs(data.blogs || []);
-        }
-      } catch (error) {
-        console.error('Failed to fetch blogs:', error);
-      } finally {
-        setLoading(false);
-      }
+        if (res.ok) { const data = await res.json(); setBlogs(data.blogs || []); }
+      } catch (error) { console.error('Failed to fetch blogs:', error); }
+      finally { setLoading(false); }
     };
-
     fetchBlogs();
   }, []);
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-AU', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
+  const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('en-AU', { month: 'short', day: 'numeric', year: 'numeric' });
+  const gradients = ['from-indigo-700 via-indigo-600 to-indigo-500', 'from-purple-700 via-purple-600 to-purple-500', 'from-indigo-700 via-purple-600 to-indigo-500', 'from-indigo-700 via-indigo-600 to-purple-500'];
+  const categories = ['All', ...Array.from(new Set(blogs.map(b => b.category).filter(Boolean) as string[]))];
+  const filtered = category === 'All' ? blogs : blogs.filter(b => b.category === category);
 
-  const getGradient = (index: number) => {
-    const gradients = [
-      'from-indigo-500 to-purple-600',
-      'from-blue-500 to-cyan-600',
-      'from-emerald-500 to-teal-600',
-      'from-pink-500 to-rose-600',
-      'from-amber-500 to-orange-600',
-      'from-violet-500 to-purple-600',
-    ];
-    return gradients[index % gradients.length];
-  };
+  if (loading) return <main className="stack-page flex-grow"><div className="stack-container py-20"><div className="stack-skeleton-grid">{[1,2,3,4,5,6].map(i => <div key={i} className="stack-skeleton-card" />)}</div></div></main>;
 
-  if (loading) {
-    return (
-      <main className="flex-grow py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <div className="animate-pulse h-12 bg-gray-200 rounded-lg w-64 mx-auto mb-4"></div>
-            <div className="animate-pulse h-6 bg-gray-200 rounded-lg w-96 mx-auto"></div>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div className="h-48 bg-gray-200 rounded-t-2xl"></div>
-                <div className="p-6 bg-white rounded-b-2xl">
-                  <div className="h-4 bg-gray-200 rounded w-24 mb-4"></div>
-                  <div className="h-6 bg-gray-200 rounded w-full mb-3"></div>
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  return (
-    <>
-      {/* Structured Data for SEO */}
-      <StructuredData
-        data={{
-          '@context': 'https://schema.org',
-          '@type': 'Blog',
-          name: 'Stack Assignment Blog',
-          description: 'Academic writing tips, guides, referencing help, study strategies and updates for students',
-          url: 'https://www.stackassignment.com/blog',
-          publisher: {
-            '@type': 'Organization',
-            name: 'Stack Assignment',
-            url: 'https://www.stackassignment.com',
-          },
-          blogPost: blogs.map((blog) => ({
-            '@type': 'BlogPosting',
-            headline: blog.title,
-            url: `https://www.stackassignment.com/blog/${blog.slug}`,
-            datePublished: blog.createdAt,
-            author: {
-              '@type': 'Person',
-              name: blog.author?.name || 'Stack Assignment',
-            },
-          })),
-        }}
-      />
-      <main className="flex-grow py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Page Header */}
-          <div className="text-center mb-12 md:mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Academic Writing Blog</h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Practical tips, guides, referencing help, study strategies and updates for students
-            </p>
-          </div>
-
-        {blogs.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">📝</div>
-            <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-2">No Blog Posts Yet</h2>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">Check back soon for new articles!</p>
-          </div>
-        ) : (
-          <>
-            {/* Blog Posts Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-              {blogs.map((blog, index) => (
-                <Link
-                  key={blog.id}
-                  href={`/blog/${blog.slug}`}
-                  className="block"
-                >
-                  <article
-                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 cursor-pointer h-full"
-                  >
-                    {/* Header image */}
-                    {blog.featuredImage ? (
-                      <div
-                        className="h-48 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${blog.featuredImage})` }}
-                      />
-                    ) : (
-                      <div className={`h-48 bg-gradient-to-br ${getGradient(index)}`} />
-                    )}
-
-                    {/* Content */}
-                    <div className="p-6 md:p-7">
-                      <div className="text-sm text-indigo-600 dark:text-indigo-400 font-medium mb-2">
-                        {blog.category || 'General'} • {formatDate(blog.createdAt)}
-                      </div>
-                      <h2 className="text-xl font-bold mb-3 line-clamp-2">{blog.title}</h2>
-                      <p className="text-gray-600 dark:text-gray-300 mb-5 line-clamp-3">
-                        {blog.excerpt || 'Click to read more...'}
-                      </p>
-                      <span className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
-                        Read full article →
-                      </span>
-                    </div>
-                  </article>
-                </Link>
-              ))}
-            </div>
-
-            {/* Load More Button */}
-            {blogs.length >= 20 && (
-              <div className="text-center mt-12 md:mt-16">
-                <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-xl text-lg font-semibold transition shadow-md">
-                  Load More Articles
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+  return <>
+    <StructuredData data={{ '@context': 'https://schema.org', '@type': 'Blog', name: 'Stack Assignment Blog', description: 'Academic writing tips, guides, referencing help and study strategies for Australian and UK students.', url: 'https://www.stackassignment.com/blog', publisher: { '@type': 'Organization', name: 'Stack Assignment', url: 'https://www.stackassignment.com' }, blogPost: blogs.map(blog => ({ '@type': 'BlogPosting', headline: blog.title, url: `https://www.stackassignment.com/blog/${blog.slug}`, datePublished: blog.createdAt })) }} />
+    <main className="stack-page flex-grow overflow-hidden">
+      <section className="stack-hero stack-blog-hero"><div className="stack-container py-16 md:py-20 relative z-10"><div className="max-w-4xl"><div className="stack-eyebrow"><Sparkles className="h-4 w-4" /> Student knowledge hub</div><h1 className="stack-hero-title">Ideas, guides & <span>study strategies</span></h1><p className="stack-hero-copy">Practical articles for Australian and UK university students — from referencing and assessment briefs to research planning and exam preparation.</p><div className="flex flex-wrap gap-3 mt-7"><span className="stack-pill-dark">AU study guides</span><span className="stack-pill-dark">UK university tips</span><span className="stack-pill-dark">Referencing help</span></div></div></div></section>
+      <section className="stack-container -mt-7 relative z-20 pb-20"><div className="stack-blog-toolbar"><div><p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">LATEST ARTICLES</p><h2 className="text-2xl font-bold mt-1">Learn something useful</h2></div><div className="flex gap-2 flex-wrap">{categories.map(c => <button key={c} onClick={() => setCategory(c)} className={`stack-filter ${category === c ? 'is-active' : ''}`}>{c}</button>)}</div></div>
+      {filtered.length === 0 ? <div className="stack-empty"><div className="text-5xl mb-4">✦</div><h2>No articles yet</h2><p>Check back soon for new student guides.</p></div> : <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">{filtered.map((blog, index) => <Link key={blog.id} href={`/blog/${blog.slug}`} className="group"><article className="stack-blog-card h-full"><div className={`stack-blog-cover bg-gradient-to-br ${gradients[index % gradients.length]}`} style={blog.featuredImage ? { backgroundImage: `linear-gradient(135deg, rgba(15,23,42,.18), rgba(79,70,229,.22)), url(${blog.featuredImage})` } : undefined}><span>{blog.category || 'Student guide'}</span><div className="absolute bottom-5 left-5 right-5 text-white"><p className="text-xs uppercase tracking-wider font-bold opacity-80">{formatDate(blog.createdAt)}</p><h3 className="text-xl font-bold mt-1 line-clamp-2">{blog.title}</h3></div></div><div className="p-6"><p className="text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">{blog.excerpt || 'Practical advice and guidance for your university study.'}</p><div className="mt-5 flex items-center justify-between text-sm font-bold text-indigo-600"><span>Read article</span><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></div></div></article></Link>)}</div>}
+      <div className="stack-soft-banner mt-12"><div><p className="text-sm font-bold text-indigo-700">Looking for a specific topic?</p><h2 className="text-2xl font-bold mt-1">Browse our guides or explore free study tools.</h2></div><div className="flex gap-3 flex-wrap"><Link href="/guides" className="stack-secondary-button">Browse guides</Link><Link href="/tools" className="stack-primary-button">Free tools <ArrowRight className="h-4 w-4" /></Link></div></div>
+      </section>
     </main>
-    </>
-  );
+  </>;
 }

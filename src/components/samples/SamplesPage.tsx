@@ -2,403 +2,49 @@
 
 import { useState, useEffect, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
-import { FileText, BookOpen, GraduationCap, FileCheck, Eye } from 'lucide-react';
+import { BookOpen, FileCheck, GraduationCap, ArrowRight, Search, Layers3 } from 'lucide-react';
 import SamplePreviewModal from './SamplePreviewModal';
 import { StructuredData } from '@/components/seo/StructuredData';
 
-interface Sample {
-  id: string;
-  title: string;
-  slug: string;
-  description?: string;
-  subject?: string;
-  academicLevel?: string;
-  paperType?: string;
-  pages?: number;
-  fileName?: string;
-  fileSize?: number;
-}
-
-// Subject-based styles and images
-const subjectStyles: Record<string, { gradient: string; image: string }> = {
-  'Business': { 
-    gradient: 'from-blue-500 to-cyan-600',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=400&fit=crop'
-  },
-  'Nursing': { 
-    gradient: 'from-teal-500 to-emerald-600',
-    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop'
-  },
-  'Literature': { 
-    gradient: 'from-purple-500 to-violet-600',
-    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop'
-  },
-  'Law': { 
-    gradient: 'from-amber-500 to-orange-600',
-    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&h=400&fit=crop'
-  },
-  'STEM': { 
-    gradient: 'from-indigo-500 to-blue-600',
-    image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop'
-  },
-  'Computer Science': { 
-    gradient: 'from-green-500 to-lime-600',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=400&fit=crop'
-  },
-  'Psychology': { 
-    gradient: 'from-pink-500 to-rose-600',
-    image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=600&h=400&fit=crop'
-  },
-  'Economics': { 
-    gradient: 'from-yellow-500 to-amber-600',
-    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop'
-  },
-  'Education': { 
-    gradient: 'from-cyan-500 to-teal-600',
-    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop'
-  },
-  'default': { 
-    gradient: 'from-gray-500 to-slate-600',
-    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&h=400&fit=crop'
-  },
+interface Sample { id: string; title: string; slug: string; description?: string; subject?: string; academicLevel?: string; paperType?: string; pages?: number; fileName?: string; fileSize?: number; }
+interface SamplesPageProps { previewSlug?: string; }
+const styles: Record<string, { gradient: string; image: string }> = {
+  Business: { gradient: 'from-indigo-600 to-indigo-500', image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&h=600&fit=crop' },
+  Nursing: { gradient: 'from-indigo-600 to-indigo-400', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=900&h=600&fit=crop' },
+  Literature: { gradient: 'from-purple-600 to-purple-500', image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&h=600&fit=crop' },
+  Law: { gradient: 'from-indigo-700 to-purple-600', image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=900&h=600&fit=crop' },
+  STEM: { gradient: 'from-indigo-600 to-indigo-500', image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=900&h=600&fit=crop' },
+  'Computer Science': { gradient: 'from-indigo-600 to-purple-500', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=900&h=600&fit=crop' },
+  Psychology: { gradient: 'from-purple-600 to-indigo-500', image: 'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=900&h=600&fit=crop' },
+  Education: { gradient: 'from-indigo-600 to-indigo-500', image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&h=600&fit=crop' },
+  default: { gradient: 'from-slate-700 to-indigo-600', image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=900&h=600&fit=crop' },
 };
-
-// Academic level labels
-const academicLevels: Record<string, string> = {
-  high_school: 'High School',
-  bachelor: "Bachelor's",
-  master: "Master's",
-  phd: 'PhD',
-};
-
-// Paper type labels
-const paperTypes: Record<string, string> = {
-  essay: 'Essay',
-  research_paper: 'Research Paper',
-  dissertation: 'Dissertation',
-  thesis: 'Thesis',
-  coursework: 'Coursework',
-  case_study: 'Case Study',
-};
-
-// Get style for subject
-const getSubjectStyle = (subject?: string) => {
-  if (!subject) return subjectStyles.default;
-  return subjectStyles[subject] || subjectStyles.default;
-};
-
-interface SamplesPageProps {
-  previewSlug?: string;
-}
-
-// Helpers for the useSyncExternalStore read below. They live at module scope so
-// their identities are stable across renders — a fresh function on every render
-// would make React re-subscribe and re-check the snapshot every time.
+const levels: Record<string, string> = { high_school: 'High School', bachelor: "Bachelor's", master: "Master's", phd: 'PhD' };
+const types: Record<string, string> = { essay: 'Essay', research_paper: 'Research Paper', dissertation: 'Dissertation', thesis: 'Thesis', coursework: 'Coursework', case_study: 'Case Study' };
 const subscribeToNothing = () => () => {};
-const readPreviewParam = () =>
-  new URLSearchParams(window.location.search).get('preview') ?? '';
-// Snapshot used for the server render and for hydration, so both passes agree.
+const readPreviewParam = () => new URLSearchParams(window.location.search).get('preview') ?? '';
 const readNoPreviewParam = () => '';
+const getStyle = (subject?: string) => (subject && styles[subject]) || styles.default;
 
 export default function SamplesPage({ previewSlug }: SamplesPageProps) {
-  const router = useRouter();
-  const [samples, setSamples] = useState<Sample[]>([]);
-  const [loading, setLoading] = useState(true);
-  // Only the *manually* opened sample is stored. The deep-linked one is derived
-  // below, because storing it meant copying a value that already exists in the
-  // URL and the sample list into state via an effect.
-  const [manualSample, setManualSample] = useState<Sample | null>(null);
-  const [previewDismissed, setPreviewDismissed] = useState(false);
-
-  useEffect(() => {
-    const fetchSamples = async () => {
-      try {
-        const res = await fetch('/api/samples');
-        const data = await res.json();
-        setSamples(data.samples || []);
-      } catch (error) {
-        console.error('Failed to fetch samples:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSamples();
-  }, []);
-
-  // Read `?preview=` from the URL so a deep link opens the right sample.
-  //
-  // It cannot simply be read during render: `/samples` is statically
-  // prerendered, so a value taken from the URL differs between the server HTML
-  // and the browser and produces a hydration mismatch — the exact bug the old
-  // `/?view=` router had. useSyncExternalStore is the API built for that split:
-  // it renders `getServerSnapshot` (an empty string) during SSR and hydration,
-  // then re-reads the real value once mounted. There is nothing to subscribe to
-  // because a full page load is the only thing that changes the query string
-  // here, hence the no-op subscribe.
-  //
-  // The prop still wins if a caller passes one; only the fallback is new. It is
-  // needed because these links used to arrive as `/?view=samples&preview=slug`
-  // and are now redirected to `/samples?preview=slug`, where nothing was
-  // supplying the prop.
-  const urlPreviewSlug = useSyncExternalStore(
-    subscribeToNothing,
-    readPreviewParam,
-    readNoPreviewParam
-  );
-
-  const effectivePreviewSlug = previewSlug || urlPreviewSlug;
-
-  // The deep-linked sample, derived rather than pushed into state by an effect.
-  // `previewDismissed` is what stops it reopening after the visitor closes it —
-  // the old effect relied on its dependencies not changing again, which worked
-  // but meant the modal's open state had two independent owners.
-  const deepLinkedSample =
-    !previewDismissed && effectivePreviewSlug
-      ? samples.find(s => s.slug === effectivePreviewSlug) ?? null
-      : null;
-
+  const router = useRouter(); const [samples, setSamples] = useState<Sample[]>([]); const [loading, setLoading] = useState(true); const [manualSample, setManualSample] = useState<Sample | null>(null); const [previewDismissed, setPreviewDismissed] = useState(false); const [query, setQuery] = useState('');
+  useEffect(() => { (async () => { try { const res = await fetch('/api/samples'); const data = await res.json(); setSamples(data.samples || []); } catch (e) { console.error(e); } finally { setLoading(false); } })(); }, []);
+  const urlPreviewSlug = useSyncExternalStore(subscribeToNothing, readPreviewParam, readNoPreviewParam); const effectivePreviewSlug = previewSlug || urlPreviewSlug;
+  const deepLinkedSample = !previewDismissed && effectivePreviewSlug ? samples.find(s => s.slug === effectivePreviewSlug) ?? null : null;
   const selectedSample = manualSample ?? deepLinkedSample;
-  const showPreview = selectedSample !== null;
-
-  const formatFileSize = (bytes?: number) => {
-    if (!bytes) return '';
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-  };
-
-  const handlePreview = (sample: Sample) => {
-    // Samples with an actual uploaded file get the PDF preview modal;
-    // content-only samples (no file attached) go to their dedicated
-    // article page instead, since the modal has nothing to render for them.
-    if (sample.fileName) {
-      setManualSample(sample);
-    } else {
-      router.push(`/samples/${sample.slug}`);
-    }
-  };
-
-  const handleClosePreview = () => {
-    setManualSample(null);
-    // Also retires the `?preview=` deep link. Without this the derived
-    // `deepLinkedSample` would still match and the modal would reopen on the
-    // very next render.
-    setPreviewDismissed(true);
-  };
-
-  // Calculate preview pages
-  const getPreviewPages = (pages?: number) => {
-    if (!pages) return 1;
-    return Math.max(1, Math.ceil(pages / 3));
-  };
-
-  if (loading) {
-    return (
-      <main className="flex-grow py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  return (
-    <>
-      {/* Structured Data for SEO */}
-      <StructuredData
-        data={{
-          '@context': 'https://schema.org',
-          '@type': 'CollectionPage',
-          name: 'Assignment & Essay Samples',
-          description: 'Preview academic writing samples including essays, research papers, dissertations, and more. Free preview of 1/3rd of each sample.',
-          url: 'https://www.stackassignment.com/samples',
-          mainEntity: {
-            '@type': 'ItemList',
-            itemListElement: samples.map((sample, index) => ({
-              '@type': 'ListItem',
-              position: index + 1,
-              name: sample.title,
-              url: `https://www.stackassignment.com/samples/${sample.slug}`,
-            })),
-          },
-          provider: {
-            '@type': 'Organization',
-            name: 'Stack Assignment',
-            url: 'https://www.stackassignment.com',
-          },
-        }}
-      />
-      <main className="flex-grow py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Page Header */}
-          <div className="text-center mb-12 md:mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
-              Assignment & Essay Samples
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Preview 1/3rd of each sample free • Contact admin for full access
-            </p>
-          </div>
-
-          {/* Samples Grid */}
-          {samples.length === 0 ? (
-            <div className="text-center py-16">
-              <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-600 dark:text-gray-400">
-                No samples available yet
-              </h3>
-              <p className="text-gray-500 dark:text-gray-500 mt-2">
-                Check back soon for sample papers
-              </p>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-              {samples.map((sample) => {
-                const style = getSubjectStyle(sample.subject);
-                return (
-                  <div
-                    key={sample.id}
-                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl hover:-translate-y-1 group flex flex-col"
-                  >
-                    {/* Header with image */}
-                    <div className="relative h-44 overflow-hidden flex-shrink-0">
-                      <img
-                        src={style.image}
-                        alt={sample.subject || 'Sample'}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} opacity-60`}></div>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center">
-                        <h3 className="text-xl font-bold leading-tight drop-shadow-lg line-clamp-2">{sample.title}</h3>
-                        {sample.subject && (
-                          <p className="text-white/90 mt-2 text-sm font-medium">{sample.subject}</p>
-                        )}
-                      </div>
-                      {/* Preview badge */}
-                      <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
-                        Preview: {getPreviewPages(sample.pages)}/{sample.pages || '?'} pages free
-                      </div>
-                    </div>
-
-                  {/* Content */}
-                  <div className="p-6 flex flex-col flex-grow">
-                    {/* Meta info - fixed height */}
-                    <div className="mb-4">
-                      {/* First row: Academic level and paper type */}
-                      <div className="flex flex-wrap gap-3">
-                        {sample.academicLevel && (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-sm font-medium">
-                            <GraduationCap className="h-4 w-4" />
-                            {academicLevels[sample.academicLevel] || sample.academicLevel}
-                          </span>
-                        )}
-                        {sample.paperType && (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
-                            <FileCheck className="h-4 w-4" />
-                            {paperTypes[sample.paperType] || sample.paperType}
-                          </span>
-                        )}
-                      </div>
-                      {/* Second row: Pages */}
-                      {sample.pages && (
-                        <div className="mt-2">
-                          <span className="inline-flex items-center px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-sm">
-                            {sample.pages} {sample.pages === 1 ? 'page' : 'pages'}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Description - fixed height */}
-                    <div className="min-h-[72px] mb-4">
-                      <p className="text-gray-600 dark:text-gray-400 line-clamp-3">
-                        {sample.description || 'No description available.'}
-                      </p>
-                    </div>
-
-                    {/* File info - fixed height */}
-                    <div className="min-h-[48px] mb-4">
-                      {sample.fileName ? (
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-slate-700 rounded-lg p-3">
-                          <FileText className="h-4 w-4 text-red-500 flex-shrink-0" />
-                          <span className="truncate flex-1">{sample.fileName}</span>
-                          {sample.fileSize && (
-                            <span className="text-xs flex-shrink-0">({formatFileSize(sample.fileSize)})</span>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="h-full"></div>
-                      )}
-                    </div>
-
-                    {/* Preview Button - pushed to bottom */}
-                    <div className="mt-auto">
-                      <button
-                        onClick={() => handlePreview(sample)}
-                        className="flex items-center justify-center gap-2 w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition"
-                      >
-                        <Eye className="h-5 w-5" />
-                        Preview Sample
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-              })}
-            </div>
-          )}
-
-          {/* Info Section */}
-          <div className="mt-16 bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800 rounded-2xl p-8 md:p-12">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-                Why Our Samples?
-              </h2>
-              <div className="grid md:grid-cols-3 gap-6 mt-8">
-                <div className="text-center">
-                  <div className="w-14 h-14 bg-teal-100 dark:bg-teal-900 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <FileCheck className="h-7 w-7 text-teal-600 dark:text-teal-400" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Quality Assured</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Every sample meets academic standards
-                  </p>
-                </div>
-                <div className="text-center">
-                  <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <GraduationCap className="h-7 w-7 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">All Levels</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    High school to PhD level work
-                  </p>
-                </div>
-                <div className="text-center">
-                  <div className="w-14 h-14 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <BookOpen className="h-7 w-7 text-purple-600 dark:text-purple-400" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Various Subjects</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Business, Nursing, Tech & more
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      {/* Preview Modal */}
-      {selectedSample && (
-        <SamplePreviewModal
-          sample={selectedSample}
-          isOpen={showPreview}
-          onClose={handleClosePreview}
-        />
-      )}
-    </>
-  );
+  const filtered = samples.filter(s => `${s.title} ${s.subject || ''} ${s.paperType || ''}`.toLowerCase().includes(query.toLowerCase()));
+  const handlePreview = (sample: Sample) => sample.fileName ? setManualSample(sample) : router.push(`/samples/${sample.slug}`);
+  const closePreview = () => { setManualSample(null); setPreviewDismissed(true); };
+  if (loading) return <main className="stack-page flex-grow"><div className="stack-container py-20"><div className="stack-skeleton-grid">{[1,2,3].map(i => <div key={i} className="stack-skeleton-card" />)}</div></div></main>;
+  return <>
+    <StructuredData data={{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Academic Samples & Worked Examples', description: 'Browse academic samples and worked examples for study and reference.', url: 'https://www.stackassignment.com/samples', provider: { '@type': 'Organization', name: 'Stack Assignment' } }} />
+    <main className="stack-page flex-grow overflow-hidden">
+      <section className="stack-hero stack-samples-hero"><div className="stack-container py-16 md:py-20 relative z-10"><div className="max-w-4xl"><div className="stack-eyebrow"><BookOpen className="h-4 w-4" /> Study library</div><h1 className="stack-hero-title">Explore <span>academic samples</span> & worked examples</h1><p className="stack-hero-copy">Browse examples across subjects and study levels to understand structure, referencing and presentation before you start your own work.</p><div className="flex flex-wrap gap-3 mt-7"><span className="stack-pill-dark"><GraduationCap className="h-4 w-4" /> AU & UK students</span><span className="stack-pill-dark"><FileCheck className="h-4 w-4" /> Reference-focused</span></div></div></div></section>
+      <section className="stack-container -mt-7 relative z-20 pb-16"><div className="stack-library-toolbar"><div><p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">SAMPLE LIBRARY</p><h2 className="text-2xl font-bold mt-1">Find something relevant</h2></div><div className="stack-search"><Search className="h-4 w-4" /><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search subject, title or paper type…" /></div></div>
+      {filtered.length === 0 ? <div className="stack-empty"><Layers3 className="h-12 w-12 text-indigo-400"/><h3>No matching samples</h3><p>Try another subject or keyword.</p></div> : <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">{filtered.map(sample => { const style = getStyle(sample.subject); return <article key={sample.id} className="stack-sample-card"><div className="stack-sample-image" style={{ backgroundImage: `linear-gradient(135deg, rgba(15,23,42,.18), rgba(79,70,229,.28)), url(${style.image})` }}><span className={`bg-gradient-to-r ${style.gradient}`}>{sample.subject || 'Academic'}</span><div className="absolute inset-x-4 bottom-4 flex items-center justify-between text-white"><span className="text-sm font-semibold">{types[sample.paperType || ''] || sample.paperType || 'Academic paper'}</span>{sample.pages ? <span className="text-xs bg-black/30 rounded-full px-2.5 py-1 backdrop-blur">{sample.pages} pages</span> : null}</div></div><div className="p-6"><div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500 mb-3"><span>{levels[sample.academicLevel || ''] || sample.academicLevel || 'University'}</span><span>•</span><span>Study example</span></div><h3 className="text-xl font-bold leading-tight line-clamp-2">{sample.title}</h3><p className="text-slate-600 dark:text-slate-300 mt-3 line-clamp-3">{sample.description || 'Explore the structure, presentation and referencing choices used in this academic example.'}</p><button onClick={() => handlePreview(sample)} className="mt-5 inline-flex items-center gap-2 text-indigo-600 font-bold text-sm">{sample.fileName ? 'Preview sample' : 'View example'} <ArrowRight className="h-4 w-4" /></button></div></article> })}</div>}
+      </section>
+      <section className="stack-container pb-20"><div className="stack-soft-banner"><div><p className="text-sm font-bold text-indigo-700">Need personalised support?</p><h2 className="text-2xl font-bold mt-1">Use a sample as a starting point, then get help with your own work.</h2></div><a href="/order" className="stack-primary-button">Get support <ArrowRight className="h-4 w-4" /></a></div></section>
+    </main>
+    {selectedSample && <SamplePreviewModal sample={selectedSample as any} isOpen={true} onClose={closePreview} />}
+  </>;
 }

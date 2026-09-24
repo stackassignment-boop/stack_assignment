@@ -181,12 +181,12 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
       {/* Modal */}
       <div className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col m-4">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700 shrink-0">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
           <div className="flex-1 pr-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white truncate">
               {sample.title}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               {hasFile ? (
                 <>{totalPages} pages total • {previewPages} preview pages available</>
               ) : (
@@ -196,20 +196,20 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition"
           >
-            <X className="h-5 w-5 text-gray-500" />
+            <X className="h-5 w-5 text-slate-500" />
           </button>
         </div>
 
         {/* PDF Viewer - Scrollable */}
         <div 
           ref={containerRef}
-          className="flex-1 overflow-y-auto p-4 bg-gray-100 dark:bg-slate-800"
+          className="flex-1 overflow-y-auto p-4 bg-slate-100 dark:bg-slate-800"
         >
           {loading && hasFile && (
             <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
             </div>
           )}
 
@@ -219,10 +219,10 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                 <div className="w-14 h-14 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center mx-auto mb-4">
                   <X className="h-7 w-7 text-red-600 dark:text-red-400" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-2">
                   Preview Failed to Load
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-slate-600 dark:text-slate-400">
                   {pdfError}
                 </p>
               </div>
@@ -238,12 +238,12 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                 />
               ) : (
                 <div className="bg-white dark:bg-slate-900 rounded-xl shadow p-8 text-center">
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  <p className="text-slate-600 dark:text-slate-400 mb-4">
                     {sample.description || 'A full preview file for this sample hasn\'t been uploaded yet.'}
                   </p>
                   <a
                     href={`/order?subject=${encodeURIComponent(sample.title)}`}
-                    className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition"
+                    className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition"
                   >
                     Order a Similar Sample
                   </a>
@@ -267,7 +267,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                     className="relative shrink-0"
                   >
                     {/* Page number indicator */}
-                    <div className="absolute -left-8 top-2 text-xs text-gray-400 font-medium">
+                    <div className="absolute -left-8 top-2 text-xs text-slate-400 font-medium">
                       {pageNum}
                     </div>
                     
@@ -285,7 +285,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                         {/* Watermark overlay for preview pages */}
                         {!isBlurredPage && (
                           <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                            <div className="text-gray-300 dark:text-gray-600 text-4xl font-bold opacity-20 rotate-[-45deg] select-none whitespace-nowrap">
+                            <div className="text-slate-300 dark:text-slate-600 text-4xl font-bold opacity-20 rotate-[-45deg] select-none whitespace-nowrap">
                               PREVIEW
                             </div>
                           </div>
@@ -298,13 +298,13 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                               <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/50 rounded-full flex items-center justify-center mx-auto mb-3">
                                 <Lock className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                               </div>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                              <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
                                 Page {pageNum} locked
                               </p>
                               <div className="flex flex-col gap-2">
                                 <a
                                   href="/admin"
-                                  className="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-medium transition"
+                                  className="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition"
                                 >
                                   <LogIn className="h-3 w-3" />
                                   Login
@@ -328,7 +328,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                     {/* Placeholder while loading */}
                     {isVisible && !imageSrc && (
                       <div 
-                        className="bg-gray-200 dark:bg-slate-700 animate-pulse rounded"
+                        className="bg-slate-200 dark:bg-slate-700 animate-pulse rounded"
                         style={{ width: containerWidth, height: 400 }}
                       />
                     )}
@@ -336,7 +336,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                     {/* Placeholder before intersection */}
                     {!isVisible && (
                       <div 
-                        className="bg-gray-200 dark:bg-slate-700 rounded"
+                        className="bg-slate-200 dark:bg-slate-700 rounded"
                         style={{ width: containerWidth, height: 400 }}
                       />
                     )}
@@ -349,9 +349,9 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
 
         {/* Legend */}
         {hasFile && !pdfError && (
-          <div className="flex items-center justify-center gap-6 py-3 px-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-xs text-gray-600 dark:text-gray-400 shrink-0">
+          <div className="flex items-center justify-center gap-6 py-3 px-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-600 dark:text-slate-400 shrink-0">
             <div className="flex items-center gap-2">
-              <span className="w-4 h-4 rounded bg-teal-600"></span>
+              <span className="w-4 h-4 rounded bg-indigo-600"></span>
               <span>Preview Pages ({previewPages})</span>
             </div>
             <div className="flex items-center gap-2">

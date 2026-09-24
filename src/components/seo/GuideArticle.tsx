@@ -56,12 +56,14 @@ export default function GuideArticle({
   return <main className="stack-page">
     <article className="mx-auto max-w-5xl px-6 py-12 md:py-16" itemScope itemType="https://schema.org/Article">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([schema, breadcrumb]) }} />
-      <header className="max-w-4xl">
-        <div className="mb-3 text-sm font-bold uppercase tracking-wider text-indigo-600">{eyebrow}</div>
-        <h1 className="text-4xl font-bold tracking-tight md:text-5xl" itemProp="headline">{title}</h1>
-        <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-400" itemProp="description">{description}</p>
-        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
-          <span>Reviewed {lastUpdated}</span><span aria-hidden="true">·</span><span>Australia & UK student resource</span>
+      <header className="stack-regional-hero -mx-6 -mt-12 mb-10 overflow-hidden rounded-b-3xl px-6 py-14 text-white md:-mt-16 md:py-16">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-3 text-sm font-bold uppercase tracking-wider text-indigo-300">{eyebrow}</div>
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl" itemProp="headline">{title}</h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-200" itemProp="description">{description}</p>
+          <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-400">
+            <span>Reviewed {lastUpdated}</span><span aria-hidden="true">·</span><span>Australia & UK student resource</span>
+          </div>
         </div>
       </header>
 

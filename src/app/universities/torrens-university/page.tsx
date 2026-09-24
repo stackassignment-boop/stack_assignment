@@ -103,14 +103,14 @@ export default function TorrensUniversityPage() {
     <main className="flex-grow">
       <StructuredData data={[faqSchema, breadcrumbSchema]} />
 
-      <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
+      <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-slate-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">Torrens University Assignment Support</span>
+        <span className="text-slate-700 dark:text-slate-300">Torrens University Assignment Support</span>
       </div>
 
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'linear-gradient(135deg, rgba(30,41,59,0.95), rgba(15,23,42,0.97)), url(https://picsum.photos/id/1059/1920/1080)' }} />
+        <div className="absolute inset-0 bg-slate-950" />
         <div className="absolute rounded-full blur-3xl opacity-30 animate-float" style={{ top: '8%', left: '6%', width: '320px', height: '320px', background: 'radial-gradient(circle, #6366f1, transparent 70%)' }} />
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
@@ -133,13 +133,13 @@ export default function TorrensUniversityPage() {
 
       <section className="py-16 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
             Torrens University Australia offers a genuinely broad range of undergraduate,
             postgraduate, online and research study options — from technology and business through
             to health, hospitality, education and design, delivered across five campuses (Sydney,
             Melbourne, Brisbane, Adelaide and Blue Mountains) as well as fully online.
           </p>
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
             That breadth means Torrens students face very different assessment styles depending on
             their course — a hospitality management report looks nothing like a cybersecurity
             project or a design portfolio. Stack Assignment provides academic support for Torrens
@@ -147,22 +147,22 @@ export default function TorrensUniversityPage() {
             referencing help, proofreading and subject-specific support matched to your actual
             course area.
           </p>
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
             Whether you study on campus, online, or in a blended format, support works the same
             way — matched to your unit and assessment brief rather than a generic template.
           </p>
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Sora, sans-serif' }}>Why Choose Stack Assignment for Torrens Students?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {whyChooseUs.map((item) => (
-              <div key={item.title} className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
+              <div key={item.title} className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4"><item.icon className="w-7 h-7 text-white" /></div>
                 <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -177,22 +177,22 @@ export default function TorrensUniversityPage() {
               const inner = (<>
                 <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center mb-4"><course.icon className="w-6 h-6 text-indigo-600 dark:text-indigo-400" /></div>
                 <h3 className="font-bold text-base mb-1.5">{course.title}</h3>
-                <p className="text-gray-500 dark:text-slate-400 text-xs leading-relaxed">{course.desc}</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">{course.desc}</p>
               </>)
-              if (course.anchor) return <a key={course.title} href={course.anchor} className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-indigo-200 dark:hover:border-indigo-800 block">{inner}</a>
-              return <div key={course.title} className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">{inner}</div>
+              if (course.anchor) return <a key={course.title} href={course.anchor} className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-indigo-200 dark:hover:border-indigo-800 block">{inner}</a>
+              return <div key={course.title} className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">{inner}</div>
             })}
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Torrens Assessment Support</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
             {assessmentSupportItems.map((item) => (
-              <div key={item} className="flex items-center gap-2.5 bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-gray-100 dark:border-slate-700">
-                <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" /><span className="text-sm font-medium text-gray-700 dark:text-gray-200">{item}</span>
+              <div key={item} className="flex items-center gap-2.5 bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-slate-100 dark:border-slate-700">
+                <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" /><span className="text-sm font-medium text-slate-700 dark:text-slate-200">{item}</span>
               </div>
             ))}
           </div>
@@ -202,14 +202,14 @@ export default function TorrensUniversityPage() {
       <section id="torrens-technology" className="py-16 bg-white dark:bg-slate-950 scroll-mt-20">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Code2 className="w-6 h-6 text-indigo-600" />Torrens University IT & Technology Assignment Support</h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-4">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm mb-4">
             Verified current Torrens technology programs include Bachelor, Graduate Certificate and
             Master of Software Engineering (including AI, Cloud Computing, Blockchain and
             Networking & Cybersecurity specialisations), and Diploma through to Master of
             Cybersecurity. Support covers programming (including C++, C# and Python), databases,
             networking, cybersecurity, data analytics and cloud computing.
           </p>
-          <p className="text-xs text-gray-400 dark:text-slate-500">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             Specific unit codes weren't published on Torrens' course pages at the level Kaplan,
             CQUniversity or APIC publish them — support is matched to your actual unit outline
             rather than a pre-built code list.
@@ -217,10 +217,10 @@ export default function TorrensUniversityPage() {
         </div>
       </section>
 
-      <section id="torrens-business" className="py-14 bg-gray-50 dark:bg-slate-900">
+      <section id="torrens-business" className="py-14 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Briefcase className="w-6 h-6 text-indigo-600" />Torrens University Business Assignment Support</h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
             Support for MBA, general business, marketing, event management, sports management and
             business analytics assessments — including business strategy, leadership, case studies
             and research reports. Torrens' MBA lecturers were recognised as Most Inspirational MBA
@@ -233,35 +233,35 @@ export default function TorrensUniversityPage() {
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-8" style={{ fontFamily: 'Sora, sans-serif' }}>Other Torrens Study Areas We Support</h2>
           <div className="grid sm:grid-cols-2 gap-6">
-            <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
               <h3 className="font-bold mb-2 flex items-center gap-2"><UtensilsCrossed className="w-5 h-5 text-indigo-600" />Hospitality</h3>
-              <p className="text-sm text-gray-600 dark:text-slate-400">Hospitality and hotel management reports and case studies via Blue Mountains International Hotel Management School.</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Hospitality and hotel management reports and case studies via Blue Mountains International Hotel Management School.</p>
             </div>
-            <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
               <h3 className="font-bold mb-2 flex items-center gap-2"><HeartPulse className="w-5 h-5 text-indigo-600" />Health</h3>
-              <p className="text-sm text-gray-600 dark:text-slate-400">Academic writing support for nursing, counselling, nutrition and naturopathy coursework — not clinical advice.</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Academic writing support for nursing, counselling, nutrition and naturopathy coursework — not clinical advice.</p>
             </div>
-            <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
               <h3 className="font-bold mb-2 flex items-center gap-2"><School className="w-5 h-5 text-indigo-600" />Education</h3>
-              <p className="text-sm text-gray-600 dark:text-slate-400">Support for education reports, teaching-related assignments and inclusive education coursework.</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Support for education reports, teaching-related assignments and inclusive education coursework.</p>
             </div>
-            <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
               <h3 className="font-bold mb-2 flex items-center gap-2"><Palette className="w-5 h-5 text-indigo-600" />Design</h3>
-              <p className="text-sm text-gray-600 dark:text-slate-400">Portfolio and academic writing support for interior, graphic, fashion, UX and web design via Billy Blue College of Design.</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Portfolio and academic writing support for interior, graphic, fashion, UX and web design via Billy Blue College of Design.</p>
             </div>
           </div>
-          <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-6 border border-gray-100 dark:border-slate-700 mt-6">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 mt-6">
             <h3 className="font-bold mb-2 flex items-center gap-2"><Microscope className="w-5 h-5 text-indigo-600" />Higher Degrees by Research</h3>
-            <p className="text-sm text-gray-600 dark:text-slate-400">Research methodology, literature review, academic writing, data analysis and referencing support for PhD, Master of Philosophy, Master of Research and Professional Doctorate candidates.</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Research methodology, literature review, academic writing, data analysis and referencing support for PhD, Master of Philosophy, Master of Research and Professional Doctorate candidates.</p>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6" style={{ fontFamily: 'Sora, sans-serif' }}>Torrens Referencing & Academic Writing Support</h2>
-          <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-7">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+          <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-7">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
               Referencing requirements can vary by course and unit at Torrens — always follow the
               style specified for your specific assessment. Support covers APA, Harvard, in-text
               citations, reference lists, paraphrasing, and referencing-focused proofreading.
@@ -273,8 +273,8 @@ export default function TorrensUniversityPage() {
       <section className="py-16 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 flex items-center justify-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}><Bot className="w-8 h-8 text-indigo-600" />Responsible AI & Academic Support</h2>
-          <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-7 border border-gray-100 dark:border-slate-700">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-7 border border-slate-100 dark:border-slate-700">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
               Students should follow the current assessment instructions and academic-integrity
               requirements of Torrens University and their individual unit before using generative
               AI in assessed work — verify any AI-generated information, follow disclosure
@@ -285,11 +285,11 @@ export default function TorrensUniversityPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6" style={{ fontFamily: 'Sora, sans-serif' }}>Academic Integrity & Responsible Academic Support</h2>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 border border-gray-100 dark:border-slate-700">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 border border-slate-100 dark:border-slate-700">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               Stack Assignment is not affiliated with, endorsed by, or partnered with Torrens
               University. Our services support understanding assessment requirements, research
               guidance, academic writing, proofreading, editing, referencing and data analysis
@@ -304,7 +304,7 @@ export default function TorrensUniversityPage() {
       <section className="py-16 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Sora, sans-serif' }}>Torrens Academic Support Across Australia</h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed mb-6">Support is delivered online regardless of which Torrens campus you study at, or if you study fully online.</p>
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">Support is delivered online regardless of which Torrens campus you study at, or if you study fully online.</p>
           <div className="flex flex-wrap justify-center gap-2">
             {campuses.map((c) => (
               <span key={c} className="inline-flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-1.5 rounded-full text-sm font-semibold"><MapPin className="w-3.5 h-3.5" />{c}</span>
@@ -313,14 +313,14 @@ export default function TorrensUniversityPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Sora, sans-serif' }}>How It Works</h2>
           <div className="space-y-5">
             {howItWorks.map((item) => (
-              <div key={item.step} className="flex gap-5 bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+              <div key={item.step} className="flex gap-5 bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
                 <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold flex-shrink-0">{item.step}</div>
-                <div><h3 className="font-bold text-base mb-1">{item.title}</h3><p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p></div>
+                <div><h3 className="font-bold text-base mb-1">{item.title}</h3><p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p></div>
               </div>
             ))}
           </div>
@@ -332,8 +332,8 @@ export default function TorrensUniversityPage() {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Torrens Student Resources</h2>
           <div className="grid sm:grid-cols-2 gap-3">
             {studentResources.map((item) => (
-              <div key={item} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-gray-100 dark:border-slate-700">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{item}</span><span className="text-xs text-gray-400 dark:text-slate-500 flex-shrink-0 ml-3">Coming soon</span>
+              <div key={item} className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-slate-100 dark:border-slate-700">
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{item}</span><span className="text-xs text-slate-400 dark:text-slate-500 flex-shrink-0 ml-3">Coming soon</span>
               </div>
             ))}
           </div>
@@ -342,36 +342,36 @@ export default function TorrensUniversityPage() {
 
       
       <RegionalSeoLinks heading="Related student resources" items={[{"title": "Torrens assessment and marking guide", "description": "Learn how to use your brief and rubric to plan your response.", "href": "/guides/torrens-marking-guide"}, {"title": "APA 7 referencing guide", "description": "A practical referencing checklist for Australian university assessments.", "href": "/guides/apa-7-referencing-australia"}, {"title": "Free study tools", "description": "Use free tools to check and improve your own work.", "href": "/tools"}]} />
-<section className="py-16 bg-gray-50 dark:bg-slate-900">
+<section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Frequently Asked Questions</h2>
           <div className="space-y-4">
             {faqs.map((item) => (
-              <div key={item.q} className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 transition hover:shadow-md">
+              <div key={item.q} className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 transition hover:shadow-md">
                 <h3 className="font-bold text-lg mb-2 flex items-start gap-2"><MessageCircle className="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5" />{item.q}</h3>
-                <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed pl-7">{item.a}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed pl-7">{item.a}</p>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
+          <p className="text-center text-sm text-slate-500 dark:text-slate-500 mt-6">Read our full <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link> before you book.</p>
         </div>
       </section>
 
       <section className="py-10 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wide">Other Australian University Academic Support</h3>
+          <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4 uppercase tracking-wide">Other Australian University Academic Support</h3>
           <div className="flex flex-wrap justify-center gap-3 text-sm">
-            <Link href="/kaplan-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Kaplan Business School</Link><span className="text-gray-300 dark:text-slate-700">·</span>
-            <Link href="/universities/cquniversity" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">CQUniversity</Link><span className="text-gray-300 dark:text-slate-700">·</span>
-            <Link href="/universities/apic" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">APIC</Link><span className="text-gray-300 dark:text-slate-700">·</span>
-            <Link href="/holmes-institute-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Holmes Institute</Link><span className="text-gray-300 dark:text-slate-700">·</span>
-            <Link href="/universities/victoria-university" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Victoria University</Link><span className="text-gray-300 dark:text-slate-700">·</span>
+            <Link href="/kaplan-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Kaplan Business School</Link><span className="text-slate-300 dark:text-slate-700">·</span>
+            <Link href="/universities/cquniversity" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">CQUniversity</Link><span className="text-slate-300 dark:text-slate-700">·</span>
+            <Link href="/universities/apic" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">APIC</Link><span className="text-slate-300 dark:text-slate-700">·</span>
+            <Link href="/holmes-institute-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Holmes Institute</Link><span className="text-slate-300 dark:text-slate-700">·</span>
+            <Link href="/universities/victoria-university" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Victoria University</Link><span className="text-slate-300 dark:text-slate-700">·</span>
             <Link href="/universities/victorian-institute-of-technology" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Victorian Institute of Technology</Link>
           </div>
         </div>
       </section>
 
-      <section className="relative py-20 overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600">
+      <section className="relative py-20 overflow-hidden stack-cta-band">
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, white 0%, transparent 8%), radial-gradient(circle at 80% 70%, white 0%, transparent 6%)' }} />
         <div className="max-w-3xl mx-auto px-6 text-center text-white relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Sora, sans-serif' }}>Need Support With Your Torrens University Assessment?</h2>

@@ -161,7 +161,7 @@ export default function QuizGenerator() {
       {!questions && (
         <>
           <div>
-            <label htmlFor="notes" className="block font-semibold text-gray-900 dark:text-slate-100 mb-3">
+            <label htmlFor="notes" className="block font-semibold text-slate-900 dark:text-slate-100 mb-3">
               Paste your lecture notes, readings or summary
             </label>
             <textarea
@@ -170,23 +170,23 @@ export default function QuizGenerator() {
               onChange={(e) => setText(e.target.value)}
               rows={12}
               placeholder="Paste a few paragraphs of study material. The more structured your notes are — definitions, key terms, explanations — the better the questions will be."
-              className="w-full rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-4 text-gray-900 dark:text-slate-100 leading-relaxed focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-4 text-slate-900 dark:text-slate-100 leading-relaxed focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
-            <div className="mt-2 text-xs text-gray-500 dark:text-slate-400">
+            <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">
               {text.trim() ? `${text.trim().split(/\s+/).length} words` : 'Nothing pasted yet'}
             </div>
           </div>
 
           <div className="flex flex-wrap items-end gap-4">
             <div>
-              <label htmlFor="count" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">
+              <label htmlFor="count" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                 Number of questions
               </label>
               <select
                 id="count"
                 value={count}
                 onChange={(e) => setCount(Number(e.target.value))}
-                className="rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-gray-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
               >
                 {[5, 10, 15, 20].map((n) => <option key={n} value={n}>{n}</option>)}
               </select>
@@ -200,7 +200,7 @@ export default function QuizGenerator() {
               <Sparkles className="h-4 w-4" /> Generate questions
             </button>
             {text.trim() && text.trim().split(/\s+/).length < 40 && (
-              <span className="text-sm text-gray-500 dark:text-slate-400">
+              <span className="text-sm text-slate-500 dark:text-slate-400">
                 Paste at least 40 words to generate a useful set.
               </span>
             )}
@@ -218,7 +218,7 @@ export default function QuizGenerator() {
       {questions && current && (
         <>
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="text-sm font-semibold text-gray-600 dark:text-slate-400">
+            <div className="text-sm font-semibold text-slate-600 dark:text-slate-400">
               Question {index + 1} of {questions.length}
             </div>
             <button
@@ -230,25 +230,25 @@ export default function QuizGenerator() {
             </button>
           </div>
 
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-slate-700">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
             <div
               className="h-full bg-indigo-600 transition-all"
               style={{ width: `${((index + 1) / questions.length) * 100}%` }}
             />
           </div>
 
-          <div className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
             <span className="inline-block rounded-full bg-indigo-100 dark:bg-indigo-500/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-indigo-700 dark:text-indigo-300 mb-4">
               {MODE_LABEL[current.mode]}
             </span>
-            <p className="text-lg text-gray-900 dark:text-slate-100 leading-relaxed mb-5">
+            <p className="text-lg text-slate-900 dark:text-slate-100 leading-relaxed mb-5">
               {current.prompt}
             </p>
 
             <button
               type="button"
               onClick={() => toggle(current.id)}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 dark:border-slate-600 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               {revealed.has(current.id) ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               {revealed.has(current.id) ? 'Hide answer' : 'Show answer'}
@@ -259,9 +259,9 @@ export default function QuizGenerator() {
                 <div className="text-xs font-bold uppercase tracking-wide text-green-700 dark:text-green-300 mb-1.5">
                   Answer
                 </div>
-                <p className="text-gray-900 dark:text-slate-100 leading-relaxed">{current.answer}</p>
+                <p className="text-slate-900 dark:text-slate-100 leading-relaxed">{current.answer}</p>
                 {current.mode !== 'recall' && (
-                  <p className="mt-3 border-t border-green-200 dark:border-green-800 pt-3 text-sm text-gray-600 dark:text-slate-400 leading-relaxed">
+                  <p className="mt-3 border-t border-green-200 dark:border-green-800 pt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                     <span className="font-semibold">From your notes:</span> {current.context}
                   </p>
                 )}
@@ -274,7 +274,7 @@ export default function QuizGenerator() {
               type="button"
               onClick={() => setIndex((i) => Math.max(0, i - 1))}
               disabled={index === 0}
-              className="rounded-lg border border-gray-300 dark:border-slate-600 px-5 py-2.5 text-sm font-semibold text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 disabled:opacity-40"
+              className="rounded-lg border border-slate-300 dark:border-slate-600 px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40"
             >
               Previous
             </button>
@@ -290,7 +290,7 @@ export default function QuizGenerator() {
         </>
       )}
 
-      <p className="text-xs text-gray-500 dark:text-slate-400 leading-relaxed border-t border-gray-200 dark:border-slate-700 pt-5">
+      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-200 dark:border-slate-700 pt-5">
         Questions are generated from the text you paste, in your browser — nothing is uploaded or
         stored. This builds active-recall practice from your own material; it does not know your
         syllabus, and it is not a prediction of what will be on your exam.

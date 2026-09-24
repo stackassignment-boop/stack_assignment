@@ -139,7 +139,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
           </button>
           <button
             onClick={() => onNavigate?.('home')}
-            className="text-sm text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400 transition"
+            className="text-sm text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 transition"
           >
             ← Back to Website
           </button>
@@ -150,15 +150,15 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
       <main className="flex-1 flex items-center justify-center p-4 sm:p-8">
         <div className="w-full max-w-md">
           {/* Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-800 overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
             {/* Tabs */}
-            <div className="flex border-b border-gray-200 dark:border-slate-800">
+            <div className="flex border-b border-slate-200 dark:border-slate-800">
               <button
                 onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}
                 className={`flex-1 py-4 text-center font-medium transition ${
                   isLogin 
                     ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 border-b-2 border-teal-600 dark:border-teal-400' 
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
                 }`}
               >
                 Login
@@ -168,7 +168,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
                 className={`flex-1 py-4 text-center font-medium transition ${
                   !isLogin 
                     ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 border-b-2 border-teal-600 dark:border-teal-400' 
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
                 }`}
               >
                 Register
@@ -192,11 +192,11 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
               {/* Name Field (Register only) */}
               {!isLogin && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                     Full Name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input
                       type="text"
                       name="name"
@@ -204,7 +204,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
                       onChange={handleChange}
                       placeholder="Enter your full name"
                       required={!isLogin}
-                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
                     />
                   </div>
                 </div>
@@ -212,11 +212,11 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
 
               {/* Email Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input
                     type="email"
                     name="email"
@@ -224,7 +224,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
                     onChange={handleChange}
                     placeholder="Enter your email"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
                   />
                 </div>
               </div>
@@ -232,7 +232,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
               {/* Phone Field (Register only) */}
               {!isLogin && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                     Phone Number (Optional)
                   </label>
                   <div className="relative">
@@ -242,7 +242,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
                       value={formData.phone}
                       onChange={handleChange}
                       placeholder="Enter your phone number"
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
                     />
                   </div>
                 </div>
@@ -250,11 +250,11 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
 
               {/* Password Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
@@ -262,12 +262,12 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
                     onChange={handleChange}
                     placeholder="Enter your password"
                     required
-                    className="w-full pl-10 pr-12 py-3 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                    className="w-full pl-10 pr-12 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -277,11 +277,11 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
               {/* Confirm Password Field (Register only) */}
               {!isLogin && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       name="confirmPassword"
@@ -289,7 +289,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
                       onChange={handleChange}
                       placeholder="Confirm your password"
                       required={!isLogin}
-                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
                     />
                   </div>
                 </div>
@@ -331,10 +331,10 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
               {/* Divider */}
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-200 dark:border-slate-700" />
+                  <span className="w-full border-t border-slate-200 dark:border-slate-700" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white dark:bg-slate-900 px-2 text-gray-500 dark:text-gray-400">
+                  <span className="bg-white dark:bg-slate-900 px-2 text-slate-500 dark:text-slate-400">
                     Or continue with
                   </span>
                 </div>
@@ -346,7 +346,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
                 onClick={handleGoogleLogin}
                 disabled={googleLoading}
                 variant="outline"
-                className="w-full py-3 border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 font-medium rounded-lg transition"
+                className="w-full py-3 border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium rounded-lg transition"
               >
                 {googleLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -381,7 +381,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
 
             {/* Footer */}
             <div className="px-6 sm:px-8 pb-6 sm:pb-8 text-center">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 {isLogin ? "Don't have an account?" : "Already have an account?"}
                 <button
                   onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess(''); }}
@@ -395,7 +395,7 @@ export default function StudentLoginPage({ onNavigate, onLogin, next = '/student
 
           {/* Benefits */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Student benefits:</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">Student benefits:</p>
             <div className="flex flex-wrap justify-center gap-3 text-xs">
               <span className="px-3 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full">
                 View Full Samples

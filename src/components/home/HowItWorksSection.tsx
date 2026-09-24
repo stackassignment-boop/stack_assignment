@@ -44,12 +44,12 @@ export default function HowItWorksSection({ onNavigate }: HowItWorksSectionProps
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
           <h2
-            className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white"
+            className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white"
             style={{ fontFamily: 'Sora, sans-serif' }}
           >
             How It Works
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
             Support that builds your skills and your draft — not a finished paper handed over.
           </p>
         </div>
@@ -58,7 +58,7 @@ export default function HowItWorksSection({ onNavigate }: HowItWorksSectionProps
           {steps.map((step) => (
             <li
               key={step.number}
-              className="relative bg-gray-50 dark:bg-slate-900 rounded-2xl p-7 border border-gray-200 dark:border-slate-700"
+              className="relative bg-slate-50 dark:bg-slate-900 rounded-2xl p-7 border border-slate-200 dark:border-slate-700"
             >
               <div
                 className="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xl font-bold mb-5"
@@ -66,10 +66,10 @@ export default function HowItWorksSection({ onNavigate }: HowItWorksSectionProps
               >
                 {step.number}
               </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
+              <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
                 {step.title}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{step.body}</p>
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{step.body}</p>
             </li>
           ))}
         </ol>
@@ -81,7 +81,7 @@ export default function HowItWorksSection({ onNavigate }: HowItWorksSectionProps
           >
             Book a Free 15-Min Consult →
           </Button>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-4">
             No obligation. We&rsquo;ll tell you honestly whether we can help before you pay anything.
           </p>
         </div>

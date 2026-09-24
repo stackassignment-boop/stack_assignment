@@ -202,10 +202,10 @@ export default function DraggableFloatingWidget() {
         {/* Close Button - Mobile Only */}
         <button
           onClick={handleDismiss}
-          className="md:hidden bg-gray-200 dark:bg-slate-700 rounded-full p-1.5 shadow-md hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors"
+          className="md:hidden bg-slate-200 dark:bg-slate-700 rounded-full p-1.5 shadow-md hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
           aria-label="Close widget"
         >
-          <X className="w-3 h-3 text-gray-600 dark:text-gray-300" />
+          <X className="w-3 h-3 text-slate-600 dark:text-slate-300" />
         </button>
 
         {/* WhatsApp Widget */}

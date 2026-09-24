@@ -186,17 +186,17 @@ export default function APICPage() {
       <StructuredData data={[faqSchema, breadcrumbSchema]} />
 
       {/* Breadcrumb */}
-      <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-gray-500 dark:text-slate-400">
+      <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-slate-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span>
         <span>Universities</span>
         <span className="mx-2">›</span>
-        <span className="text-gray-700 dark:text-gray-300">APIC Assignment Support</span>
+        <span className="text-slate-700 dark:text-slate-300">APIC Assignment Support</span>
       </div>
 
       {/* HERO */}
       <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'linear-gradient(135deg, rgba(30,41,59,0.95), rgba(15,23,42,0.97)), url(https://picsum.photos/id/1043/1920/1080)' }} />
+        <div className="absolute inset-0 bg-slate-950" />
         <div className="absolute rounded-full blur-3xl opacity-30 animate-float" style={{ top: '8%', left: '6%', width: '320px', height: '320px', background: 'radial-gradient(circle, #6366f1, transparent 70%)' }} />
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
 
@@ -226,19 +226,19 @@ export default function APICPage() {
       {/* INTRODUCTION */}
       <section className="py-16 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
             Asia Pacific International College (APIC) takes a distinctive approach to assessment —
             rather than traditional exams, most units are assessed through real-world projects,
             presentations and teamwork, across IT, business information systems, business, project
             management and MBA programs at its Sydney, Melbourne and Brisbane campuses.
           </p>
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
             That project-based structure means APIC students often need support with a different
             mix of tasks than students in exam-heavy programs — structuring a business report,
             working through a systems analysis project, preparing a presentation, or interpreting
             what a capstone industry project actually requires.
           </p>
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
             Stack Assignment provides academic support for APIC students across Australia —
             covering academic writing guidance, research assistance, referencing help, proofreading,
             data analysis guidance and subject-specific support matched to your actual course and
@@ -249,22 +249,22 @@ export default function APICPage() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             Why Choose Stack Assignment for APIC Academic Support?
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
             Built around APIC's project-based assessment style.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             {whyChooseUs.map((item) => (
-              <div key={item.title} className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
+              <div key={item.title} className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4">
                   <item.icon className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -277,7 +277,7 @@ export default function APICPage() {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             APIC Courses We Support
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
             Verified against APIC's current course catalogue.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -288,18 +288,18 @@ export default function APICPage() {
                     <course.icon className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <h3 className="font-bold text-base mb-1.5">{course.title}</h3>
-                  <p className="text-gray-500 dark:text-slate-400 text-xs leading-relaxed">{course.desc}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">{course.desc}</p>
                 </>
               )
               if (course.anchor) {
                 return (
-                  <a key={course.title} href={course.anchor} className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-indigo-200 dark:hover:border-indigo-800 block">
+                  <a key={course.title} href={course.anchor} className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-indigo-200 dark:hover:border-indigo-800 block">
                     {inner}
                   </a>
                 )
               }
               return (
-                <div key={course.title} className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+                <div key={course.title} className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
                   {inner}
                 </div>
               )
@@ -309,20 +309,20 @@ export default function APICPage() {
       </section>
 
       {/* APIC ASSESSMENT SUPPORT */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             APIC Assessment Support
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto text-sm">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto text-sm">
             APIC's own site confirms assessment is project- and presentation-based rather than
             traditional exams — not every course uses every format below.
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
             {assessmentSupportItems.map((item) => (
-              <div key={item} className="flex items-center gap-2.5 bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-gray-100 dark:border-slate-700">
+              <div key={item} className="flex items-center gap-2.5 bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-slate-100 dark:border-slate-700">
                 <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{item}</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{item}</span>
               </div>
             ))}
           </div>
@@ -340,40 +340,40 @@ export default function APICPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
               APIC IT Assignment & Academic Support
             </h2>
-            <p className="text-gray-600 dark:text-slate-400 max-w-2xl mx-auto">
+            <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               Support for programming, databases, networking, cybersecurity, systems analysis and
               enterprise architecture, matched to your specific unit.
             </p>
           </div>
 
           <h3 className="font-bold text-lg mb-4">APIC IT Units & Academic Support</h3>
-          <p className="text-sm text-gray-500 dark:text-slate-400 mb-4">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
             Sourced directly from the Bachelor of Information Technology course structure on
             apicollege.edu.au.
           </p>
-          <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-slate-700">
+          <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 dark:bg-slate-800 text-left">
-                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Unit Code</th>
-                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Unit Name</th>
-                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200 hidden sm:table-cell">Prerequisite</th>
-                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Academic Support</th>
+                <tr className="bg-slate-50 dark:bg-slate-800 text-left">
+                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Unit Code</th>
+                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Unit Name</th>
+                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200 hidden sm:table-cell">Prerequisite</th>
+                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Academic Support</th>
                 </tr>
               </thead>
               <tbody>
                 {apicUnits.map((u, i) => (
-                  <tr key={u.code} className={i % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-gray-50/60 dark:bg-slate-900'}>
+                  <tr key={u.code} className={i % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-slate-50/60 dark:bg-slate-900'}>
                     <td className="px-4 py-3 font-mono font-semibold text-indigo-700 dark:text-indigo-400 whitespace-nowrap">{u.code}</td>
-                    <td className="px-4 py-3 text-gray-800 dark:text-gray-200">{u.name}</td>
-                    <td className="px-4 py-3 text-gray-400 dark:text-slate-500 whitespace-nowrap hidden sm:table-cell">{u.prereq}</td>
-                    <td className="px-4 py-3 text-gray-500 dark:text-slate-400">{u.support}</td>
+                    <td className="px-4 py-3 text-slate-800 dark:text-slate-200">{u.name}</td>
+                    <td className="px-4 py-3 text-slate-400 dark:text-slate-500 whitespace-nowrap hidden sm:table-cell">{u.prereq}</td>
+                    <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{u.support}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-gray-400 dark:text-slate-500 mt-6 text-center max-w-2xl mx-auto">
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-6 text-center max-w-2xl mx-auto">
             Course structures, units and assessment requirements may change. Students should
             verify current information through official APIC course documentation and their unit
             materials. Source:{' '}
@@ -385,18 +385,18 @@ export default function APICPage() {
       </section>
 
       {/* PROJECT MANAGEMENT SUPPORT */}
-      <section className="py-14 bg-gray-50 dark:bg-slate-900">
+      <section className="py-14 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}>
             <Network className="w-6 h-6 text-indigo-600" />
             APIC Project Management Academic Support
           </h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm mb-3">
             Support for project planning, risk management, project governance, quality, reporting,
             stakeholder management and project documentation across APIC's Graduate Certificate,
             Graduate Diploma and Master of Project Management and Business (MPMB).
           </p>
-          <p className="text-gray-500 dark:text-slate-500 text-xs">
+          <p className="text-slate-500 dark:text-slate-500 text-xs">
             Many APIC postgraduate programs, including MPMB and MBA, include a capstone
             <strong> PRJ6001 Applied Project</strong> unit — support is available for this unit's
             research and report requirements.
@@ -411,7 +411,7 @@ export default function APICPage() {
             <Award className="w-6 h-6 text-indigo-600" />
             APIC MBA & Postgraduate Assignment Support
           </h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
             Support across APIC's MBA (including Health Management, Project Management and IT
             specialisations), Graduate Certificate and Graduate Diploma of Business Management —
             covering strategic management, research reports, case studies, presentations and the
@@ -421,19 +421,19 @@ export default function APICPage() {
       </section>
 
       {/* REFERENCING & ACADEMIC WRITING */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6" style={{ fontFamily: 'Sora, sans-serif' }}>
             APIC Referencing & Academic Writing Support
           </h2>
-          <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-7">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-7">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               APIC doesn't use one universal referencing style across every course — follow the
               style specified for your specific unit and assessment. Support covers:
             </p>
             <ul className="grid sm:grid-cols-2 gap-2">
               {['APA referencing', 'Harvard referencing', 'In-text citations', 'Reference lists', 'Academic source selection', 'Paraphrasing', 'Literature reviews', 'Referencing-focused proofreading'].map((item) => (
-                <li key={item} className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                <li key={item} className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                   {item}
                 </li>
@@ -450,8 +450,8 @@ export default function APICPage() {
             <Bot className="w-8 h-8 text-indigo-600" />
             APIC & Responsible Use of Generative AI
           </h2>
-          <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-7 border border-gray-100 dark:border-slate-700">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-7 border border-slate-100 dark:border-slate-700">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               Students should check the current APIC assessment instructions and academic-integrity
               requirements before using generative AI in assessed work. A few responsible practices
               worth keeping in mind:
@@ -463,7 +463,7 @@ export default function APICPage() {
                 'Disclose AI use where required',
                 "Don't misrepresent AI-generated work as entirely your own where that isn't accurate",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                <li key={item} className="flex items-start gap-2 text-slate-700 dark:text-slate-300 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                   {item}
                 </li>
@@ -474,25 +474,25 @@ export default function APICPage() {
       </section>
 
       {/* ACADEMIC INTEGRITY */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6" style={{ fontFamily: 'Sora, sans-serif' }}>
             APIC Academic Integrity & Responsible Academic Support
           </h2>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 border border-gray-100 dark:border-slate-700">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 border border-slate-100 dark:border-slate-700">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               Stack Assignment is not affiliated with, endorsed by, or partnered with Asia Pacific
               International College. Our services are designed to support APIC students through:
             </p>
             <ul className="grid sm:grid-cols-2 gap-2 mb-4">
               {['Assessment interpretation', 'Research guidance', 'Academic writing guidance', 'Proofreading', 'Editing', 'Referencing support', 'Data analysis guidance', 'Programming explanations'].map((item) => (
-                <li key={item} className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                <li key={item} className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               Students remain fully responsible for their own final submissions and must follow
               APIC's academic-integrity requirements. It's worth reading APIC's own academic
               integrity policy before using any academic support service, including ours.
@@ -507,14 +507,14 @@ export default function APICPage() {
       {/* CREDIBLE BENEFITS (replaces unverified numeric claims for this page) */}
       <section className="py-14 bg-white dark:bg-slate-950">
         <div className="max-w-5xl mx-auto px-6">
-          <h3 className="text-center text-sm font-semibold text-gray-500 dark:text-gray-400 mb-6 uppercase tracking-wide">
+          <h3 className="text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-6 uppercase tracking-wide">
             What APIC Students Get
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {['Subject-specific support', 'Academic writing assistance', 'Confidential service', 'Referencing support', 'Proofreading', 'Research guidance', 'Data analysis assistance', 'Assessment brief guidance'].map((item) => (
-              <div key={item} className="flex items-center gap-2.5 bg-gray-50 dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-slate-700">
+              <div key={item} className="flex items-center gap-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-slate-100 dark:border-slate-700">
                 <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">{item}</span>
+                <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{item}</span>
               </div>
             ))}
           </div>
@@ -522,23 +522,23 @@ export default function APICPage() {
       </section>
 
       {/* CAMPUSES */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Sora, sans-serif' }}>
             APIC Academic Support Across Australia
           </h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed mb-8">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-8">
             Support is delivered online, regardless of which APIC campus you study at — we're not
             physically located at any APIC campus.
           </p>
           <div className="grid sm:grid-cols-3 gap-4">
             {campuses.map((c) => (
-              <div key={c.city} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-gray-100 dark:border-slate-700">
-                <div className="flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-200 mb-1.5">
+              <div key={c.city} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-100 dark:border-slate-700">
+                <div className="flex items-center gap-2 font-semibold text-slate-800 dark:text-slate-200 mb-1.5">
                   <MapPin className="w-4 h-4 text-indigo-600 flex-shrink-0" />
                   {c.city}
                 </div>
-                <p className="text-xs text-gray-500 dark:text-slate-400">{c.address}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{c.address}</p>
               </div>
             ))}
           </div>
@@ -553,11 +553,11 @@ export default function APICPage() {
           </h2>
           <div className="space-y-5">
             {howItWorks.map((item) => (
-              <div key={item.step} className="flex gap-5 bg-gray-50 dark:bg-slate-900 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+              <div key={item.step} className="flex gap-5 bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
                 <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold flex-shrink-0">{item.step}</div>
                 <div>
                   <h3 className="font-bold text-base mb-1">{item.title}</h3>
-                  <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -566,19 +566,19 @@ export default function APICPage() {
       </section>
 
       {/* STUDENT RESOURCES */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             APIC Student Resources
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto">
             Dedicated guides for these topics are planned — check back soon.
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
             {studentResources.map((item) => (
-              <div key={item} className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-gray-100 dark:border-slate-700">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{item}</span>
-                <span className="text-xs text-gray-400 dark:text-slate-500 flex-shrink-0 ml-3">Coming soon</span>
+              <div key={item} className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-slate-100 dark:border-slate-700">
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{item}</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500 flex-shrink-0 ml-3">Coming soon</span>
               </div>
             ))}
           </div>
@@ -593,16 +593,16 @@ export default function APICPage() {
           </h2>
           <div className="space-y-4">
             {faqs.map((item) => (
-              <div key={item.q} className="bg-gray-50 dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 transition hover:shadow-md">
+              <div key={item.q} className="bg-slate-50 dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 transition hover:shadow-md">
                 <h3 className="font-bold text-lg mb-2 flex items-start gap-2">
                   <MessageCircle className="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5" />
                   {item.q}
                 </h3>
-                <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed pl-7">{item.a}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed pl-7">{item.a}</p>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">
+          <p className="text-center text-sm text-slate-500 dark:text-slate-500 mt-6">
             Read our full{' '}
             <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link>{' '}
             before you book.
@@ -611,25 +611,25 @@ export default function APICPage() {
       </section>
 
       {/* OTHER UNIVERSITIES */}
-      <section className="py-10 bg-gray-50 dark:bg-slate-900">
+      <section className="py-10 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wide">
+          <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4 uppercase tracking-wide">
             Other Australian Academic Support
           </h3>
           <div className="flex flex-wrap justify-center gap-3 text-sm">
             <Link href="/kaplan-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Kaplan Business School</Link>
-            <span className="text-gray-300 dark:text-slate-700">·</span>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
             <Link href="/universities/cquniversity" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">CQUniversity</Link>
-            <span className="text-gray-300 dark:text-slate-700">·</span>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
             <Link href="/melbourne-institute-of-technology-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Melbourne Institute of Technology</Link>
-            <span className="text-gray-300 dark:text-slate-700">·</span>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
             <Link href="/holmes-institute-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Holmes Institute</Link>
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="relative py-20 overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600">
+      <section className="relative py-20 overflow-hidden stack-cta-band">
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, white 0%, transparent 8%), radial-gradient(circle at 80% 70%, white 0%, transparent 6%)' }} />
         <div className="max-w-3xl mx-auto px-6 text-center text-white relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Sora, sans-serif' }}>

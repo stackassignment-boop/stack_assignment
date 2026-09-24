@@ -82,11 +82,11 @@ export default async function UniversityPage({ params }: PageProps) {
   return (
     <main className="flex-grow">
       {/* Hero */}
-      <section className="relative text-white py-24 md:py-36 overflow-hidden">
+      <section className="stack-regional-hero relative text-white py-24 md:py-36 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `linear-gradient(135deg, rgba(30,41,59,0.95), rgba(15,23,42,0.97)), url(https://picsum.photos/id/${uni.heroImageId}/1920/1080)`,
+            backgroundImage: 'none',
           }}
         />
 
@@ -156,7 +156,7 @@ export default async function UniversityPage({ params }: PageProps) {
                 <MapPin className="w-6 h-6 text-indigo-600" />
                 <h2 className="text-2xl font-bold">Every Campus</h2>
               </div>
-              <p className="text-gray-600 dark:text-slate-400 mb-5">
+              <p className="text-slate-600 dark:text-slate-400 mb-5">
                 100% online support — no need to be near campus in person.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -178,7 +178,7 @@ export default async function UniversityPage({ params }: PageProps) {
               </div>
               <ul className="space-y-2.5">
                 {uni.courseAreas.map((c) => (
-                  <li key={c} className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                  <li key={c} className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                     <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
                     {c}
                   </li>
@@ -190,41 +190,41 @@ export default async function UniversityPage({ params }: PageProps) {
       </section>
 
       {/* Why this university's students specifically */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             Why {uni.name} Students Choose Us
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
             Support matched to your unit outline, not a generic template.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4">
                 <BookOpen className="w-7 h-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-2">Unit-Outline Matched</h3>
-              <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                 Upload your unit outline or marking rubric and your tutor follows it and your
                 specified referencing style exactly.
               </p>
             </div>
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4">
                 <Clock className="w-7 h-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-2">Flexible Turnaround</h3>
-              <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                 Deadlines from two weeks out down to under 24 hours, matched to your
                 assessment schedule.
               </p>
             </div>
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4">
                 <ShieldCheck className="w-7 h-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-2">Every Campus Covered</h3>
-              <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                 Fully online support means it works the same wherever you're enrolled.
               </p>
             </div>
@@ -240,7 +240,7 @@ export default async function UniversityPage({ params }: PageProps) {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>
             {uni.name} Student FAQs
@@ -249,19 +249,19 @@ export default async function UniversityPage({ params }: PageProps) {
             {faqs.map((item) => (
               <div
                 key={item.q}
-                className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 transition hover:shadow-md"
+                className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 transition hover:shadow-md"
               >
                 <h3 className="font-bold text-lg mb-2 flex items-start gap-2">
                   <MessageCircle className="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5" />
                   {item.q}
                 </h3>
-                <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed pl-7">
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed pl-7">
                   {item.a}
                 </p>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">
+          <p className="text-center text-sm text-slate-500 dark:text-slate-500 mt-6">
             Read our full{' '}
             <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">
               Academic Integrity policy
@@ -272,7 +272,7 @@ export default async function UniversityPage({ params }: PageProps) {
       </section>
 
       {/* Final CTA */}
-      <section className="relative py-20 overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600">
+      <section className="relative py-20 overflow-hidden stack-cta-band">
         <div
           className="absolute inset-0 opacity-20"
           style={{

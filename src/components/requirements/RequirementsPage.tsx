@@ -171,7 +171,7 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-950">
+    <div className="stack-site-theme min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
       <Header
         currentPage="requirements"
         onNavigate={handleNavigate}
@@ -185,10 +185,10 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
                   Assignment & Coursework Help
                 </h1>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
+                <p className="mt-2 text-slate-600 dark:text-slate-400">
                   Browse requirements and get expert help
                 </p>
               </div>
@@ -210,7 +210,7 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
             <div className="flex flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <Input
                     placeholder="Search requirements by title, description, or filename..."
                     value={searchQuery}
@@ -240,16 +240,16 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-            <span className="ml-4 text-gray-600 dark:text-gray-400">Loading requirements...</span>
+            <span className="ml-4 text-slate-600 dark:text-slate-400">Loading requirements...</span>
           </div>
         ) : filteredRequirements.length === 0 ? (
           <Card>
             <CardContent className="p-12 text-center">
-              <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-500 dark:text-gray-400 text-lg mb-2">
+              <FileText className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+              <p className="text-slate-500 dark:text-slate-400 text-lg mb-2">
                 No requirements available yet
               </p>
-              <p className="text-gray-400 dark:text-gray-500 text-sm">
+              <p className="text-slate-400 dark:text-slate-500 text-sm">
                 Check back later or contact support
               </p>
             </CardContent>
@@ -263,7 +263,7 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
                     {requirement.category && (
                       <Badge className="mb-2" variant="secondary">{requirement.category}</Badge>
                     )}
-                    <CardTitle className="text-base font-semibold text-gray-900 dark:text-white leading-tight">
+                    <CardTitle className="text-base font-semibold text-slate-900 dark:text-white leading-tight">
                       <Link href={`/requirements/${requirement.id}`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                         {requirement.title}
                       </Link>
@@ -276,7 +276,7 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-500 dark:text-gray-400">
+                      <span className="text-slate-500 dark:text-slate-400">
                         {requirement.fileName}
                       </span>
                       {requirement.fileType === 'application/pdf' ? (
@@ -289,10 +289,10 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
                         </Badge>
                       )}
                     </div>
-                    <span className="bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">
+                    <span className="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs">
                       {formatFileSize(requirement.fileSize)}
                     </span>
-                    <span className="text-gray-400 dark:text-gray-500 text-xs">
+                    <span className="text-slate-400 dark:text-slate-500 text-xs">
                       {formatDate(requirement.createdAt)}
                     </span>
                   </div>
@@ -309,7 +309,7 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
                     </Button>
                     <Button
                       onClick={() => handleGetAnswer(requirement)}
-                      className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold"
+                      className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-semibold"
                     >
                       Get Answer
                       <ArrowRight className="w-4 h-4 ml-2" />

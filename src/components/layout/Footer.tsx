@@ -51,7 +51,7 @@ function FooterLink({
 export default function Footer({ onNavigate }: FooterProps) {
   return (
     <>
-      <footer className="bg-slate-900 text-slate-300 py-12 mt-auto relative">
+      <footer className="bg-slate-950 text-slate-300 py-12 mt-auto relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Trust Badges */}
           <div className="mb-10">
@@ -213,7 +213,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                 href="https://instagram.com/stackassignment"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-400 hover:text-pink-400 transition-colors text-2xl"
+                className="text-slate-400 hover:text-indigo-400 transition-colors text-2xl"
                 aria-label="Instagram"
               >
                 <Instagram className="w-6 h-6" />

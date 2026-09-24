@@ -33,9 +33,9 @@ export default function SamplePageClient({ slug }: SamplePageClientProps) {
       <main className="flex-grow py-12">
         <div className="max-w-4xl mx-auto px-6">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
-            <div className="h-64 bg-gray-200 rounded-xl"></div>
+            <div className="h-8 bg-slate-200 rounded w-3/4 mb-4"></div>
+            <div className="h-4 bg-slate-200 rounded w-1/2 mb-8"></div>
+            <div className="h-64 bg-slate-200 rounded-xl"></div>
           </div>
         </div>
       </main>
@@ -66,13 +66,13 @@ export default function SamplePageClient({ slug }: SamplePageClientProps) {
           </a>
           <h1 className="text-3xl font-bold mb-4">{sample.title}</h1>
           {sample.description && (
-            <p className="text-gray-600 mb-6">{sample.description}</p>
+            <p className="text-slate-600 mb-6">{sample.description}</p>
           )}
 
           {hasFile ? (
             <button
               onClick={() => setShowPreview(true)}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium"
             >
               Preview Sample
             </button>
@@ -83,12 +83,12 @@ export default function SamplePageClient({ slug }: SamplePageClientProps) {
             />
           ) : (
             <div className="bg-white rounded-xl shadow p-8 text-center mt-8">
-              <p className="text-gray-600 mb-4">
+              <p className="text-slate-600 mb-4">
                 A full preview for this sample hasn't been uploaded yet.
               </p>
               <a
                 href={`/order?subject=${encodeURIComponent(sample.title)}`}
-                className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition"
+                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition"
               >
                 Order a Similar Sample
               </a>

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 import { region, generateBreadcrumbSchema } from '@/lib/seo-config'
 import { TOOLS } from '@/lib/tools'
 
@@ -28,86 +28,14 @@ export const metadata: Metadata = {
 }
 
 export default function ToolsPage() {
-  return (
-    <main className="flex-grow">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            generateBreadcrumbSchema([
-              { name: 'Home', url: 'https://www.stackassignment.com' },
-              { name: 'Free Tools', url },
-            ])
-          ),
-        }}
-      />
-
-      <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-16 md:py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <h1
-            className="text-4xl md:text-5xl font-bold mb-4"
-            style={{ fontFamily: 'Sora, sans-serif' }}
-          >
-            Free study tools
-          </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl">
-            Built for the way Australian universities actually work &mdash; credit points, WAM,
-            and the referencing styles your unit guide specifies. Free to use, no account needed.
-          </p>
-        </div>
-      </section>
-
-      <div className="max-w-4xl mx-auto px-6 py-12 md:py-16">
-        <div className="space-y-5">
-          {TOOLS.map((tool) => {
-            const Icon = tool.icon
-            const body = (
-              <>
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <div className="min-w-0">
-                    <h2 className="flex flex-wrap items-center gap-2 text-xl font-bold text-gray-900 dark:text-slate-100">
-                      {tool.name}
-                      {!tool.live && (
-                        <span className="rounded-full bg-gray-100 dark:bg-slate-700 px-2.5 py-0.5 text-xs font-semibold text-gray-600 dark:text-slate-300">
-                          Coming soon
-                        </span>
-                      )}
-                    </h2>
-                    <p className="mt-2 text-gray-700 dark:text-slate-300 leading-relaxed">
-                      {tool.blurb}
-                    </p>
-                    {tool.live && (
-                      <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-                        {tool.cta} <ArrowRight className="h-4 w-4" />
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </>
-            )
-
-            return tool.live ? (
-              <Link
-                key={tool.name}
-                href={tool.href}
-                className="block rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition-all"
-              >
-                {body}
-              </Link>
-            ) : (
-              <div
-                key={tool.name}
-                className="rounded-2xl border border-dashed border-gray-300 dark:border-slate-700 bg-gray-50/60 dark:bg-slate-900/40 p-6"
-              >
-                {body}
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </main>
-  )
+  const liveTools = TOOLS.filter(t => t.live);
+  const soonTools = TOOLS.filter(t => !t.live);
+  return <main className="stack-page flex-grow overflow-hidden">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(generateBreadcrumbSchema([{ name: 'Home', url: 'https://www.stackassignment.com' }, { name: 'Free Tools', url }])) }} />
+    <section className="stack-hero stack-tools-hero"><div className="stack-container py-16 md:py-20 relative z-10"><div className="max-w-4xl"><div className="stack-eyebrow"><Sparkles className="h-4 w-4" /> Free student toolkit</div><h1 className="stack-hero-title">Useful tools for <span>university study</span></h1><p className="stack-hero-copy">Calculators, converters and study helpers designed around the needs of Australian and UK university students. Start instantly — no account required for the tools that are live.</p><div className="flex flex-wrap gap-3 mt-7"><span className="stack-pill-dark">Free to use</span><span className="stack-pill-dark">AU & UK focused</span><span className="stack-pill-dark">Built for students</span></div></div></div></section>
+    <section className="stack-container -mt-8 relative z-20 pb-20"><div className="grid sm:grid-cols-3 gap-4 mb-8"><div className="stack-stat-card"><strong>{liveTools.length}</strong><span>Live tools</span></div><div className="stack-stat-card"><strong>{TOOLS.length}</strong><span>Tools planned</span></div><div className="stack-stat-card"><strong>0</strong><span>Signup required</span></div></div>
+      <div className="mb-10"><div className="mb-5"><p className="text-xs font-extrabold uppercase tracking-widest text-indigo-700">LIVE NOW</p><h2 className="text-3xl font-bold mt-1">Start with a free tool</h2></div><div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">{liveTools.map((tool, i) => { const Icon = tool.icon; return <Link key={tool.name} href={tool.href} className="stack-tool-card group"><div className={`stack-tool-icon ${i % 3 === 0 ? 'indigo' : i % 3 === 1 ? 'cyan' : 'violet'}`}><Icon className="h-6 w-6" /></div><div className="flex-1"><h3 className="text-xl font-bold">{tool.name}</h3><p className="text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">{tool.blurb}</p><span className="inline-flex items-center gap-2 mt-5 text-sm font-bold text-indigo-600">{tool.cta}<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></span></div></Link> })}</div></div>
+      {soonTools.length > 0 && <div><div className="mb-5"><p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">COMING SOON</p><h2 className="text-3xl font-bold mt-1">More study helpers</h2></div><div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">{soonTools.map(tool => { const Icon = tool.icon; return <div key={tool.name} className="stack-tool-card is-soon"><div className="stack-tool-icon slate"><Icon className="h-6 w-6" /></div><div><div className="flex items-center gap-2"><h3 className="text-xl font-bold">{tool.name}</h3><span className="stack-coming-soon">Soon</span></div><p className="text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">{tool.blurb}</p></div></div> })}</div></div>}
+      <div className="stack-soft-banner mt-12"><div><p className="text-sm font-bold text-indigo-700">Need more than a tool?</p><h2 className="text-2xl font-bold mt-1">Explore subject guides and university resources.</h2></div><div className="flex gap-3 flex-wrap"><Link href="/subjects" className="stack-secondary-button">Browse subjects</Link><Link href="/universities" className="stack-primary-button">Find your university <ArrowRight className="h-4 w-4" /></Link></div></div>
+    </section></main>;
 }

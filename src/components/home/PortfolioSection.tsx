@@ -26,13 +26,13 @@ const subjectImages: Record<string, string> = {
 };
 
 const subjectColors: Record<string, string> = {
-  'Business': 'bg-blue-500',
-  'Nursing': 'bg-teal-500',
+  'Business': 'bg-indigo-500',
+  'Nursing': 'bg-indigo-500',
   'Literature': 'bg-purple-500',
-  'Law': 'bg-amber-500',
+  'Law': 'bg-purple-500',
   'STEM': 'bg-indigo-500',
-  'Computer Science': 'bg-green-500',
-  'default': 'bg-gray-500',
+  'Computer Science': 'bg-indigo-500',
+  'default': 'bg-slate-500',
 };
 
 const academicLevels: Record<string, string> = {
@@ -157,17 +157,17 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-950">
+    <section className="py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-950">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-sm font-semibold px-4 py-1 rounded-full mb-4">
             Sample Work
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white">
             Our Writing Portfolio
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
             Browse our expert-written papers across diverse subjects and academic levels.
           </p>
         </div>
@@ -191,7 +191,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
             {selectedSubject && (
               <button 
                 onClick={clearFilter}
-                className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 px-3 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all"
+                className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
               >
                 <X className="w-3 h-3" />
                 Clear
@@ -203,13 +203,13 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
         {/* No Samples */}
         {samples.length === 0 ? (
           <div className="text-center py-12">
-            <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-500">No samples available yet.</p>
+            <BookOpen className="h-12 w-12 text-slate-400 mx-auto mb-3" />
+            <p className="text-slate-500">No samples available yet.</p>
           </div>
         ) : displaySamples.length === 0 && selectedSubject ? (
           <div className="text-center py-12">
-            <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-500">No samples found in <span className="font-semibold text-indigo-600">{selectedSubject}</span> category.</p>
+            <BookOpen className="h-12 w-12 text-slate-400 mx-auto mb-3" />
+            <p className="text-slate-500">No samples found in <span className="font-semibold text-indigo-600">{selectedSubject}</span> category.</p>
             <button 
               onClick={clearFilter}
               className="mt-3 text-indigo-600 hover:text-indigo-700 font-medium"
@@ -254,16 +254,16 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
                       {sample.subject || 'General'}
                     </span>
                     {sample.academicLevel && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-slate-500">
                         {academicLevels[sample.academicLevel] || sample.academicLevel}
                       </span>
                     )}
                   </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
                     {sample.title}
                   </h3>
                   {sample.description && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 line-clamp-2">
                       {sample.description}
                     </p>
                   )}
@@ -284,7 +284,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
         {/* View All Button */}
         {samples.length > 0 && (
           <div className="text-center">
-            <p className="text-gray-500 mb-4">
+            <p className="text-slate-500 mb-4">
               {selectedSubject ? (
                 <>
                   Showing {Math.min(6, filteredSamples.length)} of {filteredSamples.length} samples in <span className="font-semibold text-indigo-600">{selectedSubject}</span>

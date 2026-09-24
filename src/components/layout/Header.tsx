@@ -190,7 +190,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                    hoverable area. With a margin the menu closes the moment the
                    pointer enters the gap. */
                 <div className="absolute left-0 top-full z-50 pt-3">
-                  <div className="w-72 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 py-2 shadow-lg">
+                  <div className="w-72 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 py-2 shadow-lg">
                     {NAV_TOOLS.map((tool) => {
                       const Icon = tool.icon;
                       return (
@@ -198,7 +198,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                           key={tool.href}
                           href={tool.href}
                           onClick={() => setToolsOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                         >
                           <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
                             <Icon className="h-4 w-4" />
@@ -207,11 +207,11 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                         </Link>
                       );
                     })}
-                    <div className="mt-1 border-t border-gray-200 dark:border-slate-700 pt-1">
+                    <div className="mt-1 border-t border-slate-200 dark:border-slate-700 pt-1">
                       <Link
                         href="/tools"
                         onClick={() => setToolsOpen(false)}
-                        className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                        className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                       >
                         All free tools <ArrowRight className="h-4 w-4" />
                       </Link>
@@ -226,7 +226,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
           <div className="flex shrink-0 items-center gap-2 lg:gap-3">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
               aria-label="Toggle theme"
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -257,27 +257,27 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                  <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <span className="hidden lg:block text-sm font-medium">{studentUser.name.split(' ')[0]}</span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${loginDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
                 {loginDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-2 z-50">
-                    <div className="px-4 py-2 border-b border-gray-200 dark:border-slate-700">
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-slate-200 dark:border-slate-700">
                       <p className="text-sm font-medium truncate">{studentUser.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 break-all">{studentUser.email}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 break-all">{studentUser.email}</p>
                     </div>
                     <button
                       onClick={() => {
                         handleNav('student-dashboard');
                         setLoginDropdownOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2"
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"
                     >
                       <User className="w-4 h-4" /> Dashboard
                     </button>
@@ -286,7 +286,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                         if (onLogout) onLogout();
                         setLoginDropdownOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2"
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"
                     >
                       <LogOut className="w-4 h-4" /> Logout
                     </button>
@@ -300,7 +300,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                   className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
                     loginDropdownOpen || currentPage === 'student-login'
                       ? 'text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-900/20'
-                      : 'hover:bg-gray-100 dark:hover:bg-slate-800'
+                      : 'hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
                   Login
@@ -308,19 +308,19 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                 </button>
                 
                 {loginDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50">
                     <button
                       onClick={() => {
                         handleNav('student-login');
                       }}
-                      className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-3"
+                      className="w-full text-left px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3"
                     >
-                      <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
-                        <User className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                      <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
+                        <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                       </div>
                       <div>
                         <p className="text-sm font-medium">Student</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">View samples & bookings</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">View samples & bookings</p>
                       </div>
                     </button>
                   </div>
@@ -357,15 +357,15 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
             ))}
             {/* The desktop nav is hidden below md and hover does not exist on
                 touch, so the same tools are listed outright here. */}
-            <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Student support by region:</p>
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 mt-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 px-2">Student support by region:</p>
               <div className="grid grid-cols-2 gap-2 px-2 pb-2">
                 <Link href="/australia/academic-support" onClick={() => setMobileMenuOpen(false)} className="rounded-lg border px-3 py-2 text-sm font-semibold hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700">🇦🇺 Australia</Link>
                 <Link href="/uk/academic-support" onClick={() => setMobileMenuOpen(false)} className="rounded-lg border px-3 py-2 text-sm font-semibold hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700">🇬🇧 UK</Link>
               </div>
             </div>
-            <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Free tools:</p>
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 mt-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 px-2">Free tools:</p>
               {NAV_TOOLS.map((tool) => {
                 const Icon = tool.icon;
                 return (
@@ -373,7 +373,7 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                     key={tool.href}
                     href={tool.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 w-full text-left py-2.5 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
+                    className="flex items-center gap-3 w-full text-left py-2.5 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
                     <Icon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                     <span>{tool.label}</span>
@@ -388,13 +388,13 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
                 All free tools <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Student account</p>
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 mt-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 px-2">Student account</p>
               <button
                 onClick={() => handleNav('student-login')}
-                className="flex items-center gap-3 w-full text-left py-3 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
+                className="flex items-center gap-3 w-full text-left py-3 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
               >
-                <User className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 <span>Student Login</span>
               </button>
             </div>

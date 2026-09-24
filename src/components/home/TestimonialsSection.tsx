@@ -15,7 +15,7 @@ export default function TestimonialsSection() {
       <div className="mx-auto max-w-7xl px-5 sm:px-6">
         <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
           <div>
-            <span className="inline-flex rounded-full bg-teal-50 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-teal-700 dark:bg-teal-500/10 dark:text-teal-300">Popular support areas</span>
+            <span className="inline-flex rounded-full bg-indigo-50 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">Popular support areas</span>
             <h2 className="mt-5 text-3xl font-black tracking-tight text-slate-950 dark:text-white md:text-5xl">Support that fits the subject, not a generic template.</h2>
             <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300 md:text-lg">Choose the area you need help with and tell us your university, unit and assessment context. We can then direct you to the most relevant support.</p>
           </div>

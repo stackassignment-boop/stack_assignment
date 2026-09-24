@@ -177,10 +177,9 @@ export default function CQUniversityPage() {
       <StructuredData data={faqSchema} />
 
       {/* HERO */}
-      <section className="relative text-white py-24 md:py-36 overflow-hidden">
+      <section className="stack-regional-hero relative text-white py-24 md:py-36 overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'linear-gradient(135deg, rgba(30,41,59,0.95), rgba(15,23,42,0.97)), url(https://picsum.photos/id/1011/1920/1080)' }}
+          className="absolute inset-0 bg-slate-950"
         />
         <div className="absolute rounded-full blur-3xl opacity-30 animate-float" style={{ top: '8%', left: '6%', width: '320px', height: '320px', background: 'radial-gradient(circle, #6366f1, transparent 70%)' }} />
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
@@ -211,21 +210,21 @@ export default function CQUniversityPage() {
       {/* INTRODUCTION */}
       <section className="py-16 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
             CQUniversity (CQU) students study across a genuinely wide range of disciplines — business,
             nursing, engineering, education and IT among them — often across multiple campuses or
             fully online. That breadth means assessment styles vary a lot between courses: a nursing
             case study calls for different structure and evidence than an engineering project report
             or an IT programming assignment.
           </p>
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
             Stack Assignment provides academic support for CQU students across Australia — covering
             academic writing guidance, research assistance, referencing help, proofreading, data
             analysis guidance and subject-specific support matched to your actual course area, from
             business reports and case studies through to programming assignments and literature
             reviews.
           </p>
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
             Whether you're studying at Rockhampton, Cairns, Townsville, Brisbane, Melbourne, Sydney
             or online, support works the same way — matched to your unit and assessment brief rather
             than a generic template.
@@ -234,22 +233,22 @@ export default function CQUniversityPage() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             Why Choose Stack Assignment for CQU Academic Support?
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
             Built around the breadth of what CQU students actually study.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             {whyChooseUs.map((item) => (
-              <div key={item.title} className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
+              <div key={item.title} className="bg-white dark:bg-slate-800 rounded-2xl p-7 shadow-md border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-xl">
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4">
                   <item.icon className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -262,7 +261,7 @@ export default function CQUniversityPage() {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQUniversity Courses We Support
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto">
             Support spans CQU's full course breadth — not just IT.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -273,12 +272,12 @@ export default function CQUniversityPage() {
                     <course.icon className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <h3 className="font-bold text-base mb-1.5">{course.title}</h3>
-                  <p className="text-gray-500 dark:text-slate-400 text-xs leading-relaxed">{course.desc}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">{course.desc}</p>
                 </>
               )
               if (course.anchor) {
                 return (
-                  <a key={course.title} href={course.anchor} className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-indigo-200 dark:hover:border-indigo-800 block">
+                  <a key={course.title} href={course.anchor} className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-lg hover:border-indigo-200 dark:hover:border-indigo-800 block">
                     {inner}
                   </a>
                 )
@@ -286,7 +285,7 @@ export default function CQUniversityPage() {
               // Dedicated pages for these course areas don't exist yet —
               // non-linked cards rather than fake/broken links.
               return (
-                <div key={course.title} className="bg-gray-50 dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+                <div key={course.title} className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
                   {inner}
                 </div>
               )
@@ -296,16 +295,16 @@ export default function CQUniversityPage() {
       </section>
 
       {/* CQU ASSESSMENT SUPPORT */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQU Assessment Support
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
             {assessmentSupportItems.map((item) => (
-              <div key={item} className="flex items-center gap-2.5 bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-gray-100 dark:border-slate-700">
+              <div key={item} className="flex items-center gap-2.5 bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-slate-100 dark:border-slate-700">
                 <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{item}</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{item}</span>
               </div>
             ))}
           </div>
@@ -326,9 +325,9 @@ export default function CQUniversityPage() {
           </div>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3 mb-12">
             {itSupportItems.map((item) => (
-              <div key={item} className="flex items-center gap-2.5 bg-gray-50 dark:bg-slate-800 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-700">
+              <div key={item} className="flex items-center gap-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 border border-slate-100 dark:border-slate-700">
                 <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{item}</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{item}</span>
               </div>
             ))}
           </div>
@@ -337,30 +336,30 @@ export default function CQUniversityPage() {
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQU Unit & Subject Academic Support
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-8 max-w-2xl mx-auto text-sm">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-8 max-w-2xl mx-auto text-sm">
             Verified against CQUniversity's own unit profile handbook.
           </p>
-          <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-slate-700">
+          <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 dark:bg-slate-800 text-left">
-                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Unit Code</th>
-                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Unit Name</th>
-                  <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Academic Support</th>
+                <tr className="bg-slate-50 dark:bg-slate-800 text-left">
+                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Unit Code</th>
+                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Unit Name</th>
+                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Academic Support</th>
                 </tr>
               </thead>
               <tbody>
                 {cquUnits.map((u, i) => (
-                  <tr key={u.code} className={i % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-gray-50/60 dark:bg-slate-900'}>
+                  <tr key={u.code} className={i % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-slate-50/60 dark:bg-slate-900'}>
                     <td className="px-4 py-3 font-mono font-semibold text-indigo-700 dark:text-indigo-400 whitespace-nowrap">{u.code}</td>
-                    <td className="px-4 py-3 text-gray-800 dark:text-gray-200">{u.name}</td>
-                    <td className="px-4 py-3 text-gray-500 dark:text-slate-400">{u.support}</td>
+                    <td className="px-4 py-3 text-slate-800 dark:text-slate-200">{u.name}</td>
+                    <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{u.support}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-gray-400 dark:text-slate-500 mt-6 text-center max-w-2xl mx-auto">
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-6 text-center max-w-2xl mx-auto">
             Course structures, unit codes and assessment requirements can change. Students should
             verify current information through CQUniversity's official course and student
             resources. Source:{' '}
@@ -372,13 +371,13 @@ export default function CQUniversityPage() {
       </section>
 
       {/* CQU BUSINESS & MANAGEMENT */}
-      <section className="py-14 bg-gray-50 dark:bg-slate-900">
+      <section className="py-14 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}>
             <Briefcase className="w-6 h-6 text-indigo-600" />
             CQU Business & Management Academic Support
           </h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
             Support for business reports, management reports, marketing, accounting, finance,
             business analytics, project management, case studies and research assessments across
             CQU's business courses.
@@ -393,11 +392,11 @@ export default function CQUniversityPage() {
             <HeartPulse className="w-6 h-6 text-indigo-600" />
             CQU Nursing & Health Academic Support
           </h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm mb-3">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm mb-3">
             Support for nursing academic writing, nursing case studies, health research, literature
             reviews, referencing and academic proofreading.
           </p>
-          <p className="text-gray-500 dark:text-slate-500 text-xs bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-3">
+          <p className="text-slate-500 dark:text-slate-500 text-xs bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-3">
             This is academic writing support only — it does not include clinical decision-making
             or real-world patient treatment guidance.
           </p>
@@ -405,13 +404,13 @@ export default function CQUniversityPage() {
       </section>
 
       {/* CQU ENGINEERING */}
-      <section className="py-14 bg-gray-50 dark:bg-slate-900">
+      <section className="py-14 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2" style={{ fontFamily: 'Sora, sans-serif' }}>
             <HardHat className="w-6 h-6 text-indigo-600" />
             CQU Engineering Academic Support
           </h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
             Support for engineering reports, research, project documentation, data analysis and
             technical writing across civil, electrical and mechanical engineering assessments.
           </p>
@@ -425,7 +424,7 @@ export default function CQUniversityPage() {
             <School className="w-6 h-6 text-indigo-600" />
             CQU Education & Teaching Academic Support
           </h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
             Support for education reports, teaching-related assignments, education case studies,
             literature reviews and research writing.
           </p>
@@ -433,13 +432,13 @@ export default function CQUniversityPage() {
       </section>
 
       {/* REFERENCING & ACADEMIC WRITING */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQU Referencing & Academic Writing Support
           </h2>
-          <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-7">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-7">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               CQU doesn't use one universal referencing style across every course — the required
               style (APA, Harvard, or another format) is specified for each individual unit and
               assessment, so it's worth checking your unit outline before you start referencing.
@@ -447,7 +446,7 @@ export default function CQUniversityPage() {
             </p>
             <ul className="grid sm:grid-cols-2 gap-2">
               {['APA referencing', 'Harvard referencing', 'In-text citations', 'Reference lists', 'Academic source selection', 'Paraphrasing', 'Literature reviews', 'Referencing-focused proofreading'].map((item) => (
-                <li key={item} className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                <li key={item} className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                   {item}
                 </li>
@@ -464,8 +463,8 @@ export default function CQUniversityPage() {
             <Bot className="w-8 h-8 text-indigo-600" />
             CQU Generative AI & Academic Integrity
           </h2>
-          <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-7 border border-gray-100 dark:border-slate-700">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-7 border border-slate-100 dark:border-slate-700">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               Generative AI permissions can vary between individual assessments at CQU — some may
               allow limited AI use with acknowledgement, others may not permit it at all. A few
               things worth keeping in mind:
@@ -478,7 +477,7 @@ export default function CQUniversityPage() {
                 'Verify any information or sources AI tools provide — they can be inaccurate',
                 'AI output should never be represented as entirely your own work where that isn\'t accurate',
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                <li key={item} className="flex items-start gap-2 text-slate-700 dark:text-slate-300 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                   {item}
                 </li>
@@ -489,25 +488,25 @@ export default function CQUniversityPage() {
       </section>
 
       {/* ACADEMIC INTEGRITY */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQU Academic Integrity & Responsible Academic Support
           </h2>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 border border-gray-100 dark:border-slate-700">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-7 border border-slate-100 dark:border-slate-700">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               Stack Assignment is not affiliated with, endorsed by, or partnered with CQUniversity.
               Our services are designed to support CQU students through:
             </p>
             <ul className="grid sm:grid-cols-2 gap-2 mb-4">
               {['Assessment interpretation', 'Research guidance', 'Academic writing guidance', 'Proofreading', 'Editing', 'Referencing support', 'Data analysis guidance', 'Study resources and subject explanations'].map((item) => (
-                <li key={item} className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                <li key={item} className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
               Students remain fully responsible for their own final assessment submissions and
               must comply with CQU's academic-integrity requirements, including its policies on
               contract cheating and outsourcing assessed work. It's worth reading CQU's own
@@ -523,14 +522,14 @@ export default function CQUniversityPage() {
       {/* CREDIBLE BENEFITS (replaces unverified numeric claims for this page) */}
       <section className="py-14 bg-white dark:bg-slate-950">
         <div className="max-w-5xl mx-auto px-6">
-          <h3 className="text-center text-sm font-semibold text-gray-500 dark:text-gray-400 mb-6 uppercase tracking-wide">
+          <h3 className="text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-6 uppercase tracking-wide">
             What CQU Students Get
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {['Subject-specific support', 'Academic writing assistance', 'Confidential service', 'Referencing support', 'Proofreading', 'Research guidance', 'Data analysis assistance', 'Assessment brief guidance'].map((item) => (
-              <div key={item} className="flex items-center gap-2.5 bg-gray-50 dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-slate-700">
+              <div key={item} className="flex items-center gap-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-slate-100 dark:border-slate-700">
                 <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">{item}</span>
+                <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{item}</span>
               </div>
             ))}
           </div>
@@ -538,12 +537,12 @@ export default function CQUniversityPage() {
       </section>
 
       {/* CQU LOCATIONS */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQUniversity Academic Support Across Australia
           </h2>
-          <p className="text-gray-600 dark:text-slate-400 leading-relaxed mb-6">
+          <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
             Whichever CQU campus you study at — or if you study fully online — support is delivered
             the same way, entirely online.
           </p>
@@ -566,11 +565,11 @@ export default function CQUniversityPage() {
           </h2>
           <div className="space-y-5">
             {howItWorks.map((item) => (
-              <div key={item.step} className="flex gap-5 bg-gray-50 dark:bg-slate-900 rounded-2xl p-6 border border-gray-100 dark:border-slate-700">
+              <div key={item.step} className="flex gap-5 bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
                 <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold flex-shrink-0">{item.step}</div>
                 <div>
                   <h3 className="font-bold text-base mb-1">{item.title}</h3>
-                  <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -579,19 +578,19 @@ export default function CQUniversityPage() {
       </section>
 
       {/* STUDENT RESOURCES */}
-      <section className="py-16 bg-gray-50 dark:bg-slate-900">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQU Student Resources
           </h2>
-          <p className="text-center text-gray-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto">
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto">
             Dedicated guides for these topics are planned — check back soon.
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
             {studentResources.map((item) => (
-              <div key={item} className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-gray-100 dark:border-slate-700">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{item}</span>
-                <span className="text-xs text-gray-400 dark:text-slate-500 flex-shrink-0 ml-3">Coming soon</span>
+              <div key={item} className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-xl px-4 py-3.5 border border-slate-100 dark:border-slate-700">
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{item}</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500 flex-shrink-0 ml-3">Coming soon</span>
               </div>
             ))}
           </div>
@@ -608,16 +607,16 @@ export default function CQUniversityPage() {
           </h2>
           <div className="space-y-4">
             {faqs.map((item) => (
-              <div key={item.q} className="bg-gray-50 dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 transition hover:shadow-md">
+              <div key={item.q} className="bg-slate-50 dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 transition hover:shadow-md">
                 <h3 className="font-bold text-lg mb-2 flex items-start gap-2">
                   <MessageCircle className="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5" />
                   {item.q}
                 </h3>
-                <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed pl-7">{item.a}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed pl-7">{item.a}</p>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-gray-500 dark:text-slate-500 mt-6">
+          <p className="text-center text-sm text-slate-500 dark:text-slate-500 mt-6">
             Read our full{' '}
             <Link href="/integrity" className="text-indigo-600 dark:text-indigo-400 underline font-medium">Academic Integrity policy</Link>{' '}
             before you book.
@@ -626,23 +625,23 @@ export default function CQUniversityPage() {
       </section>
 
       {/* OTHER UNIVERSITIES */}
-      <section className="py-10 bg-gray-50 dark:bg-slate-900">
+      <section className="py-10 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wide">
+          <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4 uppercase tracking-wide">
             Support for Other Australian Universities
           </h3>
           <div className="flex flex-wrap justify-center gap-3 text-sm">
             <Link href="/kaplan-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Kaplan Business School</Link>
-            <span className="text-gray-300 dark:text-slate-700">·</span>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
             <Link href="/melbourne-institute-of-technology-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Melbourne Institute of Technology</Link>
-            <span className="text-gray-300 dark:text-slate-700">·</span>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
             <Link href="/holmes-institute-assignment-help" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Holmes Institute</Link>
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="relative py-20 overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600">
+      <section className="relative py-20 overflow-hidden stack-cta-band">
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, white 0%, transparent 8%), radial-gradient(circle at 80% 70%, white 0%, transparent 6%)' }} />
         <div className="max-w-3xl mx-auto px-6 text-center text-white relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Sora, sans-serif' }}>

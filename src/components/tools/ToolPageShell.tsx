@@ -118,8 +118,8 @@ export default function ToolPageShell({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
 
-      <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-14 md:py-20">
-        <div className="max-w-4xl mx-auto px-6">
+      <section className="stack-service-hero bg-slate-950 text-white py-14 md:py-20 relative overflow-hidden">
+        <div className="relative max-w-4xl mx-auto px-6">
           {showBreadcrumbNav && (
             <nav aria-label="Breadcrumb" className="mb-5 text-sm text-white/70">
               <Link href="/" className="hover:text-white">
@@ -158,12 +158,12 @@ export default function ToolPageShell({
       </div>
 
       {(faqHeading !== false || ctas.length > 0) && (
-        <section className="border-t border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-900/40">
+        <section className="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
           <div className="max-w-3xl mx-auto px-6 py-14">
             {faqHeading !== false && (
               <>
                 <h2
-                  className="text-2xl md:text-3xl font-bold mb-8 text-gray-900 dark:text-slate-100"
+                  className="text-2xl md:text-3xl font-bold mb-8 text-slate-900 dark:text-slate-100"
                   style={{ fontFamily: 'Sora, sans-serif' }}
                 >
                   {faqHeading}
@@ -171,10 +171,10 @@ export default function ToolPageShell({
                 <div className="space-y-6">
                   {faqs.map((faq) => (
                     <div key={faq.question}>
-                      <h3 className="font-bold text-gray-900 dark:text-slate-100 mb-2">
+                      <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-2">
                         {faq.question}
                       </h3>
-                      <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
+                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>
@@ -191,11 +191,11 @@ export default function ToolPageShell({
                   'rounded-2xl border p-6',
                   cta.tone === 'accent'
                     ? 'border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-500/10'
-                    : 'border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900',
+                    : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900',
                 ].join(' ')}
               >
-                <h3 className="font-bold text-gray-900 dark:text-slate-100 mb-2">{cta.heading}</h3>
-                <p className="text-gray-700 dark:text-slate-300 mb-4 leading-relaxed">{cta.body}</p>
+                <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-2">{cta.heading}</h3>
+                <p className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed">{cta.body}</p>
                 <div className="flex flex-wrap gap-4">
                   {[{ href: cta.href, label: cta.label }, ...(cta.links ?? [])].map((link) => (
                     <Link

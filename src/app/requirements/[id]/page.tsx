@@ -85,17 +85,17 @@ export default async function RequirementDetailPage({ params }: PageProps) {
   }
 
   return (
-    <main className="flex-grow bg-gray-50 dark:bg-slate-950 min-h-screen">
+    <main className="flex-grow bg-slate-50 dark:bg-slate-950 min-h-screen">
       <div className="max-w-3xl mx-auto px-6 py-12">
         <Link
           href="/requirements"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to all requirements
         </Link>
 
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm p-8">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-8">
           {req.category && (
             <span className="inline-flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
               <Tag className="w-3 h-3" />
@@ -103,11 +103,11 @@ export default async function RequirementDetailPage({ params }: PageProps) {
             </span>
           )}
 
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4 leading-tight">
             {req.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-slate-400 mb-6 pb-6 border-b border-gray-100 dark:border-slate-800">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400 mb-6 pb-6 border-b border-slate-100 dark:border-slate-800">
             <span className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
               Posted {formatDate(req.createdAt)}
@@ -119,11 +119,11 @@ export default async function RequirementDetailPage({ params }: PageProps) {
           </div>
 
           {req.description ? (
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-8">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap mb-8">
               {req.description}
             </p>
           ) : (
-            <p className="text-gray-400 dark:text-slate-500 italic mb-8">
+            <p className="text-slate-400 dark:text-slate-500 italic mb-8">
               No additional description provided for this requirement.
             </p>
           )}

@@ -85,13 +85,13 @@ export default function ImageToText() {
         <div
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f) }}
-          className="rounded-2xl border-2 border-dashed border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900/40 p-10 text-center"
+          className="rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/40 p-10 text-center"
         >
-          <Upload className="mx-auto h-10 w-10 text-gray-400 mb-4" />
-          <p className="font-semibold text-gray-900 dark:text-slate-100 mb-1">
+          <Upload className="mx-auto h-10 w-10 text-slate-400 mb-4" />
+          <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
             Drop an image here, or choose a file
           </p>
-          <p className="text-sm text-gray-500 dark:text-slate-400 mb-5">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
             Photos of lecture slides, textbook pages, whiteboards or handwritten notes. PNG, JPG or WEBP.
           </p>
           <button
@@ -112,14 +112,14 @@ export default function ImageToText() {
       )}
 
       {preview && (
-        <div className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
-          <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-700 px-4 py-3">
-            <span className="truncate text-sm font-medium text-gray-700 dark:text-slate-300">{fileName}</span>
-            <button type="button" onClick={reset} aria-label="Remove image" className="text-gray-400 hover:text-red-600">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-4 py-3">
+            <span className="truncate text-sm font-medium text-slate-700 dark:text-slate-300">{fileName}</span>
+            <button type="button" onClick={reset} aria-label="Remove image" className="text-slate-400 hover:text-red-600">
               <X className="h-5 w-5" />
             </button>
           </div>
-          <img src={preview} alt="Uploaded image being converted to text" className="max-h-72 w-full object-contain bg-gray-50 dark:bg-slate-800" />
+          <img src={preview} alt="Uploaded image being converted to text" className="max-h-72 w-full object-contain bg-slate-50 dark:bg-slate-800" />
         </div>
       )}
 
@@ -127,14 +127,14 @@ export default function ImageToText() {
         <div className="rounded-xl border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-500/10 p-5">
           <div className="flex items-center gap-3 mb-3">
             <Loader2 className="h-5 w-5 animate-spin text-indigo-600" />
-            <span className="font-semibold text-gray-900 dark:text-slate-100">
+            <span className="font-semibold text-slate-900 dark:text-slate-100">
               Reading the image{progress > 0 ? ` — ${progress}%` : '…'}
             </span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-indigo-100 dark:bg-indigo-900">
             <div className="h-full bg-indigo-600 transition-all" style={{ width: `${progress}%` }} />
           </div>
-          <p className="mt-3 text-xs text-gray-600 dark:text-slate-400">
+          <p className="mt-3 text-xs text-slate-600 dark:text-slate-400">
             First run downloads the recognition engine, so it takes longer than later ones.
           </p>
         </div>
@@ -149,14 +149,14 @@ export default function ImageToText() {
       {text && (
         <div>
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-            <h2 className="font-bold text-gray-900 dark:text-slate-100">
+            <h2 className="font-bold text-slate-900 dark:text-slate-100">
               Extracted text ({text.split(/\s+/).filter(Boolean).length} words)
             </h2>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={copy}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 dark:border-slate-600 px-3 py-1.5 text-sm font-semibold text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-1.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 {copied ? 'Copied' : 'Copy'}
@@ -174,16 +174,16 @@ export default function ImageToText() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={12}
-            className="w-full rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-4 text-gray-900 dark:text-slate-100 leading-relaxed focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-4 text-slate-900 dark:text-slate-100 leading-relaxed focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
           />
-          <p className="mt-2 text-xs text-gray-500 dark:text-slate-400">
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
             OCR is rarely perfect — check the text above against the image, especially numbers,
             symbols and handwriting, before you rely on it.
           </p>
         </div>
       )}
 
-      <p className="text-xs text-gray-500 dark:text-slate-400 leading-relaxed border-t border-gray-200 dark:border-slate-700 pt-5">
+      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-200 dark:border-slate-700 pt-5">
         Recognition runs entirely in your browser — your image is never uploaded to a server. If you
         are converting material from a textbook or slide deck, remember that copying it into your own
         work still requires a citation.

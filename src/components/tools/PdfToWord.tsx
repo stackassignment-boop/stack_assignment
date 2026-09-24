@@ -147,13 +147,13 @@ export default function PdfToWord() {
         <div
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f) }}
-          className="rounded-2xl border-2 border-dashed border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900/40 p-10 text-center"
+          className="rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/40 p-10 text-center"
         >
-          <Upload className="mx-auto h-10 w-10 text-gray-400 mb-4" />
-          <p className="font-semibold text-gray-900 dark:text-slate-100 mb-1">
+          <Upload className="mx-auto h-10 w-10 text-slate-400 mb-4" />
+          <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
             Drop a PDF here, or choose a file
           </p>
-          <p className="text-sm text-gray-500 dark:text-slate-400 mb-5">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
             Lecture notes, readings, unit guides — anything with selectable text.
           </p>
           <button
@@ -174,9 +174,9 @@ export default function PdfToWord() {
       )}
 
       {fileName && (
-        <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3">
-          <span className="truncate text-sm font-medium text-gray-700 dark:text-slate-300">{fileName}</span>
-          <button type="button" onClick={reset} aria-label="Remove file" className="text-gray-400 hover:text-red-600">
+        <div className="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3">
+          <span className="truncate text-sm font-medium text-slate-700 dark:text-slate-300">{fileName}</span>
+          <button type="button" onClick={reset} aria-label="Remove file" className="text-slate-400 hover:text-red-600">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -186,7 +186,7 @@ export default function PdfToWord() {
         <div className="rounded-xl border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-500/10 p-5">
           <div className="flex items-center gap-3 mb-3">
             <Loader2 className="h-5 w-5 animate-spin text-indigo-600" />
-            <span className="font-semibold text-gray-900 dark:text-slate-100">
+            <span className="font-semibold text-slate-900 dark:text-slate-100">
               Extracting text — {progress}%
             </span>
           </div>
@@ -211,12 +211,12 @@ export default function PdfToWord() {
 
       {pages.length > 0 && !busy && (
         <>
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
             <div>
-              <div className="font-bold text-gray-900 dark:text-slate-100">
+              <div className="font-bold text-slate-900 dark:text-slate-100">
                 {pages.length} page{pages.length === 1 ? '' : 's'} · {wordCount.toLocaleString()} words
               </div>
-              <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                 Text extracted. Download as an editable Word document.
               </p>
             </div>
@@ -229,14 +229,14 @@ export default function PdfToWord() {
             </button>
           </div>
 
-          <div className="max-h-96 overflow-y-auto rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 space-y-5">
+          <div className="max-h-96 overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 space-y-5">
             {pages.map((p) => (
               <div key={p.page}>
                 <h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
                   Page {p.page}
                 </h3>
                 {p.paragraphs.map((t, i) => (
-                  <p key={i} className="mb-2 text-sm text-gray-800 dark:text-slate-200 leading-relaxed">{t}</p>
+                  <p key={i} className="mb-2 text-sm text-slate-800 dark:text-slate-200 leading-relaxed">{t}</p>
                 ))}
               </div>
             ))}
@@ -244,7 +244,7 @@ export default function PdfToWord() {
         </>
       )}
 
-      <p className="text-xs text-gray-500 dark:text-slate-400 leading-relaxed border-t border-gray-200 dark:border-slate-700 pt-5">
+      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-200 dark:border-slate-700 pt-5">
         Conversion happens entirely in your browser — your PDF is never uploaded. This extracts text
         and basic paragraph structure; complex layouts, tables, columns and images will not carry
         across exactly, so check the output before using it. Converting a document does not change

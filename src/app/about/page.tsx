@@ -63,12 +63,12 @@ const stats = [
   {
     value: '4',
     label: 'Referencing styles covered in depth',
-    color: 'text-pink-600 dark:text-pink-400',
+    color: 'text-indigo-600 dark:text-indigo-400',
   },
   {
     value: '1:1',
     label: 'Every tutoring session',
-    color: 'text-teal-600 dark:text-teal-400',
+    color: 'text-indigo-600 dark:text-indigo-400',
   },
 ]
 
@@ -87,7 +87,7 @@ const values = [
   },
   {
     icon: Users,
-    color: 'text-blue-600 dark:text-blue-400',
+    color: 'text-indigo-600 dark:text-indigo-400',
     title: 'Matched to the unit, not the subject',
     body: 'A tutor who has worked in your discipline at your level, briefed on the specific assessment in front of you. Generic help on a specific brief is most of why students feel unhelped.',
   },
@@ -126,7 +126,7 @@ export default function AboutPage() {
       />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-20 md:py-24">
+      <section className="stack-regional-hero text-white py-20 md:py-24">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">About Stack Assignment</h1>
           <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
@@ -139,20 +139,20 @@ export default function AboutPage() {
       {/* Mission & Vision */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-slate-800 dark:to-slate-700 p-8 rounded-2xl">
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-700 p-8 rounded-2xl">
             <Target className="w-12 h-12 text-indigo-600 dark:text-indigo-400 mb-4" />
-            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Our Mission</h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">Our Mission</h2>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
               To give Australian university students the kind of help that makes them better at the
               work — clear explanations of hard material, honest feedback on their own drafts, and
               editing that teaches rather than conceals. Affordable enough to use before the
               deadline, not just in a panic at the end of it.
             </p>
           </div>
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-slate-700 dark:to-slate-800 p-8 rounded-2xl">
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-700 dark:to-slate-800 p-8 rounded-2xl">
             <Globe className="w-12 h-12 text-purple-600 dark:text-purple-400 mb-4" />
-            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Our Vision</h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">Our Vision</h2>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
               To be the academic support service Australian students can name to their unit
               coordinator without hesitating. That means being useful and being defensible at the
               same time, which most of this industry has decided is impossible.
@@ -162,29 +162,29 @@ export default function AboutPage() {
       </div>
 
       {/* Our Story */}
-      <section className="bg-gray-50 dark:bg-slate-900 py-16">
+      <section className="bg-slate-50 dark:bg-slate-900 py-16">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
               Our Story
             </h2>
           </div>
           <div className="prose prose-lg max-w-none dark:prose-invert">
-            <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 mb-6 text-lg leading-relaxed">
               Stack Assignment started in {seoConfig.organization.foundingDate} around a problem that
               has not changed since: students who understood roughly what was being asked of them, but
               not precisely enough to score well on it. A rubric says &ldquo;critical
               analysis&rdquo;. A unit guide says &ldquo;AGLC4&rdquo;. Neither explains what the marker
               is looking for, and by the time the feedback arrives, the unit is over.
             </p>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 mb-6 text-lg leading-relaxed">
               So we built the service around the gap. A tutor who knows the discipline sits down with
               your draft and the criteria it will be marked against, and tells you what is missing and
               why. An editor returns your writing with every change visible and explained. Neither
               produces work for you to submit — which is not a limitation we apologise for, it is the
               part that makes the help worth having twice.
             </p>
-            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
               We work most closely with Australian institutions, because assessment here has its own
               vocabulary and its own rules, and generic international advice quietly misleads students
               about both. We now maintain {INSTITUTION_COUNT} institution-specific guides covering
@@ -210,7 +210,7 @@ export default function AboutPage() {
                 <div className={`text-4xl md:text-5xl font-bold mb-2 ${stat.color}`}>
                   {stat.value}
                 </div>
-                <p className="text-gray-600 dark:text-gray-400">{stat.label}</p>
+                <p className="text-slate-600 dark:text-slate-400">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -218,13 +218,13 @@ export default function AboutPage() {
       </section>
 
       {/* Our Values */}
-      <section className="bg-gray-50 dark:bg-slate-900 py-16">
+      <section className="bg-slate-50 dark:bg-slate-900 py-16">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
               Our Values
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-slate-600 dark:text-slate-400">
               The principles that guide everything we do
             </p>
           </div>
@@ -232,8 +232,8 @@ export default function AboutPage() {
             {values.map(({ icon: Icon, color, title, body }) => (
               <div key={title} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md">
                 <Icon className={`w-8 h-8 mb-3 ${color}`} />
-                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{title}</h3>
-                <p className="text-gray-600 dark:text-gray-300">{body}</p>
+                <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{title}</h3>
+                <p className="text-slate-600 dark:text-slate-300">{body}</p>
               </div>
             ))}
           </div>
@@ -244,7 +244,7 @@ export default function AboutPage() {
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
               Why Students Choose Us
             </h2>
           </div>
@@ -253,11 +253,11 @@ export default function AboutPage() {
               {whyStudentsChooseUs.map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                  <span className="text-slate-700 dark:text-slate-300">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="mt-8 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-8 text-sm text-slate-500 dark:text-slate-400">
               Where the line sits, and why it sits there, is set out in full on our{' '}
               <Link
                 href="/integrity"

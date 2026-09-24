@@ -12,9 +12,9 @@ const subjects = [
 
 export default function SubjectsPage() {
   return <main className="stack-page">
-    <section className="bg-slate-950 px-6 py-16 text-white md:py-20">
+    <section className="stack-regional-hero px-6 py-16 text-white md:py-20">
       <div className="mx-auto max-w-6xl">
-        <p className="text-sm font-bold uppercase tracking-[0.18em] text-teal-300">Australia & UK</p>
+        <p className="text-sm font-bold uppercase tracking-[0.18em] text-indigo-300">Australia & UK</p>
         <h1 className="mt-3 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">University support by subject</h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Find practical guidance for your subject area, then choose a university-specific page or a free study tool.</p>
       </div>

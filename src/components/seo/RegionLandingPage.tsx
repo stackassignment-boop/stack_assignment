@@ -73,8 +73,7 @@ export default function RegionLandingPage({ region }: { region: Region }) {
 
   return (
     <main>
-      <section className="relative overflow-hidden bg-slate-950 text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,.35),transparent_35%),radial-gradient(circle_at_80%_80%,rgba(168,85,247,.25),transparent_35%)]" />
+      <section className="stack-regional-hero relative overflow-hidden text-white">
         <div className="relative mx-auto max-w-7xl px-6 py-20 md:py-28">
           <div className="max-w-4xl">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">

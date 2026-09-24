@@ -6,7 +6,7 @@ export default function TermsPage() {
   return (
     <main className="flex-grow">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-16 md:py-20">
+      <section className="stack-regional-hero text-white py-16 md:py-20">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Terms of Service</h1>
           <p className="text-lg opacity-90">
@@ -24,14 +24,14 @@ export default function TermsPage() {
               <FileText className="w-4 h-4" /> Agreement
             </div>
             <h2 className="text-2xl font-bold mb-4">1. Agreement to Terms</h2>
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-slate-600 dark:text-slate-300">
               By accessing or using Stack Assignment services, you agree to be bound by these Terms
               of Service. If you disagree with any part of these terms, you do not have permission
               to access our services.
             </p>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Services */}
           <section>
@@ -39,10 +39,10 @@ export default function TermsPage() {
               <CheckCircle className="w-4 h-4" /> Services
             </div>
             <h2 className="text-2xl font-bold mb-4">2. Our Services</h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-300">
+            <p className="mb-4 text-slate-600 dark:text-slate-300">
               Stack Assignment provides academic writing assistance, including but not limited to:
             </p>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
+            <ul className="list-disc pl-6 space-y-2 text-slate-600 dark:text-slate-300">
               <li>Essay writing and editing</li>
               <li>Research paper assistance</li>
               <li>Dissertation and thesis support</li>
@@ -51,7 +51,7 @@ export default function TermsPage() {
             </ul>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Usage */}
           <section>
@@ -65,7 +65,7 @@ export default function TermsPage() {
                 reference and learning purposes. They should NOT be submitted as your own work.
               </p>
             </div>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
+            <ul className="list-disc pl-6 space-y-2 text-slate-600 dark:text-slate-300">
               <li>Use materials as reference guides for your own writing</li>
               <li>Learn proper formatting and citation styles</li>
               <li>Understand research methodology and structure</li>
@@ -73,7 +73,7 @@ export default function TermsPage() {
             </ul>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Payments */}
           <section>
@@ -81,7 +81,7 @@ export default function TermsPage() {
               <Scale className="w-4 h-4" /> Payments
             </div>
             <h2 className="text-2xl font-bold mb-4">4. Payment Terms</h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
+            <ul className="list-disc pl-6 space-y-2 text-slate-600 dark:text-slate-300">
               <li>All prices are in Indian Rupees (INR) unless otherwise stated</li>
               <li>Payment is required before work begins</li>
               <li>Refunds are available under specific conditions</li>
@@ -89,7 +89,7 @@ export default function TermsPage() {
             </ul>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Refunds */}
           <section>
@@ -97,10 +97,10 @@ export default function TermsPage() {
               <Shield className="w-4 h-4" /> Refunds
             </div>
             <h2 className="text-2xl font-bold mb-4">5. Refund Policy</h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-300">
+            <p className="mb-4 text-slate-600 dark:text-slate-300">
               We offer refunds in the following situations:
             </p>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
+            <ul className="list-disc pl-6 space-y-2 text-slate-600 dark:text-slate-300">
               <li>Work not delivered by the agreed deadline</li>
               <li>Significant deviation from requirements</li>
               <li>Plagiarism detected in delivered work</li>
@@ -108,7 +108,7 @@ export default function TermsPage() {
             </ul>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Contact */}
           <section>

@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 
 export default function SubjectPage() {
   return <main className="stack-page">
-    <section className="bg-slate-950 px-6 py-16 text-white md:py-20">
+    <section className="stack-regional-hero px-6 py-16 text-white md:py-20">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-bold"><GraduationCap className="h-4 w-4 text-teal-300" /> Australia & UK student support</div>
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-bold"><GraduationCap className="h-4 w-4 text-indigo-300" /> Australia & UK student support</div>
         <h1 className="max-w-4xl text-4xl font-black tracking-tight md:text-6xl">Accounting & Finance Academic Support</h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Academic support for accounting, finance and business students. Our approach is centred on helping you understand the task, improve your own work and prepare your final submission.</p>
-        <div className="mt-8 flex flex-wrap gap-3"><Link href="/order" className="inline-flex items-center gap-2 rounded-xl bg-teal-300 px-6 py-3.5 font-extrabold text-slate-950 hover:bg-teal-200">Start a support request <ArrowRight className="h-4 w-4" /></Link><Link href="/universities" className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-6 py-3.5 font-bold hover:bg-white/10">Find your university</Link></div>
+        <div className="mt-8 flex flex-wrap gap-3"><Link href="/order" className="inline-flex items-center gap-2 rounded-xl bg-yellow-400 px-6 py-3.5 font-extrabold text-slate-950 hover:bg-yellow-300">Start a support request <ArrowRight className="h-4 w-4" /></Link><Link href="/universities" className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-6 py-3.5 font-bold hover:bg-white/10">Find your university</Link></div>
       </div>
     </section>
     <section className="px-6 py-14"><div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.2fr_.8fr]">

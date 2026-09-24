@@ -103,12 +103,12 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
       <main className="flex-grow py-12">
         <div className="max-w-4xl mx-auto px-6">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
-            <div className="h-64 bg-gray-200 rounded-xl mb-8"></div>
+            <div className="h-8 bg-slate-200 rounded w-3/4 mb-4"></div>
+            <div className="h-4 bg-slate-200 rounded w-1/2 mb-8"></div>
+            <div className="h-64 bg-slate-200 rounded-xl mb-8"></div>
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-4 bg-gray-200 rounded"></div>
+                <div key={i} className="h-4 bg-slate-200 rounded"></div>
               ))}
             </div>
           </div>
@@ -122,8 +122,8 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
       <main className="flex-grow py-12">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className="text-6xl mb-4">📄</div>
-          <h1 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-2">Blog Not Found</h1>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+          <h1 className="text-2xl font-bold text-slate-700 dark:text-slate-300 mb-2">Blog Not Found</h1>
+          <p className="text-slate-500 dark:text-slate-400 mb-4">
             {error || 'The blog post you are looking for does not exist.'}
           </p>
           
@@ -160,7 +160,7 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
         {onNavigate ? (
           <Button
             variant="ghost"
-            className="mb-6 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            className="mb-6 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             onClick={() => handleNav('blog')}
           >
             ← Back to Blog
@@ -169,7 +169,7 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
           <Link href="/blog" className="mb-6 inline-block">
             <Button
               variant="ghost"
-              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             >
               ← Back to Blog
             </Button>
@@ -194,10 +194,10 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
               {blog.category}
             </span>
           )}
-          <span className="text-gray-500 dark:text-gray-400 text-sm">
+          <span className="text-slate-500 dark:text-slate-400 text-sm">
             {formatDate(blog.createdAt)}
           </span>
-          <span className="text-gray-400 dark:text-gray-500 text-sm">
+          <span className="text-slate-400 dark:text-slate-500 text-sm">
             {blog.viewCount} views
           </span>
         </div>
@@ -209,14 +209,14 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
 
         {/* Excerpt */}
         {blog.excerpt && (
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+          <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
             {blog.excerpt}
           </p>
         )}
 
         {/* Author - Hidden for admin-created blogs */}
         {/* {blog.author.name && (
-          <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-200 dark:border-slate-700">
+          <div className="flex items-center gap-3 mb-8 pb-8 border-b border-slate-200 dark:border-slate-700">
             <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
               <span className="text-indigo-600 dark:text-indigo-400 font-bold">
                 {blog.author.name.charAt(0).toUpperCase()}
@@ -224,7 +224,7 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
             </div>
             <div>
               <p className="font-medium">{blog.author.name}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Author</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Author</p>
             </div>
           </div>
         )} */}
@@ -232,33 +232,33 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
         {/* Content */}
         <article
           className="prose prose-lg dark:prose-invert max-w-none
-            prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
+            prose-headings:font-bold prose-headings:text-slate-900 dark:prose-headings:text-white
             prose-h1:text-3xl prose-h1:mb-4 prose-h1:mt-8
             prose-h2:text-2xl prose-h2:mb-3 prose-h2:mt-6
             prose-h3:text-xl prose-h3:mb-2 prose-h3:mt-4
-            prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
+            prose-p:text-slate-700 dark:prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-4
             prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-gray-900 dark:prose-strong:text-white
+            prose-strong:text-slate-900 dark:prose-strong:text-white
             prose-ul:my-4 prose-ol:my-4 prose-li:my-1
             prose-blockquote:border-l-4 prose-blockquote:border-indigo-500 prose-blockquote:pl-4 prose-blockquote:italic
             prose-img:rounded-xl prose-img:shadow-lg
-            prose-code:bg-gray-100 dark:prose-code:bg-slate-800 prose-code:px-2 prose-code:py-1 prose-code:rounded
+            prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:px-2 prose-code:py-1 prose-code:rounded
             prose-pre:bg-slate-900 prose-pre:rounded-xl prose-pre:overflow-x-auto
-            prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:px-4 prose-th:py-2 prose-th:bg-gray-100
-            prose-td:border prose-td:border-gray-300 prose-td:px-4 prose-td:py-2
+            prose-table:border-collapse prose-th:border prose-th:border-slate-300 prose-th:px-4 prose-th:py-2 prose-th:bg-slate-100
+            prose-td:border prose-td:border-slate-300 prose-td:px-4 prose-td:py-2
           "
           dangerouslySetInnerHTML={{ __html: cleanContent(blog.content) }}
         />
 
         {/* Tags */}
         {blog.tags && (
-          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-700">
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Tags</h3>
+          <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
+            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">Tags</h3>
             <div className="flex flex-wrap gap-2">
               {JSON.parse(blog.tags).map((tag: string, index: number) => (
                 <span
                   key={index}
-                  className="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm"
+                  className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-sm"
                 >
                   {tag}
                 </span>
@@ -268,7 +268,7 @@ export default function BlogDetailPage({ slug, onNavigate }: BlogDetailPageProps
         )}
 
         {/* Back to Blog */}
-        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-700 text-center">
+        <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700 text-center">
           {onNavigate ? (
             <Button
               variant="outline"

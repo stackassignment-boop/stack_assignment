@@ -99,35 +99,35 @@ export default function WamCalculatorPage() {
       {/* ---------- The guide half of the page ---------- */}
       <section className="mt-16 prose-headings:font-bold">
         <h2
-          className="flex items-center gap-2 text-2xl md:text-3xl font-bold text-gray-900 dark:text-slate-100"
+          className="flex items-center gap-2 text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100"
           style={{ fontFamily: 'Sora, sans-serif' }}
         >
           <BookOpen className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
           How to calculate your WAM
         </h2>
-        <p className="mt-4 text-gray-700 dark:text-slate-300 leading-relaxed">
+        <p className="mt-4 text-slate-700 dark:text-slate-300 leading-relaxed">
           Your Weighted Average Mark is the average of your unit marks, weighted so that units
           worth more credit points count for more. It is a distinctly Australian measure &mdash;
           there is no direct UK equivalent, which is why converting between a WAM and a UK degree
           classification is never exact.
         </p>
-        <p className="mt-4 text-gray-700 dark:text-slate-300 leading-relaxed">
+        <p className="mt-4 text-slate-700 dark:text-slate-300 leading-relaxed">
           The formula is:
         </p>
-        <p className="mt-4 rounded-xl bg-gray-100 dark:bg-slate-800 px-5 py-4 font-mono text-sm text-gray-900 dark:text-slate-100">
+        <p className="mt-4 rounded-xl bg-slate-100 dark:bg-slate-800 px-5 py-4 font-mono text-sm text-slate-900 dark:text-slate-100">
           WAM = sum of (mark &times; credit points) &divide; sum of (credit points)
         </p>
-        <p className="mt-4 text-gray-700 dark:text-slate-300 leading-relaxed">
+        <p className="mt-4 text-slate-700 dark:text-slate-300 leading-relaxed">
           So a student with 78 in a 12-credit-point unit and 64 in a 6-credit-point unit has a
           WAM of ((78 &times; 12) + (64 &times; 6)) &divide; 18 = 73.3 &mdash; not 71, which is
           what a plain average of the two marks would give. That gap is the whole point of the
           weighting, and it is why eyeballing your marks tends to mislead.
         </p>
 
-        <h3 className="mt-10 text-xl font-bold text-gray-900 dark:text-slate-100">
+        <h3 className="mt-10 text-xl font-bold text-slate-900 dark:text-slate-100">
           Where universities differ
         </h3>
-        <p className="mt-3 text-gray-700 dark:text-slate-300 leading-relaxed">
+        <p className="mt-3 text-slate-700 dark:text-slate-300 leading-relaxed">
           Three things vary between institutions, and all three are options in the calculator
           above. First, grade boundaries: most universities put High Distinction at 80, but UNSW,
           Sydney, UTS and Macquarie start it at 85, which changes the band your WAM falls into
@@ -137,17 +137,17 @@ export default function WamCalculatorPage() {
           weight by credit points alone. Third, exclusions: rules on repeated units,
           cross-institutional credit and units graded on a pass/fail basis are set locally.
         </p>
-        <p className="mt-4 text-gray-700 dark:text-slate-300 leading-relaxed">
+        <p className="mt-4 text-slate-700 dark:text-slate-300 leading-relaxed">
           The one rule that is close to universal is the one students most often get wrong:
           failed units generally do count. A single fail early in a degree can hold a WAM down
           for several semesters, because the zero-to-49 mark stays in the numerator while its
           credit points stay in the denominator.
         </p>
 
-        <h3 className="mt-10 text-xl font-bold text-gray-900 dark:text-slate-100">
+        <h3 className="mt-10 text-xl font-bold text-slate-900 dark:text-slate-100">
           WAM, GPA and honours
         </h3>
-        <p className="mt-3 text-gray-700 dark:text-slate-300 leading-relaxed">
+        <p className="mt-3 text-slate-700 dark:text-slate-300 leading-relaxed">
           A GPA collapses each unit into a grade point before averaging, so a 71 and a 79 both
           become a 6 on the 7-point scale. A WAM keeps the detail. This is why Australian honours
           admission, scholarship rankings and postgraduate selection usually quote a WAM
@@ -157,7 +157,7 @@ export default function WamCalculatorPage() {
 
         {/* ---------- FAQ, mirrored into FAQPage schema above ---------- */}
         <h2
-          className="mt-14 flex items-center gap-2 text-2xl md:text-3xl font-bold text-gray-900 dark:text-slate-100"
+          className="mt-14 flex items-center gap-2 text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100"
           style={{ fontFamily: 'Sora, sans-serif' }}
         >
           <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
@@ -167,10 +167,10 @@ export default function WamCalculatorPage() {
           {faqs.map((faq) => (
             <div
               key={faq.question}
-              className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5"
+              className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5"
             >
-              <h3 className="font-bold text-gray-900 dark:text-slate-100">{faq.question}</h3>
-              <p className="mt-2 text-gray-700 dark:text-slate-300 leading-relaxed">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">{faq.question}</h3>
+              <p className="mt-2 text-slate-700 dark:text-slate-300 leading-relaxed">
                 {faq.answer}
               </p>
             </div>
@@ -180,10 +180,10 @@ export default function WamCalculatorPage() {
 
       {/* ---------- Honest CTA, tied to a specific service ---------- */}
       <section className="mt-14 rounded-2xl border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-500/10 p-6 sm:p-8">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
           Trying to lift your WAM next semester?
         </h2>
-        <p className="mt-3 text-gray-700 dark:text-slate-300 leading-relaxed">
+        <p className="mt-3 text-slate-700 dark:text-slate-300 leading-relaxed">
           A calculator tells you where you stand; it cannot tell you what cost you the marks.
           That is usually structure, argument or referencing rather than effort. Our tutors work
           through your marked feedback with you, and our editors work inside your own draft using
@@ -207,8 +207,8 @@ export default function WamCalculatorPage() {
 
       {/* Internal links: gives the tool a path back into the money pages and
           spreads equity from whatever links this page earns. */}
-      <nav className="mt-10 text-sm text-gray-600 dark:text-slate-400">
-        <span className="font-semibold text-gray-900 dark:text-slate-200">Related:</span>{' '}
+      <nav className="mt-10 text-sm text-slate-600 dark:text-slate-400">
+        <span className="font-semibold text-slate-900 dark:text-slate-200">Related:</span>{' '}
         <Link href="/tools" className="text-indigo-600 dark:text-indigo-400 hover:underline">
           all free study tools
         </Link>

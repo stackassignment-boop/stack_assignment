@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { GraduationCap, MapPin } from 'lucide-react'
+import { GraduationCap, ArrowRight } from 'lucide-react'
 import { universities } from '@/data/universities'
 import { region, generateBreadcrumbSchema } from '@/lib/seo-config'
 
@@ -70,104 +70,15 @@ const dedicated: { name: string; country: string; href: string }[] = [
 const COUNTRY_ORDER = ['Australia', 'United Kingdom', 'Canada']
 
 export default function UniversitiesIndexPage() {
-  const all = [
-    ...dedicated,
-    ...universities.map((u) => ({
-      name: u.name,
-      country: u.country,
-      href: `/universities/${u.slug}`,
-    })),
-  ]
-
-  const grouped = COUNTRY_ORDER.map((country) => ({
-    country,
-    items: all.filter((u) => u.country === country).sort((a, b) => a.name.localeCompare(b.name)),
-  })).filter((g) => g.items.length > 0)
-
-  return (
-    <main className="flex-grow">
-      {/*
-        This page exists partly to consolidate: 27 university pages previously
-        had no hub linking them together, so each depended entirely on its own
-        backlinks. A hub gives Google a single crawlable entry point and lets
-        link equity flow between siblings.
-      */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            generateBreadcrumbSchema([
-              { name: 'Home', url: 'https://www.stackassignment.com' },
-              { name: 'Universities', url },
-            ])
-          ),
-        }}
-      />
-
-      <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-16 md:py-20">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/30 px-4 py-1.5 text-sm font-semibold mb-5">
-            <GraduationCap className="h-4 w-4" />
-            {all.length} institutions
-          </div>
-          <h1
-            className="text-4xl md:text-5xl font-bold mb-4"
-            style={{ fontFamily: 'Sora, sans-serif' }}
-          >
-            Assignment support, by university
-          </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl">
-            Marking rubrics, referencing styles and unit structures differ between institutions.
-            Pick yours to see how our tutoring and editing maps to the way your work is actually
-            assessed.
-          </p>
-        </div>
-      </section>
-
-      <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
-        {grouped.map((group) => (
-          <section key={group.country} className="mb-12 last:mb-0">
-            <h2
-              className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-slate-100 mb-5"
-              style={{ fontFamily: 'Sora, sans-serif' }}
-            >
-              <MapPin className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-              {group.country}
-              <span className="text-base font-normal text-gray-500 dark:text-slate-400">
-                ({group.items.length})
-              </span>
-            </h2>
-            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {group.items.map((u) => (
-                <li key={u.href}>
-                  <Link
-                    href={u.href}
-                    className="block h-full rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3.5 font-medium text-gray-900 dark:text-slate-100 hover:border-indigo-400 hover:shadow-md dark:hover:border-indigo-500 transition-all"
-                  >
-                    {u.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-
-        <p className="mt-4 text-sm text-gray-600 dark:text-slate-400">
-          Not listed? Our tutors and editors work across Australian and UK institutions
-          generally &mdash;{' '}
-          <Link href="/contact" className="text-indigo-600 dark:text-indigo-400 hover:underline">
-            tell us your university and unit
-          </Link>{' '}
-          and we will match you. You can also try the{' '}
-          <Link
-            href="/tools/wam-calculator"
-            className="text-indigo-600 dark:text-indigo-400 hover:underline"
-          >
-            free WAM calculator
-          </Link>
-          .
-        </p>
-      </div>
-    </main>
-  )
+  const all = [...dedicated, ...universities.map((u) => ({ name: u.name, country: u.country, href: `/universities/${u.slug}` }))];
+  const grouped = COUNTRY_ORDER.map((country) => ({ country, items: all.filter((u) => u.country === country).sort((a, b) => a.name.localeCompare(b.name)) })).filter((g) => g.items.length > 0);
+  const australia = grouped.find(g => g.country === 'Australia');
+  const uk = grouped.find(g => g.country === 'United Kingdom');
+  return <main className="stack-page flex-grow overflow-hidden">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(generateBreadcrumbSchema([{ name: 'Home', url: 'https://www.stackassignment.com' }, { name: 'Universities', url }])) }} />
+    <section className="stack-hero stack-universities-hero"><div className="stack-container py-16 md:py-20 relative z-10"><div className="max-w-5xl"><div className="stack-eyebrow"><GraduationCap className="h-4 w-4" /> University support directory</div><h1 className="stack-hero-title">Find support for <span>your university</span></h1><p className="stack-hero-copy">Explore university-specific tutoring, editing and assessment guidance for Australian and UK institutions — with pages built around referencing, assessment formats and study context.</p><div className="flex flex-wrap gap-3 mt-7"><span className="stack-pill-dark">{all.length}+ institutions</span><span className="stack-pill-dark">Australia first</span><span className="stack-pill-dark">UK support</span></div></div></div></section>
+    <section className="stack-container -mt-8 relative z-20 pb-20"><div className="grid md:grid-cols-2 gap-5 mb-8"><a href="#australia" className="stack-country-card"><div className="text-3xl">🇦🇺</div><div><p className="text-xs font-extrabold uppercase tracking-widest text-indigo-700">Australia</p><h2 className="text-2xl font-bold">Australian universities</h2><p>{australia?.items.length || 0} institutions and growing</p></div><ArrowRight className="ml-auto h-5 w-5" /></a><a href="#uk" className="stack-country-card"><div className="text-3xl">🇬🇧</div><div><p className="text-xs font-extrabold uppercase tracking-widest text-indigo-700">United Kingdom</p><h2 className="text-2xl font-bold">UK universities</h2><p>{uk?.items.length || 0} institutions and growing</p></div><ArrowRight className="ml-auto h-5 w-5" /></a></div>
+    {grouped.map(group => <section key={group.country} id={group.country === 'Australia' ? 'australia' : group.country === 'United Kingdom' ? 'uk' : undefined} className="mb-12"><div className="flex items-end justify-between gap-4 mb-5"><div><p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">{group.country === 'Australia' ? 'AU DIRECTORY' : 'UK DIRECTORY'}</p><h2 className="text-3xl font-bold mt-1">{group.country}</h2></div><span className="rounded-full bg-white border border-slate-200 px-3 py-1 text-sm font-bold text-slate-500">{group.items.length} institutions</span></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{group.items.map(u => <Link key={u.href} href={u.href} className="stack-university-card group"><div className="stack-university-mark"><GraduationCap className="h-5 w-5" /></div><div className="min-w-0"><h3 className="font-bold text-slate-900 dark:text-white truncate">{u.name}</h3><p className="text-sm text-slate-500 mt-1">Tutoring • Editing • Assessment support</p></div><ArrowRight className="h-4 w-4 ml-auto text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-indigo-600" /></Link>)}</div></section>)}
+    <div className="stack-soft-banner"><div><p className="text-sm font-bold text-indigo-700">Can't see your institution?</p><h2 className="text-2xl font-bold mt-1">Tell us your university and unit.</h2><p className="text-slate-600 mt-1">We can point you to the most relevant support or study resource.</p></div><Link href="/contact" className="stack-primary-button">Contact support <ArrowRight className="h-4 w-4" /></Link></div>
+    </section></main>;
 }

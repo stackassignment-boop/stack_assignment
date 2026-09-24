@@ -229,3 +229,325 @@ html { scroll-behavior: smooth; }
   background-clip: text;
   color: transparent;
 }
+
+/* Premium 2026 route system for Pricing / Samples / Blog / Universities / Tools */
+.stack-hero { position: relative; overflow: hidden; color: white; }
+.stack-pricing-hero,.stack-blog-hero,.stack-universities-hero,.stack-tools-hero,.stack-samples-hero { background: var(--stack-service-hero-bg); }
+.stack-eyebrow { display:inline-flex; align-items:center; gap:.5rem; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.08); backdrop-filter:blur(12px); border-radius:999px; padding:.55rem .9rem; color:#eef2ff; font-size:.72rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+.stack-hero-title { margin-top:1.2rem; font-family:'Sora',sans-serif; font-size:clamp(2.5rem,5vw,4.5rem); line-height:1.04; letter-spacing:-.045em; font-weight:800; max-width:950px; }
+.stack-hero-title span { background:linear-gradient(90deg,#fde047,#c7d2fe 50%,#d8b4fe); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.stack-hero-copy { margin-top:1.25rem; max-width:760px; font-size:clamp(1rem,1.7vw,1.25rem); line-height:1.7; color:rgba(255,255,255,.78); }
+.stack-pill-dark { display:inline-flex; align-items:center; gap:.45rem; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.08); backdrop-filter:blur(10px); padding:.55rem .8rem; border-radius:999px; }
+.stack-pricing-panel { background:rgba(255,255,255,.97); }
+.stack-icon-bubble { width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#eef2ff,#ede9fe);color:#4f46e5; }
+.stack-choice { position:relative; display:flex; align-items:flex-start; gap:.75rem; text-align:left; padding:1rem; border:1px solid #e2e8f0; border-radius:16px; background:#fff; transition:.2s; }
+.stack-choice:hover { transform:translateY(-2px); border-color:#c4b5fd; box-shadow:0 12px 30px rgba(79,70,229,.09); }
+.stack-choice.is-active { border-color:#6366f1; background:linear-gradient(135deg,#eef2ff,#f5f3ff); box-shadow:0 12px 30px rgba(79,70,229,.12); }
+.stack-choice strong { display:block; font-size:.9rem; color:#0f172a; }
+.stack-choice small { display:block; color:#64748b; line-height:1.45; margin-top:.2rem; }
+.stack-field { display:block; }
+.stack-field>span { display:block; font-size:.82rem; font-weight:800; color:#334155; margin-bottom:.5rem; }
+.stack-field>small { display:block; margin-top:.4rem; color:#94a3b8; font-size:.75rem; }
+.stack-field select,.stack-field input { width:100%; border:1px solid #dbe3ef; background:#f8fafc; border-radius:13px; padding:.85rem 1rem; color:#0f172a; outline:none; transition:.2s; }
+.stack-field select:focus,.stack-field input:focus { border-color:#6366f1; box-shadow:0 0 0 4px rgba(99,102,241,.1); }
+.stack-price-card { position:relative; overflow:hidden; border-radius:24px; padding:2rem; color:white; background:linear-gradient(145deg,#020617,#3730a3 55%,#6d28d9); box-shadow:0 25px 60px rgba(49,46,129,.25); }
+.stack-price-card::before { content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-100px;top:-100px;background:rgba(255,255,255,.1); }
+.stack-mini-trust { display:flex; align-items:center; justify-content:center; gap:.65rem; padding:1rem; border:1px solid #e2e8f0; border-radius:16px; background:rgba(255,255,255,.8); font-weight:700; color:#334155; }
+.stack-modal { position:relative; width:min(100%,440px); background:white; border-radius:24px; padding:2rem; box-shadow:0 30px 100px rgba(2,6,23,.3); }
+.stack-modal-input { width:100%; border:1px solid #dbe3ef; border-radius:12px; padding:.85rem 1rem; outline:none; }
+.stack-modal-input:focus { border-color:#6366f1; box-shadow:0 0 0 4px rgba(99,102,241,.1); }
+.stack-library-toolbar,.stack-blog-toolbar { display:flex; align-items:center; justify-content:space-between; gap:1.25rem; padding:1.25rem 1.4rem; background:rgba(255,255,255,.94); border:1px solid #e2e8f0; border-radius:22px; box-shadow:0 18px 50px rgba(15,23,42,.08); }
+.stack-search { display:flex; align-items:center; gap:.6rem; width:min(100%,360px); padding:.75rem 1rem; border:1px solid #e2e8f0; border-radius:14px; color:#64748b; background:#f8fafc; }
+.stack-search input { border:0; outline:0; background:transparent; width:100%; }
+.stack-sample-card,.stack-blog-card { overflow:hidden; border:1px solid #e2e8f0; background:#fff; border-radius:22px; box-shadow:0 12px 35px rgba(15,23,42,.055); transition:.25s; }
+.stack-sample-card:hover,.stack-blog-card:hover { transform:translateY(-5px); box-shadow:0 22px 50px rgba(15,23,42,.12); border-color:#c7d2fe; }
+.stack-sample-image,.stack-blog-cover { position:relative; height:220px; background-size:cover; background-position:center; }
+.stack-sample-image>span,.stack-blog-cover>span { position:absolute; top:1rem; left:1rem; padding:.45rem .7rem; border-radius:999px; color:white; font-size:.72rem; font-weight:800; }
+.stack-sample-image>span { background:rgba(15,23,42,.65); }
+.stack-blog-cover>span { background:rgba(15,23,42,.35); backdrop-filter:blur(10px); }
+.stack-blog-cover { display:flex; align-items:flex-end; }
+.stack-filter { padding:.55rem .8rem; border:1px solid #e2e8f0; border-radius:999px; font-size:.78rem; font-weight:800; color:#64748b; background:white; }
+.stack-filter.is-active { color:#fff; background:#4f46e5; border-color:#4f46e5; }
+.stack-country-card { display:flex; align-items:center; gap:1rem; padding:1.3rem; border:1px solid #e2e8f0; border-radius:20px; background:linear-gradient(135deg,#fff,#f8fbff); box-shadow:0 14px 35px rgba(15,23,42,.05); transition:.2s; }
+.stack-country-card:hover { transform:translateY(-3px); border-color:#c4b5fd; box-shadow:0 20px 45px rgba(79,70,229,.1); }
+.stack-country-card h2 { font-family:'Sora',sans-serif; font-size:1.3rem; }
+.stack-country-card p:last-child { color:#64748b; font-size:.86rem; margin-top:.15rem; }
+.stack-university-card { display:flex; align-items:center; gap:.85rem; min-height:86px; padding:1rem; border:1px solid #e2e8f0; border-radius:18px; background:#fff; box-shadow:0 8px 24px rgba(15,23,42,.04); transition:.2s; }
+.stack-university-card:hover { transform:translateY(-3px); border-color:#c4b5fd; box-shadow:0 18px 35px rgba(79,70,229,.1); }
+.stack-university-mark { flex:0 0 40px; height:40px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(135deg,#eef2ff,#ede9fe); color:#4f46e5; }
+.stack-stat-card { padding:1.25rem; border:1px solid #e2e8f0; border-radius:18px; background:#fff; box-shadow:0 10px 28px rgba(15,23,42,.04); }
+.stack-stat-card strong { display:block; font-family:'Sora',sans-serif; font-size:2rem; color:#4f46e5; }
+.stack-stat-card span { color:#64748b; font-size:.85rem; font-weight:700; }
+.stack-tool-card { display:flex; gap:1rem; padding:1.35rem; border:1px solid #e2e8f0; border-radius:22px; background:#fff; box-shadow:0 12px 32px rgba(15,23,42,.05); transition:.25s; }
+.stack-tool-card:hover { transform:translateY(-5px); border-color:#c4b5fd; box-shadow:0 22px 50px rgba(79,70,229,.11); }
+.stack-tool-card.is-soon { background:#f8fafc; border-style:dashed; }
+.stack-tool-icon { flex:0 0 50px; height:50px; display:grid; place-items:center; border-radius:15px; }
+.stack-tool-icon.indigo { color:#4f46e5;background:#eef2ff; }.stack-tool-icon.cyan {color:#4f46e5;background:#eef2ff}.stack-tool-icon.violet {color:#6d28d9;background:#f5f3ff}.stack-tool-icon.slate {color:#64748b;background:#f1f5f9}
+.stack-coming-soon { font-size:.68rem; font-weight:800; padding:.25rem .5rem; border-radius:999px; background:#e2e8f0; color:#64748b; }
+.stack-primary-button,.stack-secondary-button { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:12px; padding:.75rem 1rem; font-weight:800; transition:.2s; }
+.stack-primary-button { color:white; background:#facc15; color:#0f172a; box-shadow:0 10px 24px rgba(15,23,42,.12); }.stack-primary-button:hover{background:#fde047;transform:translateY(-1px)}
+.stack-secondary-button { color:#3730a3; background:#eef2ff; }.stack-secondary-button:hover{background:#e0e7ff}
+.stack-soft-banner { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; padding:1.5rem; border:1px solid #c7d2fe; border-radius:22px; background:linear-gradient(120deg,#eef2ff,#eef2ff 55%,#f5f3ff); }
+.stack-empty { text-align:center; padding:5rem 1rem; border:1px dashed #cbd5e1; border-radius:22px; margin-top:1.5rem; background:#fff; }.stack-empty h2{font-size:1.5rem;font-weight:800}.stack-empty p{color:#64748b;margin-top:.35rem}
+.stack-skeleton-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }.stack-skeleton-card { height:360px; border-radius:22px; background:linear-gradient(90deg,#e2e8f0,#f8fafc,#e2e8f0); background-size:200% 100%; animation:stackShimmer 1.5s infinite; }
+@keyframes stackShimmer { from{background-position:200% 0}to{background-position:-200% 0} }
+@media(max-width:800px){.stack-library-toolbar,.stack-blog-toolbar,.stack-soft-banner{align-items:flex-start;flex-direction:column}.stack-search{width:100%}.stack-skeleton-grid{grid-template-columns:1fr}.stack-hero-title{font-size:2.6rem}.stack-soft-banner .stack-primary-button,.stack-soft-banner .stack-secondary-button{width:100%}}
+
+/* Global brand alignment: all public routes inherit the Australia academic-support palette. */
+:root {
+  --stack-indigo: #4f46e5;
+  --stack-indigo-dark: #3730a3;
+  --stack-purple: #7c3aed;
+  --stack-yellow: #facc15;
+  --stack-yellow-hover: #fde047;
+  --stack-navy: #020617;
+  --stack-surface: #f8fafc;
+}
+::selection { background: rgba(250, 204, 21, .35); color: #0f172a; }
+
+/* Normalize the most common legacy accent utilities used across route-level pages. */
+.bg-indigo-600 { background-color: var(--stack-indigo) !important; }
+.bg-indigo-700 { background-color: var(--stack-indigo-dark) !important; }
+.bg-indigo-500 { background-color: #6366f1 !important; }
+.bg-indigo-50 { background-color: #eef2ff !important; }
+.bg-indigo-100 { background-color: #e0e7ff !important; }
+.bg-purple-600 { background-color: var(--stack-purple) !important; }
+.bg-purple-700 { background-color: #6d28d9 !important; }
+.bg-blue-600 { background-color: #4f46e5 !important; }
+.bg-blue-700 { background-color: #3730a3 !important; }
+.bg-cyan-500 { background-color: #6366f1 !important; }
+.bg-cyan-600 { background-color: #4f46e5 !important; }
+.bg-cyan-50 { background-color: #eef2ff !important; }
+.text-indigo-600 { color: var(--stack-indigo) !important; }
+.text-indigo-700 { color: var(--stack-indigo-dark) !important; }
+.text-indigo-500 { color: #6366f1 !important; }
+.text-indigo-400 { color: #818cf8 !important; }
+.text-purple-600 { color: var(--stack-purple) !important; }
+.text-purple-700 { color: #6d28d9 !important; }
+.text-blue-600 { color: var(--stack-indigo) !important; }
+.text-cyan-600 { color: var(--stack-indigo) !important; }
+.text-cyan-700 { color: var(--stack-indigo-dark) !important; }
+.border-indigo-300 { border-color: #a5b4fc !important; }
+.border-indigo-500 { border-color: #6366f1 !important; }
+.border-indigo-600 { border-color: var(--stack-indigo) !important; }
+.border-cyan-300 { border-color: #a5b4fc !important; }
+.hover\:bg-indigo-700:hover { background-color: var(--stack-indigo-dark) !important; }
+.hover\:bg-indigo-600:hover { background-color: var(--stack-indigo) !important; }
+.hover\:bg-yellow-300:hover { background-color: var(--stack-yellow-hover) !important; }
+.hover\:text-indigo-600:hover { color: var(--stack-indigo) !important; }
+.hover\:text-indigo-700:hover { color: var(--stack-indigo-dark) !important; }
+.focus\:ring-indigo-500:focus { --tw-ring-color: #6366f1 !important; }
+.focus\:border-indigo-500:focus { border-color: #6366f1 !important; }
+
+/* Common CTA pattern from the regional landing page. */
+a.bg-indigo-600, button.bg-indigo-600 { color: #fff; }
+.stack-gradient-heading { background: linear-gradient(90deg, #4f46e5, #7c3aed); }
+.stack-primary-button { background: var(--stack-yellow) !important; color: #0f172a !important; }
+.stack-primary-button:hover { background: var(--stack-yellow-hover) !important; }
+.stack-secondary-button { background: #eef2ff; color: var(--stack-indigo-dark); }
+
+/* Dark hero treatment used by the AU/UK academic-support page. */
+.stack-hero,
+.stack-pricing-hero,
+.stack-blog-hero,
+.stack-universities-hero,
+.stack-tools-hero,
+.stack-samples-hero { background: var(--stack-service-hero-bg) !important; }
+
+/* Full-site regional palette pass: older route families now use the same
+   indigo / purple / yellow language as /australia/academic-support. */
+.bg-teal-600 { background-color: var(--stack-indigo) !important; }
+.bg-teal-700 { background-color: var(--stack-indigo-dark) !important; }
+.bg-teal-50 { background-color: #eef2ff !important; }
+.bg-teal-100 { background-color: #e0e7ff !important; }
+.text-teal-600 { color: var(--stack-indigo) !important; }
+.text-teal-700 { color: var(--stack-indigo-dark) !important; }
+.border-teal-500 { border-color: #818cf8 !important; }
+.border-teal-600 { border-color: var(--stack-indigo) !important; }
+.hover\:bg-teal-700:hover { background-color: var(--stack-indigo-dark) !important; }
+.hover\:text-teal-600:hover { color: var(--stack-indigo) !important; }
+.focus\:ring-teal-500:focus { --tw-ring-color: #6366f1 !important; }
+.focus\:border-teal-500:focus { border-color: #6366f1 !important; }
+.from-teal-500 { --tw-gradient-from: #6366f1 var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(99 102 241 / 0) var(--tw-gradient-to-position) !important; }
+.to-teal-600 { --tw-gradient-to: #4f46e5 var(--tw-gradient-to-position) !important; }
+.from-teal-50 { --tw-gradient-from: #eef2ff var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(238 242 255 / 0) var(--tw-gradient-to-position) !important; }
+
+.bg-blue-50 { background-color: #eef2ff !important; }
+.bg-blue-100 { background-color: #e0e7ff !important; }
+.text-blue-600 { color: var(--stack-indigo) !important; }
+.text-blue-800 { color: var(--stack-indigo-dark) !important; }
+.border-blue-200 { border-color: #c7d2fe !important; }
+
+.bg-pink-50 { background-color: #faf5ff !important; }
+.text-pink-600 { color: var(--stack-purple) !important; }
+.text-pink-700 { color: #6d28d9 !important; }
+
+.bg-orange-100 { background-color: #fef3c7 !important; }
+.bg-orange-500 { background-color: #f59e0b !important; }
+.text-orange-600 { color: #d97706 !important; }
+.hover\:bg-orange-600:hover { background-color: #d97706 !important; }
+
+/* Shared hero treatment for legacy detail families. */
+.bg-gradient-to-r.from-indigo-600 { background-image: linear-gradient(120deg,#020617 0%,#172554 48%,#4c1d95 100%) !important; }
+
+/* Keep ordinary content surfaces neutral while making branded accents consistent. */
+a.text-teal-600, button.text-teal-600 { color: var(--stack-indigo) !important; }
+
+/* Regional reference hero: matched to the supplied Home / Services / Pricing / Samples screenshots. */
+.stack-regional-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--stack-service-hero-bg) !important;
+}
+.stack-regional-hero > * { position: relative; z-index: 1; }
+.stack-regional-cta { background:#facc15 !important; color:#0f172a !important; }
+.stack-regional-cta:hover { background:#fde047 !important; }
+
+/* --------------------------------------------------------------------------
+   SERVICE PALETTE — site-wide public-page normalization
+   The /services page is the visual source of truth. These scoped rules keep
+   legacy route families (universities, subjects, guides, tools, detail pages,
+   etc.) on the same indigo / purple / yellow / slate system without touching
+   admin or student application screens.
+   -------------------------------------------------------------------------- */
+.stack-site-theme {
+  --stack-service-navy: #020617;
+  --stack-service-navy-2: #172554;
+  --stack-service-purple: #4c1d95;
+  --stack-service-indigo: #4f46e5;
+  --stack-service-indigo-dark: #3730a3;
+  --stack-service-indigo-soft: #eef2ff;
+  --stack-service-indigo-pale: #e0e7ff;
+  --stack-service-purple-soft: #f5f3ff;
+  --stack-service-yellow: #facc15;
+  --stack-service-yellow-hover: #fde047;
+}
+
+.stack-site-theme .bg-teal-50,
+.stack-site-theme .bg-cyan-50,
+.stack-site-theme .bg-blue-50,
+.stack-site-theme .bg-indigo-50 { background-color: #eef2ff !important; }
+.stack-site-theme .bg-teal-100,
+.stack-site-theme .bg-cyan-100,
+.stack-site-theme .bg-blue-100,
+.stack-site-theme .bg-indigo-100 { background-color: #e0e7ff !important; }
+.stack-site-theme .bg-teal-500,
+.stack-site-theme .bg-cyan-500,
+.stack-site-theme .bg-blue-500,
+.stack-site-theme .bg-indigo-500 { background-color: #6366f1 !important; }
+.stack-site-theme .bg-teal-600,
+.stack-site-theme .bg-cyan-600,
+.stack-site-theme .bg-blue-600,
+.stack-site-theme .bg-indigo-600 { background-color: #4f46e5 !important; }
+.stack-site-theme .bg-teal-700,
+.stack-site-theme .bg-cyan-700,
+.stack-site-theme .bg-blue-700,
+.stack-site-theme .bg-indigo-700 { background-color: #3730a3 !important; }
+
+.stack-site-theme .text-teal-400,
+.stack-site-theme .text-cyan-400,
+.stack-site-theme .text-blue-400,
+.stack-site-theme .text-indigo-400 { color: #818cf8 !important; }
+.stack-site-theme .text-teal-500,
+.stack-site-theme .text-cyan-500,
+.stack-site-theme .text-blue-500,
+.stack-site-theme .text-indigo-500 { color: #6366f1 !important; }
+.stack-site-theme .text-teal-600,
+.stack-site-theme .text-cyan-600,
+.stack-site-theme .text-blue-600,
+.stack-site-theme .text-indigo-600 { color: #4f46e5 !important; }
+.stack-site-theme .text-teal-700,
+.stack-site-theme .text-cyan-700,
+.stack-site-theme .text-blue-700,
+.stack-site-theme .text-indigo-700 { color: #3730a3 !important; }
+
+.stack-site-theme .border-teal-200,
+.stack-site-theme .border-cyan-200,
+.stack-site-theme .border-blue-200,
+.stack-site-theme .border-indigo-200 { border-color: #c7d2fe !important; }
+.stack-site-theme .border-teal-300,
+.stack-site-theme .border-cyan-300,
+.stack-site-theme .border-blue-300,
+.stack-site-theme .border-indigo-300 { border-color: #a5b4fc !important; }
+.stack-site-theme .border-teal-500,
+.stack-site-theme .border-cyan-500,
+.stack-site-theme .border-blue-500,
+.stack-site-theme .border-indigo-500,
+.stack-site-theme .border-teal-600,
+.stack-site-theme .border-cyan-600,
+.stack-site-theme .border-blue-600,
+.stack-site-theme .border-indigo-600 { border-color: #4f46e5 !important; }
+
+/* Gradient stop normalization for legacy route classes. */
+.stack-site-theme [class*="from-teal-"] { --tw-gradient-from: #6366f1 var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(99 102 241 / 0) var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="to-teal-"] { --tw-gradient-to: #4f46e5 var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="from-cyan-"] { --tw-gradient-from: #6366f1 var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(99 102 241 / 0) var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="to-cyan-"] { --tw-gradient-to: #4f46e5 var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="from-blue-"] { --tw-gradient-from: #6366f1 var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(99 102 241 / 0) var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="to-blue-"] { --tw-gradient-to: #4f46e5 var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="from-sky-"] { --tw-gradient-from: #6366f1 var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(99 102 241 / 0) var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="to-sky-"] { --tw-gradient-to: #4f46e5 var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="from-violet-"] { --tw-gradient-from: #7c3aed var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(124 58 237 / 0) var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="to-violet-"] { --tw-gradient-to: #7c3aed var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="from-fuchsia-"] { --tw-gradient-from: #7c3aed var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(124 58 237 / 0) var(--tw-gradient-to-position) !important; }
+.stack-site-theme [class*="to-fuchsia-"] { --tw-gradient-to: #7c3aed var(--tw-gradient-to-position) !important; }
+
+/* Service-style conversion controls. */
+.stack-site-theme a[class*="bg-orange-500"],
+.stack-site-theme button[class*="bg-orange-500"],
+.stack-site-theme a[class*="bg-orange-600"],
+.stack-site-theme button[class*="bg-orange-600"] {
+  background: #facc15 !important;
+  color: #020617 !important;
+}
+.stack-site-theme a[class*="bg-orange-500"]:hover,
+.stack-site-theme button[class*="bg-orange-500"]:hover,
+.stack-site-theme a[class*="bg-orange-600"]:hover,
+.stack-site-theme button[class*="bg-orange-600"]:hover { background: #fde047 !important; }
+
+/* Common legacy hero bands use exactly the Services hero gradient. */
+.stack-site-theme .bg-gradient-to-r.from-indigo-600,
+.stack-site-theme .bg-gradient-to-br.from-indigo-600 {
+  background-image: linear-gradient(120deg,#020617 0%,#172554 48%,#4c1d95 100%) !important;
+}
+
+/* Shared page background rhythm. */
+.stack-site-theme main[class*="bg-slate-50"],
+.stack-site-theme .stack-page { background-color: #f8fafc; }
+.stack-site-theme .stack-site-hero,
+.stack-site-theme .stack-regional-hero { background: var(--stack-service-hero-bg) !important; }
+
+/* Keep the yellow CTA treatment identical to Services. */
+.stack-site-theme .stack-primary-button,
+.stack-site-theme .stack-regional-cta { background: #facc15 !important; color: #020617 !important; }
+.stack-site-theme .stack-primary-button:hover,
+.stack-site-theme .stack-regional-cta:hover { background: #fde047 !important; }
+
+
+/* ==========================================================================
+   SERVICES HERO = SITE-WIDE SOURCE OF TRUTH
+   Mirrors the /services hero: slate-950 base, soft indigo/purple glows and a
+   faint 44px grid. Every hero family (stack-hero, stack-*-hero,
+   stack-regional-hero, stack-service-hero) resolves to this one token, so
+   changing it here changes every page.
+   ========================================================================== */
+:root {
+  --stack-service-hero-bg:
+    linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / 44px 44px,
+    linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / 44px 44px,
+    radial-gradient(260px circle at 32px 32px, rgba(99,102,241,.26), transparent),
+    radial-gradient(300px circle at calc(100% - 192px) 192px, rgba(129,140,248,.16), transparent),
+    radial-gradient(220px circle at 50% calc(100% - 128px), rgba(168,85,247,.16), transparent),
+    #020617;
+}
+.stack-service-hero { position: relative; color: #fff; background: var(--stack-service-hero-bg); }
+
+/* Closing call-to-action bands: same as the Services page final CTA
+   (slate-950 -> indigo-700 -> purple-700). */
+.stack-cta-band {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(to bottom right, #020617 0%, #4338ca 50%, #7e22ce 100%) !important;
+}
+.stack-cta-band > * { position: relative; z-index: 1; }

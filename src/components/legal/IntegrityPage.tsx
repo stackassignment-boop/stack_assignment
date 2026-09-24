@@ -75,7 +75,7 @@ export default function IntegrityPage() {
   return (
     <main className="flex-grow">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-600 to-teal-600 text-white py-16 md:py-20">
+      <section className="stack-regional-hero text-white py-16 md:py-20">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Academic Integrity</h1>
           <p className="text-lg opacity-90 max-w-3xl mx-auto">
@@ -94,14 +94,14 @@ export default function IntegrityPage() {
               <GraduationCap className="w-4 h-4" /> Our position
             </div>
             <h2 className="text-2xl font-bold mb-4">One line, and it does not move</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
+            <p className="text-slate-600 dark:text-slate-300 mb-4">
               The work you submit has to be written by you. Everything we offer is built around that
               constraint rather than around a disclaimer at the bottom of the page. We will teach the
               material, read what you have written, and tell you plainly what is not working. We will
               not produce the thing you hand in, in any form, at any price, however the request is
               worded.
             </p>
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-slate-600 dark:text-slate-300">
               This is not only a matter of principle. A student who submits someone else&apos;s work
               risks a misconduct finding, a failed unit, a withheld award and, for international
               students, a visa consequence that dwarfs the assignment. The service that sold it to
@@ -109,7 +109,7 @@ export default function IntegrityPage() {
             </p>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* The line */}
           <section>
@@ -122,7 +122,7 @@ export default function IntegrityPage() {
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-green-600" /> What we do
                 </h3>
-                <ul className="text-sm text-gray-600 dark:text-gray-300 space-y-2">
+                <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-2">
                   {whatWeDo.map((item) => (
                     <li key={item} className="flex gap-2">
                       <span className="text-green-600 dark:text-green-400 flex-shrink-0">✓</span>
@@ -135,7 +135,7 @@ export default function IntegrityPage() {
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <XCircle className="w-5 h-5 text-red-600" /> What we refuse
                 </h3>
-                <ul className="text-sm text-gray-600 dark:text-gray-300 space-y-2">
+                <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-2">
                   {whatWeWillNot.map((item) => (
                     <li key={item} className="flex gap-2">
                       <span className="text-red-600 dark:text-red-400 flex-shrink-0">✕</span>
@@ -145,13 +145,13 @@ export default function IntegrityPage() {
                 </ul>
               </div>
             </div>
-            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
               If you ask us for something in the right-hand column, we will say no and explain why.
               We would rather lose the sale than put your degree at risk.
             </p>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* In practice */}
           <section>
@@ -164,13 +164,13 @@ export default function IntegrityPage() {
                 <div key={title} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow">
                   <Icon className="w-8 h-8 text-indigo-600 dark:text-indigo-400 mb-3" />
                   <h3 className="font-bold mb-2">{title}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">{body}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">{body}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Australian law */}
           <section>
@@ -178,7 +178,7 @@ export default function IntegrityPage() {
               <Scale className="w-4 h-4" /> The law in Australia
             </div>
             <h2 className="text-2xl font-bold mb-4">Why this is not just a preference</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
+            <p className="text-slate-600 dark:text-slate-300 mb-4">
               In 2020 the Australian Parliament passed the Prohibiting Academic Cheating Services
               Act, which inserted sections 114A and 114B into the Tertiary Education Quality and
               Standards Agency Act 2011. Section 114A makes it an offence to provide, or arrange for
@@ -188,7 +188,7 @@ export default function IntegrityPage() {
               students. TEQSA also has the power to have offending websites blocked by Australian
               internet providers.
             </p>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
+            <p className="text-slate-600 dark:text-slate-300 mb-4">
               Tutoring, editing, proofreading and feedback sit outside all of that. They are the same
               activities your own university funds through its learning support unit. What the
               legislation targets is the supply of work for a student to submit as their own —
@@ -196,8 +196,8 @@ export default function IntegrityPage() {
               paper&rdquo;, a &ldquo;sample written to your brief&rdquo; or a &ldquo;draft for your
               guidance&rdquo;. TEQSA guidance names that vocabulary specifically.
             </p>
-            <div className="bg-gray-50 dark:bg-slate-800/60 p-5 rounded-xl border-l-4 border-indigo-600">
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+            <div className="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-xl border-l-4 border-indigo-600">
+              <p className="text-sm text-slate-700 dark:text-slate-300">
                 <strong>If a service offers to write it for you, that is the offence, not a
                 loophole.</strong>{' '}
                 A disclaimer telling you not to submit what they just sold you does not change what
@@ -207,15 +207,15 @@ export default function IntegrityPage() {
             </div>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Free help first */}
           <section>
-            <div className="inline-flex items-center gap-2 bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs font-bold uppercase px-3 py-1 rounded-full mb-3">
+            <div className="inline-flex items-center gap-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase px-3 py-1 rounded-full mb-3">
               <BookOpen className="w-4 h-4" /> Before you pay anyone
             </div>
             <h2 className="text-2xl font-bold mb-4">Try your university&apos;s free support first</h2>
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-slate-600 dark:text-slate-300">
               Every Australian university runs an academic skills or learning support unit, and the
               cost is already inside your fees. Most offer writing consultations, drop-in sessions,
               maths and statistics help, and workshops on referencing and assessment structure. Your
@@ -225,7 +225,7 @@ export default function IntegrityPage() {
             </p>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Student Responsibility */}
           <section>
@@ -233,7 +233,7 @@ export default function IntegrityPage() {
               <Lock className="w-4 h-4" /> Your part
             </div>
             <h2 className="text-2xl font-bold mb-4">What we need from you</h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
+            <ul className="list-disc pl-6 space-y-2 text-slate-600 dark:text-slate-300">
               <li>
                 Read your university&apos;s academic integrity policy and your unit guide, and tell us
                 what they permit — rules on third-party editing differ between institutions and
@@ -255,7 +255,7 @@ export default function IntegrityPage() {
             </ul>
           </section>
 
-          <hr className="border-gray-200 dark:border-slate-700" />
+          <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* FAQ — mirrors the FAQPage markup emitted by the route */}
           <section>
@@ -264,12 +264,12 @@ export default function IntegrityPage() {
               {integrityFaqs.map((faq) => (
                 <div
                   key={faq.question}
-                  className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700"
+                  className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700"
                 >
-                  <h3 className="font-bold mb-2 text-gray-900 dark:text-slate-100">
+                  <h3 className="font-bold mb-2 text-slate-900 dark:text-slate-100">
                     {faq.question}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     {faq.answer}
                   </p>
                 </div>

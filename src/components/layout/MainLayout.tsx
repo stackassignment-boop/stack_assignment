@@ -72,7 +72,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   } : null;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="stack-site-theme min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Header
         currentPage={currentPage}
         onNavigate={handleNavigate}

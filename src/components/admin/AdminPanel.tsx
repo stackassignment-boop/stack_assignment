@@ -823,7 +823,7 @@ export default function AdminPanel() {
       completed: { variant: "secondary", className: "bg-green-100 text-green-800" },
       cancelled: { variant: "destructive", className: "" },
       new: { variant: "secondary", className: "bg-blue-100 text-blue-800" },
-      read: { variant: "secondary", className: "bg-gray-100 text-gray-800" },
+      read: { variant: "secondary", className: "bg-slate-100 text-slate-800" },
       replied: { variant: "secondary", className: "bg-green-100 text-green-800" },
       paid: { variant: "secondary", className: "bg-green-100 text-green-800" },
       unpaid: { variant: "secondary", className: "bg-red-100 text-red-800" },
@@ -2054,8 +2054,8 @@ export default function AdminPanel() {
                 {/* Currency Settings */}
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Currency Settings</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Currency Settings</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       Set the default currency for displaying prices across the platform
                     </p>
                   </div>
@@ -2083,15 +2083,15 @@ export default function AdminPanel() {
 
                     <div className="space-y-2">
                       <Label>Current Selection</Label>
-                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                      <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                         <span className="text-2xl font-bold text-teal-600 dark:text-teal-400">
                           {currencySettings.currencySymbol}
                         </span>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-white">
+                          <p className="font-medium text-slate-900 dark:text-white">
                             {AVAILABLE_CURRENCIES.find(c => c.code === currencySettings.defaultCurrency)?.name || 'US Dollar'}
                           </p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                          <p className="text-sm text-slate-500 dark:text-slate-400">
                             1 INR = {currencySettings.currencyRate} {currencySettings.defaultCurrency}
                           </p>
                         </div>
@@ -2108,10 +2108,10 @@ export default function AdminPanel() {
                 </div>
 
                 {/* Exchange Rates Table */}
-                <div className="space-y-4 pt-6 border-t border-gray-200 dark:border-slate-700">
+                <div className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-700">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Exchange Rates (Base: INR)</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Exchange Rates (Base: INR)</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       Current exchange rates used for currency conversion
                     </p>
                   </div>
@@ -2158,18 +2158,18 @@ export default function AdminPanel() {
             <div className="space-y-4">
               {/* Status Cards */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                   <Label className="text-muted-foreground">Order Status</Label>
                   <div className="mt-1">{getStatusBadge(selectedOrder.status)}</div>
                 </div>
-                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                   <Label className="text-muted-foreground">Payment Status</Label>
                   <p className="font-medium mt-1">{getStatusBadge(selectedOrder.paymentStatus)}</p>
                 </div>
               </div>
 
               {/* Customer Info */}
-              <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                 <Label className="text-muted-foreground">Customer</Label>
                 <p className="font-medium">{selectedOrder.customer.name}</p>
                 <p className="text-sm text-muted-foreground">{selectedOrder.customer.email}</p>
@@ -2203,7 +2203,7 @@ export default function AdminPanel() {
               {selectedOrder.description && (
                 <div>
                   <Label className="text-muted-foreground">Description</Label>
-                  <p className="text-sm bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mt-1">{selectedOrder.description}</p>
+                  <p className="text-sm bg-slate-50 dark:bg-slate-800 rounded-lg p-3 mt-1">{selectedOrder.description}</p>
                 </div>
               )}
 
@@ -2217,12 +2217,12 @@ export default function AdminPanel() {
                         const files = JSON.parse(selectedOrder.attachments);
                         if (!files || files.length === 0) return null;
                         return files.map((file: { name: string; type: string; size: number; url?: string }, index: number) => (
-                          <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800 rounded-lg p-3">
+                          <div key={index} className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 rounded-lg p-3">
                             <div className="flex items-center gap-2">
-                              <FileText className="w-4 h-4 text-gray-500" />
+                              <FileText className="w-4 h-4 text-slate-500" />
                               <div>
                                 <span className="text-sm font-medium">{file.name}</span>
-                                <span className="text-xs text-gray-500 ml-2">({(file.size / 1024).toFixed(1)} KB)</span>
+                                <span className="text-xs text-slate-500 ml-2">({(file.size / 1024).toFixed(1)} KB)</span>
                               </div>
                             </div>
                             {file.url && (
@@ -2250,7 +2250,7 @@ export default function AdminPanel() {
               {selectedOrder.notes && (
                 <div>
                   <Label className="text-muted-foreground">Notes</Label>
-                  <p className="text-sm bg-gray-50 dark:bg-slate-800 rounded-lg p-3 mt-1 whitespace-pre-wrap">{selectedOrder.notes}</p>
+                  <p className="text-sm bg-slate-50 dark:bg-slate-800 rounded-lg p-3 mt-1 whitespace-pre-wrap">{selectedOrder.notes}</p>
                 </div>
               )}
               
@@ -2470,7 +2470,7 @@ export default function AdminPanel() {
                 id="blog-published"
                 checked={blogForm.isPublished}
                 onChange={(e) => setBlogForm({ ...blogForm, isPublished: e.target.checked })}
-                className="w-4 h-4 rounded border-gray-300"
+                className="w-4 h-4 rounded border-slate-300"
               />
               <Label htmlFor="blog-published" className="cursor-pointer">
                 Publish immediately
@@ -2615,7 +2615,7 @@ export default function AdminPanel() {
                 id="sample-published"
                 checked={sampleForm.isPublished}
                 onChange={(e) => setSampleForm({ ...sampleForm, isPublished: e.target.checked })}
-                className="w-4 h-4 rounded border-gray-300"
+                className="w-4 h-4 rounded border-slate-300"
               />
               <Label htmlFor="sample-published" className="cursor-pointer">
                 Publish immediately

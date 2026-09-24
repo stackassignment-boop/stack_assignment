@@ -110,7 +110,7 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
       </div>
     );
@@ -118,11 +118,11 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Order Not Found</h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">This order doesn't exist or you don't have access.</p>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Order Not Found</h2>
+          <p className="text-slate-500 dark:text-slate-400 mb-4">This order doesn't exist or you don't have access.</p>
           <Button onClick={() => onNavigate?.('student-dashboard')} className="bg-teal-600 hover:bg-teal-700">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Dashboard
           </Button>
@@ -134,54 +134,54 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
   // If price is not set by admin yet
   if (order.totalPrice === 0 || order.paymentStatus === 'pending_quote') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-10">
         <div className="max-w-2xl mx-auto px-4">
           <button
             onClick={() => onNavigate?.('student-dashboard')}
-            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400 mb-6"
+            className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 mb-6"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Dashboard
           </button>
 
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-800 p-8 text-center">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8 text-center">
             <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
               <Clock className="w-10 h-10 text-amber-600 dark:text-amber-400" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
               Waiting for Quote
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-slate-600 dark:text-slate-400 mb-6">
               Our team is reviewing your order. We will send you the price quote shortly.
               You will receive an email notification once the amount is set.
             </p>
             
-            <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 mb-6">
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Order Number</p>
-              <p className="text-lg font-bold text-gray-900 dark:text-white">{order.orderNumber}</p>
+            <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 mb-6">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">Order Number</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-white">{order.orderNumber}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-left bg-gray-50 dark:bg-slate-800 rounded-xl p-4">
+            <div className="grid grid-cols-2 gap-4 text-left bg-slate-50 dark:bg-slate-800 rounded-xl p-4">
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Subject</p>
-                <p className="font-medium text-gray-900 dark:text-white">{order.subject}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Subject</p>
+                <p className="font-medium text-slate-900 dark:text-white">{order.subject}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Pages</p>
-                <p className="font-medium text-gray-900 dark:text-white">{order.pages}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Pages</p>
+                <p className="font-medium text-slate-900 dark:text-white">{order.pages}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Deadline</p>
-                <p className="font-medium text-gray-900 dark:text-white">
+                <p className="text-xs text-slate-500 dark:text-slate-400">Deadline</p>
+                <p className="font-medium text-slate-900 dark:text-white">
                   {new Date(order.deadline).toLocaleDateString()}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Status</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Status</p>
                 <p className="font-medium text-amber-600 dark:text-amber-400">Pending Quote</p>
               </div>
             </div>
 
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-6">
               Need help? Contact us at{' '}
               <a href="tel:+919907300710" className="text-teal-600 dark:text-teal-400 hover:underline">
                 +91-99073-00710
@@ -195,11 +195,11 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
 
   // Payment page for orders with price set
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-10">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-10">
       <div className="max-w-4xl mx-auto px-4">
         <button
           onClick={() => onNavigate?.('student-dashboard')}
-          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400 mb-6"
+          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Dashboard
         </button>
@@ -207,29 +207,29 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
         <div className="grid md:grid-cols-3 gap-6">
           {/* Order Summary */}
           <div className="md:col-span-1">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-800 p-6">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Order Summary</h2>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800 p-6">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Order Summary</h2>
               
               <div className="space-y-3">
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Order Number</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{order.orderNumber}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Order Number</p>
+                  <p className="font-medium text-slate-900 dark:text-white">{order.orderNumber}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Title</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{order.title}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Title</p>
+                  <p className="font-medium text-slate-900 dark:text-white">{order.title}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Subject</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{order.subject}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Subject</p>
+                  <p className="font-medium text-slate-900 dark:text-white">{order.subject}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Pages</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{order.pages}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Pages</p>
+                  <p className="font-medium text-slate-900 dark:text-white">{order.pages}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Deadline</p>
-                  <p className="font-medium text-gray-900 dark:text-white">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Deadline</p>
+                  <p className="font-medium text-slate-900 dark:text-white">
                     {new Date(order.deadline).toLocaleDateString()}
                   </p>
                 </div>
@@ -240,21 +240,21 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                 <div className="relative">
                   <button
                     onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
-                    className="w-full flex items-center justify-between px-3 py-2 border border-gray-200 dark:border-slate-700 rounded-lg bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                    className="w-full flex items-center justify-between px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
                   >
                     <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <Globe className="w-4 h-4 text-slate-500" />
+                      <span className="text-sm text-slate-700 dark:text-slate-300">
                         {CURRENCIES[selectedCurrency].name}
                       </span>
                     </div>
-                    <span className="font-medium text-gray-900 dark:text-white">
+                    <span className="font-medium text-slate-900 dark:text-white">
                       {CURRENCIES[selectedCurrency].symbol}
                     </span>
                   </button>
                   
                   {showCurrencyDropdown && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
                       {Object.entries(CURRENCIES).map(([code, info]) => (
                         <button
                           key={code}
@@ -262,12 +262,12 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                             setSelectedCurrency(code as CurrencyCode);
                             setShowCurrencyDropdown(false);
                           }}
-                          className={`w-full flex items-center justify-between px-3 py-2 hover:bg-gray-50 dark:hover:bg-slate-700 transition ${
+                          className={`w-full flex items-center justify-between px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition ${
                             selectedCurrency === code ? 'bg-teal-50 dark:bg-teal-900/20' : ''
                           }`}
                         >
-                          <span className="text-sm text-gray-700 dark:text-gray-300">{info.name}</span>
-                          <span className="font-medium text-gray-900 dark:text-white">{info.symbol}</span>
+                          <span className="text-sm text-slate-700 dark:text-slate-300">{info.name}</span>
+                          <span className="font-medium text-slate-900 dark:text-white">{info.symbol}</span>
                         </button>
                       ))}
                     </div>
@@ -275,15 +275,15 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-gray-200 dark:border-slate-700">
+              <div className="pt-6 border-t border-slate-200 dark:border-slate-700">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-400">Amount to Pay</span>
+                  <span className="text-slate-600 dark:text-slate-400">Amount to Pay</span>
                   <div className="text-right">
-                    <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <span className="text-2xl font-bold text-slate-900 dark:text-white">
                       {formatPrice(order.totalPrice, selectedCurrency)}
                     </span>
                     {selectedCurrency !== 'INR' && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                         ≈ ₹{order.totalPrice} INR (for payment)
                       </p>
                     )}
@@ -295,8 +295,8 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
 
           {/* Payment Methods */}
           <div className="md:col-span-2">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-800 p-6">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Select Payment Method</h2>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800 p-6">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Select Payment Method</h2>
 
               {/* Payment Method Tabs */}
               <div className="flex gap-2 mb-6">
@@ -305,7 +305,7 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                   className={`flex-1 py-3 px-4 rounded-lg border-2 transition ${
                     paymentMethod === 'razorpay'
                       ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
-                      : 'border-gray-200 dark:border-slate-700 hover:border-gray-300'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300'
                   }`}
                 >
                   <CreditCard className="w-5 h-5 mx-auto mb-1" />
@@ -316,7 +316,7 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                   className={`flex-1 py-3 px-4 rounded-lg border-2 transition ${
                     paymentMethod === 'upi'
                       ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
-                      : 'border-gray-200 dark:border-slate-700 hover:border-gray-300'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300'
                   }`}
                 >
                   <Wallet className="w-5 h-5 mx-auto mb-1" />
@@ -327,7 +327,7 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                   className={`flex-1 py-3 px-4 rounded-lg border-2 transition ${
                     paymentMethod === 'bank'
                       ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
-                      : 'border-gray-200 dark:border-slate-700 hover:border-gray-300'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300'
                   }`}
                 >
                   <Wallet className="w-5 h-5 mx-auto mb-1" />
@@ -338,7 +338,7 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
               {/* Razorpay/Card Payment */}
               {paymentMethod === 'razorpay' && (
                 <div className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-slate-600 dark:text-slate-400">
                     Pay securely using Razorpay. Supports Credit Card, Debit Card, UPI, Net Banking, and Wallets.
                   </p>
                   <Button
@@ -348,7 +348,7 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                     Pay {formatPrice(order.totalPrice, selectedCurrency)} with Razorpay
                   </Button>
                   {selectedCurrency !== 'INR' && (
-                    <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-center text-slate-500 dark:text-slate-400">
                       Payment will be processed in INR (₹{order.totalPrice})
                     </p>
                   )}
@@ -358,20 +358,20 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
               {/* UPI Payment */}
               {paymentMethod === 'upi' && (
                 <div className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-slate-600 dark:text-slate-400">
                     Pay directly using UPI. Scan the QR code or use the UPI ID below.
                   </p>
-                  <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-6 text-center">
-                    <p className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-6 text-center">
+                    <p className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
                       Amount: {formatPrice(order.totalPrice, selectedCurrency)}
                       {selectedCurrency !== 'INR' && (
-                        <span className="text-sm font-normal text-gray-500 dark:text-gray-400 block mt-1">
+                        <span className="text-sm font-normal text-slate-500 dark:text-slate-400 block mt-1">
                           (₹{order.totalPrice} INR)
                         </span>
                       )}
                     </p>
-                    <div className="w-48 h-48 bg-white mx-auto mb-4 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-                      <span className="text-gray-400 text-sm">QR Code</span>
+                    <div className="w-48 h-48 bg-white mx-auto mb-4 rounded-lg flex items-center justify-center border-2 border-dashed border-slate-300">
+                      <span className="text-slate-400 text-sm">QR Code</span>
                     </div>
                     <div className="flex items-center justify-center gap-2">
                       <code className="bg-white dark:bg-slate-700 px-3 py-2 rounded-lg font-mono">
@@ -379,13 +379,13 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
                       </code>
                       <button
                         onClick={() => handleCopy('stackassignment@upi')}
-                        className="p-2 hover:bg-gray-100 dark:hover:bg-slate-600 rounded-lg"
+                        className="p-2 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-lg"
                       >
                         {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                  <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
                     After payment, share screenshot on WhatsApp for confirmation
                   </p>
                 </div>
@@ -394,66 +394,66 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
               {/* Bank Transfer */}
               {paymentMethod === 'bank' && (
                 <div className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-slate-600 dark:text-slate-400">
                     Transfer the amount to our bank account and share the screenshot for confirmation.
                   </p>
-                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-6 space-y-3">
-                    <div className="text-center pb-3 border-b border-gray-200 dark:border-slate-600">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Amount to Transfer</p>
+                  <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-6 space-y-3">
+                    <div className="text-center pb-3 border-b border-slate-200 dark:border-slate-600">
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Amount to Transfer</p>
                       <p className="text-2xl font-bold text-teal-600 dark:text-teal-400">
                         {formatPrice(order.totalPrice, selectedCurrency)}
                       </p>
                       {selectedCurrency !== 'INR' && (
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
                           ≈ ₹{order.totalPrice} INR
                         </p>
                       )}
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500 dark:text-gray-400">Account Name</span>
-                      <span className="font-medium text-gray-900 dark:text-white">Stack Assignment</span>
+                      <span className="text-slate-500 dark:text-slate-400">Account Name</span>
+                      <span className="font-medium text-slate-900 dark:text-white">Stack Assignment</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500 dark:text-gray-400">Account Number</span>
+                      <span className="text-slate-500 dark:text-slate-400">Account Number</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-900 dark:text-white">1234567890123</span>
+                        <span className="font-medium text-slate-900 dark:text-white">1234567890123</span>
                         <button
                           onClick={() => handleCopy('1234567890123')}
-                          className="p-1 hover:bg-gray-200 dark:hover:bg-slate-600 rounded"
+                          className="p-1 hover:bg-slate-200 dark:hover:bg-slate-600 rounded"
                         >
                           {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
                         </button>
                       </div>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500 dark:text-gray-400">IFSC Code</span>
+                      <span className="text-slate-500 dark:text-slate-400">IFSC Code</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-900 dark:text-white">ABCD0123456</span>
+                        <span className="font-medium text-slate-900 dark:text-white">ABCD0123456</span>
                         <button
                           onClick={() => handleCopy('ABCD0123456')}
-                          className="p-1 hover:bg-gray-200 dark:hover:bg-slate-600 rounded"
+                          className="p-1 hover:bg-slate-200 dark:hover:bg-slate-600 rounded"
                         >
                           <Copy className="w-3 h-3" />
                         </button>
                       </div>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500 dark:text-gray-400">Bank Name</span>
-                      <span className="font-medium text-gray-900 dark:text-white">State Bank of India</span>
+                      <span className="text-slate-500 dark:text-slate-400">Bank Name</span>
+                      <span className="font-medium text-slate-900 dark:text-white">State Bank of India</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500 dark:text-gray-400">SWIFT Code</span>
+                      <span className="text-slate-500 dark:text-slate-400">SWIFT Code</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-900 dark:text-white">SBININBB123</span>
+                        <span className="font-medium text-slate-900 dark:text-white">SBININBB123</span>
                         <button
                           onClick={() => handleCopy('SBININBB123')}
-                          className="p-1 hover:bg-gray-200 dark:hover:bg-slate-600 rounded"
+                          className="p-1 hover:bg-slate-200 dark:hover:bg-slate-600 rounded"
                         >
                           <Copy className="w-3 h-3" />
                         </button>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 pt-3 border-t border-gray-200 dark:border-slate-600">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 pt-3 border-t border-slate-200 dark:border-slate-600">
                       For international transfers (SWIFT), additional bank fees may apply.
                     </p>
                   </div>
@@ -461,8 +461,8 @@ export default function PaymentPage({ orderId, onNavigate }: PaymentPageProps) {
               )}
 
               {/* Contact Support */}
-              <div className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-700">
-                <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+              <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+                <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
                   Having trouble? Contact us at{' '}
                   <a href="tel:+919907300710" className="text-teal-600 dark:text-teal-400 hover:underline">
                     +91-99073-00710

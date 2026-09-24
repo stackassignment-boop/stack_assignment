@@ -85,7 +85,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
   return (
     <main className="flex-grow">
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-16">
+      <div className="stack-regional-hero text-white py-16">
         <div className="max-w-5xl mx-auto px-6">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{service.title}</h1>
           {service.shortDescription && (
@@ -118,21 +118,21 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                  <span className="text-slate-700 dark:text-slate-300">{feature}</span>
                 </li>
               ))}
             </ul>
           </div>
         )}
 
-        <div className="mt-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white">
+        <div className="mt-12 bg-slate-950 rounded-2xl p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="mb-6 opacity-90">
             Get expert help with your {service.title} today
           </p>
           <a
             href="/order"
-            className="inline-block bg-white text-indigo-600 hover:bg-gray-100 px-8 py-4 rounded-xl text-lg font-bold transition shadow-lg hover:shadow-xl"
+            className="inline-block bg-white text-indigo-600 hover:bg-slate-100 px-8 py-4 rounded-xl text-lg font-bold transition shadow-lg hover:shadow-xl"
           >
             Place Your Order
           </a>
