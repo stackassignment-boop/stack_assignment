@@ -224,7 +224,7 @@ export default function WamCalculator() {
 
       {/* ---------- Units ---------- */}
       <div className="overflow-x-auto -mx-1 px-1">
-        <table className="w-full min-w-[640px] border-separate border-spacing-y-2">
+        <table className="w-full min-w-[40rem] border-separate border-spacing-y-2">
           <thead>
             <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               <th className="px-3 pb-1">Unit code (optional)</th>

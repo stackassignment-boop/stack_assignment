@@ -294,7 +294,7 @@ export default function SamplePreviewModal({ sample, isOpen, onClose }: SamplePr
                         {/* Locked overlay for blurred pages */}
                         {isBlurredPage && (
                           <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/30 dark:bg-slate-900/30 backdrop-blur-[2px]">
-                            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-4 text-center max-w-[280px]">
+                            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-4 text-center max-w-[17.5rem]">
                               <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/50 rounded-full flex items-center justify-center mx-auto mb-3">
                                 <Lock className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                               </div>

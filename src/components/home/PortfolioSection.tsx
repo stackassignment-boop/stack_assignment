@@ -149,7 +149,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
   if (loading) {
     return (
       <section className="py-20 bg-white dark:bg-slate-900">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+        <div className="stack-container text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mx-auto"></div>
         </div>
       </section>
@@ -158,7 +158,7 @@ export default function PortfolioSection({ onNavigate }: PortfolioSectionProps) 
 
   return (
     <section className="py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-950">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="stack-container">
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-sm font-semibold px-4 py-1 rounded-full mb-4">

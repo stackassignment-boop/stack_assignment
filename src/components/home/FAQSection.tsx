@@ -89,7 +89,15 @@ export default function FAQSection() {
         }}
       />
 
-      <div className="max-w-4xl mx-auto px-6 relative z-10">
+      {/*
+        Two nested wrappers rather than one, matching how the rest of the site
+        is built: `stack-container` sets the page gutter so this section starts
+        and ends on the same vertical lines as every other section, and the
+        inner `max-w-4xl` keeps the questions at a comfortable reading width
+        instead of stretching them the full 1440px.
+      */}
+      <div className="stack-container relative z-10">
+        <div className="mx-auto max-w-4xl">
         {/* Header */}
         <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 bg-white/15 border border-white/30 rounded-full px-5 py-2 text-sm font-semibold text-white mb-6">
@@ -116,6 +124,7 @@ export default function FAQSection() {
               onClick={() => toggleFAQ(index)}
             />
           ))}
+        </div>
         </div>
       </div>
     </section>

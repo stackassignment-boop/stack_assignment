@@ -60,7 +60,7 @@ export default function HomeRoute() {
 
       {/* Trust Badges Full */}
       <section className="py-8 bg-white dark:bg-slate-950">
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="stack-container">
           <TrustBadges variant="full" />
         </div>
       </section>

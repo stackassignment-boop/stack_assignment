@@ -257,7 +257,7 @@ export default function RequirementPreviewModal({ requirement, isOpen, onClose }
 
           {!loading && !error && isDocx && docxHtml && (
             <div
-              className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-8 max-w-[700px] mx-auto select-none prose prose-sm dark:prose-invert max-w-none"
+              className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-8 max-w-[43.75rem] mx-auto select-none prose prose-sm dark:prose-invert max-w-none"
               onContextMenu={(e) => e.preventDefault()}
               onDragStart={(e) => e.preventDefault()}
               dangerouslySetInnerHTML={{ __html: docxHtml }}

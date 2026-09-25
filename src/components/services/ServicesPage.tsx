@@ -295,7 +295,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                   <div className="relative mt-6">
                     <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-600 dark:text-indigo-400">{service.eyebrow}</p>
                     <h3 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white">{service.title}</h3>
-                    <p className="mt-3 min-h-[72px] text-[15px] leading-6 text-slate-600 dark:text-slate-400">{service.description}</p>
+                    <p className="mt-3 min-h-[4.5rem] text-[0.9375rem] leading-6 text-slate-600 dark:text-slate-400">{service.description}</p>
                   </div>
 
                   <ul className="relative mt-5 space-y-3 border-t border-slate-100 pt-5 dark:border-slate-800">

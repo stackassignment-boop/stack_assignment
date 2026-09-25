@@ -1102,7 +1102,7 @@ export default function AdminPanel() {
                         {stats.recentOrders.map((order) => (
                           <TableRow key={order.id}>
                             <TableCell className="font-medium">{order.orderNumber}</TableCell>
-                            <TableCell className="max-w-[200px] truncate">{order.title}</TableCell>
+                            <TableCell className="max-w-[12.5rem] truncate">{order.title}</TableCell>
                             <TableCell>{order.customer.name}</TableCell>
                             <TableCell>{formatPrice(order.totalPrice)}</TableCell>
                             <TableCell>{getStatusBadge(order.status)}</TableCell>
@@ -1136,7 +1136,7 @@ export default function AdminPanel() {
                           <TableRow key={inquiry.id}>
                             <TableCell className="font-medium">{inquiry.name}</TableCell>
                             <TableCell>{inquiry.email}</TableCell>
-                            <TableCell className="max-w-[200px] truncate">{inquiry.subject}</TableCell>
+                            <TableCell className="max-w-[12.5rem] truncate">{inquiry.subject}</TableCell>
                             <TableCell>{getStatusBadge(inquiry.status)}</TableCell>
                             <TableCell>{formatDate(inquiry.createdAt)}</TableCell>
                           </TableRow>
@@ -1176,7 +1176,7 @@ export default function AdminPanel() {
                       {orders.map((order) => (
                         <TableRow key={order.id}>
                           <TableCell className="font-medium">{order.orderNumber}</TableCell>
-                          <TableCell className="max-w-[150px] truncate">{order.title}</TableCell>
+                          <TableCell className="max-w-[9.375rem] truncate">{order.title}</TableCell>
                           <TableCell>
                             <div>
                               <div>{order.customer.name}</div>
@@ -1235,8 +1235,8 @@ export default function AdminPanel() {
                         <TableRow key={inquiry.id}>
                           <TableCell className="font-medium">{inquiry.name}</TableCell>
                           <TableCell>{inquiry.email}</TableCell>
-                          <TableCell className="max-w-[150px] truncate">{inquiry.subject}</TableCell>
-                          <TableCell className="max-w-[200px] truncate">{inquiry.message}</TableCell>
+                          <TableCell className="max-w-[9.375rem] truncate">{inquiry.subject}</TableCell>
+                          <TableCell className="max-w-[12.5rem] truncate">{inquiry.message}</TableCell>
                           <TableCell>{getStatusBadge(inquiry.status)}</TableCell>
                           <TableCell>{formatDate(inquiry.createdAt)}</TableCell>
                           <TableCell>
@@ -1291,7 +1291,7 @@ export default function AdminPanel() {
                         <TableRow key={blog.id}>
                           <TableCell className="font-medium">{blog.title}</TableCell>
                           <TableCell className="text-muted-foreground text-xs">{blog.slug}</TableCell>
-                          <TableCell className="max-w-[200px] truncate text-sm">{blog.excerpt}</TableCell>
+                          <TableCell className="max-w-[12.5rem] truncate text-sm">{blog.excerpt}</TableCell>
                           <TableCell>
                             <Badge variant={blog.isPublished ? "default" : "secondary"}>
                               {blog.isPublished ? 'Published' : 'Draft'}
@@ -1628,7 +1628,7 @@ export default function AdminPanel() {
                     <textarea 
                       value={seoConfig.description} 
                       readOnly 
-                      className="flex min-h-[80px] w-full rounded-md border border-input bg-muted px-3 py-2 text-sm mt-1"
+                      className="flex min-h-[5rem] w-full rounded-md border border-input bg-muted px-3 py-2 text-sm mt-1"
                     />
                     <p className="text-xs text-muted-foreground mt-1">{seoConfig.description.length}/160 characters (recommended)</p>
                   </div>
@@ -1702,7 +1702,7 @@ export default function AdminPanel() {
                             className="flex items-center justify-between p-2 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-800 text-sm"
                           >
                             <div className="flex items-center gap-2 flex-1">
-                              <code className="text-xs text-muted-foreground truncate max-w-[200px]">/blog/{blog.slug}</code>
+                              <code className="text-xs text-muted-foreground truncate max-w-[12.5rem]">/blog/{blog.slug}</code>
                               <span className="truncate font-medium">{blog.title}</span>
                             </div>
                             <Badge variant={blog.isPublished ? "default" : "secondary"}>
@@ -1725,7 +1725,7 @@ export default function AdminPanel() {
                             className="flex items-center justify-between p-2 rounded-lg border hover:bg-slate-50 dark:hover:bg-slate-800 text-sm"
                           >
                             <div className="flex items-center gap-2 flex-1">
-                              <code className="text-xs text-muted-foreground truncate max-w-[200px]">/samples/{sample.slug}</code>
+                              <code className="text-xs text-muted-foreground truncate max-w-[12.5rem]">/samples/{sample.slug}</code>
                               <span className="truncate font-medium">{sample.title}</span>
                             </div>
                             <Badge variant={sample.isPublished ? "default" : "secondary"}>
@@ -1983,7 +1983,7 @@ export default function AdminPanel() {
                         requirements.map((requirement) => (
                           <TableRow key={requirement.id}>
                             <TableCell className="font-medium">{requirement.title}</TableCell>
-                            <TableCell className="max-w-[150px] truncate text-sm">{requirement.description || '-'}</TableCell>
+                            <TableCell className="max-w-[9.375rem] truncate text-sm">{requirement.description || '-'}</TableCell>
                             <TableCell>
                               {requirement.category ? (
                                 <Badge variant="secondary">{requirement.category}</Badge>
@@ -1991,7 +1991,7 @@ export default function AdminPanel() {
                                 '-'
                               )}
                             </TableCell>
-                            <TableCell className="max-w-[150px] truncate text-sm">{requirement.fileName}</TableCell>
+                            <TableCell className="max-w-[9.375rem] truncate text-sm">{requirement.fileName}</TableCell>
                             <TableCell className="text-sm">{formatFileSize(requirement.fileSize)}</TableCell>
                             <TableCell>{formatDate(requirement.createdAt)}</TableCell>
                             <TableCell>
@@ -2424,7 +2424,7 @@ export default function AdminPanel() {
               </p>
               <textarea
                 id="blog-content"
-                className="w-full min-h-[300px] p-3 rounded-md border border-input bg-background text-sm"
+                className="w-full min-h-[18.75rem] p-3 rounded-md border border-input bg-background text-sm"
                 value={blogForm.content}
                 onChange={(e) => setBlogForm({ ...blogForm, content: e.target.value })}
                 placeholder="<p>Your blog content here...</p>"
@@ -2518,7 +2518,7 @@ export default function AdminPanel() {
               <Label htmlFor="sample-description">Description</Label>
               <textarea
                 id="sample-description"
-                className="w-full min-h-[80px] p-3 rounded-md border border-input bg-background text-sm"
+                className="w-full min-h-[5rem] p-3 rounded-md border border-input bg-background text-sm"
                 value={sampleForm.description}
                 onChange={(e) => setSampleForm({ ...sampleForm, description: e.target.value })}
                 placeholder="Brief description of the sample paper..."

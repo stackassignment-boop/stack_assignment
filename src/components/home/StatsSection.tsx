@@ -37,7 +37,7 @@ export default function StatsSection() {
   return (
     <section className="relative overflow-hidden bg-slate-50 py-20 dark:bg-slate-950 md:py-24">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-200 to-transparent dark:via-indigo-800" />
-      <div className="mx-auto max-w-7xl px-5 sm:px-6">
+      <div className="stack-container">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex rounded-full bg-indigo-100 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">Why students choose support</span>
           <h2 className="mt-5 text-3xl font-black tracking-tight text-slate-950 dark:text-white md:text-5xl">A better experience from the first click</h2>

@@ -32,7 +32,7 @@ const universities = [
 export default function UniversitiesSection() {
   return (
     <section className="bg-slate-950 py-20 text-white md:py-24">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6">
+      <div className="stack-container">
         <div className="grid gap-10 lg:grid-cols-[.75fr_1.25fr]">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-indigo-200"><Search className="h-3.5 w-3.5" /> Find your university</span>

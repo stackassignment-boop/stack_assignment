@@ -41,7 +41,7 @@ export default function HowItWorksSection({ onNavigate }: HowItWorksSectionProps
 
   return (
     <section className="py-20 bg-white dark:bg-slate-950">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="stack-container">
         <div className="text-center mb-14">
           <h2
             className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white"

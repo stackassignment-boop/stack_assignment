@@ -36,7 +36,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
   return (
     <section className="stack-service-hero relative overflow-hidden bg-slate-950 text-white">
 
-      <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-6 md:py-24 lg:py-28">
+      <div className="stack-container relative py-16 md:py-24 lg:py-28">
         <div className="grid items-center gap-12 lg:grid-cols-[1.08fr_.92fr]">
           <div>
             <div className="mb-6 inline-flex flex-wrap items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-4 py-2 text-sm font-semibold backdrop-blur">

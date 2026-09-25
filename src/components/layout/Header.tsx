@@ -121,15 +121,15 @@ export default function Header({ currentPage = 'home', onNavigate, studentUser, 
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/95 transition-colors">
-      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-10">
-        <div className="flex min-h-[72px] items-center justify-between gap-5">
+      <div className="mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-8 xl:px-10">
+        <div className="flex min-h-[4.5rem] items-center justify-between gap-5">
           {/* Logo */}
           <button 
             onClick={() => handleNav('home')}
-            className="flex min-w-[190px] shrink-0 items-center gap-2.5 hover:opacity-90 transition cursor-pointer"
+            className="flex min-w-[11.875rem] shrink-0 items-center gap-2.5 hover:opacity-90 transition cursor-pointer"
           >
             <GraduationCap className="h-8 w-8 shrink-0 text-indigo-600 dark:text-indigo-400" />
-            <span className="max-w-[150px] text-[21px] font-extrabold leading-[1.02] tracking-tight text-indigo-600 dark:text-indigo-400">
+            <span className="max-w-[9.375rem] text-[1.3125rem] font-extrabold leading-[1.02] tracking-tight text-indigo-600 dark:text-indigo-400">
               Stack Assignment
             </span>
           </button>

@@ -673,7 +673,7 @@ export default function OrderPage({ onNavigate }: OrderPageProps) {
                               <span className="text-sm">
                                 {file.uploading ? '⏳' : file.error ? '❌' : '✅'}
                               </span>
-                              <span className="text-sm text-slate-700 dark:text-slate-300 truncate max-w-[200px]">{file.name}</span>
+                              <span className="text-sm text-slate-700 dark:text-slate-300 truncate max-w-[12.5rem]">{file.name}</span>
                               <span className="text-xs text-slate-500">({(file.size / 1024).toFixed(1)} KB)</span>
                             </div>
                             <button type="button" onClick={() => removeFile(file.id)} className="text-red-500 hover:text-red-700 p-1">
