@@ -195,21 +195,21 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                   </div>
 
                   <div className="mt-5 space-y-3">
-                    {[
-                      ['Essay or report', 'Structure, argument & referencing', PenTool],
-                      ['Dissertation', 'Research, chapters & editing', BookOpen],
-                      ['Coursework', 'Briefs, cases & presentations', ClipboardCheck],
-                      ['Exam preparation', 'Revision & practice support', Target],
-                    ].map(([title, text, Icon]) => {
-                      const ServiceIcon = Icon as typeof PenTool;
-                      return (
+                    {(
+                      [
+                        ['Essay or report', 'Structure, argument & referencing', PenTool],
+                        ['Dissertation', 'Research, chapters & editing', BookOpen],
+                        ['Coursework', 'Briefs, cases & presentations', ClipboardCheck],
+                        ['Exam preparation', 'Revision & practice support', Target],
+                      ] as const
+                    ).map(([title, text, Icon]) => (
                         <Link
-                          key={String(title)}
-                          href={orderHref(String(title))}
+                          key={title}
+                          href={orderHref(title)}
                           className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition hover:border-indigo-300/30 hover:bg-white/[0.08]"
                         >
                           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/25 to-indigo-400/15 text-indigo-200">
-                            <ServiceIcon className="h-5 w-5" />
+                            <Icon className="h-5 w-5" />
                           </span>
                           <span className="min-w-0 flex-1">
                             <span className="block font-semibold text-white">{title}</span>
@@ -217,8 +217,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                           </span>
                           <ChevronRight className="h-5 w-5 text-slate-500 transition group-hover:translate-x-1 group-hover:text-indigo-300" />
                         </Link>
-                      );
-                    })}
+                    ))}
                   </div>
 
                   <div className="mt-5 rounded-2xl border border-indigo-300/10 bg-indigo-300/[0.06] p-4 text-sm text-slate-300">

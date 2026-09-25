@@ -180,29 +180,12 @@ html { scroll-behavior: smooth; }
   }
 }
 
-.stack-glass {
-  background: rgba(255,255,255,.72);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.dark .stack-glass {
-  background: rgba(15,23,42,.72);
-}
-
-
 /* Shared Stack Assignment page system — keeps route-level pages visually consistent. */
 .stack-page {
   min-height: 100%;
   background: #f8fafc;
 }
 .dark .stack-page { background: #020617; }
-.stack-page-section {
-  border-color: rgb(226 232 240 / 0.85);
-}
-.dark .stack-page-section {
-  border-color: rgb(51 65 85 / 0.75);
-}
 .stack-container {
   width: min(100% - 2rem, 80rem);
   margin-inline: auto;
@@ -222,12 +205,6 @@ html { scroll-behavior: smooth; }
 .dark .stack-card {
   border-color: rgb(51 65 85 / 0.8);
   background: rgb(15 23 42 / 0.88);
-}
-.stack-gradient-heading {
-  background: linear-gradient(90deg, #4f46e5, #0891b2);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 /* Premium 2026 route system for Pricing / Samples / Blog / Universities / Tools */
@@ -341,7 +318,6 @@ html { scroll-behavior: smooth; }
 
 /* Common CTA pattern from the regional landing page. */
 a.bg-indigo-600, button.bg-indigo-600 { color: #fff; }
-.stack-gradient-heading { background: linear-gradient(90deg, #4f46e5, #7c3aed); }
 .stack-primary-button { background: var(--stack-yellow) !important; color: #0f172a !important; }
 .stack-primary-button:hover { background: var(--stack-yellow-hover) !important; }
 .stack-secondary-button { background: #eef2ff; color: var(--stack-indigo-dark); }
@@ -400,8 +376,6 @@ a.text-teal-600, button.text-teal-600 { color: var(--stack-indigo) !important; }
   background: var(--stack-service-hero-bg) !important;
 }
 .stack-regional-hero > * { position: relative; z-index: 1; }
-.stack-regional-cta { background:#facc15 !important; color:#0f172a !important; }
-.stack-regional-cta:hover { background:#fde047 !important; }
 
 /* --------------------------------------------------------------------------
    SERVICE PALETTE — site-wide public-page normalization
@@ -514,14 +488,11 @@ a.text-teal-600, button.text-teal-600 { color: var(--stack-indigo) !important; }
 /* Shared page background rhythm. */
 .stack-site-theme main[class*="bg-slate-50"],
 .stack-site-theme .stack-page { background-color: #f8fafc; }
-.stack-site-theme .stack-site-hero,
 .stack-site-theme .stack-regional-hero { background: var(--stack-service-hero-bg) !important; }
 
 /* Keep the yellow CTA treatment identical to Services. */
-.stack-site-theme .stack-primary-button,
-.stack-site-theme .stack-regional-cta { background: #facc15 !important; color: #020617 !important; }
-.stack-site-theme .stack-primary-button:hover,
-.stack-site-theme .stack-regional-cta:hover { background: #fde047 !important; }
+.stack-site-theme .stack-primary-button { background: #facc15 !important; color: #020617 !important; }
+.stack-site-theme .stack-primary-button:hover { background: #fde047 !important; }
 
 
 /* ==========================================================================
