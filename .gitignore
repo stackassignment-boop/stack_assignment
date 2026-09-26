@@ -42,7 +42,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 local-*
-.claude
+# Claude session state is local; the checked-in agent definitions are not.
+# `.claude` on its own excluded the directory, and git cannot re-include a file
+# inside an excluded directory, so the exclusion has to be on the contents.
+.claude/*
+!.claude/agents/
 .z-ai-config
 dev.log
 test
