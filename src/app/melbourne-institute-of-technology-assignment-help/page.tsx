@@ -70,7 +70,7 @@ export default function MITAssignmentHelpPage() {
   return (
     <main className="flex-grow">
       {/* Hero */}
-      <section className="stack-regional-hero relative text-white py-24 md:py-36 overflow-hidden">
+      <section className="stack-regional-hero relative text-white py-16 md:py-20 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{

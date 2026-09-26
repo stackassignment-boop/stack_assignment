@@ -99,13 +99,13 @@ export default function VITPage() {
     <main className="flex-grow">
       <StructuredData data={[faqSchema, breadcrumbSchema]} />
 
-      <div className="max-w-5xl mx-auto px-6 pt-6 text-sm text-slate-500 dark:text-slate-400">
+      <div className="max-w-5xl mx-auto px-6 py-5 text-sm text-slate-500 dark:text-slate-400">
         <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
         <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
         <span className="text-slate-700 dark:text-slate-300">Victorian Institute of Technology Assignment Support</span>
       </div>
 
-      <section className="relative text-white py-24 md:py-36 overflow-hidden mt-6">
+      <section className="relative text-white py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-slate-950" />
         <div className="absolute rounded-full blur-3xl opacity-30 animate-float" style={{ top: '8%', left: '6%', width: '320px', height: '320px', background: 'radial-gradient(circle, #6366f1, transparent 70%)' }} />
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
