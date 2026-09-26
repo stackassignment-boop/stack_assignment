@@ -618,12 +618,15 @@ export default function KaplanAssignmentHelpPage() {
             <p className="text-slate-500 dark:text-slate-400 text-xs mb-5">
               A standalone KBS Harvard referencing guide is planned for a future resource page.
             </p>
-            <Link
+            {/* Plain <a>, not <Link>: OrderPage reads its prefill params in a mount
+                effect, and a soft navigation runs that effect against the previous
+                URL, so ?subject= would arrive empty. */}
+            <a
               href="/order?subject=KBS%20Harvard%20Referencing%20Help"
               className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition"
             >
               Need Help With KBS Referencing? <ArrowRight className="w-4 h-4" />
-            </Link>
+            </a>
           </div>
         </div>
       </section>
