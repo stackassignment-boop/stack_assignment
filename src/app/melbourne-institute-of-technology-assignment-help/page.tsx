@@ -100,7 +100,7 @@ export default function MITAssignmentHelpPage() {
           }}
         />
 
-        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+        <div className="stack-container relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm">
             <GraduationCap className="w-4 h-4" />
             For Melbourne Institute of Technology Students
@@ -113,12 +113,12 @@ export default function MITAssignmentHelpPage() {
             Assignment Support for<br />MIT Melbourne &amp; Sydney Students
           </h1>
 
-          <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
+          <p className="text-xl md:text-2xl opacity-90 max-w-3xl mb-10 font-medium">
             From business and accounting to software engineering and data analytics —
             support matched to your unit outline, whichever campus you're on.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+          <div className="flex flex-col sm:flex-row gap-5">
             <Link
               href="/order"
               className="bg-yellow-400 text-indigo-900 hover:bg-yellow-300 px-10 py-4 rounded-xl text-lg font-bold transition shadow-xl shadow-yellow-400/30 hover:shadow-2xl hover:scale-105 active:scale-95 min-w-[15rem]"
@@ -137,7 +137,7 @@ export default function MITAssignmentHelpPage() {
 
       {/* Campuses + course areas */}
       <section className="py-16 bg-white dark:bg-slate-950">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <div className="grid md:grid-cols-2 gap-10">
             <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-800/50 rounded-2xl p-8 border border-indigo-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-4">
@@ -179,7 +179,7 @@ export default function MITAssignmentHelpPage() {
 
       {/* Why MIT students specifically */}
       <section className="py-16 bg-slate-50 dark:bg-slate-900">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             Why MIT Students Choose Us
           </h2>
@@ -223,7 +223,7 @@ export default function MITAssignmentHelpPage() {
 
       {/* Trust badges */}
       <section className="py-10 bg-white dark:bg-slate-950">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <TrustBadges variant="full" />
         </div>
       </section>

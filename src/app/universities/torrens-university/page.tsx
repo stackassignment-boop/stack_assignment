@@ -107,7 +107,7 @@ export default function TorrensUniversityPage() {
         <div className="absolute inset-0 bg-slate-950" />
         <div className="absolute rounded-full blur-3xl opacity-30 animate-float" style={{ top: '8%', left: '6%', width: '320px', height: '320px', background: 'radial-gradient(circle, #6366f1, transparent 70%)' }} />
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
-        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+        <div className="stack-container relative z-10">
           <nav aria-label="Breadcrumb" className="mb-5 text-sm text-white/70">
             <Link href="/" className="hover:text-white">Home</Link>
             <span className="mx-2">›</span><span>Universities</span><span className="mx-2">›</span>
@@ -119,11 +119,11 @@ export default function TorrensUniversityPage() {
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
             Torrens University Assignment Support Australia
           </h1>
-          <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
+          <p className="text-xl md:text-2xl opacity-90 max-w-3xl mb-10 font-medium">
             Academic support for Torrens University students across business, technology, health,
             hospitality, education, design and other study areas.
           </p>
-          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+          <div className="flex flex-col sm:flex-row gap-5">
             <Link href="/order" className="bg-yellow-400 text-indigo-900 hover:bg-yellow-300 px-10 py-4 rounded-xl text-lg font-bold transition shadow-xl shadow-yellow-400/30 hover:shadow-2xl hover:scale-105 active:scale-95 min-w-[15rem]">Get Academic Support</Link>
             <Link href="#torrens-courses" className="border-2 border-white/70 hover:bg-white/10 px-10 py-4 rounded-xl text-lg font-semibold transition min-w-[15rem]">View Services</Link>
           </div>
@@ -154,7 +154,7 @@ export default function TorrensUniversityPage() {
       </section>
 
       <section className="py-16 bg-slate-50 dark:bg-slate-900">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Sora, sans-serif' }}>Why Choose Stack Assignment for Torrens Students?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {whyChooseUs.map((item) => (
@@ -169,7 +169,7 @@ export default function TorrensUniversityPage() {
       </section>
 
       <section id="torrens-courses" className="py-16 bg-white dark:bg-slate-950 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Sora, sans-serif' }}>Torrens University Courses We Support</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {courseAreas.map((course) => {
@@ -186,7 +186,7 @@ export default function TorrensUniversityPage() {
       </section>
 
       <section className="py-16 bg-slate-50 dark:bg-slate-900">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>Torrens Assessment Support</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
             {assessmentSupportItems.map((item) => (
@@ -229,7 +229,7 @@ export default function TorrensUniversityPage() {
       </section>
 
       <section className="py-14 bg-white dark:bg-slate-950">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-8" style={{ fontFamily: 'Sora, sans-serif' }}>Other Torrens Study Areas We Support</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">

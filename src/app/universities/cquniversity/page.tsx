@@ -184,7 +184,7 @@ export default function CQUniversityPage() {
         <div className="absolute rounded-full blur-3xl opacity-30 animate-float" style={{ top: '8%', left: '6%', width: '320px', height: '320px', background: 'radial-gradient(circle, #6366f1, transparent 70%)' }} />
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
 
-        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+        <div className="stack-container relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm">
             <GraduationCap className="w-4 h-4" />
             For CQUniversity (CQU) Students
@@ -192,11 +192,11 @@ export default function CQUniversityPage() {
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQUniversity Assignment Support Australia
           </h1>
-          <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-10 font-medium">
+          <p className="text-xl md:text-2xl opacity-90 max-w-3xl mb-10 font-medium">
             Academic support, assessment guidance, proofreading, research assistance and study
             resources for CQUniversity students.
           </p>
-          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+          <div className="flex flex-col sm:flex-row gap-5">
             <Link href="/order" className="bg-yellow-400 text-indigo-900 hover:bg-yellow-300 px-10 py-4 rounded-xl text-lg font-bold transition shadow-xl shadow-yellow-400/30 hover:shadow-2xl hover:scale-105 active:scale-95 min-w-[15rem]">
               Get CQU Academic Support
             </Link>
@@ -234,7 +234,7 @@ export default function CQUniversityPage() {
 
       {/* WHY CHOOSE US */}
       <section className="py-16 bg-slate-50 dark:bg-slate-900">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             Why Choose Stack Assignment for CQU Academic Support?
           </h2>
@@ -257,7 +257,7 @@ export default function CQUniversityPage() {
 
       {/* CQU COURSES WE SUPPORT */}
       <section id="cqu-courses" className="py-16 bg-white dark:bg-slate-950 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQUniversity Courses We Support
           </h2>
@@ -296,7 +296,7 @@ export default function CQUniversityPage() {
 
       {/* CQU ASSESSMENT SUPPORT */}
       <section className="py-16 bg-slate-50 dark:bg-slate-900">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10" style={{ fontFamily: 'Sora, sans-serif' }}>
             CQU Assessment Support
           </h2>
@@ -313,7 +313,7 @@ export default function CQUniversityPage() {
 
       {/* CQU IT ASSIGNMENT SUPPORT */}
       <section id="cqu-it-support" className="py-16 bg-white dark:bg-slate-950 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-full px-5 py-2 text-sm font-semibold text-indigo-700 dark:text-indigo-300 mb-5">
               <Code2 className="w-4 h-4" />
@@ -521,7 +521,7 @@ export default function CQUniversityPage() {
 
       {/* CREDIBLE BENEFITS (replaces unverified numeric claims for this page) */}
       <section className="py-14 bg-white dark:bg-slate-950">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="stack-container">
           <h3 className="text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-6 uppercase tracking-wide">
             What CQU Students Get
           </h3>
