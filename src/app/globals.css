@@ -405,7 +405,12 @@ a.text-teal-600, button.text-teal-600 { color: var(--stack-indigo) !important; }
   overflow: hidden;
   background: var(--stack-service-hero-bg) !important;
 }
-.stack-regional-hero > * { position: relative; z-index: 1; }
+/* Lift real content above the hero background — but never restyle a decorative
+   layer that positions itself. This rule is unlayered, so a bare `> *` would
+   beat Tailwind's `.absolute` utility (unlayered CSS outranks every @layer) and
+   drop the blurred glow divs back into normal flow, where their inline pixel
+   heights add ~600px of empty space above the hero content. */
+.stack-regional-hero > *:not(.absolute):not(.fixed) { position: relative; z-index: 1; }
 
 /* --------------------------------------------------------------------------
    SERVICE PALETTE — site-wide public-page normalization
@@ -551,4 +556,6 @@ a.text-teal-600, button.text-teal-600 { color: var(--stack-indigo) !important; }
   color: #fff;
   background: linear-gradient(to bottom right, #020617 0%, #4338ca 50%, #7e22ce 100%) !important;
 }
-.stack-cta-band > * { position: relative; z-index: 1; }
+/* Same guard as .stack-regional-hero above — don't force a decorative
+   absolutely-positioned layer back into normal flow. */
+.stack-cta-band > *:not(.absolute):not(.fixed) { position: relative; z-index: 1; }
