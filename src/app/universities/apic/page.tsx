@@ -185,15 +185,6 @@ export default function APICPage() {
     <main className="flex-grow">
       <StructuredData data={[faqSchema, breadcrumbSchema]} />
 
-      {/* Breadcrumb */}
-      <div className="max-w-5xl mx-auto px-6 py-5 text-sm text-slate-500 dark:text-slate-400">
-        <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</Link>
-        <span className="mx-2">›</span>
-        <span>Universities</span>
-        <span className="mx-2">›</span>
-        <span className="text-slate-700 dark:text-slate-300">APIC Assignment Support</span>
-      </div>
-
       {/* HERO */}
       <section className="relative text-white py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-slate-950" />
@@ -201,6 +192,13 @@ export default function APICPage() {
         <div className="absolute rounded-full blur-3xl opacity-25 animate-float" style={{ bottom: '10%', right: '8%', width: '280px', height: '280px', background: 'radial-gradient(circle, #a855f7, transparent 70%)', animationDelay: '7s' }} />
 
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+          <nav aria-label="Breadcrumb" className="mb-5 text-sm text-white/70">
+            <Link href="/" className="hover:text-white">Home</Link>
+            <span className="mx-2">›</span>
+            <span>Universities</span>
+            <span className="mx-2">›</span>
+            <span className="text-white">APIC Assignment Support</span>
+          </nav>
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/25 rounded-full px-5 py-2 text-sm font-semibold mb-8 backdrop-blur-sm">
             <GraduationCap className="w-4 h-4" />
             For Asia Pacific International College (APIC) Students
