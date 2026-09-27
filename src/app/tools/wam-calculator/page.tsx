@@ -74,7 +74,6 @@ export default function WamCalculatorPage() {
     <ToolPageShell
       url={url}
       breadcrumbLabel="WAM Calculator"
-      showBreadcrumbNav
       icon={Calculator}
       badge="Free · No sign-up"
       title="WAM Calculator"

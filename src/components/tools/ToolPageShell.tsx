@@ -59,8 +59,6 @@ export interface ToolPageShellProps {
   children: React.ReactNode
   /** Cards closing the page. Rendered under the FAQ when there is one. */
   ctas?: ToolCta[]
-  /** Show the clickable Home / Free Tools / … trail inside the hero. */
-  showBreadcrumbNav?: boolean
 }
 
 /**
@@ -91,7 +89,6 @@ export default function ToolPageShell({
   bodyWidth = 'wide',
   children,
   ctas = [],
-  showBreadcrumbNav = false,
 }: ToolPageShellProps) {
   const crumbs = [
     { name: 'Home', url: SITE },
@@ -120,19 +117,6 @@ export default function ToolPageShell({
 
       <section className="stack-service-hero bg-slate-950 text-white py-14 md:py-20 relative overflow-hidden">
         <div className="relative max-w-4xl mx-auto px-6">
-          {showBreadcrumbNav && (
-            <nav aria-label="Breadcrumb" className="mb-5 text-sm text-white/70">
-              <Link href="/" className="hover:text-white">
-                Home
-              </Link>
-              <span className="mx-2">/</span>
-              <Link href="/tools" className="hover:text-white">
-                Free Tools
-              </Link>
-              <span className="mx-2">/</span>
-              <span className="text-white">{breadcrumbLabel}</span>
-            </nav>
-          )}
           <div className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/25 px-4 py-1.5 text-sm font-semibold mb-5">
             <Icon className="h-4 w-4" /> {badge}
           </div>
