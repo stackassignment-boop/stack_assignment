@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import RequirementPreviewModal from '@/components/requirements/RequirementPreviewModal';
+import { requirementPath } from '@/lib/requirement-url';
 import { useRouteNavigate } from '@/lib/useRouteNavigate';
 
 interface Requirement {
@@ -264,7 +265,7 @@ export default function RequirementsPage({ initialRequirements = [] }: Requireme
                       <Badge className="mb-2" variant="secondary">{requirement.category}</Badge>
                     )}
                     <CardTitle className="text-base font-semibold text-slate-900 dark:text-white leading-tight">
-                      <Link href={`/requirements/${requirement.id}`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                      <Link href={requirementPath(requirement)} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                         {requirement.title}
                       </Link>
                     </CardTitle>

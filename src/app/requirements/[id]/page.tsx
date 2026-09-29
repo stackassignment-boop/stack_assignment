@@ -1,21 +1,35 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { FileText, Calendar, Tag, ArrowLeft } from 'lucide-react'
 import RequirementDetailActions from '@/components/requirements/RequirementDetailActions'
-import { region } from '@/lib/seo-config'
+import { region, generateBreadcrumbSchema } from '@/lib/seo-config'
+import {
+  extractRequirementId,
+  isIndexable,
+  requirementPath,
+} from '@/lib/requirement-url'
 
 interface PageProps {
   params: Promise<{ id: string }>
 }
+
+const SITE = 'https://www.stackassignment.com'
 
 // Same reasoning as the list page — force fresh data per request so a
 // newly uploaded requirement's detail page is reachable immediately,
 // not only after the next deployment.
 export const dynamic = 'force-dynamic'
 
-async function getRequirement(id: string) {
+// The route param is whatever was in the URL: either the canonical
+// `some-title-{cuid}` slug or a legacy bare `{cuid}`. Both resolve to the same
+// record; the page component redirects the legacy form to the canonical one so
+// only a single URL is ever indexed.
+async function getRequirement(segment: string) {
+  const id = extractRequirementId(segment)
+  if (!id) return null
+
   return db.requirementFile.findUnique({
     where: { id },
     select: {
@@ -37,22 +51,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const req = await getRequirement(id)
 
   if (!req) {
-    return { title: 'Requirement Not Found | Stack Assignment' }
+    return { title: 'Requirement Not Found | Stack Assignment', robots: { index: false, follow: false } }
   }
 
+  const canonical = `${SITE}${requirementPath(req)}`
   const description =
-    req.description?.slice(0, 155) ||
+    req.description?.trim().slice(0, 155) ||
     `${req.title} — tutoring and editing support available. Get a quote from Stack Assignment.`
 
+  // Index only pages carrying a real explanation of the assessment. A page with
+  // a bare title has nothing to rank and, published at scale, would drag down
+  // quality signals for the whole domain — so the thin ones stay out of the
+  // index. `follow` stays true either way so internal links are still crawled.
+  const indexable = isIndexable(req)
+
   return {
-    title: `${req.title} | Assignment Support | Stack Assignment`,
+    // Keyword-first. The unit code and assessment type live in `title`, and
+    // they need to be the first thing in the tag, not trailing behind a brand.
+    title: `${req.title} | Stack Assignment`,
     description,
-    alternates: { canonical: `https://www.stackassignment.com/requirements/${req.id}` },
-    robots: { index: false, follow: false },
+    alternates: { canonical },
+    robots: indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
     openGraph: {
       title: req.title,
       description,
-      url: `https://www.stackassignment.com/requirements/${req.id}`,
+      url: canonical,
       type: 'article',
       locale: region.ogLocale,
       publishedTime: req.createdAt.toISOString(),
@@ -84,8 +109,58 @@ export default async function RequirementDetailPage({ params }: PageProps) {
     notFound()
   }
 
+  // Send legacy `/requirements/{cuid}` links, and any hand-edited slug, to the
+  // canonical keyword URL. Without this the same record would be reachable at
+  // two addresses and the ranking signal would split between them.
+  const canonicalPath = requirementPath(req)
+  if (`/requirements/${id}` !== canonicalPath) {
+    redirect(canonicalPath)
+  }
+
+  const canonical = `${SITE}${canonicalPath}`
+  const summary = req.description?.trim() ?? ''
+
+  // Structured data. `Article` rather than anything document-flavoured: what is
+  // published here is an explanation of the assessment, not the assessment
+  // brief itself. The breadcrumb markup matches the site convention of keeping
+  // the JSON-LD after the visible trail was removed.
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        headline: req.title,
+        description: summary.slice(0, 250) || req.title,
+        datePublished: req.createdAt.toISOString(),
+        dateModified: req.createdAt.toISOString(),
+        inLanguage: region.htmlLang,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+        author: { '@type': 'Organization', name: 'Stack Assignment', url: SITE },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Stack Assignment',
+          url: SITE,
+        },
+        ...(req.category ? { about: req.category } : {}),
+      },
+      generateBreadcrumbSchema([
+        { name: 'Home', url: SITE },
+        // Matches the footer's anchor text for the same destination. It also
+        // avoids describing the section as a collection of university briefs,
+        // which is not what is published here — the indexed content is the
+        // explanation written for each assessment, not the brief itself.
+        { name: 'Assignment Help', url: `${SITE}/requirements` },
+        { name: req.title, url: canonical },
+      ]),
+    ],
+  }
+
   return (
     <main className="flex-grow bg-slate-50 dark:bg-slate-950 min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <Link
           href="/requirements"

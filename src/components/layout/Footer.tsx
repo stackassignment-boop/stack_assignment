@@ -105,6 +105,16 @@ export default function Footer({ onNavigate }: FooterProps) {
                   </FooterLink>
                 </li>
                 <li>
+                  {/* /requirements had no inbound link anywhere on the site — it
+                      was reachable only by typing the URL, so neither a student
+                      nor a crawler could arrive at it. This is the one internal
+                      link that renders on every page, which is what gives the
+                      requirement detail pages a crawl path at all. */}
+                  <FooterLink href="/requirements" page="requirements" onNavigate={onNavigate}>
+                    Assignment Help
+                  </FooterLink>
+                </li>
+                <li>
                   <Link href="/universities" className="hover:text-white transition-colors">
                     Universities
                   </Link>

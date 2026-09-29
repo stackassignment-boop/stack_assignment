@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { db } from '@/lib/db'
 import { universities } from '@/data/universities'
+import { isIndexable, requirementPath } from '@/lib/requirement-url'
 
 // Force fresh data on every request. Without this, Next.js can statically
 // cache the sitemap at build time — meaning newly uploaded requirements
@@ -400,8 +401,51 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // User-uploaded requirement files are not included in the public sitemap.
-  // They can contain private assessment details and are not intended as SEO pages.
+  // Fetch requirement files. The uploaded document itself is never linked from
+  // here — only the detail page, which renders the title, category and the
+  // description written for it.
+  let requirementFiles: {
+    id: string
+    title: string
+    description: string | null
+    updatedAt: Date
+  }[] = []
+  try {
+    requirementFiles = await db.requirementFile.findMany({
+      select: { id: true, title: true, description: true, updatedAt: true },
+    })
+  } catch (error) {
+    console.error('Failed to fetch requirements for sitemap:', error)
+  }
 
-  return [...staticPages, ...universityPages, ...blogPages, ...samples, ...services]
+  // Requirement detail pages, filtered through exactly the same content gate
+  // the page's own robots tag uses (`isIndexable`, in src/lib/requirement-url.ts).
+  //
+  // This replaces a blanket exclusion. The old rule kept every requirement out
+  // of the sitemap on the grounds that these pages could carry private
+  // assessment detail — which was correct while the page was an unexplained
+  // stub. The gate makes that judgement per-record instead: a requirement is
+  // submitted only once someone has written a substantial original description
+  // for it, which is the only field the page publishes. Anything thinner stays
+  // out of both the sitemap and the index, so nothing is ever announced to
+  // Google that a person did not deliberately write.
+  //
+  // Keeping the two rules on one shared predicate is the point. Submitting a
+  // URL that then answers `noindex` is a contradictory signal and wastes crawl
+  // budget, and the two would drift apart if each carried its own threshold.
+  const requirements = requirementFiles.filter(isIndexable).map((req) => ({
+    url: `${baseUrl}${requirementPath(req)}`,
+    lastModified: req.updatedAt,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  return [
+    ...staticPages,
+    ...universityPages,
+    ...blogPages,
+    ...samples,
+    ...services,
+    ...requirements,
+  ]
 }
