@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound, redirect } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { FileText, Calendar, Tag, ArrowLeft } from 'lucide-react'
 import RequirementDetailActions from '@/components/requirements/RequirementDetailActions'
@@ -112,9 +112,16 @@ export default async function RequirementDetailPage({ params }: PageProps) {
   // Send legacy `/requirements/{cuid}` links, and any hand-edited slug, to the
   // canonical keyword URL. Without this the same record would be reachable at
   // two addresses and the ranking signal would split between them.
+  //
+  // `permanentRedirect` (308), not `redirect` (307). A temporary redirect tells
+  // a search engine to keep indexing the URL it started from, which is the
+  // opposite of the point here — consolidating every alias onto one address is
+  // the whole reason this branch exists. Editing a title later changes the slug
+  // and produces a two-hop chain from any cached 308, which terminates and which
+  // crawlers follow without difficulty.
   const canonicalPath = requirementPath(req)
   if (`/requirements/${id}` !== canonicalPath) {
-    redirect(canonicalPath)
+    permanentRedirect(canonicalPath)
   }
 
   const canonical = `${SITE}${canonicalPath}`
