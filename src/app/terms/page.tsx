@@ -3,7 +3,7 @@ import TermsPageComponent from '@/components/legal/TermsPage'
 import { region } from '@/lib/seo-config'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - Stack Assignment',
+  title: 'Terms of Service',
   description: 'The rules and guidelines for using our academic tutoring, editing and assessment feedback services, including what we will and will not do.',
   keywords: ['terms of service', 'terms and conditions', 'user agreement', 'service terms'],
   alternates: { canonical: 'https://www.stackassignment.com/terms' },

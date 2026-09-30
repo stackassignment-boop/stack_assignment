@@ -27,11 +27,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const uni = getUniversityBySlug(slug)
 
   if (!uni) {
-    return { title: 'University Not Found | Stack Assignment' }
+    return { title: 'University Not Found' }
   }
 
   return {
-    title: `${uni.name} Assignment Support | Stack Assignment`,
+    title: `${uni.name} Assignment Support`,
     description: `Assignment support and essay feedback for ${uni.name} students across ${uni.courseAreas.slice(0, 3).join(', ')} — matched to your unit outline and referencing style.`,
     keywords: [
       `${uni.name} assignment support`,

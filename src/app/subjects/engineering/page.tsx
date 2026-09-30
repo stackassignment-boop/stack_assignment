@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, BookOpen, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Engineering Academic Support | Stack Assignment',
+  title: 'Engineering Academic Support',
   description: 'Academic support for engineering students in Australia and the UK. Get tutoring, assessment guidance, draft feedback and study resources for engineering, technology, project management, technical communication.',
   alternates: { canonical: 'https://www.stackassignment.com/subjects/engineering' },
 };

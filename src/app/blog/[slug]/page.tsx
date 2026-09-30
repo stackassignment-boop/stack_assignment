@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!blog) {
       return {
-        title: 'Blog Post Not Found - Stack Assignment',
+        title: 'Blog Post Not Found',
       }
     }
 
     return {
-      title: `${blog.title} - Stack Assignment Blog`,
+      title: blog.title,
       description: blog.excerpt || 'Read this article from Stack Assignment blog',
       keywords: blog.tags ? JSON.parse(blog.tags).join(', ') : 'academic writing, blog',
       alternates: { canonical: `https://www.stackassignment.com/blog/${blog.slug}` },
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   } catch (error) {
     return {
-      title: 'Blog Post - Stack Assignment',
+      title: 'Blog Post',
     }
   }
 }

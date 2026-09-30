@@ -3,7 +3,7 @@ import PricingRoute from '@/components/pricing/PricingRoute'
 import { region } from '@/lib/seo-config'
 
 export const metadata: Metadata = {
-  title: 'Tutoring & Editing Pricing in AUD | Stack Assignment',
+  title: 'Tutoring & Editing Pricing in AUD',
   description:
     'Transparent pricing for Australian students: per-hour tutoring and per-word editing, quoted in AUD with no hidden fees. Get an instant estimate before you book.',
   keywords: [

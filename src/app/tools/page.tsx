@@ -7,7 +7,7 @@ import { TOOLS } from '@/lib/tools'
 const url = 'https://www.stackassignment.com/tools'
 
 export const metadata: Metadata = {
-  title: 'Free Study Tools for Australian Uni Students | Stack Assignment',
+  title: 'Free Study Tools for Australian Uni Students',
   description:
     'Free tools for university students — WAM calculator, referencing generator, draft checker, PDF to Word, image to text (OCR) and a quiz generator. No sign-up, nothing uploaded.',
   keywords: [

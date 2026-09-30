@@ -6,7 +6,7 @@ import { integrityFaqs } from '@/data/integrity-faqs'
 const url = 'https://www.stackassignment.com/integrity'
 
 export const metadata: Metadata = {
-  title: 'Academic Integrity Policy | Stack Assignment Australia',
+  title: { absolute: 'Academic Integrity Policy | Stack Assignment Australia' },
   description:
     'Where we draw the line: we tutor, edit and give feedback, and we never write or supply work for submission. Our policy, and what Australian law requires of academic support services.',
   keywords: [

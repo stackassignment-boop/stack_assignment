@@ -3,7 +3,7 @@ import SamplesPageComponent from '@/components/samples/SamplesPage'
 import { region } from '@/lib/seo-config'
 
 export const metadata: Metadata = {
-  title: 'Worked Examples & Sample Essays | Stack Assignment',
+  title: 'Worked Examples & Sample Essays',
   description: 'Extracts from academic work annotated to show what markers reward — how an argument is structured, how sources are integrated, how referencing is applied. For studying structure, not for submission.',
   keywords: ['essay structure examples', 'academic writing examples Australia', 'how to structure an essay university', 'referencing examples AGLC4 APA'],
   alternates: { canonical: 'https://www.stackassignment.com/samples' },

@@ -20,12 +20,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!service) {
       return {
-        title: 'Service Not Found - Stack Assignment',
+        title: 'Service Not Found',
       }
     }
 
     return {
-      title: `${service.title} - Service | Stack Assignment`,
+      title: `${service.title} - Service`,
       description: service.shortDescription || service.description || `Learn more about our ${service.title} service`,
       keywords: [service.title, 'academic tutoring Australia', 'academic editing Australia', 'assignment support'].join(', '),
       alternates: { canonical: `https://www.stackassignment.com/services/${service.slug}` },
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   } catch (error) {
     return {
-      title: 'Service - Stack Assignment',
+      title: 'Service',
     }
   }
 }

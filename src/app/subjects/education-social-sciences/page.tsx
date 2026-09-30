@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, BookOpen, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Education & Social Sciences Academic Support | Stack Assignment',
+  title: 'Education & Social Sciences Academic Support',
   description: 'Support for education, psychology and social science students. Get tutoring, assessment guidance, draft feedback and study resources for education, psychology, sociology, social work, research methods.',
   alternates: { canonical: 'https://www.stackassignment.com/subjects/education-social-sciences' },
 };

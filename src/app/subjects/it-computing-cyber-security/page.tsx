@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, BookOpen, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'IT, Computing & Cyber Security Academic Support | Stack Assignment',
+  title: 'IT, Computing & Cyber Security Academic Support',
   description: 'Support for computing, information technology and cyber security students. Get tutoring, assessment guidance, draft feedback and study resources for information technology, computing, cyber security, software, networking.',
   alternates: { canonical: 'https://www.stackassignment.com/subjects/it-computing-cyber-security' },
 };

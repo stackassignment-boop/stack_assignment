@@ -3,7 +3,7 @@ import ServicesRoute from '@/components/services/ServicesRoute'
 import { region } from '@/lib/seo-config'
 
 export const metadata: Metadata = {
-  title: 'Tutoring, Editing & Study Support for AU Students | Stack Assignment',
+  title: 'Tutoring, Editing & Study Support for AU Students',
   description:
     'One-on-one tutoring, tracked-changes editing on your own draft, study and reference materials, and exam preparation — matched to Australian university marking rubrics and referencing styles.',
   keywords: [

@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!sample) {
       return {
-        title: 'Sample Not Found - Stack Assignment',
+        title: 'Sample Not Found',
       }
     }
 
     return {
-      title: `${sample.title} - Sample Preview | Stack Assignment`,
+      title: `${sample.title} - Sample Preview`,
       description: sample.description || `Preview ${sample.title} academic writing sample. ${sample.pages} pages available.`,
       keywords: [sample.subject, sample.paperType, 'sample', 'academic writing'].filter(Boolean).join(', '),
       alternates: { canonical: `https://www.stackassignment.com/samples/${sample.slug}` },
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   } catch (error) {
     return {
-      title: 'Sample Preview - Stack Assignment',
+      title: 'Sample Preview',
     }
   }
 }

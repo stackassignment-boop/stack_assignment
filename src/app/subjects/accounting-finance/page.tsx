@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, BookOpen, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Accounting & Finance Academic Support | Stack Assignment',
+  title: 'Accounting & Finance Academic Support',
   description: 'Academic support for accounting, finance and business students. Get tutoring, assessment guidance, draft feedback and study resources for accounting, finance, banking, economics.',
   alternates: { canonical: 'https://www.stackassignment.com/subjects/accounting-finance' },
 };

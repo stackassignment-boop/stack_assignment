@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, BookOpen, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Nursing & Health Academic Support | Stack Assignment',
+  title: 'Nursing & Health Academic Support',
   description: 'Academic support for nursing and health students in Australia and the UK. Get tutoring, assessment guidance, draft feedback and study resources for Nursing, health sciences, public health, allied health.',
   alternates: { canonical: 'https://www.stackassignment.com/subjects/nursing-health' },
 };

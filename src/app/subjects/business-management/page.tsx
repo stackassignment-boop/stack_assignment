@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, BookOpen, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Business & Management Academic Support | Stack Assignment',
+  title: 'Business & Management Academic Support',
   description: 'Practical support for business and management students. Get tutoring, assessment guidance, draft feedback and study resources for business, management, marketing, HR, entrepreneurship.',
   alternates: { canonical: 'https://www.stackassignment.com/subjects/business-management' },
 };

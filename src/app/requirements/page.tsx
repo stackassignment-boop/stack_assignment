@@ -6,7 +6,7 @@ import { region } from '@/lib/seo-config'
 const url = 'https://www.stackassignment.com/requirements'
 
 export const metadata: Metadata = {
-  title: 'Live Assessment Briefs | Assignment Support | Stack Assignment',
+  title: 'Live Assessment Briefs | Assignment Support',
   description:
     'Browse assessment briefs students have shared and see the tutoring or editing support available for each. Tell us your unit and we will quote in AUD before you commit.',
   keywords: [

@@ -6,7 +6,7 @@ import { region, seoConfig, generateBreadcrumbSchema } from '@/lib/seo-config'
 const url = 'https://www.stackassignment.com/about'
 
 export const metadata: Metadata = {
-  title: 'About Stack Assignment | AU Tutoring & Editing Since 2010',
+  title: { absolute: 'About Stack Assignment | AU Tutoring & Editing Since 2010' },
   description:
     'Who we are: tutors and editors who work with Australian university students on the material, the draft and the rubric — and never on the submission itself. Covering 27 AU and UK institutions.',
   keywords: [
