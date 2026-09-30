@@ -8,7 +8,9 @@ import { region, generateBreadcrumbSchema } from '@/lib/seo-config'
 import {
   extractRequirementId,
   isIndexable,
+  normaliseRequirementTitle,
   requirementPath,
+  requirementTitleTag,
 } from '@/lib/requirement-url'
 
 interface PageProps {
@@ -51,7 +53,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const req = await getRequirement(id)
 
   if (!req) {
-    return { title: 'Requirement Not Found | Stack Assignment', robots: { index: false, follow: false } }
+    return { title: 'Requirement Not Found', robots: { index: false, follow: false } }
   }
 
   const canonical = `${SITE}${requirementPath(req)}`
@@ -68,14 +70,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     // Keyword-first. The unit code and assessment type live in `title`, and
     // they need to be the first thing in the tag, not trailing behind a brand.
-    title: `${req.title} | Stack Assignment`,
+    // `requirementTitleTag` also decides whether the brand fits at all: when the
+    // owner's own title already fills the width Google renders, it returns
+    // `{ absolute }` so the keywords survive instead of being truncated.
+    title: requirementTitleTag(req.title),
     description,
     alternates: { canonical },
     robots: indexable
       ? { index: true, follow: true }
       : { index: false, follow: true },
     openGraph: {
-      title: req.title,
+      // Normalised but not suffixed. The root template never applies to
+      // og:title, so there is no brand to strip here — but the stray-whitespace
+      // and all-caps cleanup is the same defect and worth fixing for the card.
+      title: normaliseRequirementTitle(req.title),
       description,
       url: canonical,
       type: 'article',

@@ -75,3 +75,82 @@ export const MIN_INDEXABLE_DESCRIPTION = 300
 export function isIndexable(req: { description: string | null }): boolean {
   return (req.description?.trim().length ?? 0) >= MIN_INDEXABLE_DESCRIPTION
 }
+
+/**
+ * Roughly what Google renders before truncating a title (~600px, which for
+ * mixed-case text lands near 60 characters). Not a hard limit — a longer title
+ * is legal and still indexed — but past it the tail stops being visible in the
+ * result, and an overlong title makes Google likelier to discard it and write
+ * its own from the page body.
+ */
+export const TITLE_TAG_BUDGET = 60
+
+/**
+ * Must mirror the template in `src/app/layout.tsx`. It is duplicated rather
+ * than imported because that file is a server component pulling in the whole
+ * metadata config, and this module is imported by the sitemap too.
+ */
+const BRAND_TITLE_SUFFIX = ' | Stack Assignment'
+
+/**
+ * Tried longest-first; the first one that still leaves room for the brand wins.
+ * A bare unit code ranks for the code and nothing else, so the suffix is what
+ * lets the page also match "<code> assignment help" — which is the query a
+ * student actually types when they are looking for support rather than for the
+ * unit's own handbook page.
+ */
+const SUPPORT_SUFFIXES = [
+  ' — Assignment Help & Tutoring',
+  ' — Assignment Help',
+] as const
+
+/**
+ * Tidy a stored title for display in a title tag, without changing what the
+ * owner wrote.
+ *
+ * Two defects show up in real uploads: stray whitespace (one live record is
+ * `'TECH8000 ASSESSMENT 3 '`, whose trailing space renders a visible double
+ * space before the separator) and all-caps entry, which reads as shouting in a
+ * search result and is a documented reason Google rewrites a title.
+ *
+ * De-shouting only fires when the title contains no lowercase at all, so a
+ * normally-typed title is returned untouched. Tokens containing a digit are
+ * left alone so unit codes keep their case (`TECH8000`, not `Tech8000`), as are
+ * short tokens so acronyms survive (`IT`, `ICT`, `AI`).
+ */
+export function normaliseRequirementTitle(raw: string): string {
+  const collapsed = raw.replace(/\s+/g, ' ').trim()
+  if (/[a-z]/.test(collapsed)) return collapsed
+
+  return collapsed
+    .split(' ')
+    .map((word) =>
+      /\d/.test(word) || word.length <= 3
+        ? word
+        : word.charAt(0) + word.slice(1).toLowerCase()
+    )
+    .join(' ')
+}
+
+/**
+ * Build the `title` for a requirement's metadata.
+ *
+ * Returns a plain string when the brand still fits, letting the root layout's
+ * template append it. Returns `{ absolute }` when it does not — which bypasses
+ * the template entirely, so a long assessment title keeps all of its keywords
+ * instead of having them truncated to make room for a brand that would itself
+ * be cut off. The keyword is what the student searched for; the brand is not.
+ */
+export function requirementTitleTag(raw: string): string | { absolute: string } {
+  const base = normaliseRequirementTitle(raw)
+
+  const suffix =
+    SUPPORT_SUFFIXES.find(
+      (s) => base.length + s.length + BRAND_TITLE_SUFFIX.length <= TITLE_TAG_BUDGET
+    ) ?? ''
+  const withSupport = base + suffix
+
+  return withSupport.length + BRAND_TITLE_SUFFIX.length <= TITLE_TAG_BUDGET
+    ? withSupport
+    : { absolute: withSupport }
+}
